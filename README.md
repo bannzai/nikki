@@ -21,6 +21,9 @@
 
 ## Security
 - 5秒タイプされなかったら、ログイン/Face ID突破からやり直しです
+- ロックはUIゲート方式です。開きっぱなしの端末を他人が触るのを防ぎます
+    - iOS/macOS: Face ID / Touch ID でロック解除
+    - Web: passkey (WebAuthn) の再認証でロック解除。ブラウザ上でFace ID / Touch IDのプロンプトが出るため、ログインし直しは不要です
 - DB: Evoluを採用。ref: https://github.com/bannzai/nikki/issues/1
 
 ## Other
