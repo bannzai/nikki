@@ -21,9 +21,7 @@
 
 ## Security
 - 5秒タイプされなかったら、ログイン/Face ID突破からやり直しです
-- DB: 悩んでいる
-    - iOS/macOS: CoreData(SwiftData) によるiCloud共有。開発者からも見えません
-    - Web: 一方、Webもサポートしたいと考えている。その場合Tursoなどを使って、ユーザーごとにDBを分ける構成なのかなと
+- DB: Evoluを採用。ref: https://github.com/bannzai/nikki/issues/1
 
 ## Other
 - Export 対応
