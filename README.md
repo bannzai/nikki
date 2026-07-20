@@ -8,6 +8,9 @@
     - ロック解除後は最後に開いてた画面が開く
 - 文章は自分の手で書いてこそ意味があるので、文章を書く補助機能などは一切無しです
 
+## Platform
+- iOS / iPadOS / macOS に対応します
+
 ## Editor
 - フォーマットは自由です。ユーザーが自由に日記を書けます
 - マークダウン互換があります
@@ -22,9 +25,8 @@
 ## Security
 - 5秒タイプされなかったら、ログイン/Face ID突破からやり直しです
 - ロックはUIゲート方式です。開きっぱなしの端末を他人が触るのを防ぎます
-    - iOS/macOS: Face ID / Touch ID でロック解除
-    - Web: passkey (WebAuthn) の再認証でロック解除。ブラウザ上でFace ID / Touch IDのプロンプトが出るため、ログインし直しは不要です
-- DB: Evoluを採用。ref: https://github.com/bannzai/nikki/issues/1
+    - Face ID / Touch ID でロック解除
+- DB: CoreData(SwiftData) + iCloud(CloudKit) 同期。開発者からも見えません。ref: https://github.com/bannzai/nikki/issues/1
 
 ## Other
 - Export 対応
