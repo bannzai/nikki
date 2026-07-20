@@ -39,6 +39,7 @@
 		BC0D27A1D70D0730D7CB21B2 /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766734296CC2A8C5589D3AA4 /* SampleData.swift */; };
 		BCADF5C58E5445181D403BDE /* LockScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F460D61D3DC7C1CC5AFBAA3 /* LockScreenView.swift */; };
 		D0E9D7282F50A17DC0FB08E7 /* JournalEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC2C7C3164DBB03D79555B00 /* JournalEntry.swift */; };
+		D21A6C7C5D23C1EA3ED74A55 /* EditorSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D13545310A6DCBFD76AAEF4 /* EditorSupport.swift */; };
 		D40689479E4F52029BE57098 /* EditorSelectionToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5812DEFD71643DC9FB2676 /* EditorSelectionToolbarView.swift */; };
 		D880C4D3A9B3688BE6B3105B /* InkComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = F986D378B73E7F155EFE3BCA /* InkComponents.swift */; };
 		E368782CC4002864381C2952 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45F9E22095B7C77A9CE42D4 /* AppState.swift */; };
@@ -69,6 +70,7 @@
 		766734296CC2A8C5589D3AA4 /* SampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
 		7AD24D69AE47CB4268D3F72A /* OnboardingEncryptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingEncryptionView.swift; sourceTree = "<group>"; };
 		99680867289ABBCE3B3C1E99 /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorView.swift; sourceTree = "<group>"; };
+		9D13545310A6DCBFD76AAEF4 /* EditorSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorSupport.swift; sourceTree = "<group>"; };
 		A41D0C0CE3C6C437F14C158D /* Block.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Block.swift; sourceTree = "<group>"; };
 		A54AAEEAF83757EE3CE26238 /* CalendarMonthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarMonthView.swift; sourceTree = "<group>"; };
 		AB5812DEFD71643DC9FB2676 /* EditorSelectionToolbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorSelectionToolbarView.swift; sourceTree = "<group>"; };
@@ -168,6 +170,7 @@
 			children = (
 				14B3AD948EB334F421230290 /* EditorBlockReorderView.swift */,
 				AB5812DEFD71643DC9FB2676 /* EditorSelectionToolbarView.swift */,
+				9D13545310A6DCBFD76AAEF4 /* EditorSupport.swift */,
 				99680867289ABBCE3B3C1E99 /* EditorView.swift */,
 			);
 			path = Editor;
@@ -347,6 +350,7 @@
 				797182C803B87C9D2570FE75 /* CalendarMonthView.swift in Sources */,
 				AF0C957C78DC98B668B58F16 /* EditorBlockReorderView.swift in Sources */,
 				D40689479E4F52029BE57098 /* EditorSelectionToolbarView.swift in Sources */,
+				D21A6C7C5D23C1EA3ED74A55 /* EditorSupport.swift in Sources */,
 				19B2CFFFEC92CC414E833C90 /* EditorView.swift in Sources */,
 				AAA59015015D0A4FF5105960 /* EntryListView.swift in Sources */,
 				05C7CF37A9E08C895CF3CDC2 /* HomeView.swift in Sources */,
