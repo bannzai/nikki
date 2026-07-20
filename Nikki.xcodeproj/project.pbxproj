@@ -1,0 +1,579 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 54;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		006B44FB7A09E0289CC7843A /* OFL.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6376C2355D7932A1A0584881 /* OFL.txt */; };
+		03E5AAC871829B2DE8924221 /* JournalTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15812819579D015970352C89 /* JournalTemplate.swift */; };
+		045F61E955BE78F5412E4511 /* NikkiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F816F732D52F8B441A9FC4E /* NikkiApp.swift */; };
+		05C7CF37A9E08C895CF3CDC2 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02425BD7F67B1BDDD3969EE0 /* HomeView.swift */; };
+		0615EC45AE1942C73624AEF4 /* InkIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18EE568B17EE6D1045D00B79 /* InkIcons.swift */; };
+		06F82221D2948C35D17D61E6 /* OnboardingEncryptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD24D69AE47CB4268D3F72A /* OnboardingEncryptionView.swift */; };
+		0A59D71DEC238C6E78703A4A /* ScreenCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1026BD58F3644EEF0E57901 /* ScreenCatalog.swift */; };
+		0E8597ED5FC125882594DF06 /* TemplateVariableSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56E762410EA43BA0E5B281F /* TemplateVariableSheetView.swift */; };
+		12BAEAE1C4FE2680A15373D5 /* ZenKakuGothicNew-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1DAC0CB41D0E58AD6056F85D /* ZenKakuGothicNew-Regular.ttf */; };
+		19B2CFFFEC92CC414E833C90 /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99680867289ABBCE3B3C1E99 /* EditorView.swift */; };
+		2731D39AAB1F99830D8AFBCB /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D6B9BD79E29CAFC5970D5D /* RootView.swift */; };
+		3F76D0B8150C58068448A40E /* ZenKakuGothicNew-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FDBC6289B6D6A4B3469344B9 /* ZenKakuGothicNew-Bold.ttf */; };
+		4B2881C8231BA547E98C52CA /* OnboardingPhraseBackupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0793CC37DA30954F6CB94102 /* OnboardingPhraseBackupView.swift */; };
+		5083EE3968C4C5ED87434500 /* RestoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E876F829167055AA5ADAD1CB /* RestoreView.swift */; };
+		598FAFB3D20E8517EEEFA273 /* InkColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E0AFF3413039F50C4B272FB /* InkColors.swift */; };
+		5FEC886E3F6BFF4E73FD74E1 /* OnboardingBiometricView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A20C2458E06D7EFC811426 /* OnboardingBiometricView.swift */; };
+		6DAF05C0B48E3689FAD80179 /* Block.swift in Sources */ = {isa = PBXBuildFile; fileRef = A41D0C0CE3C6C437F14C158D /* Block.swift */; };
+		7273794D9729CDBFE9B21CD6 /* InkTypography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A7FE3CA9D3EF396320849A /* InkTypography.swift */; };
+		7802C5439C06589E62A2D662 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 17FBEFF52E4EC788DE932A0D /* Assets.xcassets */; };
+		797182C803B87C9D2570FE75 /* CalendarMonthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54AAEEAF83757EE3CE26238 /* CalendarMonthView.swift */; };
+		7AEC07F806EE2D33705C38E2 /* ScreenStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AFFF57CAB5BA1C81D669E8F /* ScreenStub.swift */; };
+		80E4D041A6DE15DBD8F60417 /* OnboardingPhraseConfirmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24E28FE155EB0742670529A /* OnboardingPhraseConfirmView.swift */; };
+		8AD09BD5A4F0E16DADA3B6D1 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCEBBC63598C3F97666011EB /* SettingsView.swift */; };
+		8D632B015DB6064F6EF1AE00 /* OnboardingWelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28532393810DBF469C12D95F /* OnboardingWelcomeView.swift */; };
+		9B3B4BFCA4AA7688E5B01B16 /* TemplateListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C12ADF2D71C5A3EABD0F14C8 /* TemplateListView.swift */; };
+		9E6F76FAEE066C55167B9E98 /* ZenKakuGothicNew-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1A7657DBF1D61A60B9408803 /* ZenKakuGothicNew-Medium.ttf */; };
+		A96272C26C841F7A279A2E55 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE2F1A3F71A6ED0656C53B2 /* PaywallView.swift */; };
+		AAA59015015D0A4FF5105960 /* EntryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59BC7D7CF59B35AEED41BB7F /* EntryListView.swift */; };
+		AF0C957C78DC98B668B58F16 /* EditorBlockReorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14B3AD948EB334F421230290 /* EditorBlockReorderView.swift */; };
+		BC0D27A1D70D0730D7CB21B2 /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766734296CC2A8C5589D3AA4 /* SampleData.swift */; };
+		BCADF5C58E5445181D403BDE /* LockScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F460D61D3DC7C1CC5AFBAA3 /* LockScreenView.swift */; };
+		D0E9D7282F50A17DC0FB08E7 /* JournalEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC2C7C3164DBB03D79555B00 /* JournalEntry.swift */; };
+		D40689479E4F52029BE57098 /* EditorSelectionToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB5812DEFD71643DC9FB2676 /* EditorSelectionToolbarView.swift */; };
+		D880C4D3A9B3688BE6B3105B /* InkComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = F986D378B73E7F155EFE3BCA /* InkComponents.swift */; };
+		E368782CC4002864381C2952 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45F9E22095B7C77A9CE42D4 /* AppState.swift */; };
+		F9AE4E4CFB5D6E43E1178038 /* ThemeSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE98F99D8B405132C18BB6CF /* ThemeSettingsView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		02425BD7F67B1BDDD3969EE0 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		0793CC37DA30954F6CB94102 /* OnboardingPhraseBackupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPhraseBackupView.swift; sourceTree = "<group>"; };
+		0F460D61D3DC7C1CC5AFBAA3 /* LockScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreenView.swift; sourceTree = "<group>"; };
+		14B3AD948EB334F421230290 /* EditorBlockReorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorBlockReorderView.swift; sourceTree = "<group>"; };
+		15812819579D015970352C89 /* JournalTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalTemplate.swift; sourceTree = "<group>"; };
+		17FBEFF52E4EC788DE932A0D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		18EE568B17EE6D1045D00B79 /* InkIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InkIcons.swift; sourceTree = "<group>"; };
+		1A7657DBF1D61A60B9408803 /* ZenKakuGothicNew-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ZenKakuGothicNew-Medium.ttf"; sourceTree = "<group>"; };
+		1DAC0CB41D0E58AD6056F85D /* ZenKakuGothicNew-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ZenKakuGothicNew-Regular.ttf"; sourceTree = "<group>"; };
+		28532393810DBF469C12D95F /* OnboardingWelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingWelcomeView.swift; sourceTree = "<group>"; };
+		29A7FE3CA9D3EF396320849A /* InkTypography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InkTypography.swift; sourceTree = "<group>"; };
+		38B39791C2AB0FB5EC739A70 /* Nikki.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Nikki.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3FE2F1A3F71A6ED0656C53B2 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
+		4C745AE7A6F6BB6CE06311E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		56A20C2458E06D7EFC811426 /* OnboardingBiometricView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingBiometricView.swift; sourceTree = "<group>"; };
+		59BC7D7CF59B35AEED41BB7F /* EntryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryListView.swift; sourceTree = "<group>"; };
+		5E0AFF3413039F50C4B272FB /* InkColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InkColors.swift; sourceTree = "<group>"; };
+		5F816F732D52F8B441A9FC4E /* NikkiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NikkiApp.swift; sourceTree = "<group>"; };
+		6376C2355D7932A1A0584881 /* OFL.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = OFL.txt; sourceTree = "<group>"; };
+		6AFFF57CAB5BA1C81D669E8F /* ScreenStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenStub.swift; sourceTree = "<group>"; };
+		766734296CC2A8C5589D3AA4 /* SampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
+		7AD24D69AE47CB4268D3F72A /* OnboardingEncryptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingEncryptionView.swift; sourceTree = "<group>"; };
+		99680867289ABBCE3B3C1E99 /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorView.swift; sourceTree = "<group>"; };
+		A41D0C0CE3C6C437F14C158D /* Block.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Block.swift; sourceTree = "<group>"; };
+		A54AAEEAF83757EE3CE26238 /* CalendarMonthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarMonthView.swift; sourceTree = "<group>"; };
+		AB5812DEFD71643DC9FB2676 /* EditorSelectionToolbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorSelectionToolbarView.swift; sourceTree = "<group>"; };
+		B24E28FE155EB0742670529A /* OnboardingPhraseConfirmView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPhraseConfirmView.swift; sourceTree = "<group>"; };
+		C1026BD58F3644EEF0E57901 /* ScreenCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenCatalog.swift; sourceTree = "<group>"; };
+		C12ADF2D71C5A3EABD0F14C8 /* TemplateListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateListView.swift; sourceTree = "<group>"; };
+		C8D6B9BD79E29CAFC5970D5D /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		D45F9E22095B7C77A9CE42D4 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		D56E762410EA43BA0E5B281F /* TemplateVariableSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateVariableSheetView.swift; sourceTree = "<group>"; };
+		DC2C7C3164DBB03D79555B00 /* JournalEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalEntry.swift; sourceTree = "<group>"; };
+		DCEBBC63598C3F97666011EB /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		E876F829167055AA5ADAD1CB /* RestoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestoreView.swift; sourceTree = "<group>"; };
+		F986D378B73E7F155EFE3BCA /* InkComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InkComponents.swift; sourceTree = "<group>"; };
+		FDBC6289B6D6A4B3469344B9 /* ZenKakuGothicNew-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ZenKakuGothicNew-Bold.ttf"; sourceTree = "<group>"; };
+		FE98F99D8B405132C18BB6CF /* ThemeSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSettingsView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		152D1E6653A12D49B828BAF0 /* Nikki */ = {
+			isa = PBXGroup;
+			children = (
+				4C745AE7A6F6BB6CE06311E4 /* Info.plist */,
+				AED5A0C8E10B3F23EE07CF7D /* App */,
+				18BAA6C62B8921CBCB9ED3EE /* DesignSystem */,
+				2421E45A44BB5681D6473A30 /* Features */,
+				30BC4DB0165FF337ABA8DF80 /* Models */,
+				F8A972F729145CE3AC0549E4 /* Resources */,
+			);
+			path = Nikki;
+			sourceTree = "<group>";
+		};
+		189DE529E69E12E464163B6C /* Templates */ = {
+			isa = PBXGroup;
+			children = (
+				C12ADF2D71C5A3EABD0F14C8 /* TemplateListView.swift */,
+				D56E762410EA43BA0E5B281F /* TemplateVariableSheetView.swift */,
+			);
+			path = Templates;
+			sourceTree = "<group>";
+		};
+		18BAA6C62B8921CBCB9ED3EE /* DesignSystem */ = {
+			isa = PBXGroup;
+			children = (
+				5E0AFF3413039F50C4B272FB /* InkColors.swift */,
+				F986D378B73E7F155EFE3BCA /* InkComponents.swift */,
+				18EE568B17EE6D1045D00B79 /* InkIcons.swift */,
+				29A7FE3CA9D3EF396320849A /* InkTypography.swift */,
+			);
+			path = DesignSystem;
+			sourceTree = "<group>";
+		};
+		21B9F9D322722C851411482E /* Lock */ = {
+			isa = PBXGroup;
+			children = (
+				0F460D61D3DC7C1CC5AFBAA3 /* LockScreenView.swift */,
+			);
+			path = Lock;
+			sourceTree = "<group>";
+		};
+		2421E45A44BB5681D6473A30 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				4954BEAAFD68EC507B4C4EC4 /* Editor */,
+				D07B14B72EB7F09E26E6A5C3 /* Home */,
+				21B9F9D322722C851411482E /* Lock */,
+				C3012A9CF9E0F506CF424F6E /* Onboarding */,
+				274546CA033E5CE44CA63633 /* Paywall */,
+				AEFF333EF60B14C9DA8716EA /* Restore */,
+				B69494565FA01D7DD93E13B5 /* Settings */,
+				189DE529E69E12E464163B6C /* Templates */,
+				C147F17622A80532D1156AD0 /* Theme */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		274546CA033E5CE44CA63633 /* Paywall */ = {
+			isa = PBXGroup;
+			children = (
+				3FE2F1A3F71A6ED0656C53B2 /* PaywallView.swift */,
+			);
+			path = Paywall;
+			sourceTree = "<group>";
+		};
+		30BC4DB0165FF337ABA8DF80 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A41D0C0CE3C6C437F14C158D /* Block.swift */,
+				DC2C7C3164DBB03D79555B00 /* JournalEntry.swift */,
+				15812819579D015970352C89 /* JournalTemplate.swift */,
+				766734296CC2A8C5589D3AA4 /* SampleData.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		4954BEAAFD68EC507B4C4EC4 /* Editor */ = {
+			isa = PBXGroup;
+			children = (
+				14B3AD948EB334F421230290 /* EditorBlockReorderView.swift */,
+				AB5812DEFD71643DC9FB2676 /* EditorSelectionToolbarView.swift */,
+				99680867289ABBCE3B3C1E99 /* EditorView.swift */,
+			);
+			path = Editor;
+			sourceTree = "<group>";
+		};
+		56EBB89145381C53EAA980AC /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				6376C2355D7932A1A0584881 /* OFL.txt */,
+				FDBC6289B6D6A4B3469344B9 /* ZenKakuGothicNew-Bold.ttf */,
+				1A7657DBF1D61A60B9408803 /* ZenKakuGothicNew-Medium.ttf */,
+				1DAC0CB41D0E58AD6056F85D /* ZenKakuGothicNew-Regular.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		AED5A0C8E10B3F23EE07CF7D /* App */ = {
+			isa = PBXGroup;
+			children = (
+				D45F9E22095B7C77A9CE42D4 /* AppState.swift */,
+				5F816F732D52F8B441A9FC4E /* NikkiApp.swift */,
+				C8D6B9BD79E29CAFC5970D5D /* RootView.swift */,
+				C1026BD58F3644EEF0E57901 /* ScreenCatalog.swift */,
+				6AFFF57CAB5BA1C81D669E8F /* ScreenStub.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		AEFF333EF60B14C9DA8716EA /* Restore */ = {
+			isa = PBXGroup;
+			children = (
+				E876F829167055AA5ADAD1CB /* RestoreView.swift */,
+			);
+			path = Restore;
+			sourceTree = "<group>";
+		};
+		B69494565FA01D7DD93E13B5 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				DCEBBC63598C3F97666011EB /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		C147F17622A80532D1156AD0 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				FE98F99D8B405132C18BB6CF /* ThemeSettingsView.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+		C1F193C3C25AEDDCB3633E69 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				38B39791C2AB0FB5EC739A70 /* Nikki.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C3012A9CF9E0F506CF424F6E /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				56A20C2458E06D7EFC811426 /* OnboardingBiometricView.swift */,
+				7AD24D69AE47CB4268D3F72A /* OnboardingEncryptionView.swift */,
+				0793CC37DA30954F6CB94102 /* OnboardingPhraseBackupView.swift */,
+				B24E28FE155EB0742670529A /* OnboardingPhraseConfirmView.swift */,
+				28532393810DBF469C12D95F /* OnboardingWelcomeView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		CF7F7D3FCA8CDA90C72D5B31 = {
+			isa = PBXGroup;
+			children = (
+				152D1E6653A12D49B828BAF0 /* Nikki */,
+				C1F193C3C25AEDDCB3633E69 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		D07B14B72EB7F09E26E6A5C3 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				A54AAEEAF83757EE3CE26238 /* CalendarMonthView.swift */,
+				59BC7D7CF59B35AEED41BB7F /* EntryListView.swift */,
+				02425BD7F67B1BDDD3969EE0 /* HomeView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		F8A972F729145CE3AC0549E4 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				17FBEFF52E4EC788DE932A0D /* Assets.xcassets */,
+				56EBB89145381C53EAA980AC /* Fonts */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		54F30CD89F23FF354956763C /* Nikki */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AFE06502562D18338371C047 /* Build configuration list for PBXNativeTarget "Nikki" */;
+			buildPhases = (
+				BB30DC9471FD946681143FF2 /* Sources */,
+				A074E973B7A20922EE2C3F14 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Nikki;
+			packageProductDependencies = (
+			);
+			productName = Nikki;
+			productReference = 38B39791C2AB0FB5EC739A70 /* Nikki.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C619DB1EB9B6EB70324F8801 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					54F30CD89F23FF354956763C = {
+						DevelopmentTeam = TQPN82UBBY;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 79CBA718B90F10AF93AAF9F2 /* Build configuration list for PBXProject "Nikki" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = CF7F7D3FCA8CDA90C72D5B31;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 54;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				54F30CD89F23FF354956763C /* Nikki */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A074E973B7A20922EE2C3F14 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7802C5439C06589E62A2D662 /* Assets.xcassets in Resources */,
+				006B44FB7A09E0289CC7843A /* OFL.txt in Resources */,
+				3F76D0B8150C58068448A40E /* ZenKakuGothicNew-Bold.ttf in Resources */,
+				9E6F76FAEE066C55167B9E98 /* ZenKakuGothicNew-Medium.ttf in Resources */,
+				12BAEAE1C4FE2680A15373D5 /* ZenKakuGothicNew-Regular.ttf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BB30DC9471FD946681143FF2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E368782CC4002864381C2952 /* AppState.swift in Sources */,
+				6DAF05C0B48E3689FAD80179 /* Block.swift in Sources */,
+				797182C803B87C9D2570FE75 /* CalendarMonthView.swift in Sources */,
+				AF0C957C78DC98B668B58F16 /* EditorBlockReorderView.swift in Sources */,
+				D40689479E4F52029BE57098 /* EditorSelectionToolbarView.swift in Sources */,
+				19B2CFFFEC92CC414E833C90 /* EditorView.swift in Sources */,
+				AAA59015015D0A4FF5105960 /* EntryListView.swift in Sources */,
+				05C7CF37A9E08C895CF3CDC2 /* HomeView.swift in Sources */,
+				598FAFB3D20E8517EEEFA273 /* InkColors.swift in Sources */,
+				D880C4D3A9B3688BE6B3105B /* InkComponents.swift in Sources */,
+				0615EC45AE1942C73624AEF4 /* InkIcons.swift in Sources */,
+				7273794D9729CDBFE9B21CD6 /* InkTypography.swift in Sources */,
+				D0E9D7282F50A17DC0FB08E7 /* JournalEntry.swift in Sources */,
+				03E5AAC871829B2DE8924221 /* JournalTemplate.swift in Sources */,
+				BCADF5C58E5445181D403BDE /* LockScreenView.swift in Sources */,
+				045F61E955BE78F5412E4511 /* NikkiApp.swift in Sources */,
+				5FEC886E3F6BFF4E73FD74E1 /* OnboardingBiometricView.swift in Sources */,
+				06F82221D2948C35D17D61E6 /* OnboardingEncryptionView.swift in Sources */,
+				4B2881C8231BA547E98C52CA /* OnboardingPhraseBackupView.swift in Sources */,
+				80E4D041A6DE15DBD8F60417 /* OnboardingPhraseConfirmView.swift in Sources */,
+				8D632B015DB6064F6EF1AE00 /* OnboardingWelcomeView.swift in Sources */,
+				A96272C26C841F7A279A2E55 /* PaywallView.swift in Sources */,
+				5083EE3968C4C5ED87434500 /* RestoreView.swift in Sources */,
+				2731D39AAB1F99830D8AFBCB /* RootView.swift in Sources */,
+				BC0D27A1D70D0730D7CB21B2 /* SampleData.swift in Sources */,
+				0A59D71DEC238C6E78703A4A /* ScreenCatalog.swift in Sources */,
+				7AEC07F806EE2D33705C38E2 /* ScreenStub.swift in Sources */,
+				8AD09BD5A4F0E16DADA3B6D1 /* SettingsView.swift in Sources */,
+				9B3B4BFCA4AA7688E5B01B16 /* TemplateListView.swift in Sources */,
+				0E8597ED5FC125882594DF06 /* TemplateVariableSheetView.swift in Sources */,
+				F9AE4E4CFB5D6E43E1178038 /* ThemeSettingsView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		0A277F8A25B763F69F1B2731 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Nikki/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Nikki;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.bannzai.Nikki;
+				PRODUCT_NAME = Nikki;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		5023EE8AE4AAAAEF72C1026E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Nikki/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Nikki;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.bannzai.Nikki;
+				PRODUCT_NAME = Nikki;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		55D173B46432ECF709CE0EC0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = TQPN82UBBY;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		7B94FB3137840129C9F05BC6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = TQPN82UBBY;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		79CBA718B90F10AF93AAF9F2 /* Build configuration list for PBXProject "Nikki" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7B94FB3137840129C9F05BC6 /* Debug */,
+				55D173B46432ECF709CE0EC0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		AFE06502562D18338371C047 /* Build configuration list for PBXNativeTarget "Nikki" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5023EE8AE4AAAAEF72C1026E /* Debug */,
+				0A277F8A25B763F69F1B2731 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C619DB1EB9B6EB70324F8801 /* Project object */;
+}
