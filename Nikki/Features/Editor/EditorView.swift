@@ -20,11 +20,18 @@ struct EditorView: View {
                         .foregroundStyle(InkColors.ink)
                         .padding(.bottom, 14)
 
+                    // SwiftUI の lineSpacing は CSS の line-height と違い段落端に half-leading を
+                    // 付けないため、行間(2.05)相当の余白を段落の上下に補ってから段落マージン 12pt を足す。
+                    // これで段落間ギャップが行内の行間より広くなり、見本どおり段落の切れ目が読める。
+                    let paragraphHalfLeading = InkTypography.body.lineSpacing / 2
+
                     if let first = paragraphs.first {
                         EditorParagraphBlock(text: first)
+                            .padding(.vertical, paragraphHalfLeading)
                     }
                     if paragraphs.count > 1 {
                         EditorWritingParagraph(text: paragraphs[1])
+                            .padding(.vertical, paragraphHalfLeading)
                             .padding(.top, 12)
                     }
                 }

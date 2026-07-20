@@ -83,7 +83,11 @@ struct OnboardingPhraseBackupView: View {
         }
         .padding(.horizontal, 13)
         .padding(.vertical, 10)
-        .inkCard(cornerRadius: 10)
+        .background(RoundedRectangle(cornerRadius: 10, style: .continuous).fill(InkColors.surface))
+        .overlay(
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .strokeBorder(InkColors.border, lineWidth: 1)
+        )
     }
 }
 
