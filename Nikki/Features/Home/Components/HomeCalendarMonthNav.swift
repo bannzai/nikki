@@ -16,7 +16,8 @@ struct HomeCalendarMonthNav: View {
 
             Spacer(minLength: 0)
 
-            Text("\(comps.year ?? 0)年\(comps.month ?? 0)月")
+            // Text の Int 補間はロケール書式で桁区切り(2,026)が入るため、String にしてから表示する。
+            Text("\(String(comps.year ?? 0))年\(comps.month ?? 0)月")
                 .font(InkTypography.font(15, .bold))
                 .foregroundStyle(InkColors.ink)
 
