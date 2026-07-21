@@ -38,11 +38,13 @@
 		4E0865ECF818FC3A659DAF14 /* OnboardingLogoMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBA9E2946D26692F086817 /* OnboardingLogoMark.swift */; };
 		4ECB9C57E7845E0E2DC65537 /* PaywallHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 164FF1FF16C6BDB7985263C9 /* PaywallHeader.swift */; };
 		50B72B110DDBDCBF3C3D761D /* EditorScreenScaffold.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B47B5C0DF26265DF248E7D9 /* EditorScreenScaffold.swift */; };
+		552599AD2A6A45A4BBB83A87 /* BlockMarkdownTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7625D75FB63257A914AB2D11 /* BlockMarkdownTests.swift */; };
 		57A34AE685B2D68519A0CB3D /* ThemePreviewCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67918CB4B903566099ED4D95 /* ThemePreviewCard.swift */; };
 		598FAFB3D20E8517EEEFA273 /* InkColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E0AFF3413039F50C4B272FB /* InkColors.swift */; };
 		59ADE491475E77F1CFE9360B /* PaywallFooterLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 101BBE9BB9A2784BEE7C1772 /* PaywallFooterLink.swift */; };
 		5D4A5718B5AC8A2BC8F9BD91 /* ThemeSectionLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96CD57989BD942ACEDDBD5F /* ThemeSectionLabel.swift */; };
 		5F9FE0B6206B68417D3D3454 /* HomeCalendarMonthNav.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757674A59DBC876A16AD698B /* HomeCalendarMonthNav.swift */; };
+		60AF2A07080D449730CC63B7 /* Block+Markdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF2FEC23775F11946489ACD /* Block+Markdown.swift */; };
 		6D395C26DFF2F5514C56AA79 /* EditorBlockPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06190D0FFF0EB8E6F02AA3A7 /* EditorBlockPicker.swift */; };
 		6DAF05C0B48E3689FAD80179 /* Block.swift in Sources */ = {isa = PBXBuildFile; fileRef = A41D0C0CE3C6C437F14C158D /* Block.swift */; };
 		71127F8D6056C51A7ECB5DBE /* HomeHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B020854BCC7FA07FA4237F /* HomeHeader.swift */; };
@@ -59,7 +61,9 @@
 		83DA1666FED66ED698C6EAC9 /* OnboardingWelcomePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66B4042D38A5FDA1A8029CF3 /* OnboardingWelcomePage.swift */; };
 		844A464C8C02304757528927 /* HomeCalendarWeekdayHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0208AEEACDB6816DE15FA0 /* HomeCalendarWeekdayHeader.swift */; };
 		8D102C3230CDB767AA5B1D90 /* EditorDraggingCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A10548617EA207CACB3436B /* EditorDraggingCard.swift */; };
+		91A1F236602D5C0E8CAC7983 /* EditorWritingPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16094E045E8DD23E8C560D6E /* EditorWritingPage.swift */; };
 		930ACEF7CDE9CCFCFB1B856E /* EditorDragHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E352ABC971178991AD0CFFBA /* EditorDragHandle.swift */; };
+		96F8F6D6C31D8C7FA2AC9719 /* JournalEntryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF083E94A1281338FA15F8A /* JournalEntryTests.swift */; };
 		974B2C6BDC5FB1047177592B /* EditorWritingParagraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5219618F8FE7F635CA13D9A1 /* EditorWritingParagraph.swift */; };
 		9AF88CF22995CAA9C9E79B72 /* EditorInsertionIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42467DF2C96AFF94E943E47D /* EditorInsertionIndicator.swift */; };
 		9C4435A3ABC2BD9C340D4899 /* TemplateVariableFieldCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF2D0FEF90364A0AA27D962 /* TemplateVariableFieldCard.swift */; };
@@ -87,18 +91,31 @@
 		E368782CC4002864381C2952 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45F9E22095B7C77A9CE42D4 /* AppState.swift */; };
 		EF3EEB22D5D60B485AAAA42C /* HomeCalendarPreviewCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B34B5026693697EF249A9B1B /* HomeCalendarPreviewCard.swift */; };
 		F0F86ECF7DE30A5115CEF001 /* EditorReorderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46D6442A69622DFD0E22795 /* EditorReorderRow.swift */; };
+		FB2EB0E3C6DD49702D8DC0CA /* HomeEmptyState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB8FE2154B528D325EBFF2D /* HomeEmptyState.swift */; };
 		FB8C82B28284FC25072D56F6 /* ThemePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46D1DEE127FAD755060639D9 /* ThemePage.swift */; };
 		FECADA2AACE7256E3B2C1C0F /* EditorImageBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82951D8DECE060A9A4ECCFAA /* EditorImageBlock.swift */; };
 		FF4039DCB128C8F9105AF106 /* EditorDateText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20FC750220F77C6D020D79F9 /* EditorDateText.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		4E9C8A252CEE9AA118D87512 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C619DB1EB9B6EB70324F8801 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 54F30CD89F23FF354956763C;
+			remoteInfo = Nikki;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		051E07A1DF1FE0939F4A6EDF /* HomeMonthGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeMonthGroup.swift; sourceTree = "<group>"; };
 		06190D0FFF0EB8E6F02AA3A7 /* EditorBlockPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorBlockPicker.swift; sourceTree = "<group>"; };
 		067EE9F4A8C7640919608B93 /* EditorPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorPage.swift; sourceTree = "<group>"; };
+		07FD79C6F7133FAB73E4C435 /* NikkiTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = NikkiTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		101BBE9BB9A2784BEE7C1772 /* PaywallFooterLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallFooterLink.swift; sourceTree = "<group>"; };
 		11EA798E4BFD5ACF93152BFD /* TemplateNewFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateNewFooter.swift; sourceTree = "<group>"; };
 		15812819579D015970352C89 /* JournalTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalTemplate.swift; sourceTree = "<group>"; };
+		16094E045E8DD23E8C560D6E /* EditorWritingPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorWritingPage.swift; sourceTree = "<group>"; };
 		164FF1FF16C6BDB7985263C9 /* PaywallHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallHeader.swift; sourceTree = "<group>"; };
 		16D6F342C5A44292FC5416CB /* EditorSelectedHeading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorSelectedHeading.swift; sourceTree = "<group>"; };
 		17FBEFF52E4EC788DE932A0D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -116,6 +133,7 @@
 		2EEBA9E2946D26692F086817 /* OnboardingLogoMark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingLogoMark.swift; sourceTree = "<group>"; };
 		2F4DDDB65909A22FFF160BE1 /* LockFaceIDButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockFaceIDButton.swift; sourceTree = "<group>"; };
 		38B39791C2AB0FB5EC739A70 /* Nikki.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Nikki.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3AF083E94A1281338FA15F8A /* JournalEntryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalEntryTests.swift; sourceTree = "<group>"; };
 		3B8B8D2905E96CADBA4AB3DB /* ThemeBackgroundImageCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeBackgroundImageCard.swift; sourceTree = "<group>"; };
 		42467DF2C96AFF94E943E47D /* EditorInsertionIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorInsertionIndicator.swift; sourceTree = "<group>"; };
 		42B020854BCC7FA07FA4237F /* HomeHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeHeader.swift; sourceTree = "<group>"; };
@@ -136,8 +154,11 @@
 		739EDADE1949C498089C3604 /* PaywallPlanCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallPlanCard.swift; sourceTree = "<group>"; };
 		7429940A93D19CF138F0AC7B /* LockSkeletonBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockSkeletonBackground.swift; sourceTree = "<group>"; };
 		757674A59DBC876A16AD698B /* HomeCalendarMonthNav.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCalendarMonthNav.swift; sourceTree = "<group>"; };
+		7625D75FB63257A914AB2D11 /* BlockMarkdownTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockMarkdownTests.swift; sourceTree = "<group>"; };
 		766734296CC2A8C5589D3AA4 /* SampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
 		7715B25E127BF7EAD61BCA1D /* TemplateCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateCard.swift; sourceTree = "<group>"; };
+		7BF2FEC23775F11946489ACD /* Block+Markdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Block+Markdown.swift"; sourceTree = "<group>"; };
+		7EB8FE2154B528D325EBFF2D /* HomeEmptyState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeEmptyState.swift; sourceTree = "<group>"; };
 		7FFC45A3C1B23A539769C185 /* OnboardingEncryptionPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingEncryptionPage.swift; sourceTree = "<group>"; };
 		82951D8DECE060A9A4ECCFAA /* EditorImageBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorImageBlock.swift; sourceTree = "<group>"; };
 		832D41AD6D045557E2717AE2 /* PaywallBenefitRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallBenefitRow.swift; sourceTree = "<group>"; };
@@ -174,6 +195,7 @@
 		DFFFA08DBA55395132C6471B /* SettingsSectionLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSectionLabel.swift; sourceTree = "<group>"; };
 		E352ABC971178991AD0CFFBA /* EditorDragHandle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorDragHandle.swift; sourceTree = "<group>"; };
 		E96CD57989BD942ACEDDBD5F /* ThemeSectionLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSectionLabel.swift; sourceTree = "<group>"; };
+		EA6B0540C548E08F1F643BA2 /* Nikki.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Nikki.entitlements; sourceTree = "<group>"; };
 		EC18E95563F0411929506D8E /* PaywallCloseButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallCloseButton.swift; sourceTree = "<group>"; };
 		F5EA5E3B4EE25B01A1CD7951 /* LockOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockOverlay.swift; sourceTree = "<group>"; };
 		F986D378B73E7F155EFE3BCA /* InkComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InkComponents.swift; sourceTree = "<group>"; };
@@ -217,6 +239,7 @@
 			isa = PBXGroup;
 			children = (
 				4C745AE7A6F6BB6CE06311E4 /* Info.plist */,
+				EA6B0540C548E08F1F643BA2 /* Nikki.entitlements */,
 				AED5A0C8E10B3F23EE07CF7D /* App */,
 				18BAA6C62B8921CBCB9ED3EE /* DesignSystem */,
 				2421E45A44BB5681D6473A30 /* Features */,
@@ -295,11 +318,21 @@
 			isa = PBXGroup;
 			children = (
 				A41D0C0CE3C6C437F14C158D /* Block.swift */,
+				7BF2FEC23775F11946489ACD /* Block+Markdown.swift */,
 				DC2C7C3164DBB03D79555B00 /* JournalEntry.swift */,
 				15812819579D015970352C89 /* JournalTemplate.swift */,
 				766734296CC2A8C5589D3AA4 /* SampleData.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		3418E7616F6540FAF8D16402 /* NikkiTests */ = {
+			isa = PBXGroup;
+			children = (
+				7625D75FB63257A914AB2D11 /* BlockMarkdownTests.swift */,
+				3AF083E94A1281338FA15F8A /* JournalEntryTests.swift */,
+			);
+			path = NikkiTests;
 			sourceTree = "<group>";
 		};
 		4954BEAAFD68EC507B4C4EC4 /* Editor */ = {
@@ -311,6 +344,7 @@
 				2ACDF474F7D7D3A962AAF485 /* EditorPalette.swift */,
 				CC37923FFD216D2012FF82F1 /* EditorReorderPage.swift */,
 				59F5376346171B87314B9870 /* EditorSelectionPage.swift */,
+				16094E045E8DD23E8C560D6E /* EditorWritingPage.swift */,
 				0CB32F8EE525001BDA9344E3 /* Components */,
 			);
 			path = Editor;
@@ -383,6 +417,7 @@
 			isa = PBXGroup;
 			children = (
 				38B39791C2AB0FB5EC739A70 /* Nikki.app */,
+				07FD79C6F7133FAB73E4C435 /* NikkiTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -425,6 +460,7 @@
 			isa = PBXGroup;
 			children = (
 				152D1E6653A12D49B828BAF0 /* Nikki */,
+				3418E7616F6540FAF8D16402 /* NikkiTests */,
 				C1F193C3C25AEDDCB3633E69 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -456,6 +492,7 @@
 				757674A59DBC876A16AD698B /* HomeCalendarMonthNav.swift */,
 				B34B5026693697EF249A9B1B /* HomeCalendarPreviewCard.swift */,
 				4E0208AEEACDB6816DE15FA0 /* HomeCalendarWeekdayHeader.swift */,
+				7EB8FE2154B528D325EBFF2D /* HomeEmptyState.swift */,
 				B6B9F9C21E6D4A4BD575E287 /* HomeEntryRow.swift */,
 				42B020854BCC7FA07FA4237F /* HomeHeader.swift */,
 				858B5687927B41A1F52024CF /* HomeListBody.swift */,
@@ -485,6 +522,24 @@
 			productReference = 38B39791C2AB0FB5EC739A70 /* Nikki.app */;
 			productType = "com.apple.product-type.application";
 		};
+		FE442D62C95D3A6C1DBFD3A1 /* NikkiTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 541D6ACCE3BA87317A4073B4 /* Build configuration list for PBXNativeTarget "NikkiTests" */;
+			buildPhases = (
+				80E49BA6DC6B7983C7906190 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F8ABA416C469FE968BE85512 /* PBXTargetDependency */,
+			);
+			name = NikkiTests;
+			packageProductDependencies = (
+			);
+			productName = NikkiTests;
+			productReference = 07FD79C6F7133FAB73E4C435 /* NikkiTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -495,6 +550,10 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					54F30CD89F23FF354956763C = {
+						DevelopmentTeam = TQPN82UBBY;
+						ProvisioningStyle = Automatic;
+					};
+					FE442D62C95D3A6C1DBFD3A1 = {
 						DevelopmentTeam = TQPN82UBBY;
 						ProvisioningStyle = Automatic;
 					};
@@ -515,6 +574,7 @@
 			projectRoot = "";
 			targets = (
 				54F30CD89F23FF354956763C /* Nikki */,
+				FE442D62C95D3A6C1DBFD3A1 /* NikkiTests */,
 			);
 		};
 /* End PBXProject section */
@@ -535,11 +595,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		80E49BA6DC6B7983C7906190 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				552599AD2A6A45A4BBB83A87 /* BlockMarkdownTests.swift in Sources */,
+				96F8F6D6C31D8C7FA2AC9719 /* JournalEntryTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BB30DC9471FD946681143FF2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				E368782CC4002864381C2952 /* AppState.swift in Sources */,
+				60AF2A07080D449730CC63B7 /* Block+Markdown.swift in Sources */,
 				6DAF05C0B48E3689FAD80179 /* Block.swift in Sources */,
 				6D395C26DFF2F5514C56AA79 /* EditorBlockPicker.swift in Sources */,
 				083B49E14614BFD3C5CF97B7 /* EditorCheckbox.swift in Sources */,
@@ -562,6 +632,7 @@
 				7F87A96B3C327DD6188BEA9A /* EditorSelectedHeading.swift in Sources */,
 				E2C6328ACB0AFD6B8A78C393 /* EditorSelectionPage.swift in Sources */,
 				1036F4C23998A91A505C56AE /* EditorSelectionToolbar.swift in Sources */,
+				91A1F236602D5C0E8CAC7983 /* EditorWritingPage.swift in Sources */,
 				974B2C6BDC5FB1047177592B /* EditorWritingParagraph.swift in Sources */,
 				AC1400ABBD2F3F21DB16CD4D /* HomeCalendarBody.swift in Sources */,
 				0935B04B76897A31C76A95F6 /* HomeCalendarDayCell.swift in Sources */,
@@ -569,6 +640,7 @@
 				5F9FE0B6206B68417D3D3454 /* HomeCalendarMonthNav.swift in Sources */,
 				EF3EEB22D5D60B485AAAA42C /* HomeCalendarPreviewCard.swift in Sources */,
 				844A464C8C02304757528927 /* HomeCalendarWeekdayHeader.swift in Sources */,
+				FB2EB0E3C6DD49702D8DC0CA /* HomeEmptyState.swift in Sources */,
 				80DDED57DFC0AC6B71AB80E0 /* HomeEntryRow.swift in Sources */,
 				71127F8D6056C51A7ECB5DBE /* HomeHeader.swift in Sources */,
 				3761CB0CEACD91606FAC8B11 /* HomeListBody.swift in Sources */,
@@ -622,11 +694,20 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		F8ABA416C469FE968BE85512 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 54F30CD89F23FF354956763C /* Nikki */;
+			targetProxy = 4E9C8A252CEE9AA118D87512 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
 		0A277F8A25B763F69F1B2731 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Nikki/Nikki.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = NO;
@@ -648,6 +729,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Nikki/Nikki.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GENERATE_INFOPLIST_FILE = NO;
@@ -727,6 +809,24 @@
 			};
 			name = Release;
 		};
+		6B5D04BF525E6EA3C0EED5AD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.bannzai.NikkiTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Nikki.app/Nikki";
+			};
+			name = Debug;
+		};
 		7B94FB3137840129C9F05BC6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -796,9 +896,36 @@
 			};
 			name = Debug;
 		};
+		E2A68CEA7AFCA1455BC72899 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.bannzai.NikkiTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Nikki.app/Nikki";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		541D6ACCE3BA87317A4073B4 /* Build configuration list for PBXNativeTarget "NikkiTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6B5D04BF525E6EA3C0EED5AD /* Debug */,
+				E2A68CEA7AFCA1455BC72899 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		79CBA718B90F10AF93AAF9F2 /* Build configuration list for PBXProject "Nikki" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
