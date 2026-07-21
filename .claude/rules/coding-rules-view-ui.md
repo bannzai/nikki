@@ -14,9 +14,8 @@ paths:
 
 ### Viewは構造体で定義する
 
-- 画面やコンポーネントを表す View は `struct SomeView: View` のように構造体で定義する
-- 画面・コンポーネント相当のものを `var someView: some View` のファイルスコープの computed property で代用しない
-- 補足: `body` 内の局所的な分解として `private var header: some View` のようなサブビュー computed property を使うのは許容する（Nikki の既存コードでも `HomeView.header` 等で使用）。ただし再利用・テスト・プレビューの対象になるものは struct に切り出す
+- View は `var someView: some View` のようにプロパティで宣言しない
+- 必ず `struct SomeView: View` のように構造体で定義する（`private var header: some View` のような computed property でのサブビュー宣言も禁止。ViewModifier の `body(content:)` や `View` extension のモディファイア関数はこの規約の対象外）
 
 ### .padding
 

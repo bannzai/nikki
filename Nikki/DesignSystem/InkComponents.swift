@@ -124,14 +124,8 @@ struct InkSegmentedControl: View {
 }
 
 struct InkFAB: View {
-    var icon: String
+    var icon: String = InkIcons.pen
     let action: () -> Void
-
-    // icon にデフォルト(ペン)を与えるための init。
-    init(icon: String = InkIcons.pen, action: @escaping () -> Void) {
-        self.icon = icon
-        self.action = action
-    }
 
     var body: some View {
         Button(action: action) {
@@ -150,7 +144,7 @@ struct InkSearchBar: View {
     var placeholder: String
     @Binding var text: String
 
-    // placeholder と Binding の text にプレビュー用デフォルトを与えるための init。
+    // Binding の text に既定値を与えるための init(memberwise では Binding のデフォルト値を表現できない)。
     init(placeholder: String = "日記をさがす", text: Binding<String> = .constant("")) {
         self.placeholder = placeholder
         self._text = text
@@ -316,16 +310,9 @@ enum InkNavCenter {
 }
 
 struct InkNavBar: View {
-    var leading: InkNavLeading
-    var center: InkNavCenter
-    var onLeading: (() -> Void)?
-
-    // leading / center / onLeading にデフォルトを与えるための init。
-    init(leading: InkNavLeading = .none, center: InkNavCenter = .none, onLeading: (() -> Void)? = nil) {
-        self.leading = leading
-        self.center = center
-        self.onLeading = onLeading
-    }
+    var leading: InkNavLeading = .none
+    var center: InkNavCenter = .none
+    var onLeading: (() -> Void)? = nil
 
     var body: some View {
         ZStack {
@@ -343,16 +330,21 @@ struct InkNavBar: View {
             }
 
             HStack {
-                leadingButton
+                InkNavBarLeadingButton(leading: leading, onLeading: onLeading)
                 Spacer()
             }
         }
         .frame(height: 44)
         .padding(.horizontal, 20)
     }
+}
 
-    @ViewBuilder
-    private var leadingButton: some View {
+/// InkNavBar の左端ボタン(なし / 戻る / 閉じる)。
+struct InkNavBarLeadingButton: View {
+    let leading: InkNavLeading
+    var onLeading: (() -> Void)? = nil
+
+    var body: some View {
         switch leading {
         case .none:
             Color.clear.frame(width: 16, height: 16)

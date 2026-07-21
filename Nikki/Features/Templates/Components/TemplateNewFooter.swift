@@ -1,0 +1,16 @@
+import SwiftUI
+
+/// 一覧末尾の「＋ 新しいテンプレート」フッタ。
+struct TemplateNewFooter: View {
+    var body: some View {
+        HStack(spacing: 8) {
+            Image(systemName: InkIcons.add)
+                .font(.system(size: 14, weight: .regular))
+            Text("新しいテンプレート")
+                .font(InkTypography.font(13.5, .regular))
+        }
+        .foregroundStyle(InkColors.textSecondary)
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 20)
+    }
+}

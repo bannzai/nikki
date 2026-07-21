@@ -1,7 +1,7 @@
 import SwiftUI
 import Observation
 
-enum HomeViewMode: Int, CaseIterable {
+enum HomePageMode: Int, CaseIterable {
     case list
     case calendar
 }
@@ -10,7 +10,7 @@ enum HomeViewMode: Int, CaseIterable {
 @Observable
 final class AppState {
     var isLocked: Bool = false
-    var homeView: HomeViewMode = .list
+    var homeView: HomePageMode = .list
     var paperColor: PaperColorPreset = .ecru
     var onboardingCompleted: Bool = false
 }

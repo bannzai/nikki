@@ -6,18 +6,20 @@ struct NikkiApp: App {
 
     var body: some Scene {
         WindowGroup {
-            content
+            NikkiAppContent()
                 .environment(appState)
         }
     }
+}
 
-    @ViewBuilder
-    private var content: some View {
+/// 起動画面の振り分け。環境変数 NIKKI_SCREEN があれば ScreenCatalog の該当画面、無ければ通常フロー。
+private struct NikkiAppContent: View {
+    var body: some View {
         if let raw = ProcessInfo.processInfo.environment["NIKKI_SCREEN"],
            let screen = Screen(rawValue: raw) {
-            screen.view
+            ScreenContent(screen: screen)
         } else {
-            RootView()
+            RootPage()
         }
     }
 }

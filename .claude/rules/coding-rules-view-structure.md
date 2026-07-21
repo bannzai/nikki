@@ -18,43 +18,44 @@ paths:
 
 ### エントリーポイントの命名規則
 
-- 各Feature のエントリーポイントとなる View は `{FeatureName}View`（または役割を表す `{FeatureName}{Role}View`）で統一する
-  - 例: `HomeView`, `EditorView`, `SettingsView`, `ThemeSettingsView`, `TemplateListView`
-- Focus は `{FeatureName}Page` を採用しているが、Nikki の既存コードは `View` サフィックスで統一されているため、Nikki では `View` サフィックスに合わせる
-- シート形式の画面も `View` サフィックスで表現する（例: `TemplateVariableSheetView`）
+- 各Featureのエントリーポイントは、Viewである限り `{FeatureName}Page` で統一（`View` サフィックスは使わない）
+- Sheet形式でも `{FeatureName}Page` とする（`{FeatureName}Sheet` は使わない）
+- 例: `HomePage`, `EditorPage`, `SettingsPage`, `ThemePage`, `TemplateListPage`, `TemplateVariablePage`
 
 ### コンポーネント（サブビュー）の配置と命名
 
-- エントリーポイント View や本体（後述の `{Feature}Body`）から切り出したサブビュー struct は、**Feature名を prefix に付けて命名**する
-  - 例: `HomeListBody`, `HomeCalendarBody`, `HomeEntryRow`, `HomeMonthGroup`, `EditorParagraphBlock`
-- サブビューは同じ Feature ディレクトリ内のファイルに配置する。数が増えて見通しが悪くなる場合は `Features/{FeatureName}/Components/` にファイルを分ける
-- ファイル名はそのファイルの主となる型名に合わせる
+- `{Feature}PageBody` 以外の private struct は、`Nikki/Features/{FeatureName}/Components/` ディレクトリに配置
+- コンポーネント名は `{FeatureName}{ComponentName}` の形式で命名（Feature名をprefixとして付ける）
+- ファイル名もコンポーネント名と同じにする
+- 例: `Features/Paywall/Components/PaywallPlanCard.swift`
 
 ### 良い例：Feature構造
 
 ```
 Features/
 ├── Home/
-│   ├── HomeView.swift            # エントリーポイント（共通シャーシ）
-│   ├── EntryListView.swift       # HomeListBody / HomeEntryRow など（Home prefix）
-│   └── CalendarMonthView.swift   # HomeCalendarBody など
+│   ├── HomePage.swift            # エントリーポイント（共通シャーシ）
+│   └── Components/
+│       ├── HomeListBody.swift    # Feature名が prefix、ファイル名=型名
+│       └── HomeCalendarBody.swift
 ├── Editor/
-│   ├── EditorView.swift          # エントリーポイント
-│   └── EditorSupport.swift
+│   ├── EditorPage.swift          # エントリーポイント
+│   └── Components/
+│       └── EditorParagraphBlock.swift
 └── Settings/
-    └── SettingsView.swift        # エントリーポイント
+    └── SettingsPage.swift        # エントリーポイント
 ```
 
 ```swift
-// Features/Home/HomeView.swift
-struct HomeView: View {  // ✅ {FeatureName}View
+// Features/Home/HomePage.swift
+struct HomePage: View {  // ✅ {FeatureName}Page
     var body: some View {
         // ...
         HomeListBody(entries: entries)  // ✅ Feature名が prefix
     }
 }
 
-// Features/Home/EntryListView.swift
+// Features/Home/Components/HomeListBody.swift
 struct HomeListBody: View {  // ✅ Feature名が prefix
     // ...
 }
@@ -64,9 +65,9 @@ struct HomeListBody: View {  // ✅ Feature名が prefix
 
 ### いつ使うか
 
-- エントリーポイント View の `body` が分岐や複数モードで肥大化する場合、本体を `{Feature}{Role}Body` の struct に切り出す
-  - 例: `HomeView` は選択モードに応じて `HomeListBody` / `HomeCalendarBody` を切り替える
-- 単純な画面では Body を作らず、直接 View に `body` を実装する
+- エントリーポイントの `body` が分岐や複数モードで肥大化する場合、本体を `{Feature}{Role}Body` の struct に切り出す
+  - 例: `HomePage` は選択モードに応じて `HomeListBody` / `HomeCalendarBody` を切り替える
+- 単純な画面では Body を作らず、直接 Page に `body` を実装する
 - **（非同期データ取得を導入した時）** エントリーポイントで非同期のデータ取得が必要になった場合、取得を親 View で解決し、取得成功時に `{Feature}Body` を表示する形にする
   - 現在 Nikki は非同期データ取得層（Firestore 等）を未導入。導入時にこのパターンを適用する
 

@@ -24,15 +24,8 @@ enum InkFontWeight {
 
 struct InkTextStyle {
     var font: Font
-    var lineSpacing: CGFloat
-    var tracking: CGFloat
-
-    // lineSpacing / tracking にデフォルト(0)を与えるための init。
-    init(font: Font, lineSpacing: CGFloat = 0, tracking: CGFloat = 0) {
-        self.font = font
-        self.lineSpacing = lineSpacing
-        self.tracking = tracking
-    }
+    var lineSpacing: CGFloat = 0
+    var tracking: CGFloat = 0
 }
 
 enum InkTypography {

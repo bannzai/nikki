@@ -20,38 +20,42 @@ enum Screen: String, CaseIterable, Identifiable {
     case settings = "1r"
 
     var id: String { rawValue }
+}
 
-    @ViewBuilder
-    var view: some View {
-        switch self {
+/// Screen に対応する画面を描画する。環境変数 NIKKI_SCREEN での直接起動に使う。
+struct ScreenContent: View {
+    let screen: Screen
+
+    var body: some View {
+        switch screen {
         case .welcome:
-            OnboardingWelcomeView()
+            OnboardingWelcomePage()
         case .encryption:
-            OnboardingEncryptionView()
+            OnboardingEncryptionPage()
         case .biometric:
-            OnboardingBiometricView()
+            OnboardingBiometricPage()
         case .lock:
-            LockScreenView()
+            LockPage()
         case .entryList:
-            EntryListView(entries: SampleData.entries, today: SampleData.referenceToday)
+            HomePage(entries: SampleData.entries, today: SampleData.referenceToday, initialMode: .list)
         case .calendar:
-            CalendarMonthView(entries: SampleData.entries, today: SampleData.referenceToday)
+            HomePage(entries: SampleData.entries, today: SampleData.referenceToday, initialMode: .calendar)
         case .editorWriting:
-            EditorView(entry: SampleData.sampleEntry)
+            EditorPage(entry: SampleData.sampleEntry)
         case .editorSelection:
-            EditorSelectionToolbarView(entry: SampleData.sampleEntry)
+            EditorSelectionPage(entry: SampleData.sampleEntry)
         case .editorReorder:
-            EditorBlockReorderView(entry: SampleData.sampleEntry)
+            EditorReorderPage(entry: SampleData.sampleEntry)
         case .templateList:
-            TemplateListView(templates: SampleData.templates)
+            TemplateListPage(templates: SampleData.templates)
         case .templateVariable:
-            TemplateVariableSheetView(template: SampleData.reflectionTemplate, today: SampleData.referenceToday)
+            TemplateVariablePage(template: SampleData.reflectionTemplate, today: SampleData.referenceToday)
         case .theme:
-            ThemeSettingsView(selected: .ecru)
+            ThemePage(selected: .ecru)
         case .paywall:
-            PaywallView()
+            PaywallPage()
         case .settings:
-            SettingsView()
+            SettingsPage()
         }
     }
 }
