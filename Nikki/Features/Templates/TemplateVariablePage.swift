@@ -19,7 +19,8 @@ struct TemplateVariablePage: View {
         self.template = template
         self.today = today
         self.onStart = onStart
-        _fields = State(initialValue: TemplateVariableField.fields(for: template, today: today))
+        // カタログ(1m)の記入済み状態を再現するため、デモ初期値を含めてフィールドを組み立てる。
+        _fields = State(initialValue: TemplateVariableField.fields(for: template, today: today, includesDemoValues: true))
     }
 
     var body: some View {

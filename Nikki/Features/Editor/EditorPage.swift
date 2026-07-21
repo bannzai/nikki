@@ -1,38 +1,53 @@
 import SwiftUI
+import SwiftData
 
-/// エディタ 執筆中(1i)。ツールバー・装飾は出さず、2つ目の段落末尾に点滅キャレットを置く。
+/// エディタ。タイトルと本文 markdown をそのまま編集し、変更のたびに日記へ書き戻す。
+/// 選択ツールバー(1j)・ブロック並び替え(1k)は静的表現のままで、この画面はテキスト編集に徹する。
 struct EditorPage: View {
-    var entry: JournalEntry = SampleData.sampleEntry
+    let entry: JournalEntry
+
+    /// 編集中のタイトル。変更のたびに entry へ書き戻す。
+    @State var title: String
+    /// 編集中の本文 markdown。変更のたびに entry へ書き戻す。
+    @State var bodyMarkdown: String
+
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
+
+    // @State の初期値を entry から導出するため custom init を用いる。
+    init(entry: JournalEntry) {
+        self.entry = entry
+        self._title = State(initialValue: entry.title)
+        self._bodyMarkdown = State(initialValue: entry.bodyMarkdown)
+    }
 
     var body: some View {
-        EditorScreenScaffold(caption: EditorDateText.caption(for: entry.date)) {
-            ScrollView(.vertical, showsIndicators: false) {
-                VStack(alignment: .leading, spacing: 0) {
-                    let paragraphs = EditorBlockPicker.paragraphTexts(entry)
-                    Text(entry.title)
-                        .font(InkTypography.entryTitle)
-                        .lineSpacing(InkTypography.lineSpacing(fontSize: 22, multiplier: 1.6))
-                        .foregroundStyle(InkColors.ink)
-                        .padding(.bottom, 14)
-
-                    // SwiftUI の lineSpacing は CSS の line-height と違い段落端に half-leading を
-                    // 付けないため、行間(2.05)相当の余白を段落の上下に補ってから段落マージン 12pt を足す。
-                    // これで段落間ギャップが行内の行間より広くなり、見本どおり段落の切れ目が読める。
-                    let paragraphHalfLeading = InkTypography.body.lineSpacing / 2
-
-                    if let first = paragraphs.first {
-                        EditorParagraphBlock(text: first)
-                            .padding(.vertical, paragraphHalfLeading)
-                    }
-                    if paragraphs.count > 1 {
-                        EditorWritingParagraph(text: paragraphs[1])
-                            .padding(.vertical, paragraphHalfLeading)
-                            .padding(.top, 12)
-                    }
-                }
-                .padding(.horizontal, 28)
-                .padding(.top, 10)
+        EditorScreenScaffold(caption: EditorDateText.caption(for: entry.date), onDismiss: { dismiss() }) {
+            VStack(alignment: .leading, spacing: 0) {
+                TextField("タイトル", text: $title, axis: .vertical)
+                    .font(InkTypography.entryTitle)
+                    .foregroundStyle(InkColors.ink)
+                    .padding(.bottom, 8)
+                TextEditor(text: $bodyMarkdown)
+                    .font(InkTypography.body.font)
+                    .lineSpacing(InkTypography.body.lineSpacing)
+                    .foregroundStyle(InkColors.ink)
+                    .scrollContentBackground(.hidden)
+                    .scrollIndicators(.hidden)
             }
+            .padding(.horizontal, 28)
+            .padding(.top, 10)
+        }
+        .toolbar(.hidden, for: .navigationBar)
+        .onChange(of: title) {
+            entry.setTitle(title)
+        }
+        .onChange(of: bodyMarkdown) {
+            entry.setBodyMarkdown(bodyMarkdown)
+        }
+        .onDisappear {
+            // 直後にアプリが kill されても書きかけが残るよう、画面を離れるときに明示保存する(平常時は autosave が保存する)。
+            try? modelContext.save()
         }
     }
 }

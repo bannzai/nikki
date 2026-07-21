@@ -19,14 +19,14 @@ struct TemplateVariableField: Identifiable {
     var substitution: String { bodyValue ?? value }
 
     /// template.variableNames と today から入力フィールド群を組み立てる。
-    static func fields(for template: JournalTemplate, today: Date) -> [TemplateVariableField] {
+    /// includesDemoValues は参照デザイン(1m)の記入済み状態を再現するカタログ表示でのみ true にする。
+    static func fields(for template: JournalTemplate, today: Date, includesDemoValues: Bool) -> [TemplateVariableField] {
         template.variableNames.map { name in
             guard name == "date" else {
                 return TemplateVariableField(
                     name: name,
                     isAuto: false,
-                    // 参照デザイン(1m)の記入済み状態を再現するためのデモ初期値。ユーザーは上書きできる。
-                    value: demoValues[name] ?? "",
+                    value: includesDemoValues ? (demoValues[name] ?? "") : "",
                     bodyValue: nil,
                     placeholder: placeholders[name] ?? "ここに入力"
                 )
@@ -38,6 +38,15 @@ struct TemplateVariableField: Identifiable {
                 bodyValue: dateText(today, includesWeekday: false),
                 placeholder: ""
             )
+        }
+    }
+
+    /// 入力済みフィールドで template.markdown の {{変数}} を置換した本文。未入力の変数はトークンのまま残す。
+    static func substitutedMarkdown(template: JournalTemplate, fields: [TemplateVariableField]) -> String {
+        fields.reduce(template.markdown) { result, field in
+            field.substitution.isEmpty
+                ? result
+                : result.replacingOccurrences(of: "{{\(field.name)}}", with: field.substitution)
         }
     }
 

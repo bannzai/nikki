@@ -11,12 +11,7 @@ struct TemplateVariableSheet: View {
     @FocusState private var focusedFieldName: String?
 
     var body: some View {
-        // template.markdown の {{var}} を入力値で置換した本文。未入力の変数はトークンのまま残す。
-        let generatedMarkdown = fields.reduce(template.markdown) { result, field in
-            field.substitution.isEmpty
-                ? result
-                : result.replacingOccurrences(of: "{{\(field.name)}}", with: field.substitution)
-        }
+        let generatedMarkdown = TemplateVariableField.substitutedMarkdown(template: template, fields: fields)
 
         VStack(alignment: .leading, spacing: 0) {
             RoundedRectangle(cornerRadius: 3, style: .continuous)

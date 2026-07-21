@@ -21,8 +21,11 @@ struct HomeCalendarBody: View {
             HomeCalendarWeekdayHeader()
             HomeCalendarDaysGrid(entries: entries, today: today, displayedMonth: displayedMonth)
             if let entry = todayEntry {
-                HomeCalendarPreviewCard(entry: entry)
-                    .padding(.top, 14)
+                NavigationLink(value: entry) {
+                    HomeCalendarPreviewCard(entry: entry)
+                }
+                .buttonStyle(.plain)
+                .padding(.top, 14)
             }
         }
         .padding(.horizontal, 24)
