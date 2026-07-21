@@ -24,8 +24,7 @@ struct SettingsView: View {
                         sectionLabel("鍵")
                         InkListSection {
                             InkListRow("Face ID で解除", trailing: AnyView(SettingsToggle(isOn: $faceIDUnlockEnabled)))
-                            InkListRow("パスキー", value: "登録済み")
-                            InkListRow("復元フレーズをたしかめる", showsSeparator: false)
+                            InkListRow("パスキー", value: "登録済み", showsSeparator: false)
                         }
                         .padding(.bottom, 20)
 

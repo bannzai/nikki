@@ -23,7 +23,7 @@ struct OnboardingEncryptionView: View {
             InkColors.paper.ignoresSafeArea()
 
             VStack(alignment: .leading, spacing: 0) {
-                InkStepIndicator(step: 1, total: 3)
+                InkStepIndicator(step: 1, total: 2)
 
                 Text("鍵のかかった、\nあなただけの箱。")
                     .inkTextStyle(InkTypography.onboardingHeadline)

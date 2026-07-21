@@ -10,7 +10,7 @@ struct OnboardingBiometricView: View {
             InkColors.paper.ignoresSafeArea()
 
             VStack(alignment: .leading, spacing: 0) {
-                InkStepIndicator(step: 3, total: 3)
+                InkStepIndicator(step: 2, total: 2)
 
                 VStack(spacing: 26) {
                     Image(systemName: InkIcons.faceID)
@@ -22,7 +22,7 @@ struct OnboardingBiometricView: View {
                         .foregroundStyle(InkColors.ink)
                         .multilineTextAlignment(.center)
 
-                    Text("毎回フレーズを入力する必要はありません。Face ID がそっと鍵を開けます。")
+                    Text("開きっぱなしの画面は自動でロック。Face ID がそっと鍵を開けます。")
                         .font(InkTypography.font(13.5, .regular))
                         .lineSpacing(InkTypography.lineSpacing(fontSize: 13.5, multiplier: 2.05))
                         .foregroundStyle(InkColors.textSecondary)

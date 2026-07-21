@@ -3,7 +3,6 @@ import SwiftUI
 /// オンボーディング 1a: ようこそ画面。ロゴ + キャッチコピー + はじめる導線。
 struct OnboardingWelcomeView: View {
     var onStart: () -> Void = {}
-    var onRestore: () -> Void = {}
 
     var body: some View {
         ZStack {
@@ -27,10 +26,7 @@ struct OnboardingWelcomeView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
 
-                VStack(spacing: 14) {
-                    InkPrimaryButton("はじめる", action: onStart)
-                    InkTextLink("以前の日記を復元する", action: onRestore)
-                }
+                InkPrimaryButton("はじめる", action: onStart)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .padding(.horizontal, 28)

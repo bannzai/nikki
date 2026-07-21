@@ -6,8 +6,6 @@ import SwiftUI
 enum Screen: String, CaseIterable, Identifiable {
     case welcome = "1a"
     case encryption = "1b"
-    case phraseBackup = "1c"
-    case phraseConfirm = "1d"
     case biometric = "1e"
     case lock = "1f"
     case entryList = "1g"
@@ -18,7 +16,6 @@ enum Screen: String, CaseIterable, Identifiable {
     case templateList = "1l"
     case templateVariable = "1m"
     case theme = "1n"
-    case restore = "1p"
     case paywall = "1q"
     case settings = "1r"
 
@@ -31,10 +28,6 @@ enum Screen: String, CaseIterable, Identifiable {
             OnboardingWelcomeView()
         case .encryption:
             OnboardingEncryptionView()
-        case .phraseBackup:
-            OnboardingPhraseBackupView(phrase: SampleData.mnemonic)
-        case .phraseConfirm:
-            OnboardingPhraseConfirmView(phrase: SampleData.mnemonic)
         case .biometric:
             OnboardingBiometricView()
         case .lock:
@@ -55,8 +48,6 @@ enum Screen: String, CaseIterable, Identifiable {
             TemplateVariableSheetView(template: SampleData.reflectionTemplate, today: SampleData.referenceToday)
         case .theme:
             ThemeSettingsView(selected: .ecru)
-        case .restore:
-            RestoreView(suggestions: SampleData.restoreSuggestions)
         case .paywall:
             PaywallView()
         case .settings:

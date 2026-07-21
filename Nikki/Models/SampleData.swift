@@ -16,14 +16,6 @@ enum SampleData {
 
     static let referenceToday: Date = date(2026, 7, 18, 21, 4)
 
-    static let mnemonic: [String] = [
-        "river", "lantern", "quiet", "marble",
-        "orbit", "velvet", "cedar", "hollow",
-        "amber", "drift", "plume", "stone",
-    ]
-
-    static let restoreSuggestions: [String] = ["amber", "amount", "amuse"]
-
     static let entries: [JournalEntry] = [
         JournalEntry(
             date: date(2026, 7, 18, 21, 4),
