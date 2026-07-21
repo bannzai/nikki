@@ -27,6 +27,7 @@ struct InkTextStyle {
     var lineSpacing: CGFloat
     var tracking: CGFloat
 
+    // lineSpacing / tracking にデフォルト(0)を与えるための init。
     init(font: Font, lineSpacing: CGFloat = 0, tracking: CGFloat = 0) {
         self.font = font
         self.lineSpacing = lineSpacing

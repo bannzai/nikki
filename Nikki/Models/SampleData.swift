@@ -11,7 +11,7 @@ enum SampleData {
 
     static func date(_ year: Int, _ month: Int, _ day: Int, _ hour: Int = 21, _ minute: Int = 0) -> Date {
         let components = DateComponents(year: year, month: month, day: day, hour: hour, minute: minute)
-        return calendar.date(from: components) ?? Date()
+        return calendar.date(from: components) ?? .now
     }
 
     static let referenceToday: Date = date(2026, 7, 18, 21, 4)

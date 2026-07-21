@@ -8,12 +8,11 @@ struct EditorView: View {
         self.entry = entry
     }
 
-    private var paragraphs: [String] { EditorBlockPicker.paragraphTexts(entry) }
-
     var body: some View {
         EditorScreenScaffold(caption: EditorDateText.caption(for: entry.date)) {
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 0) {
+                    let paragraphs = EditorBlockPicker.paragraphTexts(entry)
                     Text(entry.title)
                         .font(InkTypography.entryTitle)
                         .lineSpacing(InkTypography.lineSpacing(fontSize: 22, multiplier: 1.6))

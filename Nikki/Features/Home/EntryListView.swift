@@ -19,11 +19,8 @@ struct EntryListView: View {
 struct HomeListBody: View {
     let entries: [JournalEntry]
 
-    private var monthGroups: [HomeMonthGroup] {
-        HomeMonthGroup.grouped(from: entries)
-    }
-
     var body: some View {
+        let monthGroups = HomeMonthGroup.grouped(from: entries)
         ScrollView(.vertical, showsIndicators: false) {
             VStack(alignment: .leading, spacing: 0) {
                 ForEach(Array(monthGroups.enumerated()), id: \.element.id) { groupIndex, group in

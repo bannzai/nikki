@@ -6,6 +6,7 @@ struct InkPrimaryButton: View {
     var isEnabled: Bool
     let action: () -> Void
 
+    // title をラベル省略で受け取り、icon / isEnabled を任意にするための init。
     init(_ title: String, icon: String? = nil, isEnabled: Bool = true, action: @escaping () -> Void) {
         self.title = title
         self.icon = icon
@@ -39,6 +40,7 @@ struct InkSecondaryButton: View {
     var icon: String?
     let action: () -> Void
 
+    // title をラベル省略で受け取り、icon を任意にするための init。
     init(_ title: String, icon: String? = nil, action: @escaping () -> Void) {
         self.title = title
         self.icon = icon
@@ -71,6 +73,7 @@ struct InkTextLink: View {
     let title: String
     let action: () -> Void
 
+    // title をラベル省略で受け取るための init。
     init(_ title: String, action: @escaping () -> Void) {
         self.title = title
         self.action = action
@@ -124,6 +127,7 @@ struct InkFAB: View {
     var icon: String
     let action: () -> Void
 
+    // icon にデフォルト(ペン)を与えるための init。
     init(icon: String = InkIcons.pen, action: @escaping () -> Void) {
         self.icon = icon
         self.action = action
@@ -146,6 +150,7 @@ struct InkSearchBar: View {
     var placeholder: String
     @Binding var text: String
 
+    // placeholder と Binding の text にプレビュー用デフォルトを与えるための init。
     init(placeholder: String = "日記をさがす", text: Binding<String> = .constant("")) {
         self.placeholder = placeholder
         self._text = text
@@ -242,6 +247,7 @@ struct InkListRow: View {
     var trailing: AnyView?
     var action: (() -> Void)?
 
+    // title をラベル省略で受け取り、他要素を任意にするための init。
     init(
         _ title: String,
         value: String? = nil,
@@ -314,6 +320,7 @@ struct InkNavBar: View {
     var center: InkNavCenter
     var onLeading: (() -> Void)?
 
+    // leading / center / onLeading にデフォルトを与えるための init。
     init(leading: InkNavLeading = .none, center: InkNavCenter = .none, onLeading: (() -> Void)? = nil) {
         self.leading = leading
         self.center = center

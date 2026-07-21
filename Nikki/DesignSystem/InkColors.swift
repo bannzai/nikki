@@ -28,16 +28,6 @@ enum PaperColorPreset: String, CaseIterable, Identifiable {
 
     var id: String { rawValue }
 
-    var label: String {
-        switch self {
-        case .white: return "白"
-        case .ecru: return "生成"
-        case .ash: return "薄鼠"
-        case .celadon: return "青磁"
-        case .sakura: return "桜鼠"
-        }
-    }
-
     var color: Color {
         switch self {
         case .white: return Color(hex: 0xFFFFFF)

@@ -9,7 +9,7 @@ struct HomeView: View {
     var onAccount: () -> Void
 
     /// セグメントの選択状態。切替時に相互のモードへ即時に切り替わる。
-    @State private var selectedIndex: Int
+    @State var selectedIndex: Int
 
     /// @State の初期値を initialMode から決めるため custom init を用いる。
     init(
@@ -39,7 +39,7 @@ struct HomeView: View {
                     header
                     InkSearchBar()
                     InkSegmentedControl(
-                        options: HomeViewMode.allCases.map(\.label),
+                        options: HomeViewMode.allCases.map { segmentLabel(for: $0) },
                         selectedIndex: $selectedIndex
                     )
                 }
@@ -80,6 +80,13 @@ struct HomeView: View {
             HomeListBody(entries: entries)
         case .calendar:
             HomeCalendarBody(entries: entries, today: today)
+        }
+    }
+
+    private func segmentLabel(for mode: HomeViewMode) -> String {
+        switch mode {
+        case .list: return "リスト"
+        case .calendar: return "カレンダー"
         }
     }
 }

@@ -10,6 +10,7 @@ struct PaywallView: View {
     var onPrivacy: () -> Void = {}
 
     /// 見本(1q)では年プランを選択済みとして墨枠強調しているため、初期選択は年プラン。
+    // PaywallPlan がファイル内 private 型のため、@State も private のままにする(@State を非 private にする規約から逸脱)。
     @State private var selectedPlan: PaywallPlan = .yearly
 
     var body: some View {

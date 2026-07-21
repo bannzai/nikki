@@ -4,8 +4,9 @@ import SwiftUI
 /// 外観(ライト/ダーク)トグルは持たない — ライト固定。
 struct ThemeSettingsView: View {
     /// 紙色プリセットの選択状態。プレビューの地色とスウォッチの選択表示に連動する。
-    @State private var selectedPreset: PaperColorPreset
+    @State var selectedPreset: PaperColorPreset
 
+    // @State selectedPreset の初期値を selected 引数から決めるため custom init を用いる。
     init(selected: PaperColorPreset = .ecru) {
         _selectedPreset = State(initialValue: selected)
     }
@@ -142,12 +143,23 @@ struct ThemeColorSwatch: View {
                                 .foregroundStyle(InkColors.ink)
                         }
                     }
-                Text(preset.label)
+                Text(label)
                     .font(InkTypography.font(11, isSelected ? .bold : .regular))
                     .foregroundStyle(isSelected ? InkColors.ink : InkColors.textSecondary)
             }
         }
         .buttonStyle(.plain)
+    }
+
+    /// スウォッチ下に表示する紙色プリセットの表示名。
+    private var label: String {
+        switch preset {
+        case .white: return "白"
+        case .ecru: return "生成"
+        case .ash: return "薄鼠"
+        case .celadon: return "青磁"
+        case .sakura: return "桜鼠"
+        }
     }
 
     /// 非選択時の枠色。白は紙地(#FAFAF9)に対して輪郭が沈むため、他色(0.08)より濃い 0.12 の枠にする。

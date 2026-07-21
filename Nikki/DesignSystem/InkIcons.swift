@@ -24,18 +24,6 @@ struct InkCircledIcon: View {
     var iconSize: CGFloat = 18
     var borderColor: Color = InkColors.ink.opacity(0.3)
 
-    init(
-        systemName: String,
-        diameter: CGFloat = 46,
-        iconSize: CGFloat = 18,
-        borderColor: Color = InkColors.ink.opacity(0.3)
-    ) {
-        self.systemName = systemName
-        self.diameter = diameter
-        self.iconSize = iconSize
-        self.borderColor = borderColor
-    }
-
     var body: some View {
         Circle()
             .strokeBorder(borderColor, lineWidth: 1.5)

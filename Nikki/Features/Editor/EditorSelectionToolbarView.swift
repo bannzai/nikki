@@ -9,13 +9,12 @@ struct EditorSelectionToolbarView: View {
         self.entry = entry
     }
 
-    private var firstParagraph: String? { EditorBlockPicker.paragraphTexts(entry).first }
-    private var selectedHeading: String? { EditorBlockPicker.headingTexts(entry).first }
-
     var body: some View {
         EditorScreenScaffold(caption: EditorDateText.caption(for: entry.date)) {
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 0) {
+                    let firstParagraph = EditorBlockPicker.paragraphTexts(entry).first
+                    let selectedHeading = EditorBlockPicker.headingTexts(entry).first
                     Text(entry.title)
                         .font(InkTypography.entryTitle)
                         .lineSpacing(InkTypography.lineSpacing(fontSize: 22, multiplier: 1.6))

@@ -65,9 +65,11 @@ struct TemplateVariableSheetView: View {
     /// 「この内容ではじめる」をタップしたときに呼ばれる。既定は no-op。
     var onStart: () -> Void
 
+    // TemplateVariableField がファイル内 private 型のため、@State も private のままにする(@State を非 private にする規約から逸脱)。
     @State private var fields: [TemplateVariableField]
     @FocusState private var focusedFieldName: String?
 
+    // @State fields の初期値を template / today から組み立てるため custom init を用いる。
     init(
         template: JournalTemplate = SampleData.reflectionTemplate,
         today: Date = SampleData.referenceToday,

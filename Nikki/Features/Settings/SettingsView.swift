@@ -3,7 +3,7 @@ import SwiftUI
 /// 設定画面(1r)。iOS 標準のグループ化リスト形式で各設定項目を表示する。
 struct SettingsView: View {
     /// Face ID で解除するかどうか。既定値は見本(1r)が ON 状態のため true。
-    @State private var faceIDUnlockEnabled = true
+    @State var faceIDUnlockEnabled = true
 
     var body: some View {
         ZStack(alignment: .top) {

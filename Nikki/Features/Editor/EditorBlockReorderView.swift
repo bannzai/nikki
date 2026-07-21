@@ -9,12 +9,11 @@ struct EditorBlockReorderView: View {
         self.entry = entry
     }
 
-    private var paragraphs: [String] { EditorBlockPicker.paragraphTexts(entry) }
-    private var headings: [String] { EditorBlockPicker.headingTexts(entry) }
-
     var body: some View {
         EditorScreenScaffold(caption: "並び替え — 指を離すと確定") {
             VStack(alignment: .leading, spacing: 10) {
+                let paragraphs = EditorBlockPicker.paragraphTexts(entry)
+                let headings = EditorBlockPicker.headingTexts(entry)
                 staticRow {
                     Text(entry.title)
                         .font(InkTypography.font(20, .bold))
@@ -90,7 +89,7 @@ struct EditorBlockReorderView: View {
     private var draggingCard: some View {
         reorderRow(active: true) {
             VStack(alignment: .leading, spacing: 8) {
-                Text(headings.first ?? "")
+                Text(EditorBlockPicker.headingTexts(entry).first ?? "")
                     .font(InkTypography.font(16, .bold))
                     .foregroundStyle(InkColors.ink)
                 EditorChecklistBlock(

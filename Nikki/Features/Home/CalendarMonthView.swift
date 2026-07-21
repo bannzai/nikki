@@ -21,7 +21,7 @@ struct HomeCalendarBody: View {
     let today: Date
 
     /// 表示中の月(1日 00:00)。‹ › で前後の月に移動する。@State の初期値を today から決めるため custom init を用いる。
-    @State private var displayedMonth: Date
+    @State var displayedMonth: Date
 
     init(entries: [JournalEntry], today: Date) {
         self.entries = entries

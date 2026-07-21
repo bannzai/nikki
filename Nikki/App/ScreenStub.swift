@@ -7,6 +7,7 @@ struct ScreenStub: View {
     var subtitle: String?
     var background: Color = InkColors.paper
 
+    // title をラベル省略で受け取り、subtitle / background を任意にするための init。
     init(_ title: String, subtitle: String? = nil, background: Color = InkColors.paper) {
         self.title = title
         self.subtitle = subtitle

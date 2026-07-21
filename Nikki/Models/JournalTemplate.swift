@@ -6,12 +6,6 @@ struct JournalTemplate: Identifiable, Hashable {
     /// {{date}} {{weather}} 等の変数を含むマークダウン本文。
     var markdown: String
 
-    init(id: UUID = UUID(), name: String, markdown: String) {
-        self.id = id
-        self.name = name
-        self.markdown = markdown
-    }
-
     /// markdown 中の {{variable}} を出現順・重複なしで抽出する。
     var variableNames: [String] {
         var result: [String] = []

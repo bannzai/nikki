@@ -4,15 +4,9 @@ import Observation
 enum HomeViewMode: Int, CaseIterable {
     case list
     case calendar
-
-    var label: String {
-        switch self {
-        case .list: return "リスト"
-        case .calendar: return "カレンダー"
-        }
-    }
 }
 
+// アプリ全体で共有し、複数画面から参照・更新するルート状態のため @Observable を用いる。
 @Observable
 final class AppState {
     var isLocked: Bool = false
