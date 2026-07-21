@@ -37,17 +37,24 @@ struct ScreenContent: View {
         case .lock:
             LockPage()
         case .entryList:
-            HomePage(entries: SampleData.entries, today: SampleData.referenceToday, initialMode: .list)
+            // HomePage は @Query で日記を読むため、in-memory コンテナ(SampleData 投入済み)の下で NavigationStack に載せる。
+            NavigationStack {
+                HomePage(today: SampleData.referenceToday, initialMode: .list)
+            }
         case .calendar:
-            HomePage(entries: SampleData.entries, today: SampleData.referenceToday, initialMode: .calendar)
+            NavigationStack {
+                HomePage(today: SampleData.referenceToday, initialMode: .calendar)
+            }
         case .editorWriting:
-            EditorPage(entry: SampleData.sampleEntry)
+            EditorWritingPage(entry: SampleData.sampleEntry)
         case .editorSelection:
             EditorSelectionPage(entry: SampleData.sampleEntry)
         case .editorReorder:
             EditorReorderPage(entry: SampleData.sampleEntry)
         case .templateList:
-            TemplateListPage(templates: SampleData.templates)
+            NavigationStack {
+                TemplateListPage()
+            }
         case .templateVariable:
             TemplateVariablePage(template: SampleData.reflectionTemplate, today: SampleData.referenceToday)
         case .theme:

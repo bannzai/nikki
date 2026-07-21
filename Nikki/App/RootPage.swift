@@ -1,13 +1,36 @@
 import SwiftUI
 
+/// オンボーディングの進行ステップ。完了したかどうかは RootPage の onboardingCompleted が持つ。
+enum OnboardingStep {
+    case welcome
+    case encryption
+    case biometric
+}
+
 struct RootPage: View {
-    @Environment(AppState.self) private var appState
+    // AppStorage の key 名は変数名と一致させる。
+    @AppStorage("onboardingCompleted") var onboardingCompleted: Bool = false
+
+    @State var step: OnboardingStep = .welcome
 
     var body: some View {
-        if appState.onboardingCompleted {
-            HomePage(entries: SampleData.entries, today: SampleData.referenceToday)
+        if onboardingCompleted {
+            NavigationStack {
+                HomePage(today: .now)
+            }
         } else {
-            OnboardingWelcomePage()
+            switch step {
+            case .welcome:
+                OnboardingWelcomePage(onStart: { step = .encryption })
+            case .encryption:
+                OnboardingEncryptionPage(onNext: { step = .biometric })
+            case .biometric:
+                // Face ID / パスキーの実登録は未実装のため、どちらのボタンもオンボーディング完了として扱う。
+                OnboardingBiometricPage(
+                    onEnableFaceID: { onboardingCompleted = true },
+                    onRegisterPasskey: { onboardingCompleted = true }
+                )
+            }
         }
     }
 }
