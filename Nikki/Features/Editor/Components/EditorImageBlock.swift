@@ -8,13 +8,13 @@ struct EditorImageBlock: View {
         ZStack {
             EditorDiagonalStripes()
             Text("img: \(label)")
-                .font(InkTypography.mono(11))
-                .foregroundStyle(InkColors.labelGray)
+                .font(.inkMono(11))
+                .foregroundStyle(Color.inkLabelGray)
                 .padding(.horizontal, 10)
                 .padding(.vertical, 4)
                 .background(
                     RoundedRectangle(cornerRadius: 6, style: .continuous)
-                        .fill(InkColors.paper.opacity(0.9))
+                        .fill(Color.inkPaper.opacity(0.9))
                 )
         }
         .frame(maxWidth: .infinity)

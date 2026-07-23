@@ -18,14 +18,14 @@ struct EditorPage: View {
                     text: Binding(get: { entry.title }, set: { entry.setTitle($0) }),
                     axis: .vertical
                 )
-                .font(InkTypography.entryTitle)
-                .foregroundStyle(InkColors.ink)
+                .font(.inkEntryTitle)
+                .foregroundStyle(Color.ink)
                 .padding(.bottom, 8)
 
                 TextEditor(text: Binding(get: { entry.bodyMarkdown }, set: { entry.setBodyMarkdown($0) }))
-                    .font(InkTypography.body.font)
-                    .lineSpacing(InkTypography.body.lineSpacing)
-                    .foregroundStyle(InkColors.ink)
+                    .font(.ink(15))
+                    .lineSpacing(inkLineSpacing(fontSize: 15, multiplier: 2.05))
+                    .foregroundStyle(Color.ink)
                     .scrollContentBackground(.hidden)
                     .scrollIndicators(.hidden)
             }

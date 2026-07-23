@@ -18,7 +18,7 @@ struct PaywallPage: View {
 
     var body: some View {
         ZStack {
-            InkColors.paper.ignoresSafeArea()
+            Color.inkPaper.ignoresSafeArea()
 
             VStack(spacing: 0) {
                 PaywallCloseButton(action: onClose)
@@ -30,9 +30,9 @@ struct PaywallPage: View {
                     .padding(.bottom, 16)
 
                 Text("どの端末でも、続きから書けるように。")
-                    .font(InkTypography.font(15, .regular))
+                    .font(.ink(15, .regular))
                     .foregroundStyle(PaywallPage.headlineColor)
-                    .lineSpacing(InkTypography.lineSpacing(fontSize: 15, multiplier: 2.0))
+                    .lineSpacing(inkLineSpacing(fontSize: 15, multiplier: 2.0))
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.bottom, 26)
 
@@ -66,14 +66,14 @@ struct PaywallPage: View {
                 Spacer(minLength: 24)
 
                 Text("同期中も、内容は暗号化されたままです。\nわたしたちが読めないことは、変わりません。")
-                    .font(InkTypography.font(11.5, .regular))
-                    .foregroundStyle(InkColors.textTertiary)
+                    .font(.ink(11.5, .regular))
+                    .foregroundStyle(Color.inkTextTertiary)
                     .multilineTextAlignment(.center)
-                    .lineSpacing(InkTypography.lineSpacing(fontSize: 11.5, multiplier: 1.9))
+                    .lineSpacing(inkLineSpacing(fontSize: 11.5, multiplier: 1.9))
                     .frame(maxWidth: .infinity)
                     .padding(.bottom, 14)
 
-                InkPrimaryButton("Nikki Plus をはじめる", action: onPurchase)
+                InkPrimaryButton(title: "Nikki Plus をはじめる", action: onPurchase)
 
                 HStack(spacing: 22) {
                     PaywallFooterLink(title: "購入の復元", action: onRestore)

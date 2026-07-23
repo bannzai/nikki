@@ -8,17 +8,17 @@ struct EditorDetailsBlock: View {
         HStack(spacing: 10) {
             Image(systemName: InkIcons.chevronRight)
                 .font(.system(size: 11, weight: .semibold))
-                .foregroundStyle(InkColors.textSecondary)
+                .foregroundStyle(Color.inkTextSecondary)
             Text("details — \(summary)")
-                .font(InkTypography.font(14, .regular))
-                .foregroundStyle(InkColors.textSecondary)
+                .font(.ink(14, .regular))
+                .foregroundStyle(Color.inkTextSecondary)
             Spacer(minLength: 0)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 13)
         .overlay(
             RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .strokeBorder(InkColors.ink.opacity(0.12), lineWidth: 1)
+                .strokeBorder(Color.ink.opacity(0.12), lineWidth: 1)
         )
     }
 }

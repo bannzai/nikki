@@ -11,21 +11,21 @@ struct LockOverlay: View {
 
             VStack(spacing: 8) {
                 Text("鍵をかけておきました")
-                    .font(InkTypography.font(16, .bold))
-                    .foregroundStyle(InkColors.ink)
+                    .font(.ink(16, .bold))
+                    .foregroundStyle(Color.ink)
                 Text("しばらく手が止まっていたので、\nそっとロックしました。")
-                    .font(InkTypography.font(12.5, .regular))
-                    .foregroundStyle(InkColors.textSecondary)
+                    .font(.ink(12.5, .regular))
+                    .foregroundStyle(Color.inkTextSecondary)
                     .multilineTextAlignment(.center)
-                    .lineSpacing(InkTypography.lineSpacing(fontSize: 12.5, multiplier: 1.9))
+                    .lineSpacing(inkLineSpacing(fontSize: 12.5, multiplier: 1.9))
             }
 
             LockFaceIDButton(action: onUnlock)
                 .padding(.top, 8)
 
             Text("解除すると、さっきの続きに戻ります")
-                .font(InkTypography.font(12, .regular))
-                .foregroundStyle(InkColors.textTertiary)
+                .font(.ink(12, .regular))
+                .foregroundStyle(Color.inkTextTertiary)
         }
         .padding(.horizontal, 28)
     }
@@ -35,8 +35,8 @@ struct LockOverlay: View {
 struct LockPadlockCircle: View {
     var body: some View {
         Circle()
-            .fill(InkColors.paper.opacity(0.85))
-            .overlay(Circle().strokeBorder(InkColors.ink.opacity(0.3), lineWidth: 1.5))
+            .fill(Color.inkPaper.opacity(0.85))
+            .overlay(Circle().strokeBorder(Color.ink.opacity(0.3), lineWidth: 1.5))
             .frame(width: 64, height: 64)
             .overlay { LockPadlockIcon() }
     }

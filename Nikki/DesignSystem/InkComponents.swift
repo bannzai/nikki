@@ -1,18 +1,12 @@
 import SwiftUI
 
+/// 墨地の主ボタン。
 struct InkPrimaryButton: View {
     let title: String
     var icon: String?
-    var isEnabled: Bool
+    // 見本のボタンは有効状態が既定のため。
+    var isEnabled: Bool = true
     let action: () -> Void
-
-    // title をラベル省略で受け取り、icon / isEnabled を任意にするための init。
-    init(_ title: String, icon: String? = nil, isEnabled: Bool = true, action: @escaping () -> Void) {
-        self.title = title
-        self.icon = icon
-        self.isEnabled = isEnabled
-        self.action = action
-    }
 
     var body: some View {
         Button(action: action) {
@@ -22,12 +16,12 @@ struct InkPrimaryButton: View {
                         .font(.system(size: 16, weight: .semibold))
                 }
                 Text(title)
-                    .font(InkTypography.font(16, .medium).weight(.semibold))
+                    .font(.ink(16, .medium).weight(.semibold))
             }
             .frame(maxWidth: .infinity)
             .frame(height: 54)
-            .foregroundStyle(isEnabled ? InkColors.primaryButtonText : InkColors.labelGray)
-            .background(isEnabled ? InkColors.ink : InkColors.disabledBackground)
+            .foregroundStyle(isEnabled ? Color.inkPrimaryButtonText : Color.inkLabelGray)
+            .background(isEnabled ? Color.ink : Color.inkDisabledBackground)
             .clipShape(RoundedRectangle(cornerRadius: 27, style: .continuous))
         }
         .buttonStyle(.plain)
@@ -35,17 +29,11 @@ struct InkPrimaryButton: View {
     }
 }
 
+/// 枠線の二次ボタン。
 struct InkSecondaryButton: View {
     let title: String
     var icon: String?
     let action: () -> Void
-
-    // title をラベル省略で受け取り、icon を任意にするための init。
-    init(_ title: String, icon: String? = nil, action: @escaping () -> Void) {
-        self.title = title
-        self.icon = icon
-        self.action = action
-    }
 
     var body: some View {
         Button(action: action) {
@@ -55,35 +43,30 @@ struct InkSecondaryButton: View {
                         .font(.system(size: 15, weight: .medium))
                 }
                 Text(title)
-                    .font(InkTypography.font(15, .medium))
+                    .font(.ink(15, .medium))
             }
             .frame(maxWidth: .infinity)
             .frame(height: 54)
-            .foregroundStyle(InkColors.ink)
+            .foregroundStyle(Color.ink)
             .overlay(
                 RoundedRectangle(cornerRadius: 27, style: .continuous)
-                    .strokeBorder(InkColors.secondaryButtonBorder, lineWidth: 1.5)
+                    .strokeBorder(Color.inkSecondaryButtonBorder, lineWidth: 1.5)
             )
         }
         .buttonStyle(.plain)
     }
 }
 
+/// 下線なしのテキストリンク。
 struct InkTextLink: View {
     let title: String
     let action: () -> Void
 
-    // title をラベル省略で受け取るための init。
-    init(_ title: String, action: @escaping () -> Void) {
-        self.title = title
-        self.action = action
-    }
-
     var body: some View {
         Button(action: action) {
             Text(title)
-                .font(InkTypography.font(13.5, .regular))
-                .foregroundStyle(InkColors.textSecondary)
+                .font(.ink(13.5, .regular))
+                .foregroundStyle(Color.inkTextSecondary)
                 .frame(maxWidth: .infinity)
                 .padding(6)
         }
@@ -100,14 +83,14 @@ struct InkSegmentedControl: View {
             ForEach(Array(options.enumerated()), id: \.offset) { index, option in
                 let isSelected = index == selectedIndex
                 Text(option)
-                    .font(InkTypography.font(13, isSelected ? .bold : .regular).weight(isSelected ? .semibold : .regular))
-                    .foregroundStyle(isSelected ? InkColors.ink : InkColors.textSecondary)
+                    .font(.ink(13, isSelected ? .bold : .regular).weight(isSelected ? .semibold : .regular))
+                    .foregroundStyle(isSelected ? Color.ink : Color.inkTextSecondary)
                     .padding(.horizontal, 22)
                     .padding(.vertical, 7)
                     .background {
                         if isSelected {
                             RoundedRectangle(cornerRadius: 9, style: .continuous)
-                                .fill(InkColors.surface)
+                                .fill(Color.inkSurface)
                                 .shadow(color: .black.opacity(0.08), radius: 1, x: 0, y: 1)
                         }
                     }
@@ -118,7 +101,7 @@ struct InkSegmentedControl: View {
         .padding(2.5)
         .background(
             RoundedRectangle(cornerRadius: 11, style: .continuous)
-                .fill(InkColors.segmentBackground)
+                .fill(Color.inkSegmentBackground)
         )
     }
 }
@@ -131,38 +114,34 @@ struct InkFAB: View {
         Button(action: action) {
             Image(systemName: icon)
                 .font(.system(size: 22, weight: .regular))
-                .foregroundStyle(InkColors.primaryButtonText)
+                .foregroundStyle(Color.inkPrimaryButtonText)
                 .frame(width: 58, height: 58)
-                .background(Circle().fill(InkColors.ink))
-                .shadow(color: InkColors.ink.opacity(0.28), radius: 12, x: 0, y: 10)
+                .background(Circle().fill(Color.ink))
+                .shadow(color: Color.ink.opacity(0.28), radius: 12, x: 0, y: 10)
         }
         .buttonStyle(.plain)
     }
 }
 
+/// 検索バーの静的表現。実検索は未実装のため、入力状態は持たない。
 struct InkSearchBar: View {
-    var placeholder: String
-    @Binding var text: String
-
-    // Binding の text に既定値を与えるための init(memberwise では Binding のデフォルト値を表現できない)。
-    init(placeholder: String = "日記をさがす", text: Binding<String> = .constant("")) {
-        self.placeholder = placeholder
-        self._text = text
-    }
+    // 見本(1g)のプレースホルダ文言。
+    var placeholder: String = "日記をさがす"
+    var text: String = ""
 
     var body: some View {
         HStack(spacing: 10) {
             Image(systemName: InkIcons.search)
                 .font(.system(size: 15, weight: .regular))
-                .foregroundStyle(InkColors.textTertiary)
+                .foregroundStyle(Color.inkTextTertiary)
             if text.isEmpty {
                 Text(placeholder)
-                    .font(InkTypography.font(14, .regular))
-                    .foregroundStyle(InkColors.textTertiary)
+                    .font(.ink(14, .regular))
+                    .foregroundStyle(Color.inkTextTertiary)
             } else {
                 Text(text)
-                    .font(InkTypography.font(14, .regular))
-                    .foregroundStyle(InkColors.ink)
+                    .font(.ink(14, .regular))
+                    .foregroundStyle(Color.ink)
             }
             Spacer(minLength: 0)
         }
@@ -170,7 +149,7 @@ struct InkSearchBar: View {
         .frame(height: 42)
         .background(
             RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .fill(InkColors.surfaceInset)
+                .fill(Color.inkSurfaceInset)
         )
     }
 }
@@ -181,9 +160,9 @@ struct InkStepIndicator: View {
 
     var body: some View {
         Text("\(step) / \(total)")
-            .font(InkTypography.mono(11, weight: .semibold))
+            .font(.inkMono(11, weight: .semibold))
             .tracking(11 * 0.15)
-            .foregroundStyle(InkColors.textTertiary)
+            .foregroundStyle(Color.inkTextTertiary)
     }
 }
 
@@ -196,11 +175,11 @@ struct InkCardModifier: ViewModifier {
             .padding(padding ?? 0)
             .background(
                 RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                    .fill(InkColors.surface)
+                    .fill(Color.inkSurface)
             )
             .overlay(
                 RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                    .strokeBorder(InkColors.border, lineWidth: 1)
+                    .strokeBorder(Color.inkBorder, lineWidth: 1)
             )
             .shadow(color: .black.opacity(0.06), radius: 1.5, x: 0, y: 1)
     }
@@ -222,11 +201,11 @@ struct InkListSection<Content: View>: View {
         }
         .background(
             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(InkColors.surface)
+                .fill(Color.inkSurface)
         )
         .overlay(
             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .strokeBorder(InkColors.border, lineWidth: 1)
+                .strokeBorder(Color.inkBorder, lineWidth: 1)
         )
         .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
     }
@@ -235,50 +214,33 @@ struct InkListSection<Content: View>: View {
 struct InkListRow: View {
     let title: String
     var value: String?
-    var showsChevron: Bool
-    var showsSeparator: Bool
-    var height: CGFloat
+    // 見本(1r)の行は既定でシェブロンとセパレータを持つため。
+    var showsChevron: Bool = true
+    var showsSeparator: Bool = true
+    // 見本(1r)の行高。
+    var height: CGFloat = 52
     var trailing: AnyView?
     var action: (() -> Void)?
-
-    // title をラベル省略で受け取り、他要素を任意にするための init。
-    init(
-        _ title: String,
-        value: String? = nil,
-        showsChevron: Bool = true,
-        showsSeparator: Bool = true,
-        height: CGFloat = 52,
-        trailing: AnyView? = nil,
-        action: (() -> Void)? = nil
-    ) {
-        self.title = title
-        self.value = value
-        self.showsChevron = showsChevron
-        self.showsSeparator = showsSeparator
-        self.height = height
-        self.trailing = trailing
-        self.action = action
-    }
 
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 8) {
                 Text(title)
-                    .font(InkTypography.font(14.5, .regular))
-                    .foregroundStyle(InkColors.ink)
+                    .font(.ink(14.5, .regular))
+                    .foregroundStyle(Color.ink)
                 Spacer(minLength: 8)
                 if let trailing {
                     trailing
                 } else {
                     if let value {
                         Text(value)
-                            .font(InkTypography.font(13.5, .regular))
-                            .foregroundStyle(InkColors.textSecondary)
+                            .font(.ink(13.5, .regular))
+                            .foregroundStyle(Color.inkTextSecondary)
                     }
                     if showsChevron {
                         Image(systemName: InkIcons.chevronRight)
                             .font(.system(size: 13, weight: .semibold))
-                            .foregroundStyle(InkColors.textTertiary)
+                            .foregroundStyle(Color.inkTextTertiary)
                     }
                 }
             }
@@ -289,7 +251,7 @@ struct InkListRow: View {
 
             if showsSeparator {
                 Rectangle()
-                    .fill(InkColors.separator)
+                    .fill(Color.inkSeparator)
                     .frame(height: 0.5)
                     .padding(.leading, 16)
             }
@@ -321,12 +283,12 @@ struct InkNavBar: View {
                 EmptyView()
             case .title(let text):
                 Text(text)
-                    .font(InkTypography.navTitle)
-                    .foregroundStyle(InkColors.ink)
+                    .font(.inkNavTitle)
+                    .foregroundStyle(Color.ink)
             case .caption(let text):
                 Text(text)
-                    .font(InkTypography.font(12.5, .regular))
-                    .foregroundStyle(InkColors.textTertiary)
+                    .font(.ink(12.5, .regular))
+                    .foregroundStyle(Color.inkTextTertiary)
             }
 
             HStack {
@@ -352,14 +314,14 @@ struct InkNavBarLeadingButton: View {
             Button { onLeading?() } label: {
                 Image(systemName: InkIcons.chevronLeft)
                     .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(InkColors.textSecondary)
+                    .foregroundStyle(Color.inkTextSecondary)
             }
             .buttonStyle(.plain)
         case .dismiss:
             Button { onLeading?() } label: {
                 Image(systemName: InkIcons.chevronDown)
                     .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(InkColors.textSecondary)
+                    .foregroundStyle(Color.inkTextSecondary)
             }
             .buttonStyle(.plain)
         }

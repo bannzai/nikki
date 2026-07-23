@@ -10,7 +10,7 @@ struct SettingsToggle: View {
             withAnimation(.easeInOut(duration: 0.18)) { isOn.toggle() }
         } label: {
             Capsule()
-                .fill(isOn ? InkColors.ink : InkColors.disabledBackground)
+                .fill(isOn ? Color.ink : Color.inkDisabledBackground)
                 .frame(width: 44, height: 26)
                 .overlay(alignment: .leading) {
                     Circle()

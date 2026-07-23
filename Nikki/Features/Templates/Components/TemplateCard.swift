@@ -9,17 +9,17 @@ struct TemplateCard: View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Text(template.name)
-                    .font(InkTypography.listItemTitle)
-                    .foregroundStyle(InkColors.ink)
+                    .font(.inkListItemTitle)
+                    .foregroundStyle(Color.ink)
                 Spacer(minLength: 8)
                 Image(systemName: InkIcons.chevronRight)
                     .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(InkColors.textTertiary)
+                    .foregroundStyle(Color.inkTextTertiary)
             }
             Text(template.markdown)
-                .font(InkTypography.mono(11.5))
-                .foregroundStyle(InkColors.textTertiary)
-                .lineSpacing(InkTypography.lineSpacing(fontSize: 11.5, multiplier: 1.9))
+                .font(.inkMono(11.5))
+                .foregroundStyle(Color.inkTextTertiary)
+                .lineSpacing(inkLineSpacing(fontSize: 11.5, multiplier: 1.9))
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .fixedSize(horizontal: false, vertical: true)
         }

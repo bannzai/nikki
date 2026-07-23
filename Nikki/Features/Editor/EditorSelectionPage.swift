@@ -3,7 +3,7 @@ import SwiftUI
 /// エディタ 選択ツールバー(1j)。選択中の見出しにハイライト+ハンドルを付け、
 /// その 52px 上にフローティングツールバーを浮かせる。他ブロック例も並べる。
 struct EditorSelectionPage: View {
-    var entry: JournalEntry = SampleData.sampleEntry
+    let entry: JournalEntry
 
     var body: some View {
         EditorScreenScaffold(caption: EditorDateText.caption(for: entry.date), onDismiss: {}) {
@@ -12,9 +12,9 @@ struct EditorSelectionPage: View {
                     let firstParagraph = EditorBlockPicker.paragraphTexts(entry).first
                     let selectedHeading = EditorBlockPicker.headingTexts(entry).first
                     Text(entry.title)
-                        .font(InkTypography.entryTitle)
-                        .lineSpacing(InkTypography.lineSpacing(fontSize: 22, multiplier: 1.6))
-                        .foregroundStyle(InkColors.ink)
+                        .font(.inkEntryTitle)
+                        .lineSpacing(inkLineSpacing(fontSize: 22, multiplier: 1.6))
+                        .foregroundStyle(Color.ink)
                         .padding(.bottom, 14)
 
                     if let firstParagraph {

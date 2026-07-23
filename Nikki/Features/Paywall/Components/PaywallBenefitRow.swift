@@ -9,16 +9,16 @@ struct PaywallBenefitRow: View {
         HStack(alignment: .top, spacing: 14) {
             Image(systemName: InkIcons.checkmark)
                 .font(.system(size: 13, weight: .semibold))
-                .foregroundStyle(InkColors.ink)
+                .foregroundStyle(Color.ink)
                 .padding(.top, 3)
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
-                    .font(InkTypography.font(14.5, .bold))
-                    .foregroundStyle(InkColors.ink)
+                    .font(.ink(14.5, .bold))
+                    .foregroundStyle(Color.ink)
                 Text(description)
-                    .font(InkTypography.font(12.5, .regular))
-                    .foregroundStyle(InkColors.textSecondary)
-                    .lineSpacing(InkTypography.lineSpacing(fontSize: 12.5, multiplier: 1.9))
+                    .font(.ink(12.5, .regular))
+                    .foregroundStyle(Color.inkTextSecondary)
+                    .lineSpacing(inkLineSpacing(fontSize: 12.5, multiplier: 1.9))
             }
             Spacer(minLength: 0)
         }

@@ -5,11 +5,11 @@ struct HomeEmptyState: View {
     var body: some View {
         VStack(spacing: 10) {
             Text("まだ日記はありません。")
-                .font(InkTypography.font(15, .medium))
-                .foregroundStyle(InkColors.textSecondary)
+                .font(.ink(15, .medium))
+                .foregroundStyle(Color.inkTextSecondary)
             Text("最初の一枚は、右下のペンから。")
-                .font(InkTypography.font(12.5, .regular))
-                .foregroundStyle(InkColors.textTertiary)
+                .font(.ink(12.5, .regular))
+                .foregroundStyle(Color.inkTextTertiary)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
@@ -17,5 +17,5 @@ struct HomeEmptyState: View {
 
 #Preview {
     HomeEmptyState()
-        .background(InkColors.paper)
+        .background(Color.inkPaper)
 }

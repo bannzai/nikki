@@ -12,38 +12,38 @@ struct PaywallPlanCard: View {
     var body: some View {
         VStack(spacing: 0) {
             Text(title)
-                .font(InkTypography.font(12, .regular))
-                .foregroundStyle(InkColors.textSecondary)
+                .font(.ink(12, .regular))
+                .foregroundStyle(Color.inkTextSecondary)
                 .padding(.bottom, 6)
             Text(price)
-                .font(InkTypography.font(20, .bold))
-                .foregroundStyle(InkColors.ink)
+                .font(.ink(20, .bold))
+                .foregroundStyle(Color.ink)
             Text(caption)
-                .font(InkTypography.font(11, .regular))
-                .foregroundStyle(InkColors.textTertiary)
+                .font(.ink(11, .regular))
+                .foregroundStyle(Color.inkTextTertiary)
                 .padding(.top, 4)
         }
         .frame(maxWidth: .infinity)
         .padding(16)
         .background(
             RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(isSelected ? InkColors.surface : Color.clear)
+                .fill(isSelected ? Color.inkSurface : Color.clear)
         )
         .overlay(
             RoundedRectangle(cornerRadius: 16, style: .continuous)
                 // 未選択の淡い枠は見本の rgba(28,27,26,.2) を再現するため直接指定する。
-                .strokeBorder(isSelected ? InkColors.ink : InkColors.ink.opacity(0.2), lineWidth: isSelected ? 2 : 1)
+                .strokeBorder(isSelected ? Color.ink : Color.ink.opacity(0.2), lineWidth: isSelected ? 2 : 1)
         )
         .overlay(alignment: .top) {
             if let badge {
                 Text(badge)
-                    .font(InkTypography.font(10, .medium))
-                    .foregroundStyle(InkColors.primaryButtonText)
+                    .font(.ink(10, .medium))
+                    .foregroundStyle(Color.inkPrimaryButtonText)
                     .padding(.horizontal, 10)
                     .padding(.vertical, 2)
                     .background(
                         RoundedRectangle(cornerRadius: 9, style: .continuous)
-                            .fill(InkColors.ink)
+                            .fill(Color.ink)
                     )
                     .offset(y: -9)
             }

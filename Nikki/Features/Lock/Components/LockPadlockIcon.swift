@@ -11,12 +11,12 @@ struct LockPadlockIcon: View {
         ZStack {
             LockPadlockOutline()
                 .stroke(
-                    InkColors.ink,
+                    Color.ink,
                     style: StrokeStyle(lineWidth: 1.5 * scale, lineCap: .round, lineJoin: .round)
                 )
             // 鍵穴: circle cx=8 cy=12.5 r=1.5(viewBox 座標)
             Circle()
-                .fill(InkColors.ink)
+                .fill(Color.ink)
                 .frame(width: 1.5 * 2 * scale, height: 1.5 * 2 * scale)
                 .position(x: 8 * scale, y: 12.5 * scale + verticalOffset)
         }

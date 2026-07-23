@@ -3,7 +3,7 @@ import SwiftUI
 /// エディタ ブロック並び替え(1k)。各ブロック左に6点ハンドルを置き、
 /// 「買ったもの」カードがドラッグ中(浮き上がり)、その上に挿入インジケータラインを描く静的表現。
 struct EditorReorderPage: View {
-    var entry: JournalEntry = SampleData.sampleEntry
+    let entry: JournalEntry
 
     var body: some View {
         EditorScreenScaffold(caption: "並び替え — 指を離すと確定", onDismiss: {}) {
@@ -12,8 +12,8 @@ struct EditorReorderPage: View {
                 let headings = EditorBlockPicker.headingTexts(entry)
                 EditorReorderRow {
                     Text(entry.title)
-                        .font(InkTypography.font(20, .bold))
-                        .foregroundStyle(InkColors.ink)
+                        .font(.ink(20, .bold))
+                        .foregroundStyle(Color.ink)
                 }
 
                 if let first = paragraphs.first {
@@ -29,7 +29,7 @@ struct EditorReorderPage: View {
                 if headings.count > 1 {
                     EditorReorderRow {
                         Text(headings[1])
-                            .font(InkTypography.font(16, .bold))
+                            .font(.ink(16, .bold))
                             .foregroundStyle(EditorPalette.inkGray)
                     }
                 }

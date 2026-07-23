@@ -5,17 +5,17 @@ struct OnboardingLogoMark: View {
     var body: some View {
         VStack(spacing: 16) {
             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .strokeBorder(InkColors.ink, lineWidth: 2)
+                .strokeBorder(Color.ink, lineWidth: 2)
                 .frame(width: 52, height: 52)
                 .overlay {
                     Text("日")
-                        .font(InkTypography.font(24, .bold))
-                        .foregroundStyle(InkColors.ink)
+                        .font(.ink(24, .bold))
+                        .foregroundStyle(Color.ink)
                 }
             Text("Nikki")
-                .font(InkTypography.font(30, .bold))
+                .font(.ink(30, .bold))
                 .tracking(30 * 0.04)
-                .foregroundStyle(InkColors.ink)
+                .foregroundStyle(Color.ink)
         }
     }
 }

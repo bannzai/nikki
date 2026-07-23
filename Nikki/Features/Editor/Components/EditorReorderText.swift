@@ -6,8 +6,8 @@ struct EditorReorderText: View {
 
     var body: some View {
         Text(text)
-            .font(InkTypography.font(14, .regular))
-            .lineSpacing(InkTypography.lineSpacing(fontSize: 14, multiplier: 1.95))
+            .font(.ink(14, .regular))
+            .lineSpacing(inkLineSpacing(fontSize: 14, multiplier: 1.95))
             .foregroundStyle(EditorPalette.inkGray)
             .fixedSize(horizontal: false, vertical: true)
     }

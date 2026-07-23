@@ -22,7 +22,7 @@ struct InkCircledIcon: View {
     let systemName: String
     var diameter: CGFloat = 46
     var iconSize: CGFloat = 18
-    var borderColor: Color = InkColors.ink.opacity(0.3)
+    var borderColor: Color = Color.ink.opacity(0.3)
 
     var body: some View {
         Circle()
@@ -31,7 +31,7 @@ struct InkCircledIcon: View {
             .overlay {
                 Image(systemName: systemName)
                     .font(.system(size: iconSize, weight: .regular))
-                    .foregroundStyle(InkColors.ink)
+                    .foregroundStyle(Color.ink)
             }
     }
 }

@@ -6,8 +6,9 @@ struct EditorParagraphBlock: View {
 
     var body: some View {
         Text(text)
-            .inkTextStyle(InkTypography.body)
-            .foregroundStyle(InkColors.ink)
+            .font(.ink(15))
+            .lineSpacing(inkLineSpacing(fontSize: 15, multiplier: 2.05))
+            .foregroundStyle(Color.ink)
             .frame(maxWidth: .infinity, alignment: .leading)
             .fixedSize(horizontal: false, vertical: true)
     }

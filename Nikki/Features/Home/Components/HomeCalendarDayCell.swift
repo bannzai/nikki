@@ -9,20 +9,20 @@ struct HomeCalendarDayCell: View {
             if let day = cell.day {
                 if cell.isToday {
                     Text("\(day)")
-                        .font(InkTypography.font(14, .bold))
-                        .foregroundStyle(InkColors.primaryButtonText)
+                        .font(.ink(14, .bold))
+                        .foregroundStyle(Color.inkPrimaryButtonText)
                         .frame(width: 36, height: 36)
-                        .background(Circle().fill(InkColors.ink))
+                        .background(Circle().fill(Color.ink))
                         .padding(.top, 2)
                     Spacer(minLength: 0)
                 } else {
                     Text("\(day)")
-                        .font(InkTypography.font(14, .regular))
-                        .foregroundStyle(cell.isFuture ? InkColors.textQuaternary : InkColors.ink)
+                        .font(.ink(14, .regular))
+                        .foregroundStyle(cell.isFuture ? Color.inkTextQuaternary : Color.ink)
                         .padding(.top, 8)
                     Spacer(minLength: 0)
                     Circle()
-                        .fill(cell.hasEntry ? InkColors.ink : Color.clear)
+                        .fill(cell.hasEntry ? Color.ink : Color.clear)
                         .frame(width: 4, height: 4)
                         .padding(.bottom, 4)
                 }

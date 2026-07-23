@@ -1,6 +1,12 @@
 import SwiftUI
 import SwiftData
 
+/// ホームの表示モード(リスト / カレンダー)。セグメントの index と rawValue が対応する。
+enum HomePageMode: Int, CaseIterable {
+    case list
+    case calendar
+}
+
 /// ホーム画面の共通シャーシ。ロゴヘッダ・検索バー・「リスト / カレンダー」セグメント・新規作成 FAB をまとめ、
 /// 選択中セグメントに応じて時系列リスト(1g)とカレンダー(1h)を切り替える。
 /// 日記は @Query で読み、行のタップでエディタ、FAB でテンプレート一覧(1l)へ進む。
@@ -17,7 +23,7 @@ struct HomePage: View {
 
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
-            InkColors.paper.ignoresSafeArea()
+            Color.inkPaper.ignoresSafeArea()
 
             VStack(alignment: .leading, spacing: 0) {
                 VStack(alignment: .leading, spacing: 14) {

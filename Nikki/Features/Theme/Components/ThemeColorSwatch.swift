@@ -2,7 +2,8 @@ import SwiftUI
 
 /// 紙色プリセット1つを表す丸スウォッチ + ラベル。選択中は墨枠とチェックを表示する。
 struct ThemeColorSwatch: View {
-    let preset: PaperColorPreset
+    let paperColor: Color
+    let label: String
     let isSelected: Bool
     let action: () -> Void
 
@@ -10,7 +11,7 @@ struct ThemeColorSwatch: View {
         Button(action: action) {
             VStack(spacing: 6) {
                 Circle()
-                    .fill(preset.color)
+                    .fill(paperColor)
                     .frame(width: 46, height: 46)
                     .overlay(
                         Circle().strokeBorder(borderColor, lineWidth: isSelected ? 2 : 1)
@@ -19,31 +20,22 @@ struct ThemeColorSwatch: View {
                         if isSelected {
                             Image(systemName: InkIcons.checkmark)
                                 .font(.system(size: 13, weight: .semibold))
-                                .foregroundStyle(InkColors.ink)
+                                .foregroundStyle(Color.ink)
                         }
                     }
                 Text(label)
-                    .font(InkTypography.font(11, isSelected ? .bold : .regular))
-                    .foregroundStyle(isSelected ? InkColors.ink : InkColors.textSecondary)
+                    .font(.ink(11, isSelected ? .bold : .regular))
+                    .foregroundStyle(isSelected ? Color.ink : Color.inkTextSecondary)
             }
         }
         .buttonStyle(.plain)
     }
 
-    /// スウォッチ下に表示する紙色プリセットの表示名。
-    private var label: String {
-        switch preset {
-        case .white: return "白"
-        case .ecru: return "生成"
-        case .ash: return "薄鼠"
-        case .celadon: return "青磁"
-        case .sakura: return "桜鼠"
-        }
-    }
-
-    /// 非選択時の枠色。白は紙地(#FAFAF9)に対して輪郭が沈むため、他色(0.08)より濃い 0.12 の枠にする。
+    /// 非選択時の枠色。白(プリセット先頭)は紙地に対して輪郭が沈むため、他色より濃い枠にする。
     private var borderColor: Color {
-        if isSelected { return InkColors.ink }
-        return preset == .white ? Color.black.opacity(0.12) : InkColors.border
+        if isSelected {
+            return Color.ink
+        }
+        return paperColor == Color.paperColorPreset.first ? Color.black.opacity(0.12) : Color.inkBorder
     }
 }

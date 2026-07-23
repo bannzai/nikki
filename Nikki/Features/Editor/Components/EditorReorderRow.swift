@@ -17,7 +17,7 @@ struct EditorReorderRow<Content: View>: View {
         .padding(.horizontal, 14)
         .background(
             RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .fill(active ? Color.clear : InkColors.surface.opacity(0.6))
+                .fill(active ? Color.clear : Color.inkSurface.opacity(0.6))
         )
     }
 }

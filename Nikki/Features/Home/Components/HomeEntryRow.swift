@@ -10,21 +10,22 @@ struct HomeEntryRow: View {
             HStack(alignment: .top, spacing: 16) {
                 VStack(spacing: 0) {
                     Text("\(Calendar.display.component(.day, from: entry.date))")
-                        .font(InkTypography.font(21, .bold))
-                        .foregroundStyle(InkColors.ink)
+                        .font(.ink(21, .bold))
+                        .foregroundStyle(Color.ink)
                     Text(weekdayLabel)
-                        .font(InkTypography.font(11, .regular))
-                        .foregroundStyle(InkColors.textTertiary)
+                        .font(.ink(11, .regular))
+                        .foregroundStyle(Color.inkTextTertiary)
                 }
                 .frame(width: 44)
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(entry.title)
-                        .font(InkTypography.listItemTitle)
-                        .foregroundStyle(InkColors.ink)
+                        .font(.inkListItemTitle)
+                        .foregroundStyle(Color.ink)
                     Text(entry.excerpt)
-                        .inkTextStyle(InkTypography.excerpt)
-                        .foregroundStyle(InkColors.textSecondary)
+                        .font(.ink(13))
+                        .lineSpacing(inkLineSpacing(fontSize: 13, multiplier: 1.8))
+                        .foregroundStyle(Color.inkTextSecondary)
                         .lineLimit(2)
                         .multilineTextAlignment(.leading)
                 }
@@ -35,7 +36,7 @@ struct HomeEntryRow: View {
 
             if showsSeparator {
                 Rectangle()
-                    .fill(InkColors.separator)
+                    .fill(Color.inkSeparator)
                     .frame(height: 0.5)
             }
         }

@@ -11,34 +11,34 @@ struct TemplateVariableFieldCard: View {
         VStack(alignment: .leading, spacing: 5) {
             HStack {
                 Text("{{\(field.name)}}")
-                    .font(InkTypography.mono(11, weight: .semibold))
-                    .foregroundStyle(InkColors.labelGray)
+                    .font(.inkMono(11, weight: .semibold))
+                    .foregroundStyle(Color.inkLabelGray)
                 if field.isAuto {
                     Spacer(minLength: 8)
                     Text("自動")
-                        .font(InkTypography.mono(10.5))
-                        .foregroundStyle(InkColors.textTertiary)
+                        .font(.inkMono(10.5))
+                        .foregroundStyle(Color.inkTextTertiary)
                         .padding(.horizontal, 7)
                         .padding(.vertical, 2)
                         .background(
                             RoundedRectangle(cornerRadius: 5, style: .continuous)
-                                .fill(InkColors.surfaceInset)
+                                .fill(Color.inkSurfaceInset)
                         )
                 }
             }
             if field.isAuto {
                 Text(field.value)
-                    .font(InkTypography.font(14.5, .regular))
-                    .foregroundStyle(InkColors.ink)
+                    .font(.ink(14.5, .regular))
+                    .foregroundStyle(Color.ink)
             } else {
                 TextField(
                     "",
                     text: $field.value,
-                    prompt: Text(field.placeholder).foregroundStyle(InkColors.textQuaternary)
+                    prompt: Text(field.placeholder).foregroundStyle(Color.inkTextQuaternary)
                 )
-                .font(InkTypography.font(14.5, .regular))
-                .foregroundStyle(InkColors.ink)
-                .tint(InkColors.ink)
+                .font(.ink(14.5, .regular))
+                .foregroundStyle(Color.ink)
+                .tint(Color.ink)
                 .focused(focusedFieldName, equals: field.name)
             }
         }
@@ -47,11 +47,11 @@ struct TemplateVariableFieldCard: View {
         .padding(.horizontal, 15)
         .background(
             RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .fill(InkColors.surface)
+                .fill(Color.inkSurface)
         )
         .overlay(
             RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .strokeBorder(isFocused ? InkColors.ink : InkColors.border, lineWidth: isFocused ? 1.5 : 1)
+                .strokeBorder(isFocused ? Color.ink : Color.inkBorder, lineWidth: isFocused ? 1.5 : 1)
         )
     }
 }

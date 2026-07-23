@@ -7,7 +7,7 @@ struct OnboardingWelcomePage: View {
 
     var body: some View {
         ZStack {
-            InkColors.paper.ignoresSafeArea()
+            Color.inkPaper.ignoresSafeArea()
 
             VStack(alignment: .leading, spacing: 0) {
                 OnboardingLogoMark()
@@ -15,19 +15,19 @@ struct OnboardingWelcomePage: View {
 
                 VStack(alignment: .leading, spacing: 18) {
                     Text("ここに書くことは、\nあなたしか読めません。")
-                        .font(InkTypography.font(25, .bold))
-                        .lineSpacing(InkTypography.lineSpacing(fontSize: 25, multiplier: 1.7))
-                        .foregroundStyle(InkColors.ink)
+                        .font(.ink(25, .bold))
+                        .lineSpacing(inkLineSpacing(fontSize: 25, multiplier: 1.7))
+                        .foregroundStyle(Color.ink)
                         .fixedSize(horizontal: false, vertical: true)
                     Text("日記はこの端末の中で暗号化されます。わたしたち開発者にも、中身を見ることはできません。")
-                        .font(InkTypography.font(14.5, .regular))
-                        .lineSpacing(InkTypography.lineSpacing(fontSize: 14.5, multiplier: 2.1))
-                        .foregroundStyle(InkColors.textSecondary)
+                        .font(.ink(14.5, .regular))
+                        .lineSpacing(inkLineSpacing(fontSize: 14.5, multiplier: 2.1))
+                        .foregroundStyle(Color.inkTextSecondary)
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
 
-                InkPrimaryButton("はじめる") {
+                InkPrimaryButton(title: "はじめる") {
                     onboardingStep = .encryption
                 }
             }

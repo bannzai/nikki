@@ -22,9 +22,9 @@ struct TemplateListPage: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     Text("今日はどの紙に書きますか。")
-                        .font(InkTypography.font(12.5, .regular))
-                        .foregroundStyle(InkColors.textSecondary)
-                        .lineSpacing(InkTypography.lineSpacing(fontSize: 12.5, multiplier: 1.9))
+                        .font(.ink(12.5, .regular))
+                        .foregroundStyle(Color.inkTextSecondary)
+                        .lineSpacing(inkLineSpacing(fontSize: 12.5, multiplier: 1.9))
                         .padding(.bottom, 16)
 
                     VStack(spacing: 12) {
@@ -38,7 +38,7 @@ struct TemplateListPage: View {
                 .padding(.horizontal, 24)
             }
         }
-        .background(InkColors.paper.ignoresSafeArea())
+        .background(Color.inkPaper.ignoresSafeArea())
         .toolbar(.hidden, for: .navigationBar)
         .overlay {
             if template != nil {

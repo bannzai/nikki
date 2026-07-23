@@ -8,9 +8,9 @@ struct EditorSelectedHeading: View {
     var body: some View {
         Text(text)
             .font(EditorHeadingFont.font(for: level))
-            .foregroundStyle(InkColors.ink)
+            .foregroundStyle(Color.ink)
             .padding(.vertical, 2)
-            .background(InkColors.selectionHighlight)
+            .background(Color.inkSelectionHighlight)
             .overlay(alignment: .leading) {
                 EditorSelectionHandle(circleAlignment: .top, circleOffsetY: -8)
                     .offset(x: -1)
@@ -31,11 +31,11 @@ struct EditorSelectionHandle: View {
 
     var body: some View {
         Rectangle()
-            .fill(InkColors.ink)
+            .fill(Color.ink)
             .frame(width: 2)
             .overlay(alignment: circleAlignment) {
                 Circle()
-                    .fill(InkColors.ink)
+                    .fill(Color.ink)
                     .frame(width: 11, height: 11)
                     .offset(y: circleOffsetY)
             }

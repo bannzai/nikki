@@ -7,9 +7,9 @@ struct TemplateNewFooter: View {
             Image(systemName: InkIcons.add)
                 .font(.system(size: 14, weight: .regular))
             Text("新しいテンプレート")
-                .font(InkTypography.font(13.5, .regular))
+                .font(.ink(13.5, .regular))
         }
-        .foregroundStyle(InkColors.textSecondary)
+        .foregroundStyle(Color.inkTextSecondary)
         .frame(maxWidth: .infinity)
         .padding(.vertical, 20)
     }

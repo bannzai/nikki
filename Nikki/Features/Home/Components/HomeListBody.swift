@@ -14,8 +14,8 @@ struct HomeListBody: View {
                 VStack(alignment: .leading, spacing: 0) {
                     ForEach(Array(monthGroups.enumerated()), id: \.element.id) { groupIndex, group in
                         Text(group.title)
-                            .font(InkTypography.font(12, .bold).weight(.semibold))
-                            .foregroundStyle(InkColors.textTertiary)
+                            .font(.ink(12, .bold).weight(.semibold))
+                            .foregroundStyle(Color.inkTextTertiary)
                             .padding(.top, groupIndex == 0 ? 14 : 16)
                             .padding(.bottom, 4)
 

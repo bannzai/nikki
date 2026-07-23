@@ -8,7 +8,7 @@ struct LockPage: View {
 
     var body: some View {
         ZStack {
-            InkColors.paper
+            Color.inkPaper
             LockSkeletonBackground()
             LockOverlay(onUnlock: onUnlock)
         }

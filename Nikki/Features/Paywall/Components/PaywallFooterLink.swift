@@ -8,8 +8,8 @@ struct PaywallFooterLink: View {
     var body: some View {
         Button(action: action) {
             Text(title)
-                .font(InkTypography.font(11.5, .regular))
-                .foregroundStyle(InkColors.textTertiary)
+                .font(.ink(11.5, .regular))
+                .foregroundStyle(Color.inkTextTertiary)
         }
         .buttonStyle(.plain)
     }

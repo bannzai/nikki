@@ -24,13 +24,13 @@ struct TemplateVariableSheet: View {
                     .padding(.bottom, 18)
 
                 Text("「\(template.name)」から作成")
-                    .font(InkTypography.font(17, .bold))
-                    .foregroundStyle(InkColors.ink)
+                    .font(.ink(17, .bold))
+                    .foregroundStyle(Color.ink)
                     .padding(.bottom, 4)
 
                 Text("埋めた言葉が、そのまま本文に入ります。")
-                    .font(InkTypography.font(12.5, .regular))
-                    .foregroundStyle(InkColors.textTertiary)
+                    .font(.ink(12.5, .regular))
+                    .foregroundStyle(Color.inkTextTertiary)
                     .padding(.bottom, 20)
 
                 VStack(spacing: 12) {
@@ -42,7 +42,7 @@ struct TemplateVariableSheet: View {
                 TemplateMarkdownPreview(markdown: TemplateVariableField.substitutedMarkdown(template: template, fields: fields))
                     .padding(.top, 18)
 
-                InkPrimaryButton("この内容ではじめる") {
+                InkPrimaryButton(title: "この内容ではじめる") {
                     start(template)
                 }
                 .padding(.top, 18)
@@ -59,8 +59,8 @@ struct TemplateVariableSheet: View {
                     topTrailingRadius: 24,
                     style: .continuous
                 )
-                .fill(InkColors.paper)
-                .shadow(color: InkColors.ink.opacity(0.18), radius: 20, x: 0, y: -12)
+                .fill(Color.inkPaper)
+                .shadow(color: Color.ink.opacity(0.18), radius: 20, x: 0, y: -12)
             )
         }
     }

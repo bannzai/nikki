@@ -6,8 +6,8 @@ struct HomeCalendarWeekdayHeader: View {
         HStack(spacing: 0) {
             ForEach(["日", "月", "火", "水", "木", "金", "土"], id: \.self) { symbol in
                 Text(symbol)
-                    .font(InkTypography.font(11, .regular))
-                    .foregroundStyle(InkColors.textTertiary)
+                    .font(.ink(11, .regular))
+                    .foregroundStyle(Color.inkTextTertiary)
                     .frame(maxWidth: .infinity)
             }
         }

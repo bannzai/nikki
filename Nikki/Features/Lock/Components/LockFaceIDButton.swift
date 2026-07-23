@@ -11,14 +11,14 @@ struct LockFaceIDButton: View {
                 Image(systemName: InkIcons.faceID)
                     .font(.system(size: 18, weight: .regular))
                 Text("Face ID で開く")
-                    .font(InkTypography.font(15, .medium).weight(.semibold))
+                    .font(.ink(15, .medium).weight(.semibold))
             }
-            .foregroundStyle(InkColors.primaryButtonText)
+            .foregroundStyle(Color.inkPrimaryButtonText)
             .frame(height: 50)
             .padding(.horizontal, 26)
             .background(
                 RoundedRectangle(cornerRadius: 25, style: .continuous)
-                    .fill(InkColors.ink)
+                    .fill(Color.ink)
             )
         }
         .buttonStyle(.plain)

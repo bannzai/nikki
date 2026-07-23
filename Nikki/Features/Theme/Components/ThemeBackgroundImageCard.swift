@@ -4,15 +4,15 @@ import SwiftUI
 struct ThemeBackgroundImageCard: View {
     var body: some View {
         InkListSection {
-            InkListRow("写真から選ぶ", action: {})
+            InkListRow(title: "写真から選ぶ", action: {})
             HStack(spacing: 8) {
                 Text("なし")
-                    .font(InkTypography.font(14.5, .regular))
-                    .foregroundStyle(InkColors.textSecondary)
+                    .font(.ink(14.5, .regular))
+                    .foregroundStyle(Color.inkTextSecondary)
                 Spacer(minLength: 8)
                 Image(systemName: InkIcons.checkmark)
                     .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(InkColors.ink)
+                    .foregroundStyle(Color.ink)
             }
             .padding(.horizontal, 16)
             .frame(height: 52)

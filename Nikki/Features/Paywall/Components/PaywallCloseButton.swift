@@ -11,7 +11,7 @@ struct PaywallCloseButton: View {
             Button(action: action) {
                 Image(systemName: InkIcons.close)
                     .font(.system(size: 15, weight: .regular))
-                    .foregroundStyle(InkColors.textTertiary)
+                    .foregroundStyle(Color.inkTextTertiary)
             }
             .buttonStyle(.plain)
         }

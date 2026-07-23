@@ -5,7 +5,7 @@ struct EditorDragHandle: View {
     var active: Bool
 
     var body: some View {
-        let color = active ? InkColors.ink : InkColors.textQuaternary
+        let color = active ? Color.ink : Color.inkTextQuaternary
         VStack(spacing: 2.3) {
             ForEach(0..<3, id: \.self) { _ in
                 HStack(spacing: 1.8) {

@@ -21,14 +21,15 @@ struct OnboardingEncryptionPage: View {
 
     var body: some View {
         ZStack {
-            InkColors.paper.ignoresSafeArea()
+            Color.inkPaper.ignoresSafeArea()
 
             VStack(alignment: .leading, spacing: 0) {
                 InkStepIndicator(step: 1, total: 2)
 
                 Text("鍵のかかった、\nあなただけの箱。")
-                    .inkTextStyle(InkTypography.onboardingHeadline)
-                    .foregroundStyle(InkColors.ink)
+                    .font(.ink(24, .bold))
+                    .lineSpacing(inkLineSpacing(fontSize: 24, multiplier: 1.65))
+                    .foregroundStyle(Color.ink)
                     .fixedSize(horizontal: false, vertical: true)
                     .padding(.top, 14)
 
@@ -38,12 +39,12 @@ struct OnboardingEncryptionPage: View {
                             InkCircledIcon(systemName: point.icon)
                             VStack(alignment: .leading, spacing: 3) {
                                 Text(point.title)
-                                    .font(InkTypography.font(15.5, .bold))
-                                    .foregroundStyle(InkColors.ink)
+                                    .font(.ink(15.5, .bold))
+                                    .foregroundStyle(Color.ink)
                                 Text(point.description)
-                                    .font(InkTypography.font(13, .regular))
-                                    .lineSpacing(InkTypography.lineSpacing(fontSize: 13, multiplier: 1.9))
-                                    .foregroundStyle(InkColors.textSecondary)
+                                    .font(.ink(13, .regular))
+                                    .lineSpacing(inkLineSpacing(fontSize: 13, multiplier: 1.9))
+                                    .foregroundStyle(Color.inkTextSecondary)
                                     .fixedSize(horizontal: false, vertical: true)
                             }
                         }
@@ -52,14 +53,14 @@ struct OnboardingEncryptionPage: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
 
                 Text("AI も、解析も、共有もありません。ただの日記帳です。")
-                    .font(InkTypography.font(12, .regular))
-                    .lineSpacing(InkTypography.lineSpacing(fontSize: 12, multiplier: 1.9))
-                    .foregroundStyle(InkColors.textTertiary)
+                    .font(.ink(12, .regular))
+                    .lineSpacing(inkLineSpacing(fontSize: 12, multiplier: 1.9))
+                    .foregroundStyle(Color.inkTextTertiary)
                     .multilineTextAlignment(.center)
                     .frame(maxWidth: .infinity)
                     .padding(.bottom, 20)
 
-                InkPrimaryButton("次へ") {
+                InkPrimaryButton(title: "次へ") {
                     onboardingStep = .biometric
                 }
             }

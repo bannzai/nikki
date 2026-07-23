@@ -9,7 +9,7 @@ struct EditorScreenScaffold<Content: View>: View {
 
     var body: some View {
         ZStack {
-            InkColors.paper.ignoresSafeArea()
+            Color.inkPaper.ignoresSafeArea()
             VStack(spacing: 0) {
                 InkNavBar(leading: .dismiss, center: .caption(caption), onLeading: onDismiss)
                 content

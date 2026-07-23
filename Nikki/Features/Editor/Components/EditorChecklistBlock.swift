@@ -11,13 +11,14 @@ struct EditorChecklistBlock: View {
     var body: some View {
         VStack(alignment: .leading, spacing: rowSpacing) {
             ForEach(items) { item in
-                HStack(spacing: boxSpacing) {
-                    EditorCheckbox(done: item.done, size: boxSize)
+                // チェック操作は静的表現のままのため、isOn は定数で渡す。
+                Toggle(isOn: .constant(item.done)) {
                     Text(item.text)
-                        .font(InkTypography.font(fontSize, .regular))
-                        .foregroundStyle(item.done ? InkColors.textTertiary : InkColors.ink)
-                        .strikethrough(item.done, color: InkColors.textTertiary)
+                        .font(.ink(fontSize, .regular))
+                        .foregroundStyle(item.done ? Color.inkTextTertiary : Color.ink)
+                        .strikethrough(item.done, color: Color.inkTextTertiary)
                 }
+                .toggleStyle(EditorCheckboxToggleStyle(boxSize: boxSize, boxSpacing: boxSpacing))
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)

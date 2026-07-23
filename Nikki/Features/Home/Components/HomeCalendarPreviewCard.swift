@@ -8,25 +8,23 @@ struct HomeCalendarPreviewCard: View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(alignment: .firstTextBaseline, spacing: 10) {
                 Text(dateLabel)
-                    .font(InkTypography.font(13, .bold))
-                    .foregroundStyle(InkColors.ink)
+                    .font(.ink(13, .bold))
+                    .foregroundStyle(Color.ink)
                 Text(timeLabel)
-                    .font(InkTypography.font(11, .regular))
-                    .foregroundStyle(InkColors.textTertiary)
+                    .font(.ink(11, .regular))
+                    .foregroundStyle(Color.inkTextTertiary)
             }
             .padding(.bottom, 6)
 
             Text(entry.title)
-                .font(InkTypography.font(14.5, .bold))
-                .foregroundStyle(InkColors.ink)
+                .font(.ink(14.5, .bold))
+                .foregroundStyle(Color.ink)
                 .padding(.bottom, 3)
 
             Text(entry.excerpt)
-                .inkTextStyle(InkTextStyle(
-                    font: InkTypography.font(12.5, .regular),
-                    lineSpacing: InkTypography.lineSpacing(fontSize: 12.5, multiplier: 1.8)
-                ))
-                .foregroundStyle(InkColors.textSecondary)
+                .font(.ink(12.5))
+                .lineSpacing(inkLineSpacing(fontSize: 12.5, multiplier: 1.8))
+                .foregroundStyle(Color.inkTextSecondary)
                 .lineLimit(2)
                 .multilineTextAlignment(.leading)
         }

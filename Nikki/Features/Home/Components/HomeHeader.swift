@@ -5,9 +5,9 @@ struct HomeHeader: View {
     var body: some View {
         HStack(spacing: 0) {
             Text("Nikki")
-                .font(InkTypography.screenTitle)
+                .font(.inkScreenTitle)
                 .tracking(20 * 0.03)
-                .foregroundStyle(InkColors.ink)
+                .foregroundStyle(Color.ink)
             Spacer(minLength: 0)
             // アカウント画面は未実装のため、ボタンはまだ何もしない。
             Button(action: {}) {

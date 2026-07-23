@@ -6,8 +6,8 @@ struct ThemeSectionLabel: View {
 
     var body: some View {
         Text(text)
-            .font(InkTypography.font(12, .bold))
-            .foregroundStyle(InkColors.textTertiary)
+            .font(.ink(12, .bold))
+            .foregroundStyle(Color.inkTextTertiary)
             .frame(maxWidth: .infinity, alignment: .leading)
     }
 }

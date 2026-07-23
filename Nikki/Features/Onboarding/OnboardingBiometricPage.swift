@@ -7,7 +7,7 @@ struct OnboardingBiometricPage: View {
 
     var body: some View {
         ZStack {
-            InkColors.paper.ignoresSafeArea()
+            Color.inkPaper.ignoresSafeArea()
 
             VStack(alignment: .leading, spacing: 0) {
                 InkStepIndicator(step: 2, total: 2)
@@ -15,17 +15,18 @@ struct OnboardingBiometricPage: View {
                 VStack(spacing: 26) {
                     Image(systemName: InkIcons.faceID)
                         .font(.system(size: 86, weight: .regular))
-                        .foregroundStyle(InkColors.ink)
+                        .foregroundStyle(Color.ink)
 
                     Text("つぎからは、\n顔だけで。")
-                        .inkTextStyle(InkTypography.onboardingHeadline)
-                        .foregroundStyle(InkColors.ink)
+                        .font(.ink(24, .bold))
+                        .lineSpacing(inkLineSpacing(fontSize: 24, multiplier: 1.65))
+                        .foregroundStyle(Color.ink)
                         .multilineTextAlignment(.center)
 
                     Text("開きっぱなしの画面は自動でロック。Face ID がそっと鍵を開けます。")
-                        .font(InkTypography.font(13.5, .regular))
-                        .lineSpacing(InkTypography.lineSpacing(fontSize: 13.5, multiplier: 2.05))
-                        .foregroundStyle(InkColors.textSecondary)
+                        .font(.ink(13.5, .regular))
+                        .lineSpacing(inkLineSpacing(fontSize: 13.5, multiplier: 2.05))
+                        .foregroundStyle(Color.inkTextSecondary)
                         .multilineTextAlignment(.center)
                         .fixedSize(horizontal: false, vertical: true)
                         .frame(maxWidth: 290)
@@ -33,10 +34,10 @@ struct OnboardingBiometricPage: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
 
                 VStack(spacing: 12) {
-                    InkPrimaryButton("Face ID を有効にする") {
+                    InkPrimaryButton(title: "Face ID を有効にする") {
                         onboardingCompleted = true
                     }
-                    InkSecondaryButton("パスキーを登録する") {
+                    InkSecondaryButton(title: "パスキーを登録する") {
                         onboardingCompleted = true
                     }
                 }

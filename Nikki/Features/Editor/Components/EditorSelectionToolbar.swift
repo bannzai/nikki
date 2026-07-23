@@ -5,7 +5,7 @@ struct EditorSelectionToolbar: View {
     var body: some View {
         HStack(spacing: 2) {
             Text("本文")
-                .font(InkTypography.font(13.5, .regular))
+                .font(.ink(13.5, .regular))
                 .foregroundStyle(EditorPalette.inkGray)
                 .padding(.horizontal, 10)
                 .padding(.vertical, 6)
@@ -17,7 +17,7 @@ struct EditorSelectionToolbar: View {
             EditorToolbarIcon(systemName: "checkmark.square")
             EditorToolbarIcon(systemName: InkIcons.list)
             Text("…")
-                .font(InkTypography.font(14, .regular))
+                .font(.ink(14, .regular))
                 .tracking(1.4)
                 .foregroundStyle(EditorPalette.inkGray)
                 .padding(.horizontal, 9)
@@ -27,11 +27,11 @@ struct EditorSelectionToolbar: View {
         .padding(.vertical, 5)
         .background(
             RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .fill(InkColors.surface)
+                .fill(Color.inkSurface)
         )
         .overlay(
             RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .strokeBorder(InkColors.border, lineWidth: 1)
+                .strokeBorder(Color.inkBorder, lineWidth: 1)
         )
         .shadow(color: .black.opacity(0.14), radius: 13, x: 0, y: 8)
     }
@@ -41,7 +41,7 @@ struct EditorSelectionToolbar: View {
 struct EditorToolbarDivider: View {
     var body: some View {
         Rectangle()
-            .fill(InkColors.ink.opacity(0.1))
+            .fill(Color.ink.opacity(0.1))
             .frame(width: 1, height: 18)
     }
 }
@@ -53,14 +53,14 @@ struct EditorToolbarHeadingLabel: View {
 
     var body: some View {
         Text(title)
-            .font(InkTypography.mono(12.5, weight: .semibold))
-            .foregroundStyle(active ? InkColors.primaryButtonText : EditorPalette.inkGray)
+            .font(.inkMono(12.5, weight: .semibold))
+            .foregroundStyle(active ? Color.inkPrimaryButtonText : EditorPalette.inkGray)
             .padding(.horizontal, 9)
             .padding(.vertical, 6)
             .background {
                 if active {
                     RoundedRectangle(cornerRadius: 7, style: .continuous)
-                        .fill(InkColors.ink)
+                        .fill(Color.ink)
                 }
             }
     }

@@ -5,8 +5,8 @@ import SwiftUI
 struct TemplateVariableBackdrop: View {
     var body: some View {
         ZStack(alignment: .topLeading) {
-            InkColors.disabledBackground
-            InkColors.paper.opacity(0.5)
+            Color.inkDisabledBackground
+            Color.inkPaper.opacity(0.5)
             RoundedRectangle(cornerRadius: 6, style: .continuous)
                 .fill(Color(hex: 0xDDDCD7))
                 .frame(width: 170, height: 16)

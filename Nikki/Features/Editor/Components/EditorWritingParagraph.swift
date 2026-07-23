@@ -9,11 +9,11 @@ struct EditorWritingParagraph: View {
         TimelineView(.periodic(from: .now, by: 0.6)) { context in
             let visible = Int(context.date.timeIntervalSinceReferenceDate / 0.6) % 2 == 0
             (
-                Text(text).foregroundStyle(InkColors.ink)
-                + Text("\u{258F}").foregroundStyle(visible ? InkColors.ink : Color.clear)
+                Text(text).foregroundStyle(Color.ink)
+                + Text("\u{258F}").foregroundStyle(visible ? Color.ink : Color.clear)
             )
-            .font(InkTypography.body.font)
-            .lineSpacing(InkTypography.body.lineSpacing)
+            .font(.ink(15))
+            .lineSpacing(inkLineSpacing(fontSize: 15, multiplier: 2.05))
             .frame(maxWidth: .infinity, alignment: .leading)
             .fixedSize(horizontal: false, vertical: true)
         }

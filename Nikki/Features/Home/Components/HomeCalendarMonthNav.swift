@@ -10,7 +10,7 @@ struct HomeCalendarMonthNav: View {
             Button { shiftMonth(by: -1) } label: {
                 Image(systemName: InkIcons.chevronLeft)
                     .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(InkColors.textSecondary)
+                    .foregroundStyle(Color.inkTextSecondary)
             }
             .buttonStyle(.plain)
 
@@ -18,15 +18,15 @@ struct HomeCalendarMonthNav: View {
 
             // Text の Int 補間はロケールの桁区切り書式が入るため、年は String にしてから表示する。
             Text("\(String(comps.year ?? 0))年\(comps.month ?? 0)月")
-                .font(InkTypography.font(15, .bold))
-                .foregroundStyle(InkColors.ink)
+                .font(.ink(15, .bold))
+                .foregroundStyle(Color.ink)
 
             Spacer(minLength: 0)
 
             Button { shiftMonth(by: 1) } label: {
                 Image(systemName: InkIcons.chevronRight)
                     .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(InkColors.textSecondary)
+                    .foregroundStyle(Color.inkTextSecondary)
             }
             .buttonStyle(.plain)
         }

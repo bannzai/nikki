@@ -8,17 +8,17 @@ struct ThemePreviewCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("プレビュー")
-                .font(InkTypography.font(11, .regular))
-                .foregroundStyle(InkColors.textTertiary)
+                .font(.ink(11, .regular))
+                .foregroundStyle(Color.inkTextTertiary)
                 .padding(.bottom, 10)
             Text("梅雨明け")
-                .font(InkTypography.font(18, .bold))
-                .foregroundStyle(InkColors.ink)
+                .font(.ink(18, .bold))
+                .foregroundStyle(Color.ink)
                 .padding(.bottom, 8)
             Text("朝から蝉が鳴いていた。今年も夏が来たんだなと思う。")
-                .font(InkTypography.font(13, .regular))
-                .lineSpacing(InkTypography.lineSpacing(fontSize: 13, multiplier: 2.0))
-                .foregroundStyle(InkColors.textSecondary)
+                .font(.ink(13, .regular))
+                .lineSpacing(inkLineSpacing(fontSize: 13, multiplier: 2.0))
+                .foregroundStyle(Color.inkTextSecondary)
                 .fixedSize(horizontal: false, vertical: true)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -29,7 +29,7 @@ struct ThemePreviewCard: View {
         )
         .overlay(
             RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .strokeBorder(InkColors.border, lineWidth: 1)
+                .strokeBorder(Color.inkBorder, lineWidth: 1)
         )
     }
 }

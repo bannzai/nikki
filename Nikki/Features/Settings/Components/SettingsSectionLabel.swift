@@ -6,8 +6,8 @@ struct SettingsSectionLabel: View {
 
     var body: some View {
         Text(text)
-            .font(InkTypography.font(12, .medium))
-            .foregroundStyle(InkColors.textTertiary)
+            .font(.ink(12, .medium))
+            .foregroundStyle(Color.inkTextTertiary)
             .padding(.horizontal, 2)
             .padding(.bottom, 8)
             .frame(maxWidth: .infinity, alignment: .leading)
