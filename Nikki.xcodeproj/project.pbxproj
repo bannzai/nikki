@@ -33,6 +33,7 @@
 		3F76D0B8150C58068448A40E /* ZenKakuGothicNew-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FDBC6289B6D6A4B3469344B9 /* ZenKakuGothicNew-Bold.ttf */; };
 		40E0EC35832C262141B72120 /* RootPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9527164007BBD891E23DCD /* RootPage.swift */; };
 		458797AF1EA93B000619006A /* EditorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ACDF474F7D7D3A962AAF485 /* EditorPalette.swift */; };
+		47376E5AE808000234B62946 /* EnvironmentValues+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74E7B3FF311AF2ABF1C73A3 /* EnvironmentValues+.swift */; };
 		4C8AA91BA5CB6C275F4E28EF /* TemplateListPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7210A7872A734DE0F464AFA /* TemplateListPage.swift */; };
 		4E0865ECF818FC3A659DAF14 /* OnboardingLogoMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEBA9E2946D26692F086817 /* OnboardingLogoMark.swift */; };
 		4ECB9C57E7845E0E2DC65537 /* PaywallHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 164FF1FF16C6BDB7985263C9 /* PaywallHeader.swift */; };
@@ -58,6 +59,7 @@
 		83DA1666FED66ED698C6EAC9 /* OnboardingWelcomePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66B4042D38A5FDA1A8029CF3 /* OnboardingWelcomePage.swift */; };
 		844A464C8C02304757528927 /* HomeCalendarWeekdayHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0208AEEACDB6816DE15FA0 /* HomeCalendarWeekdayHeader.swift */; };
 		8D102C3230CDB767AA5B1D90 /* EditorDraggingCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A10548617EA207CACB3436B /* EditorDraggingCard.swift */; };
+		8F32A8ABD713636B1B5DFD88 /* HomeSearchEmptyState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B669D401EA89597BBD2CD90 /* HomeSearchEmptyState.swift */; };
 		8FB2C76484B3474E66D8D4A0 /* EditorCheckboxToggleStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EABD013AEE84E790C0BF8C /* EditorCheckboxToggleStyle.swift */; };
 		91A1F236602D5C0E8CAC7983 /* EditorWritingPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16094E045E8DD23E8C560D6E /* EditorWritingPage.swift */; };
 		92E777CCADFC8F98A74EC67B /* Font+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212EA01201EA1BD1F6AE7938 /* Font+.swift */; };
@@ -89,6 +91,7 @@
 		DEEEC4B1FC369FE63714832C /* LockPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAB0441A04FE090C8D46947A /* LockPage.swift */; };
 		E2C6328ACB0AFD6B8A78C393 /* EditorSelectionPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F5376346171B87314B9870 /* EditorSelectionPage.swift */; };
 		E36982E05E1D751796E9159D /* Calendar+.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09C67B430F0A5FA7CC223CE /* Calendar+.swift */; };
+		E7F36E58B3DEFF209254C4EB /* TextSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F6E3C8C305A8E223302843 /* TextSize.swift */; };
 		EF3EEB22D5D60B485AAAA42C /* HomeCalendarPreviewCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B34B5026693697EF249A9B1B /* HomeCalendarPreviewCard.swift */; };
 		F0F86ECF7DE30A5115CEF001 /* EditorReorderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46D6442A69622DFD0E22795 /* EditorReorderRow.swift */; };
 		FB2EB0E3C6DD49702D8DC0CA /* HomeEmptyState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB8FE2154B528D325EBFF2D /* HomeEmptyState.swift */; };
@@ -142,6 +145,7 @@
 		4E0208AEEACDB6816DE15FA0 /* HomeCalendarWeekdayHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCalendarWeekdayHeader.swift; sourceTree = "<group>"; };
 		5219618F8FE7F635CA13D9A1 /* EditorWritingParagraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorWritingParagraph.swift; sourceTree = "<group>"; };
 		53123C08CB789B6EC373D537 /* PaywallPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallPage.swift; sourceTree = "<group>"; };
+		54F6E3C8C305A8E223302843 /* TextSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSize.swift; sourceTree = "<group>"; };
 		56E7889CDC0091DDF91866F6 /* TemplateVariablePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateVariablePage.swift; sourceTree = "<group>"; };
 		59F5376346171B87314B9870 /* EditorSelectionPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorSelectionPage.swift; sourceTree = "<group>"; };
 		5F816F732D52F8B441A9FC4E /* NikkiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NikkiApp.swift; sourceTree = "<group>"; };
@@ -155,6 +159,7 @@
 		7625D75FB63257A914AB2D11 /* BlockMarkdownTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockMarkdownTests.swift; sourceTree = "<group>"; };
 		766734296CC2A8C5589D3AA4 /* SampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
 		7715B25E127BF7EAD61BCA1D /* TemplateCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateCard.swift; sourceTree = "<group>"; };
+		7B669D401EA89597BBD2CD90 /* HomeSearchEmptyState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeSearchEmptyState.swift; sourceTree = "<group>"; };
 		7EB8FE2154B528D325EBFF2D /* HomeEmptyState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeEmptyState.swift; sourceTree = "<group>"; };
 		7FFC45A3C1B23A539769C185 /* OnboardingEncryptionPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingEncryptionPage.swift; sourceTree = "<group>"; };
 		82951D8DECE060A9A4ECCFAA /* EditorImageBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorImageBlock.swift; sourceTree = "<group>"; };
@@ -181,6 +186,7 @@
 		C1026BD58F3644EEF0E57901 /* ScreenCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenCatalog.swift; sourceTree = "<group>"; };
 		C2104DD3961C10DA4097AC25 /* EditorHeadingBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorHeadingBlock.swift; sourceTree = "<group>"; };
 		C489AF63E9CC9D54DAD34F4B /* EditorDiagonalStripes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorDiagonalStripes.swift; sourceTree = "<group>"; };
+		C74E7B3FF311AF2ABF1C73A3 /* EnvironmentValues+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EnvironmentValues+.swift"; sourceTree = "<group>"; };
 		C7EABD013AEE84E790C0BF8C /* EditorCheckboxToggleStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorCheckboxToggleStyle.swift; sourceTree = "<group>"; };
 		C9561F4C663D114E30259BB4 /* HomePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePage.swift; sourceTree = "<group>"; };
 		CAB0441A04FE090C8D46947A /* LockPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockPage.swift; sourceTree = "<group>"; };
@@ -323,6 +329,7 @@
 				DC2C7C3164DBB03D79555B00 /* JournalEntry.swift */,
 				15812819579D015970352C89 /* JournalTemplate.swift */,
 				766734296CC2A8C5589D3AA4 /* SampleData.swift */,
+				54F6E3C8C305A8E223302843 /* TextSize.swift */,
 				E8804B5DAACD25E4A25185F6 /* UserDefaults+.swift */,
 			);
 			path = Models;
@@ -374,6 +381,7 @@
 		AED5A0C8E10B3F23EE07CF7D /* App */ = {
 			isa = PBXGroup;
 			children = (
+				C74E7B3FF311AF2ABF1C73A3 /* EnvironmentValues+.swift */,
 				5F816F732D52F8B441A9FC4E /* NikkiApp.swift */,
 				BD9527164007BBD891E23DCD /* RootPage.swift */,
 				C1026BD58F3644EEF0E57901 /* ScreenCatalog.swift */,
@@ -497,6 +505,7 @@
 				42B020854BCC7FA07FA4237F /* HomeHeader.swift */,
 				858B5687927B41A1F52024CF /* HomeListBody.swift */,
 				051E07A1DF1FE0939F4A6EDF /* HomeMonthGroup.swift */,
+				7B669D401EA89597BBD2CD90 /* HomeSearchEmptyState.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -635,6 +644,7 @@
 				1036F4C23998A91A505C56AE /* EditorSelectionToolbar.swift in Sources */,
 				91A1F236602D5C0E8CAC7983 /* EditorWritingPage.swift in Sources */,
 				974B2C6BDC5FB1047177592B /* EditorWritingParagraph.swift in Sources */,
+				47376E5AE808000234B62946 /* EnvironmentValues+.swift in Sources */,
 				92E777CCADFC8F98A74EC67B /* Font+.swift in Sources */,
 				AC1400ABBD2F3F21DB16CD4D /* HomeCalendarBody.swift in Sources */,
 				0935B04B76897A31C76A95F6 /* HomeCalendarDayCell.swift in Sources */,
@@ -648,6 +658,7 @@
 				3761CB0CEACD91606FAC8B11 /* HomeListBody.swift in Sources */,
 				B754D6D84CBAC8DCB9FE108A /* HomeMonthGroup.swift in Sources */,
 				B95D22F2C3E704D790624EB2 /* HomePage.swift in Sources */,
+				8F32A8ABD713636B1B5DFD88 /* HomeSearchEmptyState.swift in Sources */,
 				D880C4D3A9B3688BE6B3105B /* InkComponents.swift in Sources */,
 				0615EC45AE1942C73624AEF4 /* InkIcons.swift in Sources */,
 				D0E9D7282F50A17DC0FB08E7 /* JournalEntry.swift in Sources */,
@@ -683,6 +694,7 @@
 				9C4435A3ABC2BD9C340D4899 /* TemplateVariableFieldCard.swift in Sources */,
 				778738E1878AD249E733F4FD /* TemplateVariablePage.swift in Sources */,
 				198B2B12878D88AB1EC58FA0 /* TemplateVariableSheet.swift in Sources */,
+				E7F36E58B3DEFF209254C4EB /* TextSize.swift in Sources */,
 				00E90330736D76B96CD2CD77 /* ThemeBackgroundImageCard.swift in Sources */,
 				B59E3BF02DAA89579F5C9DA4 /* ThemeColorSwatch.swift in Sources */,
 				FB8C82B28284FC25072D56F6 /* ThemePage.swift in Sources */,
