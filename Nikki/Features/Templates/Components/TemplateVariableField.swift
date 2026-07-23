@@ -19,14 +19,14 @@ struct TemplateVariableField: Identifiable {
     var substitution: String { bodyValue ?? value }
 
     /// template.variableNames と today から入力フィールド群を組み立てる。
-    static func fields(for template: JournalTemplate, today: Date) -> [TemplateVariableField] {
+    /// includesDemoValues は参照デザイン(1m)の記入済み状態を再現するカタログ表示でのみ true にする。
+    static func fields(for template: JournalTemplate, today: Date, includesDemoValues: Bool) -> [TemplateVariableField] {
         template.variableNames.map { name in
             guard name == "date" else {
                 return TemplateVariableField(
                     name: name,
                     isAuto: false,
-                    // 参照デザイン(1m)の記入済み状態を再現するためのデモ初期値。ユーザーは上書きできる。
-                    value: demoValues[name] ?? "",
+                    value: includesDemoValues ? (demoValues[name] ?? "") : "",
                     bodyValue: nil,
                     placeholder: placeholders[name] ?? "ここに入力"
                 )
@@ -41,6 +41,20 @@ struct TemplateVariableField: Identifiable {
         }
     }
 
+    /// 入力済みフィールドで template.markdown の {{変数}} を置換した本文。未入力の変数はトークンのまま残す。
+    /// variableNames が受け付ける {{ weather }} のような空白入りトークンも置換できるよう、正規表現で照合する。
+    static func substitutedMarkdown(template: JournalTemplate, fields: [TemplateVariableField]) -> String {
+        fields.reduce(template.markdown) { result, field in
+            field.substitution.isEmpty
+                ? result
+                : result.replacingOccurrences(
+                    of: "\\{\\{\\s*\(field.name)\\s*\\}\\}",
+                    with: NSRegularExpression.escapedTemplate(for: field.substitution),
+                    options: .regularExpression
+                )
+        }
+    }
+
     private static let demoValues: [String: String] = ["weather": "晴れのち夕立", "place": "鎌倉"]
     private static let placeholders: [String: String] = [
         "weather": "きょうの天気",
@@ -50,8 +64,9 @@ struct TemplateVariableField: Identifiable {
 
     private static func dateText(_ date: Date, includesWeekday: Bool) -> String {
         let formatter = DateFormatter()
+        // 表記はデザイン見本の日本語形式で固定し、日付の区切りだけ端末のタイムゾーンに追従させる。
         formatter.locale = Locale(identifier: "ja_JP")
-        formatter.timeZone = TimeZone(identifier: "Asia/Tokyo")
+        formatter.timeZone = .autoupdatingCurrent
         formatter.dateFormat = includesWeekday ? "y年M月d日 EEEE" : "y年M月d日"
         return formatter.string(from: date)
     }

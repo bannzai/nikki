@@ -12,5 +12,4 @@ final class AppState {
     var isLocked: Bool = false
     var homeView: HomePageMode = .list
     var paperColor: PaperColorPreset = .ecru
-    var onboardingCompleted: Bool = false
 }

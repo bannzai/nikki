@@ -2,7 +2,8 @@ import SwiftUI
 
 /// オンボーディング 1b: E2E 暗号化を「書く / 鍵をかける / 読めるのはあなただけ」の図解で説明する。
 struct OnboardingEncryptionPage: View {
-    var onNext: () -> Void = {}
+    /// オンボーディングの進行状態。「次へ」で次のステップへ進める。
+    @Binding var onboardingStep: OnboardingStep
 
     /// 図解の 1 項目(円アイコン + タイトル + 説明)。
     private struct Point: Identifiable {
@@ -58,7 +59,9 @@ struct OnboardingEncryptionPage: View {
                     .frame(maxWidth: .infinity)
                     .padding(.bottom, 20)
 
-                InkPrimaryButton("次へ", action: onNext)
+                InkPrimaryButton("次へ") {
+                    onboardingStep = .biometric
+                }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .padding(.horizontal, 28)
@@ -69,5 +72,5 @@ struct OnboardingEncryptionPage: View {
 }
 
 #Preview {
-    OnboardingEncryptionPage()
+    OnboardingEncryptionPage(onboardingStep: .constant(.encryption))
 }

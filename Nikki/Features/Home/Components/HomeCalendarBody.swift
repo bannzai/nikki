@@ -15,14 +15,17 @@ struct HomeCalendarBody: View {
     }
 
     var body: some View {
-        let todayEntry = entries.first { SampleData.calendar.isDate($0.date, inSameDayAs: today) }
+        let todayEntry = entries.first { Calendar.display.isDate($0.date, inSameDayAs: today) }
         VStack(alignment: .leading, spacing: 0) {
             HomeCalendarMonthNav(displayedMonth: $displayedMonth)
             HomeCalendarWeekdayHeader()
             HomeCalendarDaysGrid(entries: entries, today: today, displayedMonth: displayedMonth)
             if let entry = todayEntry {
-                HomeCalendarPreviewCard(entry: entry)
-                    .padding(.top, 14)
+                NavigationLink(value: entry) {
+                    HomeCalendarPreviewCard(entry: entry)
+                }
+                .buttonStyle(.plain)
+                .padding(.top, 14)
             }
         }
         .padding(.horizontal, 24)
@@ -34,7 +37,7 @@ struct HomeCalendarBody: View {
 enum HomeCalendarMonth {
     /// 指定日を含む月の1日 00:00 を返す。
     static func startOfMonth(for date: Date) -> Date {
-        let calendar = SampleData.calendar
+        let calendar = Calendar.display
         return calendar.date(from: calendar.dateComponents([.year, .month], from: date)) ?? date
     }
 }

@@ -16,7 +16,7 @@ struct HomeMonthGroup: Identifiable {
     static func grouped(from entries: [JournalEntry]) -> [HomeMonthGroup] {
         var groups: [HomeMonthGroup] = []
         for entry in entries.sorted(by: { $0.date > $1.date }) {
-            let comps = SampleData.calendar.dateComponents([.year, .month], from: entry.date)
+            let comps = Calendar.display.dateComponents([.year, .month], from: entry.date)
             let year = comps.year ?? 0
             let month = comps.month ?? 0
             if var last = groups.last, last.year == year, last.month == month {

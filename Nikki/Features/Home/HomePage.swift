@@ -1,30 +1,19 @@
 import SwiftUI
+import SwiftData
 
 /// ホーム画面の共通シャーシ。ロゴヘッダ・検索バー・「リスト / カレンダー」セグメント・新規作成 FAB をまとめ、
 /// 選択中セグメントに応じて時系列リスト(1g)とカレンダー(1h)を切り替える。
+/// 日記は @Query で読み、行のタップでエディタ、FAB でテンプレート一覧(1l)へ進む。
 struct HomePage: View {
-    let entries: [JournalEntry]
     let today: Date
-    var onNewEntry: () -> Void
-    var onAccount: () -> Void
 
-    /// セグメントの選択状態。切替時に相互のモードへ即時に切り替わる。
+    /// セグメントの選択状態。切替時に相互のモードへ即時に切り替わる。初期値は呼び出し側が HomePageMode の rawValue で決める。
     @State var selectedIndex: Int
 
-    /// @State の初期値を initialMode から決めるため custom init を用いる。
-    init(
-        entries: [JournalEntry] = SampleData.entries,
-        today: Date = SampleData.referenceToday,
-        initialMode: HomePageMode = .list,
-        onNewEntry: @escaping () -> Void = {},
-        onAccount: @escaping () -> Void = {}
-    ) {
-        self.entries = entries
-        self.today = today
-        self.onNewEntry = onNewEntry
-        self.onAccount = onAccount
-        self._selectedIndex = State(initialValue: initialMode.rawValue)
-    }
+    /// FAB からのテンプレート一覧(1l)への遷移状態。
+    @State var templateListIsPresented: Bool = false
+
+    @Query(sort: \JournalEntry.date, order: .reverse) var entries: [JournalEntry]
 
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
@@ -32,7 +21,7 @@ struct HomePage: View {
 
             VStack(alignment: .leading, spacing: 0) {
                 VStack(alignment: .leading, spacing: 14) {
-                    HomeHeader(onAccount: onAccount)
+                    HomeHeader()
                     InkSearchBar()
                     InkSegmentedControl(
                         options: HomePageMode.allCases.map { segmentLabel(for: $0) },
@@ -53,9 +42,16 @@ struct HomePage: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             }
 
-            InkFAB(action: onNewEntry)
+            InkFAB { templateListIsPresented = true }
                 .padding(.trailing, 22)
                 .padding(.bottom, 16)
+        }
+        .toolbar(.hidden, for: .navigationBar)
+        .navigationDestination(isPresented: $templateListIsPresented) {
+            TemplateListPage()
+        }
+        .navigationDestination(for: JournalEntry.self) { entry in
+            EditorPage(entry: entry)
         }
     }
 

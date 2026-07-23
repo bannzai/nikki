@@ -5,7 +5,7 @@ struct HomeCalendarMonthNav: View {
     @Binding var displayedMonth: Date
 
     var body: some View {
-        let comps = SampleData.calendar.dateComponents([.year, .month], from: displayedMonth)
+        let comps = Calendar.display.dateComponents([.year, .month], from: displayedMonth)
         HStack(spacing: 0) {
             Button { shiftMonth(by: -1) } label: {
                 Image(systemName: InkIcons.chevronLeft)
@@ -16,7 +16,8 @@ struct HomeCalendarMonthNav: View {
 
             Spacer(minLength: 0)
 
-            Text("\(comps.year ?? 0)年\(comps.month ?? 0)月")
+            // Text の Int 補間はロケールの桁区切り書式が入るため、年は String にしてから表示する。
+            Text("\(String(comps.year ?? 0))年\(comps.month ?? 0)月")
                 .font(InkTypography.font(15, .bold))
                 .foregroundStyle(InkColors.ink)
 
@@ -34,7 +35,7 @@ struct HomeCalendarMonthNav: View {
     }
 
     private func shiftMonth(by delta: Int) {
-        if let shifted = SampleData.calendar.date(byAdding: .month, value: delta, to: displayedMonth) {
+        if let shifted = Calendar.display.date(byAdding: .month, value: delta, to: displayedMonth) {
             displayedMonth = HomeCalendarMonth.startOfMonth(for: shifted)
         }
     }

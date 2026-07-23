@@ -29,27 +29,38 @@ struct ScreenContent: View {
     var body: some View {
         switch screen {
         case .welcome:
-            OnboardingWelcomePage()
+            OnboardingWelcomePage(onboardingStep: .constant(.welcome))
         case .encryption:
-            OnboardingEncryptionPage()
+            OnboardingEncryptionPage(onboardingStep: .constant(.encryption))
         case .biometric:
-            OnboardingBiometricPage()
+            OnboardingBiometricPage(onboardingCompleted: .constant(false))
         case .lock:
             LockPage()
         case .entryList:
-            HomePage(entries: SampleData.entries, today: SampleData.referenceToday, initialMode: .list)
+            // HomePage は @Query で日記を読むため、in-memory コンテナ(SampleData 投入済み)の下で NavigationStack に載せる。
+            NavigationStack {
+                HomePage(today: SampleData.referenceToday, selectedIndex: HomePageMode.list.rawValue)
+            }
         case .calendar:
-            HomePage(entries: SampleData.entries, today: SampleData.referenceToday, initialMode: .calendar)
+            NavigationStack {
+                HomePage(today: SampleData.referenceToday, selectedIndex: HomePageMode.calendar.rawValue)
+            }
         case .editorWriting:
-            EditorPage(entry: SampleData.sampleEntry)
+            EditorWritingPage(entry: SampleData.sampleEntry)
         case .editorSelection:
             EditorSelectionPage(entry: SampleData.sampleEntry)
         case .editorReorder:
             EditorReorderPage(entry: SampleData.sampleEntry)
         case .templateList:
-            TemplateListPage(templates: SampleData.templates)
+            NavigationStack {
+                TemplateListPage()
+            }
         case .templateVariable:
-            TemplateVariablePage(template: SampleData.reflectionTemplate, today: SampleData.referenceToday)
+            let template = SampleData.reflectionTemplate
+            TemplateVariablePage(
+                template: template,
+                fields: TemplateVariableField.fields(for: template, today: SampleData.referenceToday, includesDemoValues: true)
+            )
         case .theme:
             ThemePage(selected: .ecru)
         case .paywall:
