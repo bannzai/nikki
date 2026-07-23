@@ -5,7 +5,7 @@ struct HomeCalendarMonthNav: View {
     @Binding var displayedMonth: Date
 
     var body: some View {
-        let comps = SampleData.calendar.dateComponents([.year, .month], from: displayedMonth)
+        let comps = Calendar.display.dateComponents([.year, .month], from: displayedMonth)
         HStack(spacing: 0) {
             Button { shiftMonth(by: -1) } label: {
                 Image(systemName: InkIcons.chevronLeft)
@@ -35,7 +35,7 @@ struct HomeCalendarMonthNav: View {
     }
 
     private func shiftMonth(by delta: Int) {
-        if let shifted = SampleData.calendar.date(byAdding: .month, value: delta, to: displayedMonth) {
+        if let shifted = Calendar.display.date(byAdding: .month, value: delta, to: displayedMonth) {
             displayedMonth = HomeCalendarMonth.startOfMonth(for: shifted)
         }
     }

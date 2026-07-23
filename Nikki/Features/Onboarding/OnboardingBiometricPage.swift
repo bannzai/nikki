@@ -2,8 +2,8 @@ import SwiftUI
 
 /// オンボーディング 1e: Face ID / パスキー登録を促す最終ステップ。
 struct OnboardingBiometricPage: View {
-    var onEnableFaceID: () -> Void = {}
-    var onRegisterPasskey: () -> Void = {}
+    /// オンボーディングの完了状態。Face ID / パスキーの実登録は未実装のため、どちらのボタンも完了として扱う。
+    @Binding var onboardingCompleted: Bool
 
     var body: some View {
         ZStack {
@@ -33,8 +33,12 @@ struct OnboardingBiometricPage: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
 
                 VStack(spacing: 12) {
-                    InkPrimaryButton("Face ID を有効にする", action: onEnableFaceID)
-                    InkSecondaryButton("パスキーを登録する", action: onRegisterPasskey)
+                    InkPrimaryButton("Face ID を有効にする") {
+                        onboardingCompleted = true
+                    }
+                    InkSecondaryButton("パスキーを登録する") {
+                        onboardingCompleted = true
+                    }
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
@@ -46,5 +50,5 @@ struct OnboardingBiometricPage: View {
 }
 
 #Preview {
-    OnboardingBiometricPage()
+    OnboardingBiometricPage(onboardingCompleted: .constant(false))
 }

@@ -1,36 +1,33 @@
 import SwiftUI
 
-/// オンボーディングの進行ステップ。完了したかどうかは RootPage の onboardingCompleted が持つ。
-enum OnboardingStep {
+/// オンボーディングの進行ステップ。完了したかどうかは onboardingCompleted が持つ。
+enum OnboardingStep: String {
     case welcome
     case encryption
     case biometric
 }
 
 struct RootPage: View {
-    // AppStorage の key 名は変数名と一致させる。
-    @AppStorage("onboardingCompleted") var onboardingCompleted: Bool = false
-
-    /// 表示中のオンボーディングステップ。
-    @State var step: OnboardingStep = .welcome
+    @AppStorage(.onboardingCompleted) var onboardingCompleted: Bool = false
+    /// 進行途中でアプリを終了しても続きのステップから再開できるよう永続化する。
+    @AppStorage(.onboardingStep) var onboardingStep: OnboardingStep = .welcome
 
     var body: some View {
         if onboardingCompleted {
             NavigationStack {
-                HomePage(today: .now)
+                // アプリを開いたまま日付をまたいでも「今日」の表示が追従するよう、分刻みの時計から today を渡す。
+                TimelineView(.everyMinute) { context in
+                    HomePage(today: context.date)
+                }
             }
         } else {
-            switch step {
+            switch onboardingStep {
             case .welcome:
-                OnboardingWelcomePage(onStart: { step = .encryption })
+                OnboardingWelcomePage(onboardingStep: $onboardingStep)
             case .encryption:
-                OnboardingEncryptionPage(onNext: { step = .biometric })
+                OnboardingEncryptionPage(onboardingStep: $onboardingStep)
             case .biometric:
-                // Face ID / パスキーの実登録は未実装のため、どちらのボタンもオンボーディング完了として扱う。
-                OnboardingBiometricPage(
-                    onEnableFaceID: { onboardingCompleted = true },
-                    onRegisterPasskey: { onboardingCompleted = true }
-                )
+                OnboardingBiometricPage(onboardingCompleted: $onboardingCompleted)
             }
         }
     }

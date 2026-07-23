@@ -9,7 +9,12 @@ struct NikkiApp: App {
     let modelContainer: ModelContainer
 
     init() {
-        if ProcessInfo.processInfo.environment["NIKKI_SCREEN"] != nil {
+        let environment = ProcessInfo.processInfo.environment
+        // カタログモードと、ユニットテストがホストアプリとして起動したときは、
+        // CloudKit の本番ストアに触れない(シードもしない)よう in-memory ストアを使う。
+        if environment["NIKKI_SCREEN"] != nil
+            || environment["XCTestSessionIdentifier"] != nil
+            || environment["XCTestConfigurationFilePath"] != nil {
             modelContainer = SampleData.inMemoryContainer()
         } else {
             modelContainer = Self.defaultContainer()

@@ -37,13 +37,13 @@ struct HomeCalendarPreviewCard: View {
     }
 
     private var dateLabel: String {
-        let comps = SampleData.calendar.dateComponents([.month, .day, .weekday], from: entry.date)
+        let comps = Calendar.display.dateComponents([.month, .day, .weekday], from: entry.date)
         let symbols = ["日", "月", "火", "水", "木", "金", "土"]
         return "\(comps.month ?? 0)月\(comps.day ?? 0)日 \(symbols[(comps.weekday ?? 1) - 1])曜日"
     }
 
     private var timeLabel: String {
-        let comps = SampleData.calendar.dateComponents([.hour, .minute], from: entry.createdAt)
+        let comps = Calendar.display.dateComponents([.hour, .minute], from: entry.createdAt)
         return String(format: "%02d:%02d", comps.hour ?? 0, comps.minute ?? 0)
     }
 }

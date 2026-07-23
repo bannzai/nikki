@@ -9,7 +9,7 @@ struct HomeEntryRow: View {
         VStack(spacing: 0) {
             HStack(alignment: .top, spacing: 16) {
                 VStack(spacing: 0) {
-                    Text("\(SampleData.calendar.component(.day, from: entry.date))")
+                    Text("\(Calendar.display.component(.day, from: entry.date))")
                         .font(InkTypography.font(21, .bold))
                         .foregroundStyle(InkColors.ink)
                     Text(weekdayLabel)
@@ -43,6 +43,6 @@ struct HomeEntryRow: View {
 
     private var weekdayLabel: String {
         let symbols = ["日", "月", "火", "水", "木", "金", "土"]
-        return symbols[SampleData.calendar.component(.weekday, from: entry.date) - 1] + "曜"
+        return symbols[Calendar.display.component(.weekday, from: entry.date) - 1] + "曜"
     }
 }

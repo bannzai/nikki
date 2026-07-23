@@ -42,11 +42,16 @@ struct TemplateVariableField: Identifiable {
     }
 
     /// 入力済みフィールドで template.markdown の {{変数}} を置換した本文。未入力の変数はトークンのまま残す。
+    /// variableNames が受け付ける {{ weather }} のような空白入りトークンも置換できるよう、正規表現で照合する。
     static func substitutedMarkdown(template: JournalTemplate, fields: [TemplateVariableField]) -> String {
         fields.reduce(template.markdown) { result, field in
             field.substitution.isEmpty
                 ? result
-                : result.replacingOccurrences(of: "{{\(field.name)}}", with: field.substitution)
+                : result.replacingOccurrences(
+                    of: "\\{\\{\\s*\(field.name)\\s*\\}\\}",
+                    with: NSRegularExpression.escapedTemplate(for: field.substitution),
+                    options: .regularExpression
+                )
         }
     }
 
@@ -59,8 +64,9 @@ struct TemplateVariableField: Identifiable {
 
     private static func dateText(_ date: Date, includesWeekday: Bool) -> String {
         let formatter = DateFormatter()
+        // 表記はデザイン見本の日本語形式で固定し、日付の区切りだけ端末のタイムゾーンに追従させる。
         formatter.locale = Locale(identifier: "ja_JP")
-        formatter.timeZone = TimeZone(identifier: "Asia/Tokyo")
+        formatter.timeZone = .autoupdatingCurrent
         formatter.dateFormat = includesWeekday ? "y年M月d日 EEEE" : "y年M月d日"
         return formatter.string(from: date)
     }

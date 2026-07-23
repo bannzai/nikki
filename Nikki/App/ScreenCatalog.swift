@@ -29,11 +29,11 @@ struct ScreenContent: View {
     var body: some View {
         switch screen {
         case .welcome:
-            OnboardingWelcomePage()
+            OnboardingWelcomePage(onboardingStep: .constant(.welcome))
         case .encryption:
-            OnboardingEncryptionPage()
+            OnboardingEncryptionPage(onboardingStep: .constant(.encryption))
         case .biometric:
-            OnboardingBiometricPage()
+            OnboardingBiometricPage(onboardingCompleted: .constant(false))
         case .lock:
             LockPage()
         case .entryList:

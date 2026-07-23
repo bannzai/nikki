@@ -8,8 +8,10 @@ import SwiftData
 final class JournalEntry {
     private(set) var id: UUID = UUID()
     private(set) var date: Date = Date.now
-    private(set) var title: String = ""
-    private(set) var bodyMarkdown: String = ""
+    // 日記の中身は CloudKit の encrypted field として保存し、「開発者からも見えない」を担保する。
+    // date / createdAt / updatedAt はソートや日付表示のクエリに使うため暗号化しない。
+    @Attribute(.allowsCloudEncryption) private(set) var title: String = ""
+    @Attribute(.allowsCloudEncryption) private(set) var bodyMarkdown: String = ""
     private(set) var createdAt: Date = Date.now
     private(set) var updatedAt: Date = Date.now
 

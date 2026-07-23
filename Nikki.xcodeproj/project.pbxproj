@@ -45,6 +45,7 @@
 		5D4A5718B5AC8A2BC8F9BD91 /* ThemeSectionLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96CD57989BD942ACEDDBD5F /* ThemeSectionLabel.swift */; };
 		5F9FE0B6206B68417D3D3454 /* HomeCalendarMonthNav.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757674A59DBC876A16AD698B /* HomeCalendarMonthNav.swift */; };
 		60AF2A07080D449730CC63B7 /* Block+Markdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF2FEC23775F11946489ACD /* Block+Markdown.swift */; };
+		66AE4310103A03E2F9292B00 /* TemplateVariableFieldTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 646D51D231958113F37B81B7 /* TemplateVariableFieldTests.swift */; };
 		6D395C26DFF2F5514C56AA79 /* EditorBlockPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06190D0FFF0EB8E6F02AA3A7 /* EditorBlockPicker.swift */; };
 		6DAF05C0B48E3689FAD80179 /* Block.swift in Sources */ = {isa = PBXBuildFile; fileRef = A41D0C0CE3C6C437F14C158D /* Block.swift */; };
 		71127F8D6056C51A7ECB5DBE /* HomeHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B020854BCC7FA07FA4237F /* HomeHeader.swift */; };
@@ -65,6 +66,7 @@
 		930ACEF7CDE9CCFCFB1B856E /* EditorDragHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E352ABC971178991AD0CFFBA /* EditorDragHandle.swift */; };
 		96F8F6D6C31D8C7FA2AC9719 /* JournalEntryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF083E94A1281338FA15F8A /* JournalEntryTests.swift */; };
 		974B2C6BDC5FB1047177592B /* EditorWritingParagraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5219618F8FE7F635CA13D9A1 /* EditorWritingParagraph.swift */; };
+		981D29FC52CE34CEADD8186D /* UserDefaults+.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8804B5DAACD25E4A25185F6 /* UserDefaults+.swift */; };
 		9AF88CF22995CAA9C9E79B72 /* EditorInsertionIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42467DF2C96AFF94E943E47D /* EditorInsertionIndicator.swift */; };
 		9C4435A3ABC2BD9C340D4899 /* TemplateVariableFieldCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDF2D0FEF90364A0AA27D962 /* TemplateVariableFieldCard.swift */; };
 		9D54187B136374450236A5D8 /* EditorPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 067EE9F4A8C7640919608B93 /* EditorPage.swift */; };
@@ -89,6 +91,7 @@
 		DEEEC4B1FC369FE63714832C /* LockPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAB0441A04FE090C8D46947A /* LockPage.swift */; };
 		E2C6328ACB0AFD6B8A78C393 /* EditorSelectionPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F5376346171B87314B9870 /* EditorSelectionPage.swift */; };
 		E368782CC4002864381C2952 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45F9E22095B7C77A9CE42D4 /* AppState.swift */; };
+		E36982E05E1D751796E9159D /* Calendar+.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09C67B430F0A5FA7CC223CE /* Calendar+.swift */; };
 		EF3EEB22D5D60B485AAAA42C /* HomeCalendarPreviewCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B34B5026693697EF249A9B1B /* HomeCalendarPreviewCard.swift */; };
 		F0F86ECF7DE30A5115CEF001 /* EditorReorderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46D6442A69622DFD0E22795 /* EditorReorderRow.swift */; };
 		FB2EB0E3C6DD49702D8DC0CA /* HomeEmptyState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB8FE2154B528D325EBFF2D /* HomeEmptyState.swift */; };
@@ -148,6 +151,7 @@
 		5E0AFF3413039F50C4B272FB /* InkColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InkColors.swift; sourceTree = "<group>"; };
 		5F816F732D52F8B441A9FC4E /* NikkiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NikkiApp.swift; sourceTree = "<group>"; };
 		6376C2355D7932A1A0584881 /* OFL.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = OFL.txt; sourceTree = "<group>"; };
+		646D51D231958113F37B81B7 /* TemplateVariableFieldTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateVariableFieldTests.swift; sourceTree = "<group>"; };
 		66B4042D38A5FDA1A8029CF3 /* OnboardingWelcomePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingWelcomePage.swift; sourceTree = "<group>"; };
 		67918CB4B903566099ED4D95 /* ThemePreviewCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemePreviewCard.swift; sourceTree = "<group>"; };
 		6AFFF57CAB5BA1C81D669E8F /* ScreenStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenStub.swift; sourceTree = "<group>"; };
@@ -170,6 +174,7 @@
 		A41D0C0CE3C6C437F14C158D /* Block.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Block.swift; sourceTree = "<group>"; };
 		AAB33916D390F0ECF5AE09DC /* OnboardingBiometricPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingBiometricPage.swift; sourceTree = "<group>"; };
 		B02CBC27CBC023843FC9FA7D /* EditorChecklistBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorChecklistBlock.swift; sourceTree = "<group>"; };
+		B09C67B430F0A5FA7CC223CE /* Calendar+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Calendar+.swift"; sourceTree = "<group>"; };
 		B1B5E63B78BE8BF9A00626BC /* HomeCalendarDaysGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCalendarDaysGrid.swift; sourceTree = "<group>"; };
 		B34B5026693697EF249A9B1B /* HomeCalendarPreviewCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCalendarPreviewCard.swift; sourceTree = "<group>"; };
 		B46D6442A69622DFD0E22795 /* EditorReorderRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorReorderRow.swift; sourceTree = "<group>"; };
@@ -194,6 +199,7 @@
 		DC2C7C3164DBB03D79555B00 /* JournalEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalEntry.swift; sourceTree = "<group>"; };
 		DFFFA08DBA55395132C6471B /* SettingsSectionLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSectionLabel.swift; sourceTree = "<group>"; };
 		E352ABC971178991AD0CFFBA /* EditorDragHandle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorDragHandle.swift; sourceTree = "<group>"; };
+		E8804B5DAACD25E4A25185F6 /* UserDefaults+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+.swift"; sourceTree = "<group>"; };
 		E96CD57989BD942ACEDDBD5F /* ThemeSectionLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSectionLabel.swift; sourceTree = "<group>"; };
 		EA6B0540C548E08F1F643BA2 /* Nikki.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Nikki.entitlements; sourceTree = "<group>"; };
 		EC18E95563F0411929506D8E /* PaywallCloseButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallCloseButton.swift; sourceTree = "<group>"; };
@@ -319,9 +325,11 @@
 			children = (
 				A41D0C0CE3C6C437F14C158D /* Block.swift */,
 				7BF2FEC23775F11946489ACD /* Block+Markdown.swift */,
+				B09C67B430F0A5FA7CC223CE /* Calendar+.swift */,
 				DC2C7C3164DBB03D79555B00 /* JournalEntry.swift */,
 				15812819579D015970352C89 /* JournalTemplate.swift */,
 				766734296CC2A8C5589D3AA4 /* SampleData.swift */,
+				E8804B5DAACD25E4A25185F6 /* UserDefaults+.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -331,6 +339,7 @@
 			children = (
 				7625D75FB63257A914AB2D11 /* BlockMarkdownTests.swift */,
 				3AF083E94A1281338FA15F8A /* JournalEntryTests.swift */,
+				646D51D231958113F37B81B7 /* TemplateVariableFieldTests.swift */,
 			);
 			path = NikkiTests;
 			sourceTree = "<group>";
@@ -601,6 +610,7 @@
 			files = (
 				552599AD2A6A45A4BBB83A87 /* BlockMarkdownTests.swift in Sources */,
 				96F8F6D6C31D8C7FA2AC9719 /* JournalEntryTests.swift in Sources */,
+				66AE4310103A03E2F9292B00 /* TemplateVariableFieldTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -611,6 +621,7 @@
 				E368782CC4002864381C2952 /* AppState.swift in Sources */,
 				60AF2A07080D449730CC63B7 /* Block+Markdown.swift in Sources */,
 				6DAF05C0B48E3689FAD80179 /* Block.swift in Sources */,
+				E36982E05E1D751796E9159D /* Calendar+.swift in Sources */,
 				6D395C26DFF2F5514C56AA79 /* EditorBlockPicker.swift in Sources */,
 				083B49E14614BFD3C5CF97B7 /* EditorCheckbox.swift in Sources */,
 				D336550531DAF5030C59845A /* EditorChecklistBlock.swift in Sources */,
@@ -689,6 +700,7 @@
 				FB8C82B28284FC25072D56F6 /* ThemePage.swift in Sources */,
 				57A34AE685B2D68519A0CB3D /* ThemePreviewCard.swift in Sources */,
 				5D4A5718B5AC8A2BC8F9BD91 /* ThemeSectionLabel.swift in Sources */,
+				981D29FC52CE34CEADD8186D /* UserDefaults+.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

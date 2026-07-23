@@ -20,7 +20,7 @@ struct HomeCalendarDaysGrid: View {
 
     /// 表示中の月のグリッドに並べるセル。先頭に月初めまでの空白セルを含む。
     private func gridDays() -> [HomeCalendarDay] {
-        let calendar = SampleData.calendar
+        let calendar = Calendar.display
         let firstOfMonth = HomeCalendarMonth.startOfMonth(for: displayedMonth)
         let leadingBlanks = calendar.component(.weekday, from: firstOfMonth) - 1
         let dayRange = calendar.range(of: .day, in: .month, for: firstOfMonth) ?? 1..<1

@@ -2,7 +2,8 @@ import SwiftUI
 
 /// オンボーディング 1a: ようこそ画面。ロゴ + キャッチコピー + はじめる導線。
 struct OnboardingWelcomePage: View {
-    var onStart: () -> Void = {}
+    /// オンボーディングの進行状態。「はじめる」で次のステップへ進める。
+    @Binding var onboardingStep: OnboardingStep
 
     var body: some View {
         ZStack {
@@ -26,7 +27,9 @@ struct OnboardingWelcomePage: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
 
-                InkPrimaryButton("はじめる", action: onStart)
+                InkPrimaryButton("はじめる") {
+                    onboardingStep = .encryption
+                }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .padding(.horizontal, 28)
@@ -37,5 +40,5 @@ struct OnboardingWelcomePage: View {
 }
 
 #Preview {
-    OnboardingWelcomePage()
+    OnboardingWelcomePage(onboardingStep: .constant(.welcome))
 }

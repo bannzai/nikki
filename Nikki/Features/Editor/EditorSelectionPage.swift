@@ -6,7 +6,7 @@ struct EditorSelectionPage: View {
     var entry: JournalEntry = SampleData.sampleEntry
 
     var body: some View {
-        EditorScreenScaffold(caption: EditorDateText.caption(for: entry.date)) {
+        EditorScreenScaffold(caption: EditorDateText.caption(for: entry.date), onDismiss: {}) {
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 0) {
                     let firstParagraph = EditorBlockPicker.paragraphTexts(entry).first
