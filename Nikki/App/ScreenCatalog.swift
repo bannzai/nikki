@@ -36,16 +36,20 @@ struct ScreenContent: View {
         case .biometric:
             OnboardingBiometricPage(onboardingCompleted: .constant(false))
         case .lock:
-            LockPage()
+            LockPage(locked: .constant(true))
         case .entryList:
             // HomePage は @Query で日記を読むため、in-memory コンテナ(SampleData 投入済み)の下で NavigationStack に載せる。
             NavigationStack {
-                HomePage(today: SampleData.referenceToday, selectedIndex: HomePageMode.list.rawValue)
+                HomePage()
             }
+            .environment(\.today, SampleData.referenceToday)
+            .defaultAppStorage(homePageModeDefaults(mode: .list))
         case .calendar:
             NavigationStack {
-                HomePage(today: SampleData.referenceToday, selectedIndex: HomePageMode.calendar.rawValue)
+                HomePage()
             }
+            .environment(\.today, SampleData.referenceToday)
+            .defaultAppStorage(homePageModeDefaults(mode: .calendar))
         case .editorWriting:
             EditorWritingPage(entry: SampleData.sampleEntry)
         case .editorSelection:
@@ -64,14 +68,21 @@ struct ScreenContent: View {
                 fields: TemplateVariableField.fields(template: template, today: SampleData.referenceToday, includesDemoValues: true)
             )
         case .theme:
-            // 見本(1n)の初期選択は生成(プリセット2番目)。
-            ThemePage(selectedPaperColor: Color.paperColorPreset[1])
+            ThemePage()
         case .paywall:
             PaywallPage()
         case .settings:
             SettingsPage()
         }
     }
+}
+
+/// カタログの list / calendar 画面用に、ホームの表示モードを固定した UserDefaults suite を返す。
+/// 実利用(.appGroups)の保存値を汚さないよう専用 suite に毎回書き込む(冪等)。
+private func homePageModeDefaults(mode: HomePageMode) -> UserDefaults {
+    let defaults = UserDefaults(suiteName: "screen-catalog-home-\(mode.rawValue)")!
+    defaults.set(mode.rawValue, forKey: UserDefaults.IntEnumKey.homePageMode.key)
+    return defaults
 }
 
 /// Focus の Preview 一覧と同様に、カタログの全画面を一覧から開ける確認用ページ。
