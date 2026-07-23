@@ -4,13 +4,12 @@ import SwiftUI
 /// 中央のオーバーレイで再開を促す。解除後は呼び出し側が直前の画面へ復帰させる。
 struct LockPage: View {
     /// Face ID ボタンのタップで呼ばれる。実際の生体認証・解除処理は呼び出し側が担う。
-    var onUnlock: () -> Void = {}
-
     var body: some View {
         ZStack {
             Color.inkPaper
             LockSkeletonBackground()
-            LockOverlay(onUnlock: onUnlock)
+            // ロック解除の実装は未配線のため、まだ何もしない(https://github.com/bannzai/nikki/issues/14)。
+            LockOverlay(onUnlock: {})
         }
         .ignoresSafeArea()
     }

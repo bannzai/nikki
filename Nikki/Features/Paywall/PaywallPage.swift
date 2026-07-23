@@ -3,12 +3,6 @@ import SwiftUI
 /// サブスク訴求 / ペイウォール画面(1q「Nikki Plus」)。
 /// 訴求軸はデバイス数・同期。料金プランはタップで選択を切り替える。
 struct PaywallPage: View {
-    var onClose: () -> Void = {}
-    var onPurchase: () -> Void = {}
-    var onRestore: () -> Void = {}
-    var onTerms: () -> Void = {}
-    var onPrivacy: () -> Void = {}
-
     /// 見本(1q)では年プランを選択済みとして墨枠強調しているため、初期選択は年プラン。
     // PaywallPlan がファイル内 private 型のため、@State も private のままにする(@State を非 private にする規約から逸脱)。
     @State private var selectedPlan: PaywallPlan = .yearly
@@ -21,7 +15,8 @@ struct PaywallPage: View {
             Color.inkPaper.ignoresSafeArea()
 
             VStack(spacing: 0) {
-                PaywallCloseButton(action: onClose)
+                // 課金導線は未実装のため、各ボタンはまだ何もしない(https://github.com/bannzai/nikki/issues/14)。
+                PaywallCloseButton(action: {})
                     .padding(.top, 6)
                     .padding(.bottom, 4)
 
@@ -73,12 +68,12 @@ struct PaywallPage: View {
                     .frame(maxWidth: .infinity)
                     .padding(.bottom, 14)
 
-                InkPrimaryButton(title: "Nikki Plus をはじめる", action: onPurchase)
+                InkPrimaryButton(title: "Nikki Plus をはじめる", action: {})
 
                 HStack(spacing: 22) {
-                    PaywallFooterLink(title: "購入の復元", action: onRestore)
-                    PaywallFooterLink(title: "利用規約", action: onTerms)
-                    PaywallFooterLink(title: "プライバシー", action: onPrivacy)
+                    PaywallFooterLink(title: "購入の復元", action: {})
+                    PaywallFooterLink(title: "利用規約", action: {})
+                    PaywallFooterLink(title: "プライバシー", action: {})
                 }
                 .padding(.top, 14)
             }
