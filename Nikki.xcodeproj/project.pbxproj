@@ -14,7 +14,6 @@
 		03E5AAC871829B2DE8924221 /* JournalTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15812819579D015970352C89 /* JournalTemplate.swift */; };
 		045F61E955BE78F5412E4511 /* NikkiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F816F732D52F8B441A9FC4E /* NikkiApp.swift */; };
 		0615EC45AE1942C73624AEF4 /* InkIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18EE568B17EE6D1045D00B79 /* InkIcons.swift */; };
-		083B49E14614BFD3C5CF97B7 /* EditorCheckbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CF6549EEDA6E02BC36E6A2 /* EditorCheckbox.swift */; };
 		0935B04B76897A31C76A95F6 /* HomeCalendarDayCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2F81C2057BE7FC56BDD75C /* HomeCalendarDayCell.swift */; };
 		0A59D71DEC238C6E78703A4A /* ScreenCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1026BD58F3644EEF0E57901 /* ScreenCatalog.swift */; };
 		0C93C7D480143648869F0974 /* EditorReorderPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC37923FFD216D2012FF82F1 /* EditorReorderPage.swift */; };
@@ -40,20 +39,19 @@
 		50B72B110DDBDCBF3C3D761D /* EditorScreenScaffold.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B47B5C0DF26265DF248E7D9 /* EditorScreenScaffold.swift */; };
 		552599AD2A6A45A4BBB83A87 /* BlockMarkdownTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7625D75FB63257A914AB2D11 /* BlockMarkdownTests.swift */; };
 		57A34AE685B2D68519A0CB3D /* ThemePreviewCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67918CB4B903566099ED4D95 /* ThemePreviewCard.swift */; };
-		598FAFB3D20E8517EEEFA273 /* InkColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E0AFF3413039F50C4B272FB /* InkColors.swift */; };
 		59ADE491475E77F1CFE9360B /* PaywallFooterLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 101BBE9BB9A2784BEE7C1772 /* PaywallFooterLink.swift */; };
 		5D4A5718B5AC8A2BC8F9BD91 /* ThemeSectionLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96CD57989BD942ACEDDBD5F /* ThemeSectionLabel.swift */; };
 		5F9FE0B6206B68417D3D3454 /* HomeCalendarMonthNav.swift in Sources */ = {isa = PBXBuildFile; fileRef = 757674A59DBC876A16AD698B /* HomeCalendarMonthNav.swift */; };
 		60AF2A07080D449730CC63B7 /* Block+Markdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF2FEC23775F11946489ACD /* Block+Markdown.swift */; };
 		66AE4310103A03E2F9292B00 /* TemplateVariableFieldTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 646D51D231958113F37B81B7 /* TemplateVariableFieldTests.swift */; };
+		6CAB943BF133FD939FA3F281 /* Const.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F78CAAF6EE221E69DF0E097 /* Const.swift */; };
 		6D395C26DFF2F5514C56AA79 /* EditorBlockPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06190D0FFF0EB8E6F02AA3A7 /* EditorBlockPicker.swift */; };
 		6DAF05C0B48E3689FAD80179 /* Block.swift in Sources */ = {isa = PBXBuildFile; fileRef = A41D0C0CE3C6C437F14C158D /* Block.swift */; };
 		71127F8D6056C51A7ECB5DBE /* HomeHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B020854BCC7FA07FA4237F /* HomeHeader.swift */; };
-		7273794D9729CDBFE9B21CD6 /* InkTypography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A7FE3CA9D3EF396320849A /* InkTypography.swift */; };
+		72598B9FC5BDE98F19162DCE /* Color+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED19A84C546BC16475B0411 /* Color+.swift */; };
 		7597DB6CEA66C70AAFF7B424 /* EditorReorderText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF5F88F9EE50988A0A9C6B1 /* EditorReorderText.swift */; };
 		778738E1878AD249E733F4FD /* TemplateVariablePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E7889CDC0091DDF91866F6 /* TemplateVariablePage.swift */; };
 		7802C5439C06589E62A2D662 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 17FBEFF52E4EC788DE932A0D /* Assets.xcassets */; };
-		7AEC07F806EE2D33705C38E2 /* ScreenStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AFFF57CAB5BA1C81D669E8F /* ScreenStub.swift */; };
 		7BD58529D346030863C601AE /* PaywallBenefitRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832D41AD6D045557E2717AE2 /* PaywallBenefitRow.swift */; };
 		7E869A68CE5AF49AD971D21B /* OnboardingBiometricPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAB33916D390F0ECF5AE09DC /* OnboardingBiometricPage.swift */; };
 		7F87A96B3C327DD6188BEA9A /* EditorSelectedHeading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D6F342C5A44292FC5416CB /* EditorSelectedHeading.swift */; };
@@ -62,7 +60,9 @@
 		83DA1666FED66ED698C6EAC9 /* OnboardingWelcomePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66B4042D38A5FDA1A8029CF3 /* OnboardingWelcomePage.swift */; };
 		844A464C8C02304757528927 /* HomeCalendarWeekdayHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0208AEEACDB6816DE15FA0 /* HomeCalendarWeekdayHeader.swift */; };
 		8D102C3230CDB767AA5B1D90 /* EditorDraggingCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A10548617EA207CACB3436B /* EditorDraggingCard.swift */; };
+		8FB2C76484B3474E66D8D4A0 /* EditorCheckboxToggleStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7EABD013AEE84E790C0BF8C /* EditorCheckboxToggleStyle.swift */; };
 		91A1F236602D5C0E8CAC7983 /* EditorWritingPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16094E045E8DD23E8C560D6E /* EditorWritingPage.swift */; };
+		92E777CCADFC8F98A74EC67B /* Font+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212EA01201EA1BD1F6AE7938 /* Font+.swift */; };
 		930ACEF7CDE9CCFCFB1B856E /* EditorDragHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E352ABC971178991AD0CFFBA /* EditorDragHandle.swift */; };
 		96F8F6D6C31D8C7FA2AC9719 /* JournalEntryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF083E94A1281338FA15F8A /* JournalEntryTests.swift */; };
 		974B2C6BDC5FB1047177592B /* EditorWritingParagraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5219618F8FE7F635CA13D9A1 /* EditorWritingParagraph.swift */; };
@@ -90,7 +90,6 @@
 		DCC32B6B0D528D855BB3E818 /* SettingsToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43462C3182B3E7EA9135C70F /* SettingsToggle.swift */; };
 		DEEEC4B1FC369FE63714832C /* LockPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAB0441A04FE090C8D46947A /* LockPage.swift */; };
 		E2C6328ACB0AFD6B8A78C393 /* EditorSelectionPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F5376346171B87314B9870 /* EditorSelectionPage.swift */; };
-		E368782CC4002864381C2952 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45F9E22095B7C77A9CE42D4 /* AppState.swift */; };
 		E36982E05E1D751796E9159D /* Calendar+.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09C67B430F0A5FA7CC223CE /* Calendar+.swift */; };
 		EF3EEB22D5D60B485AAAA42C /* HomeCalendarPreviewCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B34B5026693697EF249A9B1B /* HomeCalendarPreviewCard.swift */; };
 		F0F86ECF7DE30A5115CEF001 /* EditorReorderRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46D6442A69622DFD0E22795 /* EditorReorderRow.swift */; };
@@ -128,8 +127,8 @@
 		1F2F81C2057BE7FC56BDD75C /* HomeCalendarDayCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCalendarDayCell.swift; sourceTree = "<group>"; };
 		20778A458E0A7E383D6235EC /* LockPadlockIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockPadlockIcon.swift; sourceTree = "<group>"; };
 		20FC750220F77C6D020D79F9 /* EditorDateText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorDateText.swift; sourceTree = "<group>"; };
+		212EA01201EA1BD1F6AE7938 /* Font+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+.swift"; sourceTree = "<group>"; };
 		24EB59C84155565112C85F61 /* SettingsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPage.swift; sourceTree = "<group>"; };
-		29A7FE3CA9D3EF396320849A /* InkTypography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InkTypography.swift; sourceTree = "<group>"; };
 		2ACDF474F7D7D3A962AAF485 /* EditorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorPalette.swift; sourceTree = "<group>"; };
 		2B47B5C0DF26265DF248E7D9 /* EditorScreenScaffold.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorScreenScaffold.swift; sourceTree = "<group>"; };
 		2C08CE9A46091CA3CE97B1E3 /* HomeCalendarBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCalendarBody.swift; sourceTree = "<group>"; };
@@ -148,13 +147,11 @@
 		53123C08CB789B6EC373D537 /* PaywallPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallPage.swift; sourceTree = "<group>"; };
 		56E7889CDC0091DDF91866F6 /* TemplateVariablePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateVariablePage.swift; sourceTree = "<group>"; };
 		59F5376346171B87314B9870 /* EditorSelectionPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorSelectionPage.swift; sourceTree = "<group>"; };
-		5E0AFF3413039F50C4B272FB /* InkColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InkColors.swift; sourceTree = "<group>"; };
 		5F816F732D52F8B441A9FC4E /* NikkiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NikkiApp.swift; sourceTree = "<group>"; };
 		6376C2355D7932A1A0584881 /* OFL.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = OFL.txt; sourceTree = "<group>"; };
 		646D51D231958113F37B81B7 /* TemplateVariableFieldTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateVariableFieldTests.swift; sourceTree = "<group>"; };
 		66B4042D38A5FDA1A8029CF3 /* OnboardingWelcomePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingWelcomePage.swift; sourceTree = "<group>"; };
 		67918CB4B903566099ED4D95 /* ThemePreviewCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemePreviewCard.swift; sourceTree = "<group>"; };
-		6AFFF57CAB5BA1C81D669E8F /* ScreenStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenStub.swift; sourceTree = "<group>"; };
 		739EDADE1949C498089C3604 /* PaywallPlanCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallPlanCard.swift; sourceTree = "<group>"; };
 		7429940A93D19CF138F0AC7B /* LockSkeletonBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockSkeletonBackground.swift; sourceTree = "<group>"; };
 		757674A59DBC876A16AD698B /* HomeCalendarMonthNav.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCalendarMonthNav.swift; sourceTree = "<group>"; };
@@ -169,6 +166,8 @@
 		858B5687927B41A1F52024CF /* HomeListBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeListBody.swift; sourceTree = "<group>"; };
 		85ABAE4BC9666C0BD50AE424 /* EditorSelectionToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorSelectionToolbar.swift; sourceTree = "<group>"; };
 		8A10548617EA207CACB3436B /* EditorDraggingCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorDraggingCard.swift; sourceTree = "<group>"; };
+		8ED19A84C546BC16475B0411 /* Color+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+.swift"; sourceTree = "<group>"; };
+		8F78CAAF6EE221E69DF0E097 /* Const.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Const.swift; sourceTree = "<group>"; };
 		8FF4C4D9DF399092960DAF0E /* EditorParagraphBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorParagraphBlock.swift; sourceTree = "<group>"; };
 		9AF5F88F9EE50988A0A9C6B1 /* EditorReorderText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorReorderText.swift; sourceTree = "<group>"; };
 		A41D0C0CE3C6C437F14C158D /* Block.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Block.swift; sourceTree = "<group>"; };
@@ -186,6 +185,7 @@
 		C1026BD58F3644EEF0E57901 /* ScreenCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenCatalog.swift; sourceTree = "<group>"; };
 		C2104DD3961C10DA4097AC25 /* EditorHeadingBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorHeadingBlock.swift; sourceTree = "<group>"; };
 		C489AF63E9CC9D54DAD34F4B /* EditorDiagonalStripes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorDiagonalStripes.swift; sourceTree = "<group>"; };
+		C7EABD013AEE84E790C0BF8C /* EditorCheckboxToggleStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorCheckboxToggleStyle.swift; sourceTree = "<group>"; };
 		C9561F4C663D114E30259BB4 /* HomePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePage.swift; sourceTree = "<group>"; };
 		CAB0441A04FE090C8D46947A /* LockPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockPage.swift; sourceTree = "<group>"; };
 		CB6696A3E1F8B1B10E7000E2 /* EditorDetailsBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorDetailsBlock.swift; sourceTree = "<group>"; };
@@ -194,8 +194,6 @@
 		CDF2D0FEF90364A0AA27D962 /* TemplateVariableFieldCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateVariableFieldCard.swift; sourceTree = "<group>"; };
 		D267FE0FAFF50F8CC7343EC2 /* ThemeColorSwatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeColorSwatch.swift; sourceTree = "<group>"; };
 		D2C2DFEC8198F9AADBEFBBE9 /* TemplateMarkdownPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateMarkdownPreview.swift; sourceTree = "<group>"; };
-		D3CF6549EEDA6E02BC36E6A2 /* EditorCheckbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorCheckbox.swift; sourceTree = "<group>"; };
-		D45F9E22095B7C77A9CE42D4 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		DC2C7C3164DBB03D79555B00 /* JournalEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalEntry.swift; sourceTree = "<group>"; };
 		DFFFA08DBA55395132C6471B /* SettingsSectionLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSectionLabel.swift; sourceTree = "<group>"; };
 		E352ABC971178991AD0CFFBA /* EditorDragHandle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorDragHandle.swift; sourceTree = "<group>"; };
@@ -212,7 +210,7 @@
 		0CB32F8EE525001BDA9344E3 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				D3CF6549EEDA6E02BC36E6A2 /* EditorCheckbox.swift */,
+				C7EABD013AEE84E790C0BF8C /* EditorCheckboxToggleStyle.swift */,
 				B02CBC27CBC023843FC9FA7D /* EditorChecklistBlock.swift */,
 				CB6696A3E1F8B1B10E7000E2 /* EditorDetailsBlock.swift */,
 				C489AF63E9CC9D54DAD34F4B /* EditorDiagonalStripes.swift */,
@@ -268,10 +266,10 @@
 		18BAA6C62B8921CBCB9ED3EE /* DesignSystem */ = {
 			isa = PBXGroup;
 			children = (
-				5E0AFF3413039F50C4B272FB /* InkColors.swift */,
+				8ED19A84C546BC16475B0411 /* Color+.swift */,
+				212EA01201EA1BD1F6AE7938 /* Font+.swift */,
 				F986D378B73E7F155EFE3BCA /* InkComponents.swift */,
 				18EE568B17EE6D1045D00B79 /* InkIcons.swift */,
-				29A7FE3CA9D3EF396320849A /* InkTypography.swift */,
 			);
 			path = DesignSystem;
 			sourceTree = "<group>";
@@ -326,6 +324,7 @@
 				A41D0C0CE3C6C437F14C158D /* Block.swift */,
 				7BF2FEC23775F11946489ACD /* Block+Markdown.swift */,
 				B09C67B430F0A5FA7CC223CE /* Calendar+.swift */,
+				8F78CAAF6EE221E69DF0E097 /* Const.swift */,
 				DC2C7C3164DBB03D79555B00 /* JournalEntry.swift */,
 				15812819579D015970352C89 /* JournalTemplate.swift */,
 				766734296CC2A8C5589D3AA4 /* SampleData.swift */,
@@ -381,11 +380,9 @@
 		AED5A0C8E10B3F23EE07CF7D /* App */ = {
 			isa = PBXGroup;
 			children = (
-				D45F9E22095B7C77A9CE42D4 /* AppState.swift */,
 				5F816F732D52F8B441A9FC4E /* NikkiApp.swift */,
 				BD9527164007BBD891E23DCD /* RootPage.swift */,
 				C1026BD58F3644EEF0E57901 /* ScreenCatalog.swift */,
-				6AFFF57CAB5BA1C81D669E8F /* ScreenStub.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -618,12 +615,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E368782CC4002864381C2952 /* AppState.swift in Sources */,
 				60AF2A07080D449730CC63B7 /* Block+Markdown.swift in Sources */,
 				6DAF05C0B48E3689FAD80179 /* Block.swift in Sources */,
 				E36982E05E1D751796E9159D /* Calendar+.swift in Sources */,
+				72598B9FC5BDE98F19162DCE /* Color+.swift in Sources */,
+				6CAB943BF133FD939FA3F281 /* Const.swift in Sources */,
 				6D395C26DFF2F5514C56AA79 /* EditorBlockPicker.swift in Sources */,
-				083B49E14614BFD3C5CF97B7 /* EditorCheckbox.swift in Sources */,
+				8FB2C76484B3474E66D8D4A0 /* EditorCheckboxToggleStyle.swift in Sources */,
 				D336550531DAF5030C59845A /* EditorChecklistBlock.swift in Sources */,
 				FF4039DCB128C8F9105AF106 /* EditorDateText.swift in Sources */,
 				25E0339969D8AD73EBC1E288 /* EditorDetailsBlock.swift in Sources */,
@@ -645,6 +643,7 @@
 				1036F4C23998A91A505C56AE /* EditorSelectionToolbar.swift in Sources */,
 				91A1F236602D5C0E8CAC7983 /* EditorWritingPage.swift in Sources */,
 				974B2C6BDC5FB1047177592B /* EditorWritingParagraph.swift in Sources */,
+				92E777CCADFC8F98A74EC67B /* Font+.swift in Sources */,
 				AC1400ABBD2F3F21DB16CD4D /* HomeCalendarBody.swift in Sources */,
 				0935B04B76897A31C76A95F6 /* HomeCalendarDayCell.swift in Sources */,
 				DBD9F4A02F4A52DBEB1B1D46 /* HomeCalendarDaysGrid.swift in Sources */,
@@ -657,10 +656,8 @@
 				3761CB0CEACD91606FAC8B11 /* HomeListBody.swift in Sources */,
 				B754D6D84CBAC8DCB9FE108A /* HomeMonthGroup.swift in Sources */,
 				B95D22F2C3E704D790624EB2 /* HomePage.swift in Sources */,
-				598FAFB3D20E8517EEEFA273 /* InkColors.swift in Sources */,
 				D880C4D3A9B3688BE6B3105B /* InkComponents.swift in Sources */,
 				0615EC45AE1942C73624AEF4 /* InkIcons.swift in Sources */,
-				7273794D9729CDBFE9B21CD6 /* InkTypography.swift in Sources */,
 				D0E9D7282F50A17DC0FB08E7 /* JournalEntry.swift in Sources */,
 				03E5AAC871829B2DE8924221 /* JournalTemplate.swift in Sources */,
 				135B00CD00AC086CA6CF987A /* LockFaceIDButton.swift in Sources */,
@@ -682,7 +679,6 @@
 				40E0EC35832C262141B72120 /* RootPage.swift in Sources */,
 				BC0D27A1D70D0730D7CB21B2 /* SampleData.swift in Sources */,
 				0A59D71DEC238C6E78703A4A /* ScreenCatalog.swift in Sources */,
-				7AEC07F806EE2D33705C38E2 /* ScreenStub.swift in Sources */,
 				342B7952E820A0D5EF1496AD /* SettingsPage.swift in Sources */,
 				24E057D04DD0586D9E3F8E02 /* SettingsSectionLabel.swift in Sources */,
 				DCC32B6B0D528D855BB3E818 /* SettingsToggle.swift in Sources */,

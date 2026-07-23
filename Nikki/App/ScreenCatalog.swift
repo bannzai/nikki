@@ -1,28 +1,29 @@
 import SwiftUI
 
-/// デザイン画面 ID(1a〜1r)と各画面 View の対応表。
-/// 環境変数 NIKKI_SCREEN="1a" を渡すと該当画面を直接起動できる。
+#if DEBUG
+/// デザインカタログの画面と各画面 View の対応表。
+/// 環境変数 NIKKI_SCREEN="welcome" のように画面名を渡すと該当画面を直接起動できる。
 /// 日付依存の画面には SampleData.referenceToday(2026-07-18)を「今日」として渡す。
 enum Screen: String, CaseIterable, Identifiable {
-    case welcome = "1a"
-    case encryption = "1b"
-    case biometric = "1e"
-    case lock = "1f"
-    case entryList = "1g"
-    case calendar = "1h"
-    case editorWriting = "1i"
-    case editorSelection = "1j"
-    case editorReorder = "1k"
-    case templateList = "1l"
-    case templateVariable = "1m"
-    case theme = "1n"
-    case paywall = "1q"
-    case settings = "1r"
+    case welcome
+    case encryption
+    case biometric
+    case lock
+    case entryList
+    case calendar
+    case editorWriting
+    case editorSelection
+    case editorReorder
+    case templateList
+    case templateVariable
+    case theme
+    case paywall
+    case settings
 
     var id: String { rawValue }
 }
 
-/// Screen に対応する画面を描画する。環境変数 NIKKI_SCREEN での直接起動に使う。
+/// Screen に対応する画面を描画する。カタログ一覧と NIKKI_SCREEN での直接起動の両方から使う。
 struct ScreenContent: View {
     let screen: Screen
 
@@ -62,7 +63,8 @@ struct ScreenContent: View {
                 fields: TemplateVariableField.fields(for: template, today: SampleData.referenceToday, includesDemoValues: true)
             )
         case .theme:
-            ThemePage(selected: .ecru)
+            // 見本(1n)の初期選択は生成(プリセット2番目)。
+            ThemePage(selectedPaperColor: Color.paperColorPreset[1])
         case .paywall:
             PaywallPage()
         case .settings:
@@ -70,3 +72,26 @@ struct ScreenContent: View {
         }
     }
 }
+
+/// Focus の Preview 一覧と同様に、カタログの全画面を一覧から開ける確認用ページ。
+/// 各画面は自前のナビ構成を持つため、push ではなく sheet で全画面をそのまま表示する。
+struct ScreenCatalogPage: View {
+    /// 一覧から開いている画面。nil のときは一覧のみ表示。
+    @State var screen: Screen?
+
+    var body: some View {
+        NavigationStack {
+            List(Screen.allCases) { screen in
+                Button(screen.rawValue) {
+                    self.screen = screen
+                }
+                .foregroundStyle(Color.ink)
+            }
+            .navigationTitle("Screens")
+        }
+        .sheet(item: $screen) { screen in
+            ScreenContent(screen: screen)
+        }
+    }
+}
+#endif
