@@ -3,12 +3,11 @@ import SwiftData
 
 @main
 struct NikkiApp: App {
-    @State private var appState = AppState()
-
     /// カタログモードはサンプルデータ入りの in-memory ストア、通常起動は CloudKit 同期つきの永続ストアを使う。
     let modelContainer: ModelContainer
 
     init() {
+        #if DEBUG
         let environment = ProcessInfo.processInfo.environment
         // カタログモードと、ユニットテストがホストアプリとして起動したときは、
         // CloudKit の本番ストアに触れない(シードもしない)よう in-memory ストアを使う。
@@ -19,12 +18,15 @@ struct NikkiApp: App {
         } else {
             modelContainer = Self.defaultContainer()
         }
+        #else
+        modelContainer = Self.defaultContainer()
+        #endif
     }
 
     var body: some Scene {
         WindowGroup {
             NikkiAppContent()
-                .environment(appState)
+                .defaultAppStorage(.appGroups)
         }
         .modelContainer(modelContainer)
     }
@@ -51,14 +53,21 @@ struct NikkiApp: App {
     }
 }
 
-/// 起動画面の振り分け。環境変数 NIKKI_SCREEN があれば ScreenCatalog の該当画面、無ければ通常フロー。
+/// 起動画面の振り分け。環境変数 NIKKI_SCREEN が画面名ならその画面、それ以外の値ならカタログ一覧、無ければ通常フロー。
 private struct NikkiAppContent: View {
     var body: some View {
-        if let raw = ProcessInfo.processInfo.environment["NIKKI_SCREEN"],
-           let screen = Screen(rawValue: raw) {
-            ScreenContent(screen: screen)
+        #if DEBUG
+        if let raw = ProcessInfo.processInfo.environment["NIKKI_SCREEN"] {
+            if let screen = Screen(rawValue: raw) {
+                ScreenContent(screen: screen)
+            } else {
+                ScreenCatalogPage()
+            }
         } else {
             RootPage()
         }
+        #else
+        RootPage()
+        #endif
     }
 }

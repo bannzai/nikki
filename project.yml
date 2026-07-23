@@ -42,6 +42,8 @@ targets:
           - iCloud.com.bannzai.Nikki
         com.apple.developer.icloud-services:
           - CloudKit
+        com.apple.security.application-groups:
+          - group.com.bannzai.Nikki
     info:
       path: Nikki/Info.plist
       properties:
@@ -49,6 +51,7 @@ targets:
         CFBundleShortVersionString: "1.0.0"
         CFBundleVersion: "1"
         UILaunchScreen: {}
+        NSFaceIDUsageDescription: 日記のロック解除に Face ID を使用します
         UIUserInterfaceStyle: Light
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false

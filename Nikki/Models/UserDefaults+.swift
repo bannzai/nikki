@@ -42,3 +42,10 @@ extension AppStorage {
         self.init(wrappedValue: wrappedValue, key.key, store: store)
     }
 }
+
+// MARK: - AppGroups
+
+extension UserDefaults {
+    /// App Groups 共有の suite。@AppStorage は .defaultAppStorage(.appGroups) 経由でこれを既定にする。
+    static let appGroups: UserDefaults = .init(suiteName: Const.iOSAppGroupsKey)!
+}
