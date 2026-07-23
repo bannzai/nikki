@@ -17,6 +17,7 @@ struct TemplateListPage: View {
     @State var sheetOpenedAt: Date = .now
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.resetAutoLockTimer) private var resetAutoLockTimer
 
     var body: some View {
         VStack(spacing: 0) {
@@ -42,6 +43,10 @@ struct TemplateListPage: View {
         }
         .background(Color.inkPaper.ignoresSafeArea())
         .toolbar(.hidden, for: .navigationBar)
+        // 変数入力シートのキーボード入力はタッチとして拾えないため、入力変化を無操作タイマーのリセットにする。
+        .onChange(of: fields) {
+            resetAutoLockTimer()
+        }
         .overlay {
             if template != nil {
                 ZStack(alignment: .bottom) {
