@@ -14,3 +14,11 @@ struct TemplateNewFooter: View {
         .padding(.vertical, 20)
     }
 }
+
+struct TemplateNewFooter_Previews: PreviewProvider {
+    static var previews: some View {
+        TemplateNewFooter()
+            .padding()
+            .background(Color.inkPaper)
+    }
+}

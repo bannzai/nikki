@@ -20,3 +20,11 @@ struct ThemeBackgroundImageCard: View {
         }
     }
 }
+
+struct ThemeBackgroundImageCard_Previews: PreviewProvider {
+    static var previews: some View {
+        ThemeBackgroundImageCard()
+            .padding()
+            .background(Color.inkPaper)
+    }
+}

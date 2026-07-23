@@ -34,12 +34,14 @@ struct OnboardingBiometricPage: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
 
                 VStack(spacing: 12) {
-                    InkPrimaryButton(title: "Face ID を有効にする") {
+                    Button("Face ID を有効にする") {
                         onboardingCompleted = true
                     }
-                    InkSecondaryButton(title: "パスキーを登録する") {
+                    .buttonStyle(InkPrimaryButtonStyle())
+                    Button("パスキーを登録する") {
                         onboardingCompleted = true
                     }
+                    .buttonStyle(InkSecondaryButtonStyle())
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
@@ -50,6 +52,8 @@ struct OnboardingBiometricPage: View {
     }
 }
 
-#Preview {
-    OnboardingBiometricPage(onboardingCompleted: .constant(false))
+struct OnboardingBiometricPage_Previews: PreviewProvider {
+    static var previews: some View {
+        OnboardingBiometricPage(onboardingCompleted: .constant(false))
+    }
 }

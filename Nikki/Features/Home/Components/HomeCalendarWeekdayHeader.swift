@@ -14,3 +14,11 @@ struct HomeCalendarWeekdayHeader: View {
         .padding(.bottom, 6)
     }
 }
+
+struct HomeCalendarWeekdayHeader_Previews: PreviewProvider {
+    static var previews: some View {
+        HomeCalendarWeekdayHeader()
+            .padding()
+            .background(Color.inkPaper)
+    }
+}

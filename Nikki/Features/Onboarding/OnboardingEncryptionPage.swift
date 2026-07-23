@@ -60,9 +60,10 @@ struct OnboardingEncryptionPage: View {
                     .frame(maxWidth: .infinity)
                     .padding(.bottom, 20)
 
-                InkPrimaryButton(title: "次へ") {
+                Button("次へ") {
                     onboardingStep = .biometric
                 }
+                .buttonStyle(InkPrimaryButtonStyle())
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .padding(.horizontal, 28)
@@ -72,6 +73,8 @@ struct OnboardingEncryptionPage: View {
     }
 }
 
-#Preview {
-    OnboardingEncryptionPage(onboardingStep: .constant(.encryption))
+struct OnboardingEncryptionPage_Previews: PreviewProvider {
+    static var previews: some View {
+        OnboardingEncryptionPage(onboardingStep: .constant(.encryption))
+    }
 }

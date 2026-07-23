@@ -10,6 +10,8 @@ struct TemplateVariableSheet: View {
     @Binding var fields: [TemplateVariableField]
     /// 「この内容ではじめる」で作成した日記。親はこれを navigationDestination(item:) でのエディタ遷移に使う。
     @Binding var entry: JournalEntry?
+    /// シートを開いた時点の「今日」。{{date}} の補完値と作成する日記の date を一致させるために受け取る。
+    let today: Date
 
     @Environment(\.modelContext) private var modelContext
     @FocusState private var focusedFieldName: String?
@@ -42,9 +44,10 @@ struct TemplateVariableSheet: View {
                 TemplateMarkdownPreview(markdown: TemplateVariableField.substitutedMarkdown(template: template, fields: fields))
                     .padding(.top, 18)
 
-                InkPrimaryButton(title: "この内容ではじめる") {
-                    start(template)
+                Button("この内容ではじめる") {
+                    start(template: template)
                 }
+                .buttonStyle(InkPrimaryButtonStyle())
                 .padding(.top, 18)
             }
             .padding(.top, 14)
@@ -66,14 +69,30 @@ struct TemplateVariableSheet: View {
     }
 
     /// 変数を差し込んだ markdown から日記を作成・保存し、シートを閉じて親のエディタ遷移を起こす。
-    private func start(_ template: JournalTemplate) {
+    private func start(template: JournalTemplate) {
         let entry = JournalEntry(
             templateMarkdown: TemplateVariableField.substitutedMarkdown(template: template, fields: fields),
-            date: .now
+            date: today
         )
         modelContext.insert(entry)
         try? modelContext.save()
         self.template = nil
         self.entry = entry
+    }
+}
+
+struct TemplateVariableSheet_Previews: PreviewProvider {
+    static var previews: some View {
+        TemplateVariableSheet(
+            template: .constant(SampleData.reflectionTemplate),
+            fields: .constant(TemplateVariableField.fields(
+                template: SampleData.reflectionTemplate,
+                today: SampleData.referenceToday,
+                includesDemoValues: true
+            )),
+            entry: .constant(nil),
+            today: SampleData.referenceToday
+        )
+        .modelContainer(SampleData.inMemoryContainer())
     }
 }

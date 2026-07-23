@@ -24,3 +24,11 @@ struct PaywallBenefitRow: View {
         }
     }
 }
+
+struct PaywallBenefitRow_Previews: PreviewProvider {
+    static var previews: some View {
+        PaywallBenefitRow(title: "複数端末で同期", description: "iPhone・Mac・Web。暗号化されたまま届きます。")
+            .padding()
+            .background(Color.inkPaper)
+    }
+}

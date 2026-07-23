@@ -19,3 +19,11 @@ struct OnboardingLogoMark: View {
         }
     }
 }
+
+struct OnboardingLogoMark_Previews: PreviewProvider {
+    static var previews: some View {
+        OnboardingLogoMark()
+            .padding()
+            .background(Color.inkPaper)
+    }
+}

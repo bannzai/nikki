@@ -15,7 +15,9 @@ struct HomeEmptyState: View {
     }
 }
 
-#Preview {
-    HomeEmptyState()
-        .background(Color.inkPaper)
+struct HomeEmptyState_Previews: PreviewProvider {
+    static var previews: some View {
+        HomeEmptyState()
+            .background(Color.inkPaper)
+    }
 }

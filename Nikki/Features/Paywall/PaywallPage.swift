@@ -15,8 +15,7 @@ struct PaywallPage: View {
             Color.inkPaper.ignoresSafeArea()
 
             VStack(spacing: 0) {
-                // 課金導線は未実装のため、各ボタンはまだ何もしない(https://github.com/bannzai/nikki/issues/14)。
-                PaywallCloseButton(action: {})
+                PaywallCloseButton()
                     .padding(.top, 6)
                     .padding(.bottom, 4)
 
@@ -68,12 +67,13 @@ struct PaywallPage: View {
                     .frame(maxWidth: .infinity)
                     .padding(.bottom, 14)
 
-                InkPrimaryButton(title: "Nikki Plus をはじめる", action: {})
+                Button("Nikki Plus をはじめる") {}
+                    .buttonStyle(InkPrimaryButtonStyle())
 
                 HStack(spacing: 22) {
-                    PaywallFooterLink(title: "購入の復元", action: {})
-                    PaywallFooterLink(title: "利用規約", action: {})
-                    PaywallFooterLink(title: "プライバシー", action: {})
+                    PaywallFooterLink(title: "購入の復元")
+                    PaywallFooterLink(title: "利用規約")
+                    PaywallFooterLink(title: "プライバシー")
                 }
                 .padding(.top, 14)
             }
@@ -90,6 +90,8 @@ private enum PaywallPlan {
     case yearly
 }
 
-#Preview {
-    PaywallPage()
+struct PaywallPage_Previews: PreviewProvider {
+    static var previews: some View {
+        PaywallPage()
+    }
 }

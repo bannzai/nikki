@@ -25,3 +25,14 @@ struct EditorDragDot: View {
         Circle().fill(color).frame(width: 3.2, height: 3.2)
     }
 }
+
+struct EditorDragHandle_Previews: PreviewProvider {
+    static var previews: some View {
+        HStack(spacing: 20) {
+            EditorDragHandle(active: true)
+            EditorDragHandle(active: false)
+        }
+        .padding()
+        .background(Color.inkPaper)
+    }
+}

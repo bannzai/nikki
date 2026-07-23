@@ -19,3 +19,11 @@ struct TemplateMarkdownPreview: View {
             )
     }
 }
+
+struct TemplateMarkdownPreview_Previews: PreviewProvider {
+    static var previews: some View {
+        TemplateMarkdownPreview(markdown: "# 2026年7月18日\n天気: 晴れのち夕立\n## よかったこと\n## 明日のじぶんへ")
+            .padding()
+            .background(Color.inkPaper)
+    }
+}

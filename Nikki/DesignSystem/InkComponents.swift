@@ -1,50 +1,25 @@
 import SwiftUI
 
-/// 墨地の主ボタン。
-struct InkPrimaryButton: View {
-    let title: String
-    var icon: String?
-    // 見本のボタンは有効状態が既定のため。
-    var isEnabled: Bool = true
-    let action: () -> Void
+/// 墨地の主ボタンの ButtonStyle。無効状態の見た目は .disabled() による environment で切り替わる。
+struct InkPrimaryButtonStyle: ButtonStyle {
+    @Environment(\.isEnabled) private var isEnabled
 
-    var body: some View {
-        Button(action: action) {
-            HStack(spacing: 8) {
-                if let icon {
-                    Image(systemName: icon)
-                        .font(.system(size: 16, weight: .semibold))
-                }
-                Text(title)
-                    .font(.ink(16, .medium).weight(.semibold))
-            }
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.ink(16, .medium).weight(.semibold))
             .frame(maxWidth: .infinity)
             .frame(height: 54)
             .foregroundStyle(isEnabled ? Color.inkPrimaryButtonText : Color.inkLabelGray)
             .background(isEnabled ? Color.ink : Color.inkDisabledBackground)
             .clipShape(RoundedRectangle(cornerRadius: 27, style: .continuous))
-        }
-        .buttonStyle(.plain)
-        .disabled(!isEnabled)
     }
 }
 
-/// 枠線の二次ボタン。
-struct InkSecondaryButton: View {
-    let title: String
-    var icon: String?
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            HStack(spacing: 8) {
-                if let icon {
-                    Image(systemName: icon)
-                        .font(.system(size: 15, weight: .medium))
-                }
-                Text(title)
-                    .font(.ink(15, .medium))
-            }
+/// 枠線の二次ボタンの ButtonStyle。
+struct InkSecondaryButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.ink(15, .medium))
             .frame(maxWidth: .infinity)
             .frame(height: 54)
             .foregroundStyle(Color.ink)
@@ -52,25 +27,6 @@ struct InkSecondaryButton: View {
                 RoundedRectangle(cornerRadius: 27, style: .continuous)
                     .strokeBorder(Color.inkSecondaryButtonBorder, lineWidth: 1.5)
             )
-        }
-        .buttonStyle(.plain)
-    }
-}
-
-/// 下線なしのテキストリンク。
-struct InkTextLink: View {
-    let title: String
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            Text(title)
-                .font(.ink(13.5, .regular))
-                .foregroundStyle(Color.inkTextSecondary)
-                .frame(maxWidth: .infinity)
-                .padding(6)
-        }
-        .buttonStyle(.plain)
     }
 }
 
@@ -106,20 +62,15 @@ struct InkSegmentedControl: View {
     }
 }
 
-struct InkFAB: View {
-    var icon: String = InkIcons.pen
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            Image(systemName: icon)
-                .font(.system(size: 22, weight: .regular))
-                .foregroundStyle(Color.inkPrimaryButtonText)
-                .frame(width: 58, height: 58)
-                .background(Circle().fill(Color.ink))
-                .shadow(color: Color.ink.opacity(0.28), radius: 12, x: 0, y: 10)
-        }
-        .buttonStyle(.plain)
+/// 右下の丸い新規作成ボタンの ButtonStyle。ラベルにはアイコンを渡す。
+struct InkFABButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.system(size: 22, weight: .regular))
+            .foregroundStyle(Color.inkPrimaryButtonText)
+            .frame(width: 58, height: 58)
+            .background(Circle().fill(Color.ink))
+            .shadow(color: Color.ink.opacity(0.28), radius: 12, x: 0, y: 10)
     }
 }
 

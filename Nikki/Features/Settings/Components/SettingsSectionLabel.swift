@@ -13,3 +13,11 @@ struct SettingsSectionLabel: View {
             .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
+
+struct SettingsSectionLabel_Previews: PreviewProvider {
+    static var previews: some View {
+        SettingsSectionLabel(text: "書くこと")
+            .padding()
+            .background(Color.inkPaper)
+    }
+}

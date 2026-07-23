@@ -8,13 +8,14 @@ struct LockPage: View {
         ZStack {
             Color.inkPaper
             LockSkeletonBackground()
-            // ロック解除の実装は未配線のため、まだ何もしない(https://github.com/bannzai/nikki/issues/14)。
-            LockOverlay(onUnlock: {})
+            LockOverlay()
         }
         .ignoresSafeArea()
     }
 }
 
-#Preview {
-    LockPage()
+struct LockPage_Previews: PreviewProvider {
+    static var previews: some View {
+        LockPage()
+    }
 }

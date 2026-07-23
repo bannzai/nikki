@@ -20,3 +20,11 @@ struct PaywallHeader: View {
         }
     }
 }
+
+struct PaywallHeader_Previews: PreviewProvider {
+    static var previews: some View {
+        PaywallHeader()
+            .padding()
+            .background(Color.inkPaper)
+    }
+}

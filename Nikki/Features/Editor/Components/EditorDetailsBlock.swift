@@ -22,3 +22,11 @@ struct EditorDetailsBlock: View {
         )
     }
 }
+
+struct EditorDetailsBlock_Previews: PreviewProvider {
+    static var previews: some View {
+        EditorDetailsBlock(summary: "病院メモ(たたんでおく)")
+            .padding()
+            .background(Color.inkPaper)
+    }
+}

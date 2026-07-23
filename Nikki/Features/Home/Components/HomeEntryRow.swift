@@ -47,3 +47,11 @@ struct HomeEntryRow: View {
         return symbols[Calendar.display.component(.weekday, from: entry.date) - 1] + "曜"
     }
 }
+
+struct HomeEntryRow_Previews: PreviewProvider {
+    static var previews: some View {
+        HomeEntryRow(entry: SampleData.sampleEntry, showsSeparator: true)
+            .padding()
+            .background(Color.inkPaper)
+    }
+}

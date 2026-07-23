@@ -38,3 +38,12 @@ struct HomeListBody: View {
         }
     }
 }
+
+struct HomeListBody_Previews: PreviewProvider {
+    static var previews: some View {
+        NavigationStack {
+            HomeListBody(entries: SampleData.entries)
+        }
+        .background(Color.inkPaper)
+    }
+}

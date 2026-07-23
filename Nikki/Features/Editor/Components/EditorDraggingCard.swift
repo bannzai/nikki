@@ -28,3 +28,11 @@ struct EditorDraggingCard: View {
         .scaleEffect(1.02)
     }
 }
+
+struct EditorDraggingCard_Previews: PreviewProvider {
+    static var previews: some View {
+        EditorDraggingCard(entry: SampleData.sampleEntry)
+            .padding()
+            .background(Color.inkPaper)
+    }
+}

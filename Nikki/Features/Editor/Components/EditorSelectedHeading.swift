@@ -41,3 +41,11 @@ struct EditorSelectionHandle: View {
             }
     }
 }
+
+struct EditorSelectedHeading_Previews: PreviewProvider {
+    static var previews: some View {
+        EditorSelectedHeading(text: "買ったもの")
+            .padding()
+            .background(Color.inkPaper)
+    }
+}

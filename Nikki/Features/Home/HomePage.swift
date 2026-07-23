@@ -42,15 +42,20 @@ struct HomePage: View {
                     case .list:
                         HomeListBody(entries: entries)
                     case .calendar:
-                        HomeCalendarBody(entries: entries, today: today)
+                        HomeCalendarBody(entries: entries, today: today, displayedMonth: HomeCalendarMonth.startOfMonth(date: today))
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             }
 
-            InkFAB { templateListIsPresented = true }
-                .padding(.trailing, 22)
-                .padding(.bottom, 16)
+            Button {
+                templateListIsPresented = true
+            } label: {
+                Image(systemName: InkIcons.pen)
+            }
+            .buttonStyle(InkFABButtonStyle())
+            .padding(.trailing, 22)
+            .padding(.bottom, 16)
         }
         .toolbar(.hidden, for: .navigationBar)
         .navigationDestination(isPresented: $templateListIsPresented) {

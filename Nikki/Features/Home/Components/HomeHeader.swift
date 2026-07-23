@@ -20,3 +20,11 @@ struct HomeHeader: View {
         }
     }
 }
+
+struct HomeHeader_Previews: PreviewProvider {
+    static var previews: some View {
+        HomeHeader()
+            .padding()
+            .background(Color.inkPaper)
+    }
+}

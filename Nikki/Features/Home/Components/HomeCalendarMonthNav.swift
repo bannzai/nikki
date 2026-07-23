@@ -36,7 +36,15 @@ struct HomeCalendarMonthNav: View {
 
     private func shiftMonth(by delta: Int) {
         if let shifted = Calendar.display.date(byAdding: .month, value: delta, to: displayedMonth) {
-            displayedMonth = HomeCalendarMonth.startOfMonth(for: shifted)
+            displayedMonth = HomeCalendarMonth.startOfMonth(date: shifted)
         }
+    }
+}
+
+struct HomeCalendarMonthNav_Previews: PreviewProvider {
+    static var previews: some View {
+        HomeCalendarMonthNav(displayedMonth: .constant(HomeCalendarMonth.startOfMonth(date: SampleData.referenceToday)))
+            .padding()
+            .background(Color.inkPaper)
     }
 }

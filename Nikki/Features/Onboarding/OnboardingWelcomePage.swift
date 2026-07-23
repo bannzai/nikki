@@ -27,9 +27,10 @@ struct OnboardingWelcomePage: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
 
-                InkPrimaryButton(title: "はじめる") {
+                Button("はじめる") {
                     onboardingStep = .encryption
                 }
+                .buttonStyle(InkPrimaryButtonStyle())
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .padding(.horizontal, 28)
@@ -39,6 +40,8 @@ struct OnboardingWelcomePage: View {
     }
 }
 
-#Preview {
-    OnboardingWelcomePage(onboardingStep: .constant(.welcome))
+struct OnboardingWelcomePage_Previews: PreviewProvider {
+    static var previews: some View {
+        OnboardingWelcomePage(onboardingStep: .constant(.welcome))
+    }
 }

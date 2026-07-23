@@ -15,3 +15,9 @@ struct TemplateVariableBackdrop: View {
         }
     }
 }
+
+struct TemplateVariableBackdrop_Previews: PreviewProvider {
+    static var previews: some View {
+        TemplateVariableBackdrop()
+    }
+}

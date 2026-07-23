@@ -21,3 +21,18 @@ struct EditorReorderRow<Content: View>: View {
         )
     }
 }
+
+struct EditorReorderRow_Previews: PreviewProvider {
+    static var previews: some View {
+        VStack(spacing: 10) {
+            EditorReorderRow {
+                EditorReorderText(text: "朝から蝉が鳴いていた。")
+            }
+            EditorReorderRow(active: true) {
+                EditorReorderText(text: "アイスコーヒーを濃いめに淹れて、ベランダで飲んだ")
+            }
+        }
+        .padding()
+        .background(Color.inkPaper)
+    }
+}

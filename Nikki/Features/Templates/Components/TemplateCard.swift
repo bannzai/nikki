@@ -30,3 +30,11 @@ struct TemplateCard: View {
         .onTapGesture(perform: onTap)
     }
 }
+
+struct TemplateCard_Previews: PreviewProvider {
+    static var previews: some View {
+        TemplateCard(template: SampleData.reflectionTemplate, onTap: {})
+            .padding()
+            .background(Color.inkPaper)
+    }
+}

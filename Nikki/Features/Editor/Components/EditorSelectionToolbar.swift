@@ -78,3 +78,11 @@ struct EditorToolbarIcon: View {
             .padding(.vertical, 6)
     }
 }
+
+struct EditorSelectionToolbar_Previews: PreviewProvider {
+    static var previews: some View {
+        EditorSelectionToolbar()
+            .padding()
+            .background(Color.inkPaper)
+    }
+}

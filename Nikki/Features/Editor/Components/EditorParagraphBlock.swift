@@ -13,3 +13,11 @@ struct EditorParagraphBlock: View {
             .fixedSize(horizontal: false, vertical: true)
     }
 }
+
+struct EditorParagraphBlock_Previews: PreviewProvider {
+    static var previews: some View {
+        EditorParagraphBlock(text: "朝から蝉が鳴いていた。ベランダの鉢に水をやりながら、今年も夏が来たんだなと思う。")
+            .padding()
+            .background(Color.inkPaper)
+    }
+}

@@ -3,9 +3,6 @@ import SwiftUI
 /// 画面中央のロック解除オーバーレイ(南京錠円・文言・Face ID ボタン・脚注)。
 struct LockOverlay: View {
     /// Face ID ボタンのタップで呼ばれる。
-    // ロック解除処理。自動ロック実装時に配線する(https://github.com/bannzai/nikki/issues/14)。
-    let onUnlock: () -> Void
-
     var body: some View {
         VStack(spacing: 20) {
             LockPadlockCircle()
@@ -21,7 +18,7 @@ struct LockOverlay: View {
                     .lineSpacing(inkLineSpacing(fontSize: 12.5, multiplier: 1.9))
             }
 
-            LockFaceIDButton(action: onUnlock)
+            LockFaceIDButton()
                 .padding(.top, 8)
 
             Text("解除すると、さっきの続きに戻ります")
@@ -40,5 +37,12 @@ struct LockPadlockCircle: View {
             .overlay(Circle().strokeBorder(Color.ink.opacity(0.3), lineWidth: 1.5))
             .frame(width: 64, height: 64)
             .overlay { LockPadlockIcon() }
+    }
+}
+
+struct LockOverlay_Previews: PreviewProvider {
+    static var previews: some View {
+        LockOverlay()
+            .background(Color.inkPaper)
     }
 }

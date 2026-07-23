@@ -19,3 +19,11 @@ struct EditorWritingParagraph: View {
         }
     }
 }
+
+struct EditorWritingParagraph_Previews: PreviewProvider {
+    static var previews: some View {
+        EditorWritingParagraph(text: "アイスコーヒーを濃いめに淹れて、ベランダで飲んだ")
+            .padding()
+            .background(Color.inkPaper)
+    }
+}

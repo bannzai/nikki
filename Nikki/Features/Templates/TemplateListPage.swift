@@ -13,6 +13,8 @@ struct TemplateListPage: View {
     @State var fields: [TemplateVariableField] = []
     /// 変数入力シートが作成した日記。エディタへの遷移に使う。
     @State var entry: JournalEntry?
+    /// シートを開いた時刻。{{date}} の補完値と作成する日記の date を一致させるために保持する。
+    @State var sheetOpenedAt: Date = .now
 
     @Environment(\.dismiss) private var dismiss
 
@@ -29,7 +31,7 @@ struct TemplateListPage: View {
 
                     VStack(spacing: 12) {
                         ForEach(templates) { template in
-                            TemplateCard(template: template) { open(template) }
+                            TemplateCard(template: template) { open(template: template) }
                         }
                     }
 
@@ -45,7 +47,7 @@ struct TemplateListPage: View {
                 ZStack(alignment: .bottom) {
                     TemplateVariableBackdrop()
                         .onTapGesture { template = nil }
-                    TemplateVariableSheet(template: $template, fields: $fields, entry: $entry)
+                    TemplateVariableSheet(template: $template, fields: $fields, entry: $entry, today: sheetOpenedAt)
                 }
                 .ignoresSafeArea()
             }
@@ -56,15 +58,18 @@ struct TemplateListPage: View {
     }
 
     /// カードで選んだテンプレートの変数入力シートを開く。
-    private func open(_ template: JournalTemplate) {
-        fields = TemplateVariableField.fields(for: template, today: .now, includesDemoValues: false)
+    private func open(template: JournalTemplate) {
+        sheetOpenedAt = .now
+        fields = TemplateVariableField.fields(template: template, today: sheetOpenedAt, includesDemoValues: false)
         self.template = template
     }
 }
 
-#Preview {
-    NavigationStack {
-        TemplateListPage()
+struct TemplateListPage_Previews: PreviewProvider {
+    static var previews: some View {
+        NavigationStack {
+            TemplateListPage()
+        }
+        .modelContainer(SampleData.inMemoryContainer())
     }
-    .modelContainer(SampleData.inMemoryContainer())
 }

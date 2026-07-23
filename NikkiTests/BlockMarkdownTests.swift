@@ -23,7 +23,7 @@ struct BlockMarkdownTests {
     // 各ブロックを単独で markdown 化した文字列は「種別 + 内容」を一意に表すため、
     // id(UUID)を無視したブロックの内容比較として使う。
     private func contents(of blocks: [Block]) -> [String] {
-        blocks.map { Block.markdown(from: [$0]) }
+        blocks.map { Block.markdown(blocks: [$0]) }
     }
 
     @Test("全ブロック種をパースできる")
@@ -53,7 +53,7 @@ struct BlockMarkdownTests {
             .details(summary: "折りたたみ", isCollapsed: true),
             .details(summary: "ひらいたまま", isCollapsed: false),
         ]
-        #expect(Block.markdown(from: blocks) == """
+        #expect(Block.markdown(blocks: blocks) == """
         # 見出し
 
         段落
@@ -72,9 +72,9 @@ struct BlockMarkdownTests {
     @Test("markdown とブロック列を往復できる")
     func roundTrips() {
         let blocks = Block.blocks(fromMarkdown: fullMarkdown)
-        let roundTripped = Block.blocks(fromMarkdown: Block.markdown(from: blocks))
+        let roundTripped = Block.blocks(fromMarkdown: Block.markdown(blocks: blocks))
         #expect(contents(of: roundTripped) == contents(of: blocks))
-        #expect(Block.markdown(from: roundTripped) == Block.markdown(from: blocks))
+        #expect(Block.markdown(blocks: roundTripped) == Block.markdown(blocks: blocks))
     }
 
     @Test("サポート外の行は段落として扱う")

@@ -55,3 +55,27 @@ struct TemplateVariableFieldCard: View {
         )
     }
 }
+
+struct TemplateVariableFieldCard_Previews: PreviewProvider {
+    /// @FocusState を preview に用意するためのラッパー。
+    private struct Container: View {
+        @State var field = TemplateVariableField(
+            name: "weather",
+            isAuto: false,
+            value: "晴れのち夕立",
+            bodyValue: nil,
+            placeholder: "きょうの天気"
+        )
+        @FocusState var focusedFieldName: String?
+
+        var body: some View {
+            TemplateVariableFieldCard(field: $field, focusedFieldName: $focusedFieldName)
+        }
+    }
+
+    static var previews: some View {
+        Container()
+            .padding()
+            .background(Color.inkPaper)
+    }
+}

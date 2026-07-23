@@ -32,3 +32,15 @@ struct HomeCalendarDayCell: View {
         .frame(height: 38, alignment: .top)
     }
 }
+
+struct HomeCalendarDayCell_Previews: PreviewProvider {
+    static var previews: some View {
+        HStack(spacing: 12) {
+            HomeCalendarDayCell(cell: HomeCalendarDay(day: 18, isToday: true, isFuture: false, hasEntry: false))
+            HomeCalendarDayCell(cell: HomeCalendarDay(day: 12, isToday: false, isFuture: false, hasEntry: true))
+            HomeCalendarDayCell(cell: HomeCalendarDay(day: 25, isToday: false, isFuture: true, hasEntry: false))
+        }
+        .padding()
+        .background(Color.inkPaper)
+    }
+}

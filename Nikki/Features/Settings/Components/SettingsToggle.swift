@@ -24,3 +24,11 @@ struct SettingsToggle: View {
         .buttonStyle(.plain)
     }
 }
+
+struct SettingsToggle_Previews: PreviewProvider {
+    static var previews: some View {
+        SettingsToggle(isOn: .constant(true))
+            .padding()
+            .background(Color.inkPaper)
+    }
+}

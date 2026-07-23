@@ -45,3 +45,11 @@ struct HomeCalendarPreviewCard: View {
         return String(format: "%02d:%02d", comps.hour ?? 0, comps.minute ?? 0)
     }
 }
+
+struct HomeCalendarPreviewCard_Previews: PreviewProvider {
+    static var previews: some View {
+        HomeCalendarPreviewCard(entry: SampleData.sampleEntry)
+            .padding()
+            .background(Color.inkPaper)
+    }
+}

@@ -59,8 +59,9 @@ struct ScreenContent: View {
         case .templateVariable:
             let template = SampleData.reflectionTemplate
             TemplateVariablePage(
+                today: SampleData.referenceToday,
                 template: template,
-                fields: TemplateVariableField.fields(for: template, today: SampleData.referenceToday, includesDemoValues: true)
+                fields: TemplateVariableField.fields(template: template, today: SampleData.referenceToday, includesDemoValues: true)
             )
         case .theme:
             // 見本(1n)の初期選択は生成(プリセット2番目)。

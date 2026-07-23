@@ -20,3 +20,11 @@ struct EditorDiagonalStripes: View {
         }
     }
 }
+
+struct EditorDiagonalStripes_Previews: PreviewProvider {
+    static var previews: some View {
+        EditorDiagonalStripes()
+            .frame(height: 120)
+            .padding()
+    }
+}

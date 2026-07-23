@@ -33,3 +33,11 @@ struct ThemePreviewCard: View {
         )
     }
 }
+
+struct ThemePreviewCard_Previews: PreviewProvider {
+    static var previews: some View {
+        ThemePreviewCard(paperColor: Color.paperColorPreset[1])
+            .padding()
+            .background(Color.inkPaper)
+    }
+}

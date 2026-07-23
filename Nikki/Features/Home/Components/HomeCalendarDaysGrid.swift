@@ -21,7 +21,7 @@ struct HomeCalendarDaysGrid: View {
     /// 表示中の月のグリッドに並べるセル。先頭に月初めまでの空白セルを含む。
     private func gridDays() -> [HomeCalendarDay] {
         let calendar = Calendar.display
-        let firstOfMonth = HomeCalendarMonth.startOfMonth(for: displayedMonth)
+        let firstOfMonth = HomeCalendarMonth.startOfMonth(date: displayedMonth)
         let leadingBlanks = calendar.component(.weekday, from: firstOfMonth) - 1
         let dayRange = calendar.range(of: .day, in: .month, for: firstOfMonth) ?? 1..<1
         let todayStart = calendar.startOfDay(for: today)
@@ -53,4 +53,16 @@ struct HomeCalendarDay {
     let isFuture: Bool
     /// その日に日記があるか(墨ドットを表示する)。
     let hasEntry: Bool
+}
+
+struct HomeCalendarDaysGrid_Previews: PreviewProvider {
+    static var previews: some View {
+        HomeCalendarDaysGrid(
+            entries: SampleData.entries,
+            today: SampleData.referenceToday,
+            displayedMonth: HomeCalendarMonth.startOfMonth(date: SampleData.referenceToday)
+        )
+        .padding()
+        .background(Color.inkPaper)
+    }
 }

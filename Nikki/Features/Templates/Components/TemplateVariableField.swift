@@ -20,7 +20,7 @@ struct TemplateVariableField: Identifiable {
 
     /// template.variableNames と today から入力フィールド群を組み立てる。
     /// includesDemoValues は参照デザイン(1m)の記入済み状態を再現するカタログ表示でのみ true にする。
-    static func fields(for template: JournalTemplate, today: Date, includesDemoValues: Bool) -> [TemplateVariableField] {
+    static func fields(template: JournalTemplate, today: Date, includesDemoValues: Bool) -> [TemplateVariableField] {
         template.variableNames.map { name in
             guard name == "date" else {
                 return TemplateVariableField(

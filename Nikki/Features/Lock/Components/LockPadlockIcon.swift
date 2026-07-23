@@ -50,3 +50,11 @@ struct LockPadlockOutline: Shape {
         return path
     }
 }
+
+struct LockPadlockIcon_Previews: PreviewProvider {
+    static var previews: some View {
+        LockPadlockIcon()
+            .padding()
+            .background(Color.inkPaper)
+    }
+}

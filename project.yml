@@ -44,6 +44,8 @@ targets:
           - CloudKit
         com.apple.security.application-groups:
           - group.com.bannzai.Nikki
+        # CloudKit のサイレントプッシュ(サーバ変更通知)を受けるための APNs 環境。配布時は Xcode が production に差し替える
+        aps-environment: development
     info:
       path: Nikki/Info.plist
       properties:

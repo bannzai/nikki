@@ -52,3 +52,10 @@ struct LockSkeletonBar {
     /// 段落の区切りを表す上マージン。
     var topMargin: CGFloat = 0
 }
+
+struct LockSkeletonBackground_Previews: PreviewProvider {
+    static var previews: some View {
+        LockSkeletonBackground()
+            .background(Color.inkPaper)
+    }
+}

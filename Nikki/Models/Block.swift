@@ -77,7 +77,7 @@ nonisolated extension Block {
     }
 
     /// ブロック列を markdown 文字列にする。ブロック間は空行で区切り、blocks(fromMarkdown:) と往復できる形にする。
-    static func markdown(from blocks: [Block]) -> String {
+    static func markdown(blocks: [Block]) -> String {
         blocks.map { block -> String in
             switch block {
             case .heading(_, let level, let text):
@@ -127,7 +127,7 @@ nonisolated extension Block {
         if !line.hasPrefix("<img") {
             return nil
         }
-        return .image(label: attributeValue("alt", in: line) ?? attributeValue("src", in: line) ?? "")
+        return .image(label: attributeValue(name: "alt", line: line) ?? attributeValue(name: "src", line: line) ?? "")
     }
 
     /// <details> タグの行。<summary> の中身を要約に、open 属性の有無を開閉状態に読む。
@@ -136,18 +136,18 @@ nonisolated extension Block {
             return nil
         }
         return .details(
-            summary: firstMatch(pattern: "<summary>(.*?)</summary>", in: line) ?? "",
+            summary: firstMatch(pattern: "<summary>(.*?)</summary>", line: line) ?? "",
             isCollapsed: !line.hasPrefix("<details open")
         )
     }
 
     /// name="値" 形式の HTML 属性値を取り出す。
-    private static func attributeValue(_ name: String, in line: String) -> String? {
-        firstMatch(pattern: "\(name)=\"([^\"]*)\"", in: line)
+    private static func attributeValue(name: String, line: String) -> String? {
+        firstMatch(pattern: "\(name)=\"([^\"]*)\"", line: line)
     }
 
     /// pattern の最初のキャプチャグループにマッチした文字列を返す。
-    private static func firstMatch(pattern: String, in line: String) -> String? {
+    private static func firstMatch(pattern: String, line: String) -> String? {
         let source = line as NSString
         let regex = try? NSRegularExpression(pattern: pattern)
         let match = regex?.firstMatch(in: line, range: NSRange(location: 0, length: source.length))

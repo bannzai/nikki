@@ -22,3 +22,11 @@ struct EditorImageBlock: View {
         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
 }
+
+struct EditorImageBlock_Previews: PreviewProvider {
+    static var previews: some View {
+        EditorImageBlock(label: "夕焼けの写真")
+            .padding()
+            .background(Color.inkPaper)
+    }
+}

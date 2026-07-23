@@ -24,3 +24,14 @@ struct EditorChecklistBlock: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
+
+struct EditorChecklistBlock_Previews: PreviewProvider {
+    static var previews: some View {
+        EditorChecklistBlock(items: [
+            ChecklistItem(text: "麦茶のパック", done: true),
+            ChecklistItem(text: "蚊取り線香", done: false),
+        ])
+        .padding()
+        .background(Color.inkPaper)
+    }
+}

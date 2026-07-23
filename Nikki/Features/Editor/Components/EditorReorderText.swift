@@ -12,3 +12,11 @@ struct EditorReorderText: View {
             .fixedSize(horizontal: false, vertical: true)
     }
 }
+
+struct EditorReorderText_Previews: PreviewProvider {
+    static var previews: some View {
+        EditorReorderText(text: "朝から蝉が鳴いていた。")
+            .padding()
+            .background(Color.inkPaper)
+    }
+}

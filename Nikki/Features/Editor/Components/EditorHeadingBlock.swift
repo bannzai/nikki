@@ -23,3 +23,11 @@ enum EditorHeadingFont {
         }
     }
 }
+
+struct EditorHeadingBlock_Previews: PreviewProvider {
+    static var previews: some View {
+        EditorHeadingBlock(level: 2, text: "買ったもの")
+            .padding()
+            .background(Color.inkPaper)
+    }
+}

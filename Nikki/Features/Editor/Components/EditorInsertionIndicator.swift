@@ -9,3 +9,11 @@ struct EditorInsertionIndicator: View {
             .padding(.horizontal, 6)
     }
 }
+
+struct EditorInsertionIndicator_Previews: PreviewProvider {
+    static var previews: some View {
+        EditorInsertionIndicator()
+            .padding()
+            .background(Color.inkPaper)
+    }
+}

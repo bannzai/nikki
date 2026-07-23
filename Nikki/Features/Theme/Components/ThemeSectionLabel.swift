@@ -11,3 +11,11 @@ struct ThemeSectionLabel: View {
             .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
+
+struct ThemeSectionLabel_Previews: PreviewProvider {
+    static var previews: some View {
+        ThemeSectionLabel(text: "紙の色")
+            .padding()
+            .background(Color.inkPaper)
+    }
+}

@@ -22,9 +22,8 @@ struct ThemePage: View {
                             ForEach(Array(Color.paperColorPreset.enumerated()), id: \.offset) { index, paperColor in
                                 ThemeColorSwatch(
                                     paperColor: paperColor,
-                                    label: swatchLabel(at: index),
-                                    isSelected: paperColor == selectedPaperColor,
-                                    action: { selectedPaperColor = paperColor }
+                                    label: swatchLabel(index: index),
+                                    selectedPaperColor: $selectedPaperColor
                                 )
                             }
                         }
@@ -51,7 +50,7 @@ struct ThemePage: View {
     }
 
     /// スウォッチ下に表示する紙色プリセットの表示名(Color.paperColorPreset と同順)。
-    private func swatchLabel(at index: Int) -> String {
+    private func swatchLabel(index: Int) -> String {
         switch index {
         case 0: return "白"
         case 1: return "生成"

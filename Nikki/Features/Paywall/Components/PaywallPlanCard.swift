@@ -52,3 +52,14 @@ struct PaywallPlanCard: View {
         .onTapGesture(perform: onTap)
     }
 }
+
+struct PaywallPlanCard_Previews: PreviewProvider {
+    static var previews: some View {
+        HStack(spacing: 14) {
+            PaywallPlanCard(title: "月ごと", price: "¥300", caption: "/月", badge: nil, isSelected: false, onTap: {})
+            PaywallPlanCard(title: "年ごと", price: "¥3,000", caption: "¥250/月", badge: "2ヶ月ぶんお得", isSelected: true, onTap: {})
+        }
+        .padding()
+        .background(Color.inkPaper)
+    }
+}

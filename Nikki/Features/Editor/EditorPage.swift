@@ -11,7 +11,7 @@ struct EditorPage: View {
     @Environment(\.modelContext) private var modelContext
 
     var body: some View {
-        EditorScreenScaffold(caption: EditorDateText.caption(for: entry.date), onDismiss: { dismiss() }) {
+        EditorScreenScaffold(caption: editorDateText(date: entry.date), onDismiss: { dismiss() }) {
             VStack(alignment: .leading, spacing: 0) {
                 TextField(
                     "タイトル",

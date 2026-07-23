@@ -31,3 +31,15 @@ struct EditorCheckboxToggleStyle: ToggleStyle {
         .buttonStyle(.plain)
     }
 }
+
+struct EditorCheckboxToggleStyle_Previews: PreviewProvider {
+    static var previews: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Toggle(isOn: .constant(true)) { Text("麦茶のパック") }
+            Toggle(isOn: .constant(false)) { Text("蚊取り線香") }
+        }
+        .toggleStyle(EditorCheckboxToggleStyle())
+        .padding()
+        .background(Color.inkPaper)
+    }
+}
