@@ -1,14 +1,16 @@
 import SwiftUI
 
 /// 自動ロック時に表示するロック画面(1f)。背景の日記本文をぼかして中身を守り、
-/// 中央のオーバーレイで再開を促す。解除後は呼び出し側が直前の画面へ復帰させる。
+/// 中央のオーバーレイで再開を促す。解除に成功すると locked を false に戻し、直前の画面がそのまま現れる。
 struct LockPage: View {
-    /// Face ID ボタンのタップで呼ばれる。実際の生体認証・解除処理は呼び出し側が担う。
+    /// 自動ロック状態。Face ID 解除の成功で false に戻す。
+    @Binding var locked: Bool
+
     var body: some View {
         ZStack {
             Color.inkPaper
             LockSkeletonBackground()
-            LockOverlay()
+            LockOverlay(locked: $locked)
         }
         .ignoresSafeArea()
     }
@@ -16,6 +18,6 @@ struct LockPage: View {
 
 struct LockPage_Previews: PreviewProvider {
     static var previews: some View {
-        LockPage()
+        LockPage(locked: .constant(true))
     }
 }

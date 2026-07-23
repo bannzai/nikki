@@ -1,10 +1,18 @@
 import SwiftUI
+import LocalAuthentication
 
 /// 「Face ID で開く」墨 pill ボタン。高さ50・横パディング26・角丸25。
+/// タップで生体認証(使えない場合はパスコード)を評価し、成功したら locked を false に戻す。
 struct LockFaceIDButton: View {
+    /// 自動ロック状態。解除の成功で false に戻す。
+    @Binding var locked: Bool
+
     var body: some View {
-        // 自動ロック・Face ID 解除は未実装のため、ボタンはまだ何もしない(https://github.com/bannzai/nikki/issues/14)。
-        Button {} label: {
+        Button {
+            Task {
+                await unlock()
+            }
+        } label: {
             HStack(spacing: 10) {
                 Image(systemName: InkIcons.faceID)
                     .font(.system(size: 18, weight: .regular))
@@ -13,6 +21,20 @@ struct LockFaceIDButton: View {
             }
         }
         .buttonStyle(LockFaceIDButtonStyle())
+    }
+
+    /// 生体認証でロックを解除する。キャンセル・失敗時はロックを維持する。
+    private func unlock() async {
+        let context = LAContext()
+        // パスコード未設定の端末(シミュレータ等)は評価できる認証手段がなく締め出しになるため、そのまま解除する。
+        if !context.canEvaluatePolicy(.deviceOwnerAuthentication, error: nil) {
+            locked = false
+            return
+        }
+        // Face ID が未登録・失敗した場合でもパスコードで解除できるよう .deviceOwnerAuthentication を使う。
+        if (try? await context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: "日記のロックを解除します")) == true {
+            locked = false
+        }
     }
 }
 
@@ -32,7 +54,7 @@ private struct LockFaceIDButtonStyle: ButtonStyle {
 
 struct LockFaceIDButton_Previews: PreviewProvider {
     static var previews: some View {
-        LockFaceIDButton()
+        LockFaceIDButton(locked: .constant(true))
             .padding()
             .background(Color.inkPaper)
     }
