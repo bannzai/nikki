@@ -39,11 +39,11 @@ struct ScreenContent: View {
         case .entryList:
             // HomePage は @Query で日記を読むため、in-memory コンテナ(SampleData 投入済み)の下で NavigationStack に載せる。
             NavigationStack {
-                HomePage(today: SampleData.referenceToday, initialMode: .list)
+                HomePage(today: SampleData.referenceToday, selectedIndex: HomePageMode.list.rawValue)
             }
         case .calendar:
             NavigationStack {
-                HomePage(today: SampleData.referenceToday, initialMode: .calendar)
+                HomePage(today: SampleData.referenceToday, selectedIndex: HomePageMode.calendar.rawValue)
             }
         case .editorWriting:
             EditorWritingPage(entry: SampleData.sampleEntry)
@@ -56,7 +56,11 @@ struct ScreenContent: View {
                 TemplateListPage()
             }
         case .templateVariable:
-            TemplateVariablePage(template: SampleData.reflectionTemplate, today: SampleData.referenceToday)
+            let template = SampleData.reflectionTemplate
+            TemplateVariablePage(
+                template: template,
+                fields: TemplateVariableField.fields(for: template, today: SampleData.referenceToday, includesDemoValues: true)
+            )
         case .theme:
             ThemePage(selected: .ecru)
         case .paywall:

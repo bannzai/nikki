@@ -17,7 +17,7 @@ struct RootPage: View {
             NavigationStack {
                 // アプリを開いたまま日付をまたいでも「今日」の表示が追従するよう、分刻みの時計から today を渡す。
                 TimelineView(.everyMinute) { context in
-                    HomePage(today: context.date)
+                    HomePage(today: context.date, selectedIndex: HomePageMode.list.rawValue)
                 }
             }
         } else {

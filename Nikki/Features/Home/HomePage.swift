@@ -7,18 +7,13 @@ import SwiftData
 struct HomePage: View {
     let today: Date
 
-    /// セグメントの選択状態。切替時に相互のモードへ即時に切り替わる。
+    /// セグメントの選択状態。切替時に相互のモードへ即時に切り替わる。初期値は呼び出し側が HomePageMode の rawValue で決める。
     @State var selectedIndex: Int
+
     /// FAB からのテンプレート一覧(1l)への遷移状態。
     @State var templateListIsPresented: Bool = false
 
     @Query(sort: \JournalEntry.date, order: .reverse) var entries: [JournalEntry]
-
-    /// @State の初期値を initialMode から決めるため custom init を用いる。
-    init(today: Date, initialMode: HomePageMode = .list) {
-        self.today = today
-        self._selectedIndex = State(initialValue: initialMode.rawValue)
-    }
 
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
