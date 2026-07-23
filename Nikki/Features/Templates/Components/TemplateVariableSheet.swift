@@ -11,8 +11,6 @@ struct TemplateVariableSheet: View {
     @FocusState private var focusedFieldName: String?
 
     var body: some View {
-        let generatedMarkdown = TemplateVariableField.substitutedMarkdown(template: template, fields: fields)
-
         VStack(alignment: .leading, spacing: 0) {
             RoundedRectangle(cornerRadius: 3, style: .continuous)
                 .fill(Color(hex: 0xD5D4CF))
@@ -36,7 +34,7 @@ struct TemplateVariableSheet: View {
                 }
             }
 
-            TemplateMarkdownPreview(markdown: generatedMarkdown)
+            TemplateMarkdownPreview(markdown: TemplateVariableField.substitutedMarkdown(template: template, fields: fields))
                 .padding(.top, 18)
 
             InkPrimaryButton("この内容ではじめる", action: onStart)

@@ -3,7 +3,7 @@ import SwiftUI
 /// エディタ 執筆中(1i)の静的表現。カタログモードのデザイン検証用。
 /// ツールバー・装飾は出さず、2つ目の段落末尾に点滅キャレットを置く。
 struct EditorWritingPage: View {
-    var entry: JournalEntry = SampleData.sampleEntry
+    let entry: JournalEntry
 
     var body: some View {
         EditorScreenScaffold(caption: EditorDateText.caption(for: entry.date)) {

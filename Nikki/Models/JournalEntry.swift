@@ -56,14 +56,9 @@ final class JournalEntry {
         updatedAt = .now
     }
 
-    /// 本文 markdown をパースした表示用のブロック列。
-    var blocks: [Block] {
-        Block.blocks(fromMarkdown: bodyMarkdown)
-    }
-
     /// 一覧の抜粋に使う、本文段落を連結したプレーンテキスト。
     var excerpt: String {
-        blocks.compactMap { block -> String? in
+        Block.blocks(fromMarkdown: bodyMarkdown).compactMap { block -> String? in
             switch block {
             case .paragraph(_, let text): return text
             case .heading(_, _, let text): return text

@@ -33,8 +33,7 @@ struct NikkiApp: App {
                 for: JournalEntry.self, JournalTemplate.self,
                 configurations: ModelConfiguration(cloudKitDatabase: .private("iCloud.com.bannzai.Nikki"))
             )
-            let templateCount = (try? container.mainContext.fetchCount(FetchDescriptor<JournalTemplate>())) ?? 0
-            if templateCount == 0 {
+            if ((try? container.mainContext.fetchCount(FetchDescriptor<JournalTemplate>())) ?? 0) == 0 {
                 for template in SampleData.templates {
                     container.mainContext.insert(template)
                 }

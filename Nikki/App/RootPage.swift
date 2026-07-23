@@ -11,6 +11,7 @@ struct RootPage: View {
     // AppStorage の key 名は変数名と一致させる。
     @AppStorage("onboardingCompleted") var onboardingCompleted: Bool = false
 
+    /// 表示中のオンボーディングステップ。
     @State var step: OnboardingStep = .welcome
 
     var body: some View {

@@ -103,15 +103,12 @@ nonisolated extension Block {
         }
         return source.substring(with: match.range(at: 1))
     }
-}
 
-// MARK: - [Block] → markdown
+    // MARK: - [Block] → markdown
 
-// 状態を持たない純粋関数のため nonisolated にし、nonisolated な @Model のプロパティからも呼べるようにする。
-nonisolated extension [Block] {
-    /// ブロック列を markdown 文字列にする。ブロック間は空行で区切り、Block.blocks(fromMarkdown:) と往復できる形にする。
-    var markdown: String {
-        map { block -> String in
+    /// ブロック列を markdown 文字列にする。ブロック間は空行で区切り、blocks(fromMarkdown:) と往復できる形にする。
+    static func markdown(from blocks: [Block]) -> String {
+        blocks.map { block -> String in
             switch block {
             case .heading(_, let level, let text):
                 return String(repeating: "#", count: level) + " " + text

@@ -64,8 +64,10 @@ struct TemplateListPage: View {
 
     /// 変数を差し込んだ markdown から日記を作成・保存し、エディタへ進む。
     private func start(_ template: JournalTemplate) {
-        let markdown = TemplateVariableField.substitutedMarkdown(template: template, fields: fields)
-        let entry = JournalEntry(templateMarkdown: markdown, date: .now)
+        let entry = JournalEntry(
+            templateMarkdown: TemplateVariableField.substitutedMarkdown(template: template, fields: fields),
+            date: .now
+        )
         modelContext.insert(entry)
         try? modelContext.save()
         self.template = nil
