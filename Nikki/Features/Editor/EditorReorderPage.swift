@@ -8,8 +8,8 @@ struct EditorReorderPage: View {
     var body: some View {
         EditorScreenScaffold(caption: "並び替え — 指を離すと確定", onDismiss: {}) {
             VStack(alignment: .leading, spacing: 10) {
-                let paragraphs = EditorBlockPicker.paragraphTexts(entry)
-                let headings = EditorBlockPicker.headingTexts(entry)
+                let paragraphs = entry.blocks.paragraphTexts
+                let headings = entry.blocks.headingTexts
                 EditorReorderRow {
                     Text(entry.title)
                         .font(.ink(20, .bold))

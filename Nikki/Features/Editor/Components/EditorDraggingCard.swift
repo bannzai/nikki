@@ -7,11 +7,11 @@ struct EditorDraggingCard: View {
     var body: some View {
         EditorReorderRow(active: true) {
             VStack(alignment: .leading, spacing: 8) {
-                Text(EditorBlockPicker.headingTexts(entry).first ?? "")
+                Text(entry.blocks.headingTexts.first ?? "")
                     .font(.ink(16, .bold))
                     .foregroundStyle(Color.ink)
                 EditorChecklistBlock(
-                    items: EditorBlockPicker.firstChecklist(entry),
+                    items: entry.blocks.firstChecklistItems,
                     boxSize: 17,
                     fontSize: 14,
                     rowSpacing: 7,

@@ -9,7 +9,7 @@ struct EditorWritingPage: View {
         EditorScreenScaffold(caption: EditorDateText.caption(for: entry.date), onDismiss: {}) {
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 0) {
-                    let paragraphs = EditorBlockPicker.paragraphTexts(entry)
+                    let paragraphs = entry.blocks.paragraphTexts
                     Text(entry.title)
                         .font(.inkEntryTitle)
                         .lineSpacing(inkLineSpacing(fontSize: 22, multiplier: 1.6))

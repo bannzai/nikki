@@ -58,9 +58,16 @@ final class JournalEntry {
         updatedAt = .now
     }
 
+    /// 本文 markdown をパースした表示用のブロック列。
+    /// パーサ呼び出しだけの getter だが、使用側が毎回 Block.blocks(fromMarkdown:) を書かずに済むよう
+    /// データの所有者側で導出を提供する(レビュー指示による規約からの逸脱)。
+    var blocks: [Block] {
+        Block.blocks(fromMarkdown: bodyMarkdown)
+    }
+
     /// 一覧の抜粋に使う、本文段落を連結したプレーンテキスト。
     var excerpt: String {
-        Block.blocks(fromMarkdown: bodyMarkdown).compactMap { block -> String? in
+        blocks.compactMap { block -> String? in
             switch block {
             case .paragraph(_, let text): return text
             case .heading(_, _, let text): return text

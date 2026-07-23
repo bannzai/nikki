@@ -9,19 +9,19 @@ struct EditorSelectionPage: View {
         EditorScreenScaffold(caption: EditorDateText.caption(for: entry.date), onDismiss: {}) {
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 0) {
-                    let firstParagraph = EditorBlockPicker.paragraphTexts(entry).first
-                    let selectedHeading = EditorBlockPicker.headingTexts(entry).first
+                    // パースの二重計算を避けるため、body 内でローカル let に束縛して使い回す。
+                    let blocks = entry.blocks
                     Text(entry.title)
                         .font(.inkEntryTitle)
                         .lineSpacing(inkLineSpacing(fontSize: 22, multiplier: 1.6))
                         .foregroundStyle(Color.ink)
                         .padding(.bottom, 14)
 
-                    if let firstParagraph {
+                    if let firstParagraph = blocks.paragraphTexts.first {
                         EditorParagraphBlock(text: firstParagraph)
                     }
 
-                    if let selectedHeading {
+                    if let selectedHeading = blocks.headingTexts.first {
                         EditorSelectedHeading(text: selectedHeading)
                             .padding(.top, 26)
                             .overlay(alignment: .topLeading) {
@@ -31,15 +31,15 @@ struct EditorSelectionPage: View {
                             }
                     }
 
-                    EditorChecklistBlock(items: EditorBlockPicker.firstChecklist(entry))
+                    EditorChecklistBlock(items: blocks.firstChecklistItems)
                         .padding(.top, 16)
 
-                    if let label = EditorBlockPicker.firstImageLabel(entry) {
+                    if let label = blocks.firstImageLabel {
                         EditorImageBlock(label: label)
                             .padding(.top, 22)
                     }
 
-                    if let summary = EditorBlockPicker.firstDetailsSummary(entry) {
+                    if let summary = blocks.firstDetailsSummary {
                         EditorDetailsBlock(summary: summary)
                             .padding(.top, 18)
                     }
