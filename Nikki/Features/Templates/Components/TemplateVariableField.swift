@@ -1,7 +1,8 @@
 import Foundation
 
 /// 変数入力シート(1m)の 1 変数分の入力状態。
-struct TemplateVariableField: Identifiable {
+/// Equatable は入力変化の検知(onChange)に使う(実装はコンパイラの自動合成)。
+struct TemplateVariableField: Identifiable, Equatable {
     var id: String { name }
     /// 変数名({{date}} の date 部分)。
     let name: String
