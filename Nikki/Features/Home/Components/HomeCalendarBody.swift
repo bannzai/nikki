@@ -3,16 +3,17 @@ import SwiftUI
 /// カレンダー本体。月送り・曜日ヘッダ・日グリッド(日記の墨ドット / today の墨円)と today の日記プレビューを表示する。
 struct HomeCalendarBody: View {
     let entries: [JournalEntry]
-    let today: Date
 
     /// 表示中の月(1日 00:00)。‹ › で前後の月に移動する。初期値は呼び出し側が決める。
     @State var displayedMonth: Date
+
+    @Environment(\.today) private var today
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             HomeCalendarMonthNav(displayedMonth: $displayedMonth)
             HomeCalendarWeekdayHeader()
-            HomeCalendarDaysGrid(entries: entries, today: today, displayedMonth: displayedMonth)
+            HomeCalendarDaysGrid(entries: entries, displayedMonth: displayedMonth)
             // 前後の月を表示している間は today のカードが紛らわしいため、today を含む月だけプレビューを出す。
             if let entry = entries.first(where: { Calendar.display.isDate($0.date, inSameDayAs: today) }),
                Calendar.display.isDate(today, equalTo: displayedMonth, toGranularity: .month) {
@@ -42,10 +43,10 @@ struct HomeCalendarBody_Previews: PreviewProvider {
         NavigationStack {
             HomeCalendarBody(
                 entries: SampleData.entries,
-                today: SampleData.referenceToday,
                 displayedMonth: HomeCalendarMonth.startOfMonth(date: SampleData.referenceToday)
             )
         }
+        .environment(\.today, SampleData.referenceToday)
         .background(Color.inkPaper)
     }
 }

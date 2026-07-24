@@ -7,10 +7,19 @@ import SwiftData
 struct EditorPage: View {
     let entry: JournalEntry
 
+    @AppStorage(.textSize) var textSize: TextSize = .standard
+
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.resetAutoLockTimer) private var resetAutoLockTimer
 
     var body: some View {
+        // 設定「文字の大きさ」は書く時間が長い本文にだけ反映する。標準は見本の 15pt、前後は読みやすさを保つ 2pt 刻み。
+        let bodyFontSize: CGFloat = switch textSize {
+        case .small: 13
+        case .standard: 15
+        case .large: 17
+        }
         EditorScreenScaffold(caption: editorDateText(date: entry.date), onDismiss: { dismiss() }) {
             VStack(alignment: .leading, spacing: 0) {
                 TextField(
@@ -23,8 +32,8 @@ struct EditorPage: View {
                 .padding(.bottom, 8)
 
                 TextEditor(text: Binding(get: { entry.bodyMarkdown }, set: { entry.setBodyMarkdown($0) }))
-                    .font(.ink(15))
-                    .lineSpacing(inkLineSpacing(fontSize: 15, multiplier: 2.05))
+                    .font(.ink(bodyFontSize))
+                    .lineSpacing(inkLineSpacing(fontSize: bodyFontSize, multiplier: 2.05))
                     .foregroundStyle(Color.ink)
                     .scrollContentBackground(.hidden)
                     .scrollIndicators(.hidden)
@@ -33,6 +42,10 @@ struct EditorPage: View {
             .padding(.top, 10)
         }
         .toolbar(.hidden, for: .navigationBar)
+        // キーボード入力はタッチとして拾えないため、書き込み(updatedAt の更新)を無操作タイマーのリセットにする。
+        .onChange(of: entry.updatedAt) {
+            resetAutoLockTimer()
+        }
         .onDisappear {
             // 直後にアプリが kill されても書きかけが残るよう、画面を離れるときに明示保存する(平常時は autosave が保存する)。
             try? modelContext.save()

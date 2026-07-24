@@ -1,12 +1,15 @@
 import SwiftUI
 
-/// 右上の × クローズボタン行。
+/// 右上の × クローズボタン行。ペイウォールのシートを閉じる。
 struct PaywallCloseButton: View {
+    @Environment(\.dismiss) private var dismiss
+
     var body: some View {
         HStack {
             Spacer()
-            // ペイウォールの表示導線が未配線のため、閉じる処理もまだ何もしない(https://github.com/bannzai/nikki/issues/14)。
-            Button {} label: {
+            Button {
+                dismiss()
+            } label: {
                 Image(systemName: InkIcons.close)
                     .font(.system(size: 15, weight: .regular))
                     .foregroundStyle(Color.inkTextTertiary)

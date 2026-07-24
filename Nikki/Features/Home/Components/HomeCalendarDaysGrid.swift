@@ -3,8 +3,9 @@ import SwiftUI
 /// カレンダーの日グリッド。先頭に月初めまでの空白セルを置き、7列で日セルを並べる。
 struct HomeCalendarDaysGrid: View {
     let entries: [JournalEntry]
-    let today: Date
     let displayedMonth: Date
+
+    @Environment(\.today) private var today
 
     var body: some View {
         let cells = gridDays()
@@ -27,7 +28,7 @@ struct HomeCalendarDaysGrid: View {
         let todayStart = calendar.startOfDay(for: today)
 
         var cells = Array(
-            repeating: HomeCalendarDay(day: nil, isToday: false, isFuture: false, hasEntry: false),
+            repeating: HomeCalendarDay(day: nil, isToday: false, isFuture: false, entry: nil),
             count: leadingBlanks
         )
         for day in dayRange {
@@ -36,7 +37,7 @@ struct HomeCalendarDaysGrid: View {
                 day: day,
                 isToday: calendar.isDate(date, inSameDayAs: today),
                 isFuture: calendar.startOfDay(for: date) > todayStart,
-                hasEntry: entries.contains { calendar.isDate($0.date, inSameDayAs: date) }
+                entry: entries.first { calendar.isDate($0.date, inSameDayAs: date) }
             ))
         }
         return cells
@@ -51,17 +52,17 @@ struct HomeCalendarDay {
     let isToday: Bool
     /// today より未来の日か(微色で表示する)。
     let isFuture: Bool
-    /// その日に日記があるか(墨ドットを表示する)。
-    let hasEntry: Bool
+    /// その日の日記。墨ドットの表示と、タップでエディタを開く遷移に使う。同じ日に複数ある場合は最初の1件。
+    let entry: JournalEntry?
 }
 
 struct HomeCalendarDaysGrid_Previews: PreviewProvider {
     static var previews: some View {
         HomeCalendarDaysGrid(
             entries: SampleData.entries,
-            today: SampleData.referenceToday,
             displayedMonth: HomeCalendarMonth.startOfMonth(date: SampleData.referenceToday)
         )
+        .environment(\.today, SampleData.referenceToday)
         .padding()
         .background(Color.inkPaper)
     }

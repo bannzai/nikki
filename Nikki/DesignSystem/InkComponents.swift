@@ -74,27 +74,29 @@ struct InkFABButtonStyle: ButtonStyle {
     }
 }
 
-/// 検索バーの静的表現。実検索は未実装のため、入力状態は持たない。
+/// 検索バー。入力は呼び出し側の Binding に流し、絞り込み自体は呼び出し側が行う。
 struct InkSearchBar: View {
     // 見本(1g)のプレースホルダ文言。
     var placeholder: String = "日記をさがす"
-    var text: String = ""
+    @Binding var text: String
 
     var body: some View {
         HStack(spacing: 10) {
             Image(systemName: InkIcons.search)
                 .font(.system(size: 15, weight: .regular))
                 .foregroundStyle(Color.inkTextTertiary)
-            if text.isEmpty {
-                Text(placeholder)
+            TextField(
+                placeholder,
+                text: $text,
+                prompt: Text(placeholder)
                     .font(.ink(14, .regular))
                     .foregroundStyle(Color.inkTextTertiary)
-            } else {
-                Text(text)
-                    .font(.ink(14, .regular))
-                    .foregroundStyle(Color.ink)
-            }
-            Spacer(minLength: 0)
+            )
+            .font(.ink(14, .regular))
+            .foregroundStyle(Color.ink)
+            .autocorrectionDisabled()
+            .textInputAutocapitalization(.never)
+            .submitLabel(.search)
         }
         .padding(.horizontal, 14)
         .frame(height: 42)

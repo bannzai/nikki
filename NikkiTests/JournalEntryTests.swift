@@ -59,4 +59,50 @@ struct JournalEntryTests {
         )
         #expect(entry.excerpt == "朝から蝉が鳴いていた。 買ったもの")
     }
+
+    @Test("matches はタイトルと本文を大文字小文字を区別せず照合する")
+    func matchesSearchesTitleAndBody() {
+        let entry = JournalEntry(
+            date: .now,
+            title: "梅雨明け",
+            bodyMarkdown: "朝から蝉が鳴いていた。Iced Coffee を淹れた。",
+            createdAt: .now,
+            updatedAt: .now
+        )
+        #expect(entry.matches(searchText: "梅雨"))
+        #expect(entry.matches(searchText: "蝉"))
+        #expect(entry.matches(searchText: "iced coffee"))
+        #expect(!entry.matches(searchText: "雪"))
+    }
+
+    @Test("exportMarkdown は日付見出し + 本文を水平線で区切って連結する")
+    func exportMarkdownJoinsEntries() {
+        let entries = [
+            JournalEntry(
+                date: SampleData.date(2026, 7, 16),
+                title: "何もない日",
+                bodyMarkdown: "特別なことは何もなかった。",
+                createdAt: .now,
+                updatedAt: .now
+            ),
+            JournalEntry(
+                date: SampleData.date(2026, 7, 18),
+                title: "",
+                bodyMarkdown: "タイトルのない日。",
+                createdAt: .now,
+                updatedAt: .now
+            ),
+        ]
+        #expect(entries.exportMarkdown == """
+        # 2026-07-16 何もない日
+
+        特別なことは何もなかった。
+
+        ---
+
+        # 2026-07-18
+
+        タイトルのない日。
+        """)
+    }
 }

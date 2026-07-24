@@ -76,4 +76,30 @@ final class JournalEntry {
         }
         .joined(separator: " ")
     }
+
+    /// ホーム検索の照合。タイトルまたは本文 markdown に検索語が含まれるか(大文字小文字は区別しない)。
+    func matches(searchText: String) -> Bool {
+        title.localizedCaseInsensitiveContains(searchText)
+            || bodyMarkdown.localizedCaseInsensitiveContains(searchText)
+    }
+}
+
+// MARK: - Markdown 書き出し
+
+extension [JournalEntry] {
+    /// 設定「Markdown で書き出す」用に、全件を1つの markdown 文書へ連結したテキスト。
+    /// 日付(+ タイトル)の H1 見出しに本文を続け、日記ごとに水平線で区切る。
+    var exportMarkdown: String {
+        let formatter = DateFormatter()
+        // 表記は README の {{date}} と同じ 2026-07-19 形式に合わせ、日付の区切りは端末のタイムゾーンに追従させる。
+        formatter.timeZone = .autoupdatingCurrent
+        formatter.dateFormat = "yyyy-MM-dd"
+        return map { entry in
+            let heading = entry.title.isEmpty
+                ? "# \(formatter.string(from: entry.date))"
+                : "# \(formatter.string(from: entry.date)) \(entry.title)"
+            return "\(heading)\n\n\(entry.bodyMarkdown)"
+        }
+        .joined(separator: "\n\n---\n\n")
+    }
 }
