@@ -79,6 +79,8 @@ struct InkSearchBar: View {
     // 見本(1g)のプレースホルダ文言。
     var placeholder: String = "日記をさがす"
     @Binding var text: String
+    /// 呼び出し側がキーボードショートカット(⌘F)でフォーカスを当てるための binding。
+    var isFocused: FocusState<Bool>.Binding
 
     var body: some View {
         HStack(spacing: 10) {
@@ -94,6 +96,7 @@ struct InkSearchBar: View {
             )
             .font(.ink(14, .regular))
             .foregroundStyle(Color.ink)
+            .focused(isFocused)
             .autocorrectionDisabled()
             .textInputAutocapitalization(.never)
             .submitLabel(.search)
