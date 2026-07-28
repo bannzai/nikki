@@ -20,6 +20,9 @@
 	<string>1.0.0</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<!-- 独自の暗号実装を持たず、HTTPS と iCloud(CloudKit) の OS 標準暗号化のみを使うため輸出コンプライアンスの免除区分に該当する。提出ごとの申告質問を省くためここで宣言する -->
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>NSFaceIDUsageDescription</key>
 	<string>日記のロック解除に Face ID を使用します</string>
 	<key>UIAppFonts</key>
