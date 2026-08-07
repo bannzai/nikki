@@ -21,6 +21,9 @@ struct HomePage: View {
     /// FAB からのテンプレート一覧(1l)への遷移状態。
     @State var templateListIsPresented: Bool = false
 
+    /// 検索バーのフォーカス。⌘F ショートカットからも当てられるようにここで持つ。
+    @FocusState var searchFieldIsFocused: Bool
+
     @Query(sort: \JournalEntry.date, order: .reverse) var entries: [JournalEntry]
 
     @Environment(\.today) private var today
@@ -34,7 +37,7 @@ struct HomePage: View {
             VStack(alignment: .leading, spacing: 0) {
                 VStack(alignment: .leading, spacing: 14) {
                     HomeHeader()
-                    InkSearchBar(text: $searchText)
+                    InkSearchBar(text: $searchText, isFocused: $searchFieldIsFocused)
                     InkSegmentedControl(
                         options: HomePageMode.allCases.map { segmentLabel(for: $0) },
                         selectedIndex: Binding(
@@ -65,11 +68,22 @@ struct HomePage: View {
             Button {
                 templateListIsPresented = true
             } label: {
-                Image(systemName: InkIcons.pen)
+                // アイコンのみ表示しつつ、⌘ 長押しのショートカット一覧と VoiceOver に名前を出すため Label にする。
+                Label("新しい日記", systemImage: InkIcons.pen)
+                    .labelStyle(.iconOnly)
             }
             .buttonStyle(InkFABButtonStyle())
+            .keyboardShortcut("n", modifiers: .command)
             .padding(.trailing, 22)
             .padding(.bottom, 16)
+        }
+        // ハードウェアキーボード(iPad / Mac)から検索フィールドへフォーカスするためのショートカット。画面には出さない。
+        .background {
+            Button("日記をさがす") {
+                searchFieldIsFocused = true
+            }
+            .keyboardShortcut("f", modifiers: .command)
+            .hidden()
         }
         .toolbar(.hidden, for: .navigationBar)
         // キーボード入力はタッチとして拾えないため、検索の入力を無操作タイマーのリセットにする。

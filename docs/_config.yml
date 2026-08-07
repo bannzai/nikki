@@ -1,0 +1,4 @@
+# GitHub Pages (main ブランチ /docs) の Jekyll 設定。
+# .md へのリンクは jekyll-relative-links (Pages 既定プラグイン) が公開 URL に変換する。
+title: Nikki
+theme: jekyll-theme-primer

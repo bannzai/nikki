@@ -126,9 +126,11 @@ enum SampleData {
     /// プレビューとカタログモードが使う、サンプルデータ投入済みの in-memory コンテナを作る。
     static func inMemoryContainer() -> ModelContainer {
         do {
+            // cloudKitDatabase の既定 (.automatic) は entitlements のコンテナへ同期を試みるため、
+            // プレビュー・カタログ・テストから CloudKit に触れないよう .none を明示する。
             let container = try ModelContainer(
                 for: JournalEntry.self, JournalTemplate.self,
-                configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+                configurations: ModelConfiguration(isStoredInMemoryOnly: true, cloudKitDatabase: .none)
             )
             for entry in entries {
                 container.mainContext.insert(entry)
