@@ -50,5 +50,5 @@ For people who believe writing matters most when it's written by hand.
 
 ## URL (共通)
 
-- プライバシーポリシー URL: docs/legal/privacy-ja.html / privacy-en.html の公開 URL (ホスティング有効化後に確定)
-- サポート URL: 同上 (サポート窓口: bannzai.app@gmail.com)
+- プライバシーポリシー URL: https://bannzai.github.io/nikki/legal/privacy-ja.html (en は privacy-en.html)
+- サポート URL: https://bannzai.github.io/nikki/ (サポート窓口: bannzai.app@gmail.com)

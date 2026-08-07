@@ -52,5 +52,5 @@
 
 ## 法務ドキュメントの掲載
 
-- 利用規約 / プライバシーポリシー (日英) は `docs/legal/` に静的 HTML として用意済み
-- App Store の URL 要件を満たすため、公開ホスティング (GitHub Pages 等) の有効化が別途必要
+- 利用規約 / プライバシーポリシー (日英) は `docs/legal/` に markdown で用意し、GitHub Pages (main ブランチ /docs, Jekyll) で公開する
+- 公開 URL: https://bannzai.github.io/nikki/legal/terms-ja.html ほか (.md は Jekyll が .html に変換する)
