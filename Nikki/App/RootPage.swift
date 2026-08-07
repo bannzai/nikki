@@ -30,6 +30,9 @@ struct RootPage: View {
                 NavigationStack {
                     HomePage()
                 }
+                // ロック中は下の画面ごと無効化し、ハードウェアキーボードのショートカット(⌘N / ⌘F)が
+                // ロックの裏で画面状態を変えないようにする。
+                .disabled(locked)
                 // 画面に触れている間はロックしないよう、配下へのあらゆるタッチを無操作起点のリセットとして拾う。
                 .simultaneousGesture(
                     DragGesture(minimumDistance: 0).onChanged { _ in registerActivity() }
