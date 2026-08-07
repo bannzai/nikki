@@ -41,7 +41,7 @@ Because the Developer does not collect or process your personal data, no process
 
 ## 8. Deleting Your Data
 
-You can delete your journal data at any time by removing the App's data from your device's iCloud settings (Settings &gt; Apple Account &gt; iCloud), or by deleting the App along with its data. You do not need to ask the Developer to delete your data — the Developer holds no data and therefore cannot delete it on your behalf.
+You can delete your journal data at any time by removing the App's data from your device's iCloud settings (Settings &gt; Apple Account &gt; iCloud). This removes the data stored in your iCloud account. Note that simply deleting the App from your device does not remove the data already synced to iCloud. You do not need to ask the Developer to delete your data — the Developer holds no data and therefore cannot delete it on your behalf.
 
 ## 9. Children's Privacy
 
