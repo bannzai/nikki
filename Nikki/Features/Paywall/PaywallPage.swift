@@ -10,6 +10,8 @@ struct PaywallPage: View {
     @State var selectedPlan: PaywallPlan = .yearly
     /// RevenueCat の current offering(`default`)。読み込み中・失敗・未 configure の間は nil。
     @State var offering: Offering?
+    /// 買い切り済み・サブスク加入中の判定に使う顧客情報。読み込み中・未 configure の間は nil。
+    @State var customerInfo: CustomerInfo?
     /// offering の取得に失敗したかどうか。再読み込みの導線を出す。
     @State var offeringLoadFailed = false
     /// 購入・復元の処理中かどうか。二重実行を防ぎ、ボタンを無効化する。
@@ -51,41 +53,64 @@ struct PaywallPage: View {
                         PaywallBenefitRow(title: "テーマを増やす", description: "薄鼠・青磁・桜鼠。紙の色をすべて解放。")
                             .padding(.bottom, 28)
 
-                        // offering に存在する package のカードだけを表示する。
-                        // 未 configure(カタログ・プレビュー)は見本価格で全カードを表示する。
-                        HStack(spacing: 12) {
-                            if offering?.monthly != nil || !Purchases.isConfigured {
-                                PaywallPlanCard(
-                                    title: "月ごと",
-                                    price: planPrice(package: offering?.monthly, samplePrice: "¥300"),
-                                    caption: "/月",
-                                    badge: nil,
-                                    isSelected: selectedPlan == .monthly,
-                                    onTap: { selectedPlan = .monthly }
-                                )
+                        if lifetimePurchased {
+                            Text("買い切りを購入済みのため、Nikki Plus はずっと有効です。")
+                                .font(.ink(12.5, .regular))
+                                .foregroundStyle(Color.inkTextSecondary)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        } else {
+                            // offering に存在する package のカードだけを表示する。
+                            // 未 configure(カタログ・プレビュー)は見本価格で全カードを表示する。
+                            HStack(spacing: 12) {
+                                if offering?.monthly != nil || !Purchases.isConfigured {
+                                    PaywallPlanCard(
+                                        title: "月ごと",
+                                        price: planPrice(package: offering?.monthly, samplePrice: "¥300"),
+                                        caption: "/月",
+                                        badge: nil,
+                                        isSelected: selectedPlan == .monthly,
+                                        onTap: { selectedPlan = .monthly }
+                                    )
+                                }
+                                if offering?.annual != nil || !Purchases.isConfigured {
+                                    PaywallPlanCard(
+                                        title: "年ごと",
+                                        price: planPrice(package: offering?.annual, samplePrice: "¥3,000"),
+                                        caption: annualPerMonthCaption(),
+                                        badge: annualSavingsBadge(),
+                                        isSelected: selectedPlan == .yearly,
+                                        onTap: { selectedPlan = .yearly }
+                                    )
+                                }
                             }
-                            if offering?.annual != nil || !Purchases.isConfigured {
-                                PaywallPlanCard(
-                                    title: "年ごと",
-                                    price: planPrice(package: offering?.annual, samplePrice: "¥3,000"),
-                                    caption: annualPerMonthCaption(),
-                                    badge: annualSavingsBadge(),
-                                    isSelected: selectedPlan == .yearly,
-                                    onTap: { selectedPlan = .yearly }
-                                )
-                            }
-                        }
-                        .padding(.bottom, 12)
+                            .padding(.bottom, 12)
 
-                        if offering?.lifetime != nil || !Purchases.isConfigured {
-                            PaywallPlanCard(
-                                title: "買い切り",
-                                price: planPrice(package: offering?.lifetime, samplePrice: "¥12,000"),
-                                caption: "一度の購入で、ずっと",
-                                badge: nil,
-                                isSelected: selectedPlan == .lifetime,
-                                onTap: { selectedPlan = .lifetime }
-                            )
+                            if offering?.lifetime != nil || !Purchases.isConfigured {
+                                PaywallPlanCard(
+                                    title: "買い切り",
+                                    price: planPrice(package: offering?.lifetime, samplePrice: "¥12,000"),
+                                    caption: "一度の購入で、ずっと",
+                                    badge: nil,
+                                    isSelected: selectedPlan == .lifetime,
+                                    onTap: { selectedPlan = .lifetime }
+                                )
+
+                                // 買い切りを購入しても既存の自動更新サブスクは解約されないため、加入中は明示して管理画面へ誘導する。
+                                if subscriptionActive {
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text("買い切りを購入しても、加入中のサブスクリプションは自動では解約されません。購入後に App Store のサブスクリプション設定から解約してください。")
+                                            .foregroundStyle(Color.inkTextTertiary)
+                                            .lineSpacing(inkLineSpacing(fontSize: 11.5, multiplier: 1.9))
+                                        Button("サブスクリプションを管理") {
+                                            openURL(URL(string: "https://apps.apple.com/account/subscriptions")!)
+                                        }
+                                        .foregroundStyle(Color.ink)
+                                    }
+                                    .font(.ink(11.5, .regular))
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .padding(.top, 12)
+                                }
+                            }
                         }
 
                         if Purchases.isConfigured && offering == nil && !offeringLoadFailed {
@@ -116,7 +141,7 @@ struct PaywallPage: View {
                     }
                 }
                 .buttonStyle(InkPrimaryButtonStyle())
-                .disabled(purchasing || selectedPackage == nil)
+                .disabled(purchasing || selectedPackage == nil || lifetimePurchased)
                 .padding(.top, 14)
 
                 HStack(spacing: 22) {
@@ -144,6 +169,16 @@ struct PaywallPage: View {
         .alert(paywallAlertMessage, isPresented: $paywallAlertIsPresented) {
             Button("OK") {}
         }
+    }
+
+    /// 買い切り(非消耗型)を購入済みかどうか。本アプリの非消耗型商品は買い切り(nikki_plus_lifetime)のみ。
+    private var lifetimePurchased: Bool {
+        customerInfo?.nonSubscriptions.isEmpty == false
+    }
+
+    /// 自動更新サブスクリプション(月額・年額)が有効かどうか。
+    private var subscriptionActive: Bool {
+        customerInfo?.activeSubscriptions.isEmpty == false
     }
 
     /// 選択中プランに対応する package。offering 未取得の間は nil。
@@ -192,6 +227,8 @@ struct PaywallPage: View {
             return
         }
         offeringLoadFailed = false
+        // 買い切り済み・サブスク加入中の表示分岐に使う。取得失敗しても価格表示は続行できるため try? に留める。
+        customerInfo = try? await Purchases.shared.customerInfo()
         do {
             offering = try await Purchases.shared.offerings().current
             if offering == nil {
