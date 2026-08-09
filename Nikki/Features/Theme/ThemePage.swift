@@ -6,7 +6,10 @@ struct ThemePage: View {
     // 見本(1n)の初期選択が「生成」(プリセット2番目)のため。
     @AppStorage(.paperColorPresetIndex) var paperColorPresetIndex: Int = 1
 
+    @State var paywallSheetIsPresented = false
+
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.plusActive) private var plusActive
 
     var body: some View {
         // 保存済みの index がプリセットの範囲外(将来のプリセット変更等)でも落ちないよう既定の「生成」に倒す。
@@ -29,7 +32,9 @@ struct ThemePage: View {
                                 ThemeColorSwatch(
                                     index: index,
                                     label: paperColorPresetLabel(index: index),
-                                    selectedIndex: $paperColorPresetIndex
+                                    selectedIndex: $paperColorPresetIndex,
+                                    locked: paperColorPresetRequiresPlus(index: index) && !plusActive,
+                                    paywallSheetIsPresented: $paywallSheetIsPresented
                                 )
                             }
                         }
@@ -54,6 +59,9 @@ struct ThemePage: View {
             }
         }
         .toolbar(.hidden, for: .navigationBar)
+        .sheet(isPresented: $paywallSheetIsPresented) {
+            PaywallPage()
+        }
     }
 }
 
@@ -68,4 +76,10 @@ func paperColorPresetLabel(index: Int) -> String {
     case 4: return "桜鼠"
     default: return ""
     }
+}
+
+/// 紙色プリセットが Nikki Plus 限定かどうか。
+/// 無料の範囲は白・生成(先頭2つ)。既定の「生成」を無課金のまま使い続けられるようにしつつ、それ以降をプレミアムテーマとして解放境界にする。
+func paperColorPresetRequiresPlus(index: Int) -> Bool {
+    index >= 2
 }
