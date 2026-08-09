@@ -12,9 +12,11 @@ struct ThemePage: View {
     @Environment(\.plusActive) private var plusActive
 
     var body: some View {
+        // Plus 失効後は保存値を残したまま無料範囲へ倒した添字で表示する(再加入で元の選択に戻る)。
+        let effectiveIndex = effectivePaperColorPresetIndex(storedIndex: paperColorPresetIndex, plusActive: plusActive)
         // 保存済みの index がプリセットの範囲外(将来のプリセット変更等)でも落ちないよう既定の「生成」に倒す。
-        let paperColor = Color.paperColorPreset.indices.contains(paperColorPresetIndex)
-            ? Color.paperColorPreset[paperColorPresetIndex]
+        let paperColor = Color.paperColorPreset.indices.contains(effectiveIndex)
+            ? Color.paperColorPreset[effectiveIndex]
             : Color.paperColorPreset[1]
         ZStack {
             Color.inkPaper.ignoresSafeArea()
@@ -32,7 +34,11 @@ struct ThemePage: View {
                                 ThemeColorSwatch(
                                     index: index,
                                     label: paperColorPresetLabel(index: index),
-                                    selectedIndex: $paperColorPresetIndex,
+                                    // 選択中の見た目も失効時のフォールバック(effectiveIndex)に合わせるため、保存値を直接渡さない。
+                                    selectedIndex: Binding(
+                                        get: { effectivePaperColorPresetIndex(storedIndex: paperColorPresetIndex, plusActive: plusActive) },
+                                        set: { paperColorPresetIndex = $0 }
+                                    ),
                                     locked: paperColorPresetRequiresPlus(index: index) && !plusActive,
                                     paywallSheetIsPresented: $paywallSheetIsPresented
                                 )
@@ -82,4 +88,13 @@ func paperColorPresetLabel(index: Int) -> String {
 /// 無料の範囲は白・生成(先頭2つ)。既定の「生成」を無課金のまま使い続けられるようにしつつ、それ以降をプレミアムテーマとして解放境界にする。
 func paperColorPresetRequiresPlus(index: Int) -> Bool {
     index >= 2
+}
+
+/// 実際に適用する紙色プリセットの添字。Plus が無効な間は Plus 限定の保存値を無料の既定「生成」(index 1)へ倒す。
+/// 保存値自体は書き換えない(再加入した時に元の選択へ戻すため)。
+func effectivePaperColorPresetIndex(storedIndex: Int, plusActive: Bool) -> Int {
+    if paperColorPresetRequiresPlus(index: storedIndex) && !plusActive {
+        return 1
+    }
+    return storedIndex
 }

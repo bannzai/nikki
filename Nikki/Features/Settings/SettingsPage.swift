@@ -72,7 +72,8 @@ struct SettingsPage: View {
                         InkListSection {
                             InkListRow(
                                 title: "テーマ",
-                                value: paperColorPresetLabel(index: paperColorPresetIndex),
+                                // Plus 失効時はテーマ画面のフォールバックと同じ実効値を表示する。
+                                value: paperColorPresetLabel(index: effectivePaperColorPresetIndex(storedIndex: paperColorPresetIndex, plusActive: plusActive)),
                                 action: { themeIsPresented = true }
                             )
                             InkListRow(

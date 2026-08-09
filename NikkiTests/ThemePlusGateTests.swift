@@ -10,4 +10,12 @@ struct ThemePlusGateTests {
         #expect(paperColorPresetRequiresPlus(index: 3) == true)
         #expect(paperColorPresetRequiresPlus(index: 4) == true)
     }
+
+    @Test("Plus 失効中は Plus 限定の保存値を生成へ倒し、無料の保存値と加入中はそのまま")
+    func effectiveIndexFallsBackWhenPlusInactive() {
+        #expect(effectivePaperColorPresetIndex(storedIndex: 3, plusActive: false) == 1)
+        #expect(effectivePaperColorPresetIndex(storedIndex: 3, plusActive: true) == 3)
+        #expect(effectivePaperColorPresetIndex(storedIndex: 0, plusActive: false) == 0)
+        #expect(effectivePaperColorPresetIndex(storedIndex: 1, plusActive: false) == 1)
+    }
 }
