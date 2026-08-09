@@ -2,9 +2,11 @@ import SwiftUI
 import RevenueCat
 
 /// サブスク訴求 / ペイウォール画面(1q「Nikki Plus」)。
-/// 訴求軸はデバイス数・同期。料金プランは offering `default` の packages から表示し、購入・復元は RevenueCat 経由で行う。
+/// 料金プランは offering `default` の packages から表示し、購入・復元は RevenueCat 経由で行う。
+/// 特典の記載は現時点で実際に解放される機能(プレミアムテーマ)のみに絞る(同期・テンプレート等は各ゲートの実装時に追加する)。
 struct PaywallPage: View {
     /// 見本(1q)では年プランを選択済みとして墨枠強調しているため、初期選択は年プラン。
+    /// offering に年プランが無い場合は loadOffering() で購入可能なプランへ倒す。
     @State var selectedPlan: PaywallPlan = .yearly
     /// RevenueCat の current offering(`default`)。読み込み中・失敗・未 configure の間は nil。
     @State var offering: Offering?
@@ -31,77 +33,82 @@ struct PaywallPage: View {
                     .padding(.top, 6)
                     .padding(.bottom, 4)
 
-                PaywallHeader()
-                    .padding(.top, 10)
-                    .padding(.bottom, 16)
+                // 高さが足りない端末(iPhone SE・横画面等)でも購入ボタンと復元・規約リンクが
+                // 画面外へ押し出されないよう、訴求と料金カードだけをスクロール領域にし、購入導線は下部に固定する。
+                ScrollView {
+                    VStack(spacing: 0) {
+                        PaywallHeader()
+                            .padding(.top, 10)
+                            .padding(.bottom, 16)
 
-                Text("どの端末でも、続きから書けるように。")
-                    .font(.ink(15, .regular))
-                    .foregroundStyle(PaywallPage.headlineColor)
-                    .lineSpacing(inkLineSpacing(fontSize: 15, multiplier: 2.0))
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.bottom, 26)
+                        Text("日記の見た目を、もっとじぶん好みに。")
+                            .font(.ink(15, .regular))
+                            .foregroundStyle(PaywallPage.headlineColor)
+                            .lineSpacing(inkLineSpacing(fontSize: 15, multiplier: 2.0))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.bottom, 26)
 
-                VStack(spacing: 20) {
-                    PaywallBenefitRow(title: "複数端末で同期", description: "iPhone・Mac・Web。暗号化されたまま届きます。")
-                    PaywallBenefitRow(title: "テーマを増やす", description: "紙の色と背景画像を、もっと自由に。")
-                    PaywallBenefitRow(title: "テンプレート無制限", description: "自分の書き方を、いくつでも。")
-                }
-                .padding(.bottom, 28)
+                        PaywallBenefitRow(title: "テーマを増やす", description: "薄鼠・青磁・桜鼠。紙の色をすべて解放。")
+                            .padding(.bottom, 28)
 
-                HStack(spacing: 12) {
-                    PaywallPlanCard(
-                        title: "月ごと",
-                        price: planPrice(package: offering?.monthly, samplePrice: "¥300"),
-                        caption: "/月",
-                        badge: nil,
-                        isSelected: selectedPlan == .monthly,
-                        onTap: { selectedPlan = .monthly }
-                    )
-                    PaywallPlanCard(
-                        title: "年ごと",
-                        price: planPrice(package: offering?.annual, samplePrice: "¥3,000"),
-                        caption: annualPerMonthCaption(),
-                        badge: "2ヶ月ぶんお得",
-                        isSelected: selectedPlan == .yearly,
-                        onTap: { selectedPlan = .yearly }
-                    )
-                }
-                .padding(.bottom, 12)
-
-                PaywallPlanCard(
-                    title: "買い切り",
-                    price: planPrice(package: offering?.lifetime, samplePrice: "¥12,000"),
-                    caption: "一度の購入で、ずっと",
-                    badge: nil,
-                    isSelected: selectedPlan == .lifetime,
-                    onTap: { selectedPlan = .lifetime }
-                )
-                .padding(.bottom, 20)
-
-                if offeringLoadFailed {
-                    HStack(spacing: 8) {
-                        Text("価格を読み込めませんでした。")
-                            .foregroundStyle(Color.inkTextTertiary)
-                        Button("再読み込み") {
-                            Task {
-                                await loadOffering()
+                        // offering に存在する package のカードだけを表示する。
+                        // 未 configure(カタログ・プレビュー)は見本価格で全カードを表示する。
+                        HStack(spacing: 12) {
+                            if offering?.monthly != nil || !Purchases.isConfigured {
+                                PaywallPlanCard(
+                                    title: "月ごと",
+                                    price: planPrice(package: offering?.monthly, samplePrice: "¥300"),
+                                    caption: "/月",
+                                    badge: nil,
+                                    isSelected: selectedPlan == .monthly,
+                                    onTap: { selectedPlan = .monthly }
+                                )
+                            }
+                            if offering?.annual != nil || !Purchases.isConfigured {
+                                PaywallPlanCard(
+                                    title: "年ごと",
+                                    price: planPrice(package: offering?.annual, samplePrice: "¥3,000"),
+                                    caption: annualPerMonthCaption(),
+                                    badge: annualSavingsBadge(),
+                                    isSelected: selectedPlan == .yearly,
+                                    onTap: { selectedPlan = .yearly }
+                                )
                             }
                         }
-                        .foregroundStyle(Color.ink)
+                        .padding(.bottom, 12)
+
+                        if offering?.lifetime != nil || !Purchases.isConfigured {
+                            PaywallPlanCard(
+                                title: "買い切り",
+                                price: planPrice(package: offering?.lifetime, samplePrice: "¥12,000"),
+                                caption: "一度の購入で、ずっと",
+                                badge: nil,
+                                isSelected: selectedPlan == .lifetime,
+                                onTap: { selectedPlan = .lifetime }
+                            )
+                        }
+
+                        if Purchases.isConfigured && offering == nil && !offeringLoadFailed {
+                            ProgressView()
+                                .padding(.top, 24)
+                        }
+
+                        if offeringLoadFailed {
+                            HStack(spacing: 8) {
+                                Text("価格を読み込めませんでした。")
+                                    .foregroundStyle(Color.inkTextTertiary)
+                                Button("再読み込み") {
+                                    Task {
+                                        await loadOffering()
+                                    }
+                                }
+                                .foregroundStyle(Color.ink)
+                            }
+                            .font(.ink(11.5, .regular))
+                            .padding(.top, 12)
+                        }
                     }
-                    .font(.ink(11.5, .regular))
                 }
-
-                Spacer(minLength: 24)
-
-                Text("同期中も、内容は暗号化されたままです。\nわたしたちが読めないことは、変わりません。")
-                    .font(.ink(11.5, .regular))
-                    .foregroundStyle(Color.inkTextTertiary)
-                    .multilineTextAlignment(.center)
-                    .lineSpacing(inkLineSpacing(fontSize: 11.5, multiplier: 1.9))
-                    .frame(maxWidth: .infinity)
-                    .padding(.bottom, 14)
 
                 Button(purchasing ? "処理中…" : "Nikki Plus をはじめる") {
                     Task {
@@ -110,6 +117,7 @@ struct PaywallPage: View {
                 }
                 .buttonStyle(InkPrimaryButtonStyle())
                 .disabled(purchasing || selectedPackage == nil)
+                .padding(.top, 14)
 
                 HStack(spacing: 22) {
                     PaywallFooterLink(title: "購入の復元") {
@@ -147,22 +155,35 @@ struct PaywallPage: View {
         }
     }
 
-    /// プラン価格の表示文字列。取得済みならストア価格、未 configure(カタログ・プレビュー)は見本価格、取得前・失敗時はプレースホルダ。
+    /// プラン価格の表示文字列。カードは package があるか未 configure の場合しか表示しないため、
+    /// package が無いのは未 configure(カタログ・プレビュー)の見本表示だけになる。
     private func planPrice(package: Package?, samplePrice: String) -> String {
-        if let package {
-            return package.storeProduct.localizedPriceString
-        }
-        return Purchases.isConfigured ? "—" : samplePrice
+        package?.storeProduct.localizedPriceString ?? samplePrice
     }
 
-    /// 年プランの月あたり換算のキャプション。換算できない間は期間表記に倒す。
+    /// 年プランのキャプション。月あたり換算を実価格から出し、換算できない場合は期間表記に倒す。
     private func annualPerMonthCaption() -> String {
-        if let storeProduct = offering?.annual?.storeProduct,
-           let pricePerMonth = storeProduct.pricePerMonth,
-           let formatted = storeProduct.priceFormatter?.string(from: pricePerMonth) {
-            return "\(formatted)/月"
+        if let storeProduct = offering?.annual?.storeProduct {
+            if let pricePerMonth = storeProduct.pricePerMonth,
+               let formatted = storeProduct.priceFormatter?.string(from: pricePerMonth) {
+                return "\(formatted)/月"
+            }
+            return "/年"
         }
-        return Purchases.isConfigured ? "/年" : "¥250/月"
+        // 未 configure(カタログ・プレビュー)の見本表示。
+        return "¥250/月"
+    }
+
+    /// 年プランの「◯ヶ月ぶんお得」バッジ。実価格から算出し、算出できない・得にならない場合は表示しない。
+    private func annualSavingsBadge() -> String? {
+        if let monthly = offering?.monthly, let annual = offering?.annual {
+            if let months = annualSavingsMonths(monthlyPrice: monthly.storeProduct.price, annualPrice: annual.storeProduct.price) {
+                return "\(months)ヶ月ぶんお得"
+            }
+            return nil
+        }
+        // 未 configure(カタログ・プレビュー)は見本価格(¥300/¥3,000)相当の2ヶ月で表示する。
+        return Purchases.isConfigured ? nil : "2ヶ月ぶんお得"
     }
 
     /// current offering(`default`)を取得する。未 configure(カタログ・プレビュー)では何もしない。
@@ -176,6 +197,16 @@ struct PaywallPage: View {
             if offering == nil {
                 offeringLoadFailed = true
             }
+            // 選択中プランの package が offering に無い場合、購入可能なプランへ選択を倒す。
+            if selectedPackage == nil {
+                if offering?.annual != nil {
+                    selectedPlan = .yearly
+                } else if offering?.monthly != nil {
+                    selectedPlan = .monthly
+                } else if offering?.lifetime != nil {
+                    selectedPlan = .lifetime
+                }
+            }
         } catch {
             offeringLoadFailed = true
         }
@@ -184,7 +215,8 @@ struct PaywallPage: View {
     /// 選択中の package を購入し、entitlement `plus` が有効になったら閉じる。
     /// 月額⇔年額の切り替えも同じ購入 API で行う(同一サブスクグループのため App Store 側でプラン変更として処理される)。
     private func purchase() async {
-        guard let selectedPackage else {
+        // 多重タップや復元との並行実行を防ぐ。
+        guard !purchasing, let selectedPackage else {
             return
         }
         purchasing = true
@@ -199,6 +231,10 @@ struct PaywallPage: View {
             }
             if result.customerInfo.entitlements[Const.revenueCatPlusEntitlementID]?.isActive == true {
                 dismiss()
+            } else {
+                // 商品と entitlement の紐付け不備・反映遅延で、購入が成功しても plus が有効にならないケースを黙殺しない。
+                paywallAlertMessage = "購入は完了しましたが、プランの反映を確認できませんでした。時間をおいて「購入の復元」をお試しください。"
+                paywallAlertIsPresented = true
             }
         } catch {
             paywallAlertMessage = "購入を完了できませんでした。\(error.localizedDescription)"
@@ -208,6 +244,10 @@ struct PaywallPage: View {
 
     /// 過去の購入を復元し、entitlement `plus` が有効になったら閉じる。
     private func restore() async {
+        // 未 configure(カタログ・プレビュー)で Purchases.shared に触れるとクラッシュするのを防ぎ、多重実行も防ぐ。
+        guard Purchases.isConfigured, !purchasing else {
+            return
+        }
         purchasing = true
         defer {
             purchasing = false
@@ -232,6 +272,19 @@ enum PaywallPlan {
     case monthly
     case yearly
     case lifetime
+}
+
+/// 年額が月額の12ヶ月ぶんに対して何ヶ月ぶん安いかを返す(切り捨て)。
+/// 1ヶ月未満の差しかない・割引がない・月額が不正な場合は nil(バッジを出さない)。
+func annualSavingsMonths(monthlyPrice: Decimal, annualPrice: Decimal) -> Int? {
+    if monthlyPrice <= 0 {
+        return nil
+    }
+    let savedMonths = Int(NSDecimalNumber(decimal: (monthlyPrice * 12 - annualPrice) / monthlyPrice).doubleValue.rounded(.down))
+    if savedMonths < 1 {
+        return nil
+    }
+    return savedMonths
 }
 
 struct PaywallPage_Previews: PreviewProvider {
