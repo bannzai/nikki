@@ -1,4 +1,5 @@
 import SwiftUI
+import RevenueCat
 
 /// オンボーディングの進行ステップ。完了したかどうかは onboardingCompleted が持つ。
 enum OnboardingStep: String {
@@ -21,6 +22,8 @@ struct RootPage: View {
     @State var lastActivityAt: Date = .now
     /// 自動ロック中かどうか。README の「開きっぱなしの端末を他人が触るのを防ぐ」UI ゲート。
     @State var locked: Bool = false
+    /// Nikki Plus の加入状態。customerInfoStream の更新に追従し、environment で配下へ配る。
+    @State var plusActive: Bool = false
 
     @Environment(\.scenePhase) private var scenePhase
 
@@ -44,6 +47,16 @@ struct RootPage: View {
             }
             .environment(\.today, today)
             .environment(\.resetAutoLockTimer, registerActivity)
+            .environment(\.plusActive, plusActive)
+            // 起動時キャッシュ→購入・復元・更新の順で customerInfo が流れてくるため、加入状態はこの1本で追従できる。
+            .task {
+                if !Purchases.isConfigured {
+                    return
+                }
+                for await customerInfo in Purchases.shared.customerInfoStream {
+                    plusActive = customerInfo.entitlements[Const.revenueCatPlusEntitlementID]?.isActive == true
+                }
+            }
             .onChange(of: scenePhase) {
                 if scenePhase == .active {
                     today = .now
