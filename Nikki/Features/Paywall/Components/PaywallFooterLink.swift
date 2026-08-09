@@ -3,10 +3,10 @@ import SwiftUI
 /// フッタのテキストリンク(購入の復元 / 利用規約 / プライバシー)。
 struct PaywallFooterLink: View {
     let title: String
+    let action: () -> Void
 
     var body: some View {
-        // 課金導線は未実装のため、ボタンはまだ何もしない(https://github.com/bannzai/nikki/issues/14)。
-        Button(title) {}
+        Button(title, action: action)
             .buttonStyle(PaywallFooterLinkButtonStyle())
     }
 }
@@ -22,7 +22,7 @@ private struct PaywallFooterLinkButtonStyle: ButtonStyle {
 
 struct PaywallFooterLink_Previews: PreviewProvider {
     static var previews: some View {
-        PaywallFooterLink(title: "利用規約")
+        PaywallFooterLink(title: "利用規約", action: {})
             .padding()
             .background(Color.inkPaper)
     }

@@ -8,4 +8,8 @@ extension EnvironmentValues {
     /// 自動ロックの無操作タイマーを起点からやり直す。
     /// RootPage のタッチ検知では拾えない操作(キーボード入力等)を受け付ける画面が呼ぶ。
     @Entry var resetAutoLockTimer: @MainActor () -> Void = {}
+
+    /// Nikki Plus(entitlement `plus`)が有効かどうか。
+    /// RootPage が RevenueCat の customerInfoStream から更新して配る。未 configure(カタログ・テスト)では常に false。
+    @Entry var plusActive: Bool = false
 }

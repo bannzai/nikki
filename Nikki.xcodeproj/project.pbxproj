@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		D4A1B2C3E5F60718293A4B03 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = D4A1B2C3E5F60718293A4B02 /* RevenueCat */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		07FD79C6F7133FAB73E4C435 /* NikkiTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = NikkiTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		38B39791C2AB0FB5EC739A70 /* Nikki.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Nikki.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -38,6 +42,17 @@
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
+/* Begin PBXFrameworksBuildPhase section */
+		D4A1B2C3E5F60718293A4B04 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D4A1B2C3E5F60718293A4B03 /* RevenueCat in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
 /* Begin PBXGroup section */
 		C1F193C3C25AEDDCB3633E69 /* Products */ = {
 			isa = PBXGroup;
@@ -65,6 +80,7 @@
 			buildConfigurationList = AFE06502562D18338371C047 /* Build configuration list for PBXNativeTarget "Nikki" */;
 			buildPhases = (
 				BB30DC9471FD946681143FF2 /* Sources */,
+				D4A1B2C3E5F60718293A4B04 /* Frameworks */,
 				A074E973B7A20922EE2C3F14 /* Resources */,
 			);
 			buildRules = (
@@ -76,6 +92,7 @@
 			);
 			name = Nikki;
 			packageProductDependencies = (
+				D4A1B2C3E5F60718293A4B02 /* RevenueCat */,
 			);
 			productName = Nikki;
 			productReference = 38B39791C2AB0FB5EC739A70 /* Nikki.app */;
@@ -131,6 +148,9 @@
 			);
 			mainGroup = CF7F7D3FCA8CDA90C72D5B31;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				D4A1B2C3E5F60718293A4B01 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C1F193C3C25AEDDCB3633E69 /* Products */;
 			projectDirPath = "";
@@ -419,6 +439,25 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D4A1B2C3E5F60718293A4B01 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RevenueCat/purchases-ios-spm";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.83.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D4A1B2C3E5F60718293A4B02 /* RevenueCat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D4A1B2C3E5F60718293A4B01 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
+			productName = RevenueCat;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C619DB1EB9B6EB70324F8801 /* Project object */;
 }

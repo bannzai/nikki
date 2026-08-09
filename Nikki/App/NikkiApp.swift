@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import RevenueCat
 
 @main
 struct NikkiApp: App {
@@ -11,15 +12,18 @@ struct NikkiApp: App {
         let environment = ProcessInfo.processInfo.environment
         // カタログモードと、ユニットテストがホストアプリとして起動したときは、
         // CloudKit の本番ストアに触れない(シードもしない)よう in-memory ストアを使う。
+        // RevenueCat もネットワークに触れないよう configure しない(参照側は Purchases.isConfigured で分岐する)。
         if environment["NIKKI_SCREEN"] != nil
             || environment["XCTestSessionIdentifier"] != nil
             || environment["XCTestConfigurationFilePath"] != nil {
             modelContainer = SampleData.inMemoryContainer()
         } else {
             modelContainer = Self.defaultContainer()
+            Purchases.configure(withAPIKey: Const.revenueCatAPIKey)
         }
         #else
         modelContainer = Self.defaultContainer()
+        Purchases.configure(withAPIKey: Const.revenueCatAPIKey)
         #endif
     }
 

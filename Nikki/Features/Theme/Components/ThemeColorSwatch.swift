@@ -1,16 +1,25 @@
 import SwiftUI
 
 /// 紙色プリセット1つを表す丸スウォッチ + ラベル。選択中は墨枠とチェックを表示する。
+/// locked のスウォッチは錠前を重ね、タップで選択せずペイウォールを開く。
 struct ThemeColorSwatch: View {
     /// 自分が表す紙色プリセットの添字(Color.paperColorPreset と同順)。
     let index: Int
     let label: String
     /// 選択中プリセットの添字。タップで自分の index に更新して選択を切り替える。
     @Binding var selectedIndex: Int
+    /// Nikki Plus 未加入でこのプリセットを選べないかどうか。
+    let locked: Bool
+    /// locked のスウォッチをタップした時に開くペイウォールの表示状態。
+    @Binding var paywallSheetIsPresented: Bool
 
     var body: some View {
         Button {
-            selectedIndex = index
+            if locked {
+                paywallSheetIsPresented = true
+            } else {
+                selectedIndex = index
+            }
         } label: {
             VStack(spacing: 6) {
                 Circle()
@@ -24,6 +33,10 @@ struct ThemeColorSwatch: View {
                             Image(systemName: InkIcons.checkmark)
                                 .font(.system(size: 13, weight: .semibold))
                                 .foregroundStyle(Color.ink)
+                        } else if locked {
+                            Image(systemName: InkIcons.lock)
+                                .font(.system(size: 13, weight: .semibold))
+                                .foregroundStyle(Color.inkTextSecondary)
                         }
                     }
                 Text(label)
@@ -51,8 +64,9 @@ struct ThemeColorSwatch: View {
 struct ThemeColorSwatch_Previews: PreviewProvider {
     static var previews: some View {
         HStack(spacing: 14) {
-            ThemeColorSwatch(index: 0, label: "白", selectedIndex: .constant(1))
-            ThemeColorSwatch(index: 1, label: "生成", selectedIndex: .constant(1))
+            ThemeColorSwatch(index: 0, label: "白", selectedIndex: .constant(1), locked: false, paywallSheetIsPresented: .constant(false))
+            ThemeColorSwatch(index: 1, label: "生成", selectedIndex: .constant(1), locked: false, paywallSheetIsPresented: .constant(false))
+            ThemeColorSwatch(index: 2, label: "薄鼠", selectedIndex: .constant(1), locked: true, paywallSheetIsPresented: .constant(false))
         }
         .padding()
         .background(Color.inkPaper)
