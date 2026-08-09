@@ -28,6 +28,7 @@ struct SettingsPage: View {
     @Query(sort: \JournalEntry.date) var entries: [JournalEntry]
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.plusActive) private var plusActive
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -89,10 +90,9 @@ struct SettingsPage: View {
                                 title: "Markdown で書き出す",
                                 action: { markdownExporterIsPresented = true }
                             )
-                            // 課金は未実装で加入手段がないため、現状は全員未加入。
                             InkListRow(
                                 title: "Nikki Plus",
-                                value: "未加入",
+                                value: plusActive ? "加入中" : "未加入",
                                 showsSeparator: false,
                                 action: { paywallSheetIsPresented = true }
                             )
