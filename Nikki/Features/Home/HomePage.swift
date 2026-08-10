@@ -85,7 +85,7 @@ struct HomePage: View {
             .keyboardShortcut("f", modifiers: .command)
             .hidden()
         }
-        .toolbar(.hidden, for: .navigationBar)
+        .inkNavigationBarHidden()
         // キーボード入力はタッチとして拾えないため、検索の入力を無操作タイマーのリセットにする。
         .onChange(of: searchText) {
             resetAutoLockTimer()

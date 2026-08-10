@@ -28,11 +28,25 @@ struct NikkiApp: App {
     }
 
     var body: some Scene {
+        #if os(macOS)
+        // WindowGroup は File > New Window の ⌘N を自動で提供し、新規日記の ⌘N (HomePage) と衝突するため、
+        // iOS(UIApplicationSupportsMultipleScenes = false)と同じ1ウィンドウ構成の Window を使う。
+        Window("Nikki", id: "main") {
+            NikkiAppContent()
+                .defaultAppStorage(.appGroups)
+                // 縦長1カラムのデザインが崩れない範囲で自由リサイズを許す下限。幅は iPhone 標準(375pt)、高さはロック画面の要素が収まる実用下限。
+                .frame(minWidth: 375, minHeight: 600)
+        }
+        .modelContainer(modelContainer)
+        // 書き物アプリとして一覧・本文が読みやすい縦長の初期サイズ。
+        .defaultSize(width: 520, height: 800)
+        #else
         WindowGroup {
             NikkiAppContent()
                 .defaultAppStorage(.appGroups)
         }
         .modelContainer(modelContainer)
+        #endif
     }
 
     /// CloudKit private database と同期する永続ストアを作る。

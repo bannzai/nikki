@@ -112,7 +112,7 @@ struct SettingsPage: View {
                 }
             }
         }
-        .toolbar(.hidden, for: .navigationBar)
+        .inkNavigationBarHidden()
         .navigationDestination(isPresented: $themeIsPresented) {
             ThemePage()
         }

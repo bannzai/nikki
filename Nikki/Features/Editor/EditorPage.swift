@@ -41,7 +41,7 @@ struct EditorPage: View {
             .padding(.horizontal, 28)
             .padding(.top, 10)
         }
-        .toolbar(.hidden, for: .navigationBar)
+        .inkNavigationBarHidden()
         // キーボード入力はタッチとして拾えないため、書き込み(updatedAt の更新)を無操作タイマーのリセットにする。
         .onChange(of: entry.updatedAt) {
             resetAutoLockTimer()

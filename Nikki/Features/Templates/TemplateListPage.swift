@@ -42,7 +42,7 @@ struct TemplateListPage: View {
             }
         }
         .background(Color.inkPaper.ignoresSafeArea())
-        .toolbar(.hidden, for: .navigationBar)
+        .inkNavigationBarHidden()
         // 変数入力シートのキーボード入力はタッチとして拾えないため、入力変化を無操作タイマーのリセットにする。
         .onChange(of: fields) {
             resetAutoLockTimer()

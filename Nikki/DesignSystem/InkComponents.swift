@@ -98,7 +98,10 @@ struct InkSearchBar: View {
             .foregroundStyle(Color.ink)
             .focused(isFocused)
             .autocorrectionDisabled()
+            // textInputAutocapitalization は macOS に存在しない(macOS は自動大文字化自体がない)。
+            #if os(iOS)
             .textInputAutocapitalization(.never)
+            #endif
             .submitLabel(.search)
         }
         .padding(.horizontal, 14)
