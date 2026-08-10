@@ -1,5 +1,8 @@
 import SwiftUI
 import RevenueCat
+#if os(macOS)
+import AppKit
+#endif
 
 /// オンボーディングの進行ステップ。完了したかどうかは onboardingCompleted が持つ。
 enum OnboardingStep: String {
@@ -24,6 +27,10 @@ struct RootPage: View {
     @State var locked: Bool = false
     /// Nikki Plus の加入状態。customerInfoStream の更新に追従し、environment で配下へ配る。
     @State var plusActive: Bool = false
+    #if os(macOS)
+    /// スクロール等の NSEvent を無操作起点のリセットにつなぐローカルモニター。onDisappear で解除するために保持する。
+    @State var activityEventMonitor: Any?
+    #endif
 
     @Environment(\.scenePhase) private var scenePhase
 
@@ -97,6 +104,30 @@ struct RootPage: View {
                 }
                 locked = true
             }
+            #if os(macOS)
+            // macOS のスクロールホイール・トラックパッドのスクロールは SwiftUI のジェスチャに乗らず
+            // simultaneousGesture の DragGesture では拾えないため、NSEvent のローカルモニターで
+            // 操作イベントを無操作起点のリセットとして拾う。マウスをわずかに動かしただけでも発火する
+            // mouseMoved は意図した操作といえないため対象に含めない。
+            .onAppear {
+                if activityEventMonitor != nil {
+                    return
+                }
+                activityEventMonitor = NSEvent.addLocalMonitorForEvents(
+                    matching: [.scrollWheel, .leftMouseDown, .rightMouseDown, .otherMouseDown, .keyDown, .magnify]
+                ) { event in
+                    registerActivity()
+                    // nil を返すとイベントがアプリに届かなくなるため、そのまま流す。
+                    return event
+                }
+            }
+            .onDisappear {
+                if let activityEventMonitor {
+                    NSEvent.removeMonitor(activityEventMonitor)
+                }
+                activityEventMonitor = nil
+            }
+            #endif
         } else {
             switch onboardingStep {
             case .welcome:
