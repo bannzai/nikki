@@ -37,14 +37,12 @@ struct LockFaceIDButton: View {
 
     /// 生体認証でロックを解除する。キャンセル・失敗時はロックを維持する。
     private func unlock() async {
-        let context = LAContext()
         // パスコード未設定の端末(シミュレータ等)は評価できる認証手段がなく締め出しになるため、そのまま解除する。
-        if !context.canEvaluatePolicy(.deviceOwnerAuthentication, error: nil) {
+        if !canEvaluateUnlockAuthentication() {
             locked = false
             return
         }
-        // Face ID が未登録・失敗した場合でもパスコードで解除できるよう .deviceOwnerAuthentication を使う。
-        if (try? await context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: "日記のロックを解除します")) == true {
+        if await evaluateUnlockAuthentication() {
             locked = false
         }
     }
