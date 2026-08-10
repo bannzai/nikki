@@ -12,7 +12,7 @@ struct LockPage: View {
     @Environment(\.appearsActive) var appearsActive
     /// ウィンドウがアクティブになった時に解除認証を自動提示してよいか。
     /// 認証ダイアログ自身が起こすアクティブ切り替えで提示ループにならないよう、提示のたびに消費し、
-    /// 評価中ではない非アクティブ化(ユーザーが他アプリへ移った時)と、評価終了時にアプリが非アクティブのまま
+    /// 評価中ではない非アクティブ化(ユーザーが他アプリへ移った時)と、評価終了時に別の通常アプリが前面
     /// だった場合(ダイアログを残して他アプリへ移り、そこでキャンセルした時)にのみ引き直す。
     /// ウィンドウがアクティブなままロックされたケースでもロック画面の表示直後に自動提示したいため、初期値は提示可にする。
     @State var autoPromptArmed = true
@@ -53,6 +53,12 @@ struct LockPage: View {
         if !autoPromptArmed || autoPromptEvaluating {
             return
         }
+        // appearsActive の変化から Task の実行までの間にウィンドウが非アクティブ化・最小化され得る。
+        // environment の appearsActive は Task 生成時点のスナップショットで実行時点の状態を参照できないため、
+        // 提示直前に実行時点の前面状態を確認し、非アクティブなウィンドウから認証ダイアログを出さない。
+        if !NSApp.isActive || NSApp.keyWindow == nil {
+            return
+        }
         // 評価できる認証手段がない端末(パスコード未設定のシミュレータ等)では、自動提示すると表示直後の即時解除になり
         // ロック画面が無意味になるため、自動提示はせずボタンからの解除に委ねる。
         if !canEvaluateUnlockAuthentication() {
@@ -63,13 +69,14 @@ struct LockPage: View {
         if await evaluateUnlockAuthentication() {
             locked = false
         } else {
-            // 認証ダイアログを残したまま他アプリへ移ると Nikki は既に非アクティブで、以降ウィンドウの
-            // アクティブ切り替えが起きないため、ここで引き直さないと復帰時に自動提示できない。
-            // その場でキャンセルしただけの場合はフォーカスが Nikki に戻るまでにわずかな間があり、
-            // すぐ判定すると非アクティブ扱いの引き直し→再アクティブ化で再提示ループになり得るため、
-            // フォーカスの戻りが落ち着くのを待ってから判定する。
-            try? await Task.sleep(for: .milliseconds(500))
-            if !NSApp.isActive {
+            // 認証ダイアログを残したまま他アプリへ移ってからキャンセルすると、Nikki は既に非アクティブで
+            // 以降ウィンドウのアクティブ切り替えが起きないため、ここで引き直さないと復帰時に自動提示できない。
+            // その場でキャンセルした直後の前面は Nikki 自身か認証エージェント(coreautha。Dock に出ない
+            // 非 regular なプロセス)なので、別の通常アプリが前面の時だけ「他アプリへ移っている」と判定して
+            // 引き直す。時間待ちで判定すると、待機中に Nikki へ戻られた場合に復帰イベントを取りこぼす。
+            if let frontmost = NSWorkspace.shared.frontmostApplication,
+               frontmost.processIdentifier != ProcessInfo.processInfo.processIdentifier,
+               frontmost.activationPolicy == .regular {
                 autoPromptArmed = true
             }
         }
