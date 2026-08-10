@@ -1,17 +1,24 @@
 PROJECT := Nikki.xcodeproj
 SCHEME := Nikki
 DERIVED_DATA := tmp/DerivedData
+INSTALL_APP := /Applications/Nikki.app
+LSREGISTER := /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister
 
 .PHONY: macos ios ios-device
 
-# ネイティブ macOS ビルド。ビルドのみ行い、アプリの起動はしない (ssh 越しの実行を想定)
+# Release ビルドを /Applications に配置して普段使いできるようにする (PUTS ADR 0009 と同じ方式)。
+# 起動はしないため ssh 越しでも実行できる
 macos:
 	xcodebuild -project $(PROJECT) -scheme $(SCHEME) \
+		-configuration Release \
 		-destination 'platform=macOS' \
 		-derivedDataPath $(DERIVED_DATA) \
 		-allowProvisioningUpdates -allowProvisioningDeviceRegistration \
 		build
-	@echo "起動するには: open $(DERIVED_DATA)/Build/Products/Debug/Nikki.app"
+	rm -rf $(INSTALL_APP)
+	ditto $(DERIVED_DATA)/Build/Products/Release/Nikki.app $(INSTALL_APP)
+	$(LSREGISTER) -f $(INSTALL_APP)
+	@echo "起動するには: open $(INSTALL_APP)"
 
 ios:
 	xcodebuild -project $(PROJECT) -scheme $(SCHEME) \
