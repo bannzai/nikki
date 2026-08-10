@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- CloudKit のサイレントプッシュ(サーバ変更通知)を受けるための APNs 環境。macOS は iOS の aps-environment と異なり com.apple.developer. 前置のキーを使う。配布時は Xcode が production に差し替える -->
+	<key>com.apple.developer.aps-environment</key>
+	<string>development</string>
+	<key>com.apple.developer.icloud-container-identifiers</key>
+	<array>
+		<string>iCloud.com.bannzai.Nikki</string>
+	</array>
+	<key>com.apple.developer.icloud-services</key>
+	<array>
+		<string>CloudKit</string>
+	</array>
+	<!-- Mac App Store 配布の必須要件 -->
+	<key>com.apple.security.app-sandbox</key>
+	<true/>
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>group.com.bannzai.Nikki</string>
+	</array>
+	<!-- App Sandbox 下で CloudKit / RevenueCat が外部へ通信するために必要 -->
+	<key>com.apple.security.network.client</key>
+	<true/>
+</dict>
+</plist>

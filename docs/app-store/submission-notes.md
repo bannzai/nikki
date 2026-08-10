@@ -30,11 +30,16 @@
 
 ## プラットフォーム構成 / App Sandbox
 
-- iOS / iPadOS: 単一の iOS アプリターゲット (`TARGETED_DEVICE_FAMILY = 1,2`)。App ID `com.bannzai.Nikki` は UNIVERSAL
-- macOS: ネイティブ macOS ターゲットは持たず、**iPad アプリを Apple シリコン Mac で配布する (Designed for iPad)**。
-  Mac App Store への掲載は App Store Connect の「Mac で利用可能」設定で行う
-- App Sandbox: iOS アプリを Mac で実行する場合はシステムが自動でサンドボックス化するため、
-  entitlements への `com.apple.security.app-sandbox` 追加は不要 (ネイティブ macOS ターゲットを作る場合にのみ必要)
+- iOS / iPadOS / macOS: 単一のマルチプラットフォームターゲット (`SUPPORTED_PLATFORMS = iphoneos iphonesimulator macosx`)。
+  App ID `com.bannzai.Nikki` は UNIVERSAL で、iOS / macOS とも**同一 Bundle ID** で配布する
+- macOS: **ネイティブ macOS アプリとして配布する** (issue #26 で Designed for iPad から移行)。
+  `SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO` のため「iPad アプリを Mac で実行」の配布形態は持たない
+- Info.plist / entitlements は macOS 専用ファイル (`Nikki/Info-macOS.plist` / `Nikki/Nikki-macOS.entitlements`) を
+  `[sdk=macosx*]` の条件付きビルド設定で使い分ける
+- App Sandbox: Mac App Store の必須要件として、macOS 側 entitlements に `com.apple.security.app-sandbox` を設定済み。
+  CloudKit / RevenueCat の通信のため `com.apple.security.network.client` も併せて必要。iOS 側 entitlements には不要
+- APNs (CloudKit のサーバ変更通知): macOS は iOS の `aps-environment` と異なり
+  `com.apple.developer.aps-environment` キーを使う
 
 ## iCloud (CloudKit) スキーマ管理
 

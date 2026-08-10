@@ -38,20 +38,25 @@ struct InkSegmentedControl: View {
         HStack(spacing: 0) {
             ForEach(Array(options.enumerated()), id: \.offset) { index, option in
                 let isSelected = index == selectedIndex
-                Text(option)
-                    .font(.ink(13, isSelected ? .bold : .regular).weight(isSelected ? .semibold : .regular))
-                    .foregroundStyle(isSelected ? Color.ink : Color.inkTextSecondary)
-                    .padding(.horizontal, 22)
-                    .padding(.vertical, 7)
-                    .background {
-                        if isSelected {
-                            RoundedRectangle(cornerRadius: 9, style: .continuous)
-                                .fill(Color.inkSurface)
-                                .shadow(color: .black.opacity(0.08), radius: 1, x: 0, y: 1)
+                // VoiceOver や AX 自動操作からもセグメントを押せるよう、onTapGesture ではなく Button にする。
+                Button {
+                    selectedIndex = index
+                } label: {
+                    Text(option)
+                        .font(.ink(13, isSelected ? .bold : .regular).weight(isSelected ? .semibold : .regular))
+                        .foregroundStyle(isSelected ? Color.ink : Color.inkTextSecondary)
+                        .padding(.horizontal, 22)
+                        .padding(.vertical, 7)
+                        .background {
+                            if isSelected {
+                                RoundedRectangle(cornerRadius: 9, style: .continuous)
+                                    .fill(Color.inkSurface)
+                                    .shadow(color: .black.opacity(0.08), radius: 1, x: 0, y: 1)
+                            }
                         }
-                    }
-                    .contentShape(Rectangle())
-                    .onTapGesture { selectedIndex = index }
+                        .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
             }
         }
         .padding(2.5)
@@ -98,7 +103,10 @@ struct InkSearchBar: View {
             .foregroundStyle(Color.ink)
             .focused(isFocused)
             .autocorrectionDisabled()
+            // textInputAutocapitalization は macOS に存在しない(macOS は自動大文字化自体がない)。
+            #if os(iOS)
             .textInputAutocapitalization(.never)
+            #endif
             .submitLabel(.search)
         }
         .padding(.horizontal, 14)
@@ -180,30 +188,16 @@ struct InkListRow: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            HStack(spacing: 8) {
-                Text(title)
-                    .font(.ink(14.5, .regular))
-                    .foregroundStyle(Color.ink)
-                Spacer(minLength: 8)
-                if let trailing {
-                    trailing
-                } else {
-                    if let value {
-                        Text(value)
-                            .font(.ink(13.5, .regular))
-                            .foregroundStyle(Color.inkTextSecondary)
-                    }
-                    if showsChevron {
-                        Image(systemName: InkIcons.chevronRight)
-                            .font(.system(size: 13, weight: .semibold))
-                            .foregroundStyle(Color.inkTextTertiary)
-                    }
+            // VoiceOver や AX 自動操作からも行を押せるよう、onTapGesture ではなく Button にする。
+            // action の無い行(トグル行・表示のみの行)はボタンとして読み上げられないよう素の行面のままにする。
+            if let action {
+                Button(action: action) {
+                    InkListRowSurface(title: title, value: value, showsChevron: showsChevron, height: height, trailing: trailing)
                 }
+                .buttonStyle(.plain)
+            } else {
+                InkListRowSurface(title: title, value: value, showsChevron: showsChevron, height: height, trailing: trailing)
             }
-            .padding(.horizontal, 16)
-            .frame(height: height)
-            .contentShape(Rectangle())
-            .onTapGesture { action?() }
 
             if showsSeparator {
                 Rectangle()
@@ -212,6 +206,41 @@ struct InkListRow: View {
                     .padding(.leading, 16)
             }
         }
+    }
+}
+
+/// InkListRow の行面(タイトル・値・シェブロン / trailing)。Button 化した行とタップ無しの行の両方から使う。
+struct InkListRowSurface: View {
+    let title: String
+    let value: String?
+    let showsChevron: Bool
+    let height: CGFloat
+    let trailing: AnyView?
+
+    var body: some View {
+        HStack(spacing: 8) {
+            Text(title)
+                .font(.ink(14.5, .regular))
+                .foregroundStyle(Color.ink)
+            Spacer(minLength: 8)
+            if let trailing {
+                trailing
+            } else {
+                if let value {
+                    Text(value)
+                        .font(.ink(13.5, .regular))
+                        .foregroundStyle(Color.inkTextSecondary)
+                }
+                if showsChevron {
+                    Image(systemName: InkIcons.chevronRight)
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundStyle(Color.inkTextTertiary)
+                }
+            }
+        }
+        .padding(.horizontal, 16)
+        .frame(height: height)
+        .contentShape(Rectangle())
     }
 }
 

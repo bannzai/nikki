@@ -64,7 +64,7 @@ struct ThemePage: View {
                 }
             }
         }
-        .toolbar(.hidden, for: .navigationBar)
+        .inkNavigationBarHidden()
         .sheet(isPresented: $paywallSheetIsPresented) {
             PaywallPage()
         }
