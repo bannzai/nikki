@@ -171,7 +171,7 @@ struct PaywallPage: View {
         }
     }
 
-    /// 買い切り(非消耗型)を購入済みかどうか。本アプリの非消耗型商品は買い切り(nikki_plus_lifetime)のみ。
+    /// 買い切り(非消耗型)を購入済みかどうか。本アプリの非消耗型商品は買い切り(nikki_plus_lifetime2)のみ。
     private var lifetimePurchased: Bool {
         customerInfo?.nonSubscriptions.isEmpty == false
     }
