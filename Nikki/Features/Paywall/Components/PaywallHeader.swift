@@ -1,11 +1,12 @@
 import SwiftUI
 
-/// ペイウォール上部のロゴ「日」+「Nikki Plus」ヘッダ。
+/// ペイウォール上部の日記帳アイコン +「Nikki Plus」ヘッダ。
 struct PaywallHeader: View {
     var body: some View {
         HStack(spacing: 12) {
-            Text("日")
-                .font(.ink(18, .bold))
+            // 枠線の太さに負けて薄く見えないよう weight を上げる (OnboardingLogoMark と同じ調整)。
+            Image(systemName: InkIcons.book)
+                .font(.system(size: 18, weight: .semibold))
                 .foregroundStyle(Color.ink)
                 .frame(width: 40, height: 40)
                 .overlay(
