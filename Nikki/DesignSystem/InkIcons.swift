@@ -16,6 +16,7 @@ enum InkIcons {
     static let close = "xmark"
     static let checklist = "checklist"
     static let add = "plus"
+    static let book = "book.closed"
 }
 
 /// オンボーディングの図解で使う 46px 円 + 1.5px 枠の中に線画アイコンを収めるヘルパー。

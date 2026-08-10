@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// ようこそ画面のロゴマーク。角丸枠の「日」とワードマーク「Nikki」を縦に並べる。
+/// ようこそ画面のロゴマーク。角丸枠の日記帳アイコンとワードマーク「Nikki」を縦に並べる。
 struct OnboardingLogoMark: View {
     var body: some View {
         VStack(spacing: 16) {
@@ -8,8 +8,9 @@ struct OnboardingLogoMark: View {
                 .strokeBorder(Color.ink, lineWidth: 2)
                 .frame(width: 52, height: 52)
                 .overlay {
-                    Text("日")
-                        .font(.ink(24, .bold))
+                    Image(systemName: InkIcons.book)
+                        // 枠線の太さに負けて薄く見えないよう weight を上げる。
+                        .font(.system(size: 24, weight: .semibold))
                         .foregroundStyle(Color.ink)
                 }
             Text("Nikki")
