@@ -85,6 +85,12 @@ struct RootPage: View {
                 if locked || !faceIDUnlockEnabled {
                     return
                 }
+                #if DEBUG
+                // E2E・AX 自動操作での動作確認が数秒の自動ロックに阻まれないよう、開発ビルドに限り環境変数で自動ロックを無効化できる。
+                if ProcessInfo.processInfo.environment["NIKKI_AUTOLOCK_DISABLED"] != nil {
+                    return
+                }
+                #endif
                 try? await Task.sleep(for: .seconds(autoLockSeconds))
                 if Task.isCancelled {
                     return
