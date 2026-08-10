@@ -9,7 +9,7 @@ struct OnboardingLogoMark: View {
                 .frame(width: 52, height: 52)
                 .overlay {
                     Image(systemName: InkIcons.book)
-                        // 枠線 2px の太さに負けて薄く見えないよう、置き換え前の「日」(24pt bold) に合わせて semibold にする。
+                        // 枠線の太さに負けて薄く見えないよう weight を上げる。
                         .font(.system(size: 24, weight: .semibold))
                         .foregroundStyle(Color.ink)
                 }
