@@ -1,22 +1,34 @@
 import SwiftUI
 import LocalAuthentication
 
-/// 「Face ID で開く」墨 pill ボタン。高さ50・横パディング26・角丸25。
-/// タップで生体認証(使えない場合はパスコード)を評価し、成功したら locked を false に戻す。
+/// ロック解除の墨 pill ボタン。高さ50・横パディング26・角丸25。
+/// 端末で使える生体認証(Face ID / Touch ID)に合わせて文言とアイコンを出し分ける。
+/// タップで生体認証(使えない場合はパスコード / パスワード)を評価し、成功したら locked を false に戻す。
 struct LockFaceIDButton: View {
     /// 自動ロック状態。解除の成功で false に戻す。
     @Binding var locked: Bool
 
     var body: some View {
+        // 生体認証が使えない端末(パスコード未設定・生体認証なしの Mac 等)は OS の用語(macOS: パスワード、iOS / iPadOS: パスコード)に合わせる。
+        #if os(macOS)
+        let fallback = (InkIcons.lock, "パスワードで開く")
+        #else
+        let fallback = (InkIcons.lock, "パスコードで開く")
+        #endif
+        let (systemName, title) = switch currentBiometryType() {
+        case .faceID: (InkIcons.faceID, "Face ID で開く")
+        case .touchID: (InkIcons.touchID, "Touch ID で開く")
+        default: fallback
+        }
         Button {
             Task {
                 await unlock()
             }
         } label: {
             HStack(spacing: 10) {
-                Image(systemName: InkIcons.faceID)
+                Image(systemName: systemName)
                     .font(.system(size: 18, weight: .regular))
-                Text("Face ID で開く")
+                Text(title)
                     .font(.ink(15, .medium).weight(.semibold))
             }
         }
