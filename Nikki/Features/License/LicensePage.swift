@@ -1,8 +1,25 @@
 import SwiftUI
 import LicenseList
 
-/// OSS ライセンス一覧画面。ライブラリ名と本文は LicenseList の BuildToolPlugin が
-/// SwiftPM の依存関係(SourcePackages)から収集したものを表示する。
+/// 一覧に表示する OSS。LicenseList の BuildToolPlugin が SwiftPM の依存関係(SourcePackages)から
+/// 収集したものへ、SwiftPM 経由ではない同梱フォントを加える。
+private let licenseLibraries: [Library] = {
+    // 同梱フォント Zen Kaku Gothic New はバンドルへコピーされる OFL.txt を本文の正とする。
+    if let oflURL = Bundle.main.url(forResource: "OFL", withExtension: "txt"),
+       let ofl = try? String(contentsOf: oflURL, encoding: .utf8) {
+        return Library.libraries + [
+            Library(
+                name: "Zen Kaku Gothic New",
+                // OFL.txt の著作権表記が挙げるプロジェクトのリポジトリ。
+                url: "https://github.com/googlefonts/zen-kakugothic",
+                licenseBody: ofl
+            )
+        ]
+    }
+    return Library.libraries
+}()
+
+/// OSS ライセンス一覧画面。
 struct LicensePage: View {
     /// 本文を表示するライブラリ。行のタップで決まる。
     @State var selectedLibrary: Library?
@@ -19,10 +36,10 @@ struct LicensePage: View {
                     // RootPage が自動ロック用に張る simultaneousGesture(DragGesture) に奪われて本文へ遷移しない。
                     // 他画面と同じ InkListRow(Button) なら同じジェスチャ下でも遷移できるため、一覧はアプリ側で組む。
                     InkListSection {
-                        ForEach(Library.libraries) { library in
+                        ForEach(licenseLibraries) { library in
                             InkListRow(
                                 title: library.name,
-                                showsSeparator: library.id != Library.libraries.last?.id,
+                                showsSeparator: library.id != licenseLibraries.last?.id,
                                 action: { selectedLibrary = library }
                             )
                         }
