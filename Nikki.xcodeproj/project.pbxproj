@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D4A1B2C3E5F60718293A4B13 /* LicenseList in Frameworks */ = {isa = PBXBuildFile; productRef = D4A1B2C3E5F60718293A4B12 /* LicenseList */; };
 		D4A1B2C3E5F60718293A4B03 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = D4A1B2C3E5F60718293A4B02 /* RevenueCat */; };
 /* End PBXBuildFile section */
 
@@ -49,6 +50,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4A1B2C3E5F60718293A4B13 /* LicenseList in Frameworks */,
 				D4A1B2C3E5F60718293A4B03 /* RevenueCat in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -94,6 +96,7 @@
 			);
 			name = Nikki;
 			packageProductDependencies = (
+				D4A1B2C3E5F60718293A4B12 /* LicenseList */,
 				D4A1B2C3E5F60718293A4B02 /* RevenueCat */,
 			);
 			productName = Nikki;
@@ -151,6 +154,7 @@
 			mainGroup = CF7F7D3FCA8CDA90C72D5B31;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				D4A1B2C3E5F60718293A4B11 /* XCRemoteSwiftPackageReference "LicenseList" */,
 				D4A1B2C3E5F60718293A4B01 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -463,6 +467,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		D4A1B2C3E5F60718293A4B11 /* XCRemoteSwiftPackageReference "LicenseList" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/cybozu/LicenseList.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.5.0;
+			};
+		};
 		D4A1B2C3E5F60718293A4B01 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/RevenueCat/purchases-ios-spm";
@@ -474,6 +486,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		D4A1B2C3E5F60718293A4B12 /* LicenseList */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D4A1B2C3E5F60718293A4B11 /* XCRemoteSwiftPackageReference "LicenseList" */;
+			productName = LicenseList;
+		};
 		D4A1B2C3E5F60718293A4B02 /* RevenueCat */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = D4A1B2C3E5F60718293A4B01 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;

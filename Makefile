@@ -2,6 +2,9 @@ PROJECT := Nikki.xcodeproj
 SCHEME := Nikki
 DERIVED_DATA := tmp/DerivedData
 INSTALL_APP := /Applications/Nikki.app
+# LicenseList の BuildToolPlugin (PrepareLicenseList) は初回に信頼の確認を求める。
+# GUI での承認結果は共有されない xcuserdata に入るため、CLI ビルドでは検証をスキップする
+SKIP_PLUGIN_VALIDATION := -skipPackagePluginValidation
 LSREGISTER := /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister
 
 .PHONY: macos ios ios-device
@@ -14,6 +17,7 @@ macos:
 		-destination 'platform=macOS' \
 		-derivedDataPath $(DERIVED_DATA) \
 		-allowProvisioningUpdates -allowProvisioningDeviceRegistration \
+		$(SKIP_PLUGIN_VALIDATION) \
 		build
 	rm -rf $(INSTALL_APP)
 	ditto $(DERIVED_DATA)/Build/Products/Release/Nikki.app $(INSTALL_APP)
@@ -24,6 +28,7 @@ ios:
 	xcodebuild -project $(PROJECT) -scheme $(SCHEME) \
 		-destination 'generic/platform=iOS Simulator' \
 		-derivedDataPath $(DERIVED_DATA) \
+		$(SKIP_PLUGIN_VALIDATION) \
 		build
 
 # iOS 実機ビルド + インストール。DEVICE 未指定時は接続中 (connected) の実機を自動選択する
@@ -32,6 +37,7 @@ ios-device:
 		-destination 'generic/platform=iOS' \
 		-derivedDataPath $(DERIVED_DATA) \
 		-allowProvisioningUpdates -allowProvisioningDeviceRegistration \
+		$(SKIP_PLUGIN_VALIDATION) \
 		build
 	@set -e; \
 	device="$(DEVICE)"; \
