@@ -20,6 +20,7 @@ struct SettingsPage: View {
     @State var autoLockConfirmationDialogIsPresented = false
     @State var textSizeConfirmationDialogIsPresented = false
     @State var themeIsPresented = false
+    @State var licenseIsPresented = false
     @State var paywallSheetIsPresented = false
     @State var markdownExporterIsPresented = false
 
@@ -100,6 +101,16 @@ struct SettingsPage: View {
                         }
                         .padding(.bottom, 20)
 
+                        SettingsSectionLabel(text: "このアプリについて")
+                        InkListSection {
+                            InkListRow(
+                                title: "OSS ライセンス",
+                                showsSeparator: false,
+                                action: { licenseIsPresented = true }
+                            )
+                        }
+                        .padding(.bottom, 20)
+
                         Text("Nikki 1.0.0 — あなたの日記は、この端末の中に。")
                             .font(.ink(11, .regular))
                             .foregroundStyle(Color.inkTextQuaternary)
@@ -115,6 +126,9 @@ struct SettingsPage: View {
         .inkNavigationBarHidden()
         .navigationDestination(isPresented: $themeIsPresented) {
             ThemePage()
+        }
+        .navigationDestination(isPresented: $licenseIsPresented) {
+            LicensePage()
         }
         .sheet(isPresented: $paywallSheetIsPresented) {
             PaywallPage()
