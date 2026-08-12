@@ -48,6 +48,29 @@ struct JournalEntryTests {
         #expect(entry.updatedAt > .distantPast)
     }
 
+    @Test("新規作成の日記はアーカイブされていない状態で始まる")
+    func newEntryStartsUnarchived() {
+        let entry = JournalEntry(templateMarkdown: "# タイトル\n本文", date: .now)
+        #expect(!entry.isArchived)
+    }
+
+    @Test("setArchived が isArchived を切り替えて updatedAt を進める")
+    func setArchivedTogglesAndBumpsUpdatedAt() {
+        let entry = JournalEntry(
+            date: .now,
+            title: "梅雨明け",
+            bodyMarkdown: "本文",
+            createdAt: .distantPast,
+            updatedAt: .distantPast
+        )
+        entry.setArchived(true)
+        #expect(entry.isArchived)
+        #expect(entry.updatedAt > .distantPast)
+
+        entry.setArchived(false)
+        #expect(!entry.isArchived)
+    }
+
     @Test("excerpt は段落と見出しのテキストを連結する")
     func excerptJoinsParagraphsAndHeadings() {
         let entry = JournalEntry(

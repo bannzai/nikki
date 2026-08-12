@@ -14,14 +14,20 @@ final class JournalEntry {
     @Attribute(.allowsCloudEncryption) private(set) var bodyMarkdown: String = ""
     private(set) var createdAt: Date = Date.now
     private(set) var updatedAt: Date = Date.now
+    /// アーカイブ済みかどうか。ホームの一覧・カレンダー・検索から外し、アーカイブ一覧(設定 > アーカイブした日記)にだけ出す。
+    /// ホームの @Query の絞り込み条件に使うため暗号化しない。
+    private(set) var isArchived: Bool = false
 
     // createdAt / updatedAt はサンプルデータで参照日時を固定するため引数から受け取る。
-    init(date: Date, title: String, bodyMarkdown: String, createdAt: Date, updatedAt: Date) {
+    // isArchived はサンプルデータでアーカイブ済みの日記を作るため引数から受け取る。
+    // 新規作成の日記はアーカイブされていない状態で始まるため false を既定にする。
+    init(date: Date, title: String, bodyMarkdown: String, createdAt: Date, updatedAt: Date, isArchived: Bool = false) {
         self.date = date
         self.title = title
         self.bodyMarkdown = bodyMarkdown
         self.createdAt = createdAt
         self.updatedAt = updatedAt
+        self.isArchived = isArchived
     }
 
     /// テンプレートから生成した markdown で日記を作る。
@@ -55,6 +61,12 @@ final class JournalEntry {
     /// bodyMarkdown を更新し、updatedAt も同時に更新する。
     func setBodyMarkdown(_ bodyMarkdown: String) {
         self.bodyMarkdown = bodyMarkdown
+        updatedAt = .now
+    }
+
+    /// isArchived を更新し、updatedAt も同時に更新する。
+    func setArchived(_ isArchived: Bool) {
+        self.isArchived = isArchived
         updatedAt = .now
     }
 
