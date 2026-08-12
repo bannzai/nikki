@@ -1,9 +1,12 @@
 import SwiftUI
+import SwiftData
 
 /// 時系列リスト本体。日記を月ごとにまとめ、日付ブロック + タイトル + 2行抜粋の行を並べる。
-/// 行のタップで該当日記のエディタへ進む。日記が1件もないときは空状態を表示する。
+/// 行のタップで該当日記のエディタへ、長押しのコンテキストメニューでアーカイブへ進む。日記が1件もないときは空状態を表示する。
 struct HomeListBody: View {
     let entries: [JournalEntry]
+
+    @Environment(\.modelContext) private var modelContext
 
     var body: some View {
         if entries.isEmpty {
@@ -28,6 +31,15 @@ struct HomeListBody: View {
                                 )
                             }
                             .buttonStyle(.plain)
+                            .contextMenu {
+                                Button {
+                                    entry.setArchived(true)
+                                    // 直後にアプリが kill されても結果が残るよう明示保存する(平常時は autosave が保存する)。
+                                    try? modelContext.save()
+                                } label: {
+                                    Label("アーカイブ", systemImage: InkIcons.archive)
+                                }
+                            }
                         }
                     }
                 }

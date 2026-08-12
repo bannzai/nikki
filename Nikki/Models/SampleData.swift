@@ -80,6 +80,21 @@ enum SampleData {
     /// エディタ系画面が使うリッチな本文を持つ日記(梅雨明け)。
     static var sampleEntry: JournalEntry { entries[0] }
 
+    /// アーカイブ一覧のプレビュー・カタログ用のアーカイブ済み日記。
+    /// entries には混ぜず、ホーム系プレビュー(絞り込み前の配列を直接受け取る)に出ないようにする。
+    static var archivedEntries: [JournalEntry] {
+        [
+            JournalEntry(
+                date: date(2026, 5, 3, 18, 20),
+                title: "連休の中日",
+                bodyMarkdown: "どこへも行かず、たまっていた写真を整理した。読み返すことはないけれど、残しておきたい日。",
+                createdAt: date(2026, 5, 3, 18, 20),
+                updatedAt: date(2026, 5, 3, 18, 20),
+                isArchived: true
+            ),
+        ]
+    }
+
     /// 初回起動時のシードにも使う既定テンプレート4種。
     static var templates: [JournalTemplate] {
         [
@@ -133,6 +148,9 @@ enum SampleData {
                 configurations: ModelConfiguration(isStoredInMemoryOnly: true, cloudKitDatabase: .none)
             )
             for entry in entries {
+                container.mainContext.insert(entry)
+            }
+            for entry in archivedEntries {
                 container.mainContext.insert(entry)
             }
             for template in templates {

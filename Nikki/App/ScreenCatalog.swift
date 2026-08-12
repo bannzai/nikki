@@ -19,6 +19,7 @@ enum Screen: String, CaseIterable, Identifiable {
     case theme
     case paywall
     case settings
+    case archive
 
     var id: String { rawValue }
 }
@@ -73,6 +74,11 @@ struct ScreenContent: View {
             PaywallPage()
         case .settings:
             SettingsPage()
+        case .archive:
+            // ArchivePage は @Query でアーカイブ済みの日記を読むため、NavigationStack に載せる。
+            NavigationStack {
+                ArchivePage()
+            }
         }
     }
 }

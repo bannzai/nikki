@@ -21,6 +21,7 @@ struct SettingsPage: View {
     @State var textSizeConfirmationDialogIsPresented = false
     @State var themeIsPresented = false
     @State var licenseIsPresented = false
+    @State var archiveIsPresented = false
     @State var paywallSheetIsPresented = false
     @State var markdownExporterIsPresented = false
 
@@ -89,6 +90,10 @@ struct SettingsPage: View {
                         SettingsSectionLabel(text: "データ")
                         InkListSection {
                             InkListRow(
+                                title: "アーカイブした日記",
+                                action: { archiveIsPresented = true }
+                            )
+                            InkListRow(
                                 title: "Markdown で書き出す",
                                 action: { markdownExporterIsPresented = true }
                             )
@@ -129,6 +134,9 @@ struct SettingsPage: View {
         }
         .navigationDestination(isPresented: $licenseIsPresented) {
             LicensePage()
+        }
+        .navigationDestination(isPresented: $archiveIsPresented) {
+            ArchivePage()
         }
         .sheet(isPresented: $paywallSheetIsPresented) {
             PaywallPage()

@@ -24,7 +24,12 @@ struct HomePage: View {
     /// 検索バーのフォーカス。⌘F ショートカットからも当てられるようにここで持つ。
     @FocusState var searchFieldIsFocused: Bool
 
-    @Query(sort: \JournalEntry.date, order: .reverse) var entries: [JournalEntry]
+    // アーカイブ済みの日記はホーム(リスト・カレンダー・検索)に出さず、設定 > アーカイブした日記でだけ見せる。
+    @Query(
+        filter: #Predicate<JournalEntry> { $0.isArchived == false },
+        sort: \JournalEntry.date,
+        order: .reverse
+    ) var entries: [JournalEntry]
 
     @Environment(\.today) private var today
     @Environment(\.resetAutoLockTimer) private var resetAutoLockTimer
