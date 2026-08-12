@@ -4,7 +4,8 @@ import RevenueCat
 
 @main
 struct NikkiApp: App {
-    /// カタログモードはサンプルデータ入りの in-memory ストア、通常起動は CloudKit 同期つきの永続ストアを使う。
+    /// カタログモードはサンプルデータ入りの in-memory ストア、DEBUG の通常起動は開発用の永続ストア、
+    /// Release は CloudKit 同期つきの普段使い用ストアを使う。
     let modelContainer: ModelContainer
 
     init() {
@@ -18,7 +19,7 @@ struct NikkiApp: App {
             || environment["XCTestConfigurationFilePath"] != nil {
             modelContainer = SampleData.inMemoryContainer()
         } else {
-            modelContainer = Self.defaultContainer()
+            modelContainer = Self.developmentContainer()
             Purchases.configure(withAPIKey: Const.revenueCatAPIKey)
         }
         #else
@@ -49,14 +50,39 @@ struct NikkiApp: App {
         #endif
     }
 
-    /// CloudKit private database と同期する永続ストアを作る。
+    /// CloudKit private database と同期する、普段使い用の永続ストアを作る。
+    private static func defaultContainer() -> ModelContainer {
+        persistentContainer(configuration: ModelConfiguration(cloudKitDatabase: .private("iCloud.com.bannzai.Nikki")))
+    }
+
+    #if DEBUG
+    /// 開発用の永続ストアを作る。
+    /// 開発中に作ったデータが普段使いの DB に混ざって普段使いを妨げないよう(issue #40)、
+    /// 普段使い用の default.store とは別ファイルに保存し、CloudKit 同期もしない。
+    private static func developmentContainer() -> ModelContainer {
+        do {
+            // 明示 URL のストアは SwiftData が親ディレクトリを作らないため、サンドボックス初回起動に備えて自前で作る。
+            try FileManager.default.createDirectory(at: .applicationSupportDirectory, withIntermediateDirectories: true)
+            return persistentContainer(
+                configuration: ModelConfiguration(
+                    url: URL.applicationSupportDirectory.appending(path: "NikkiDev.store"),
+                    cloudKitDatabase: .none
+                )
+            )
+        } catch {
+            fatalError("開発用ストアのディレクトリ作成に失敗: \(error)")
+        }
+    }
+    #endif
+
+    /// 指定された設定で永続ストアを作る。
     /// テンプレートが1件もない初回起動時は既定テンプレートをシードする。
     /// シードはローカルの件数判定のみで行うため、同期前の複数端末が同時に初回起動すると重複し得る(既知の割り切り)。
-    private static func defaultContainer() -> ModelContainer {
+    private static func persistentContainer(configuration: ModelConfiguration) -> ModelContainer {
         do {
             let container = try ModelContainer(
                 for: JournalEntry.self, JournalTemplate.self,
-                configurations: ModelConfiguration(cloudKitDatabase: .private("iCloud.com.bannzai.Nikki"))
+                configurations: configuration
             )
             if ((try? container.mainContext.fetchCount(FetchDescriptor<JournalTemplate>())) ?? 0) == 0 {
                 for template in SampleData.templates {
