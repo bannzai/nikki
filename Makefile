@@ -31,9 +31,11 @@ ios:
 		$(SKIP_PLUGIN_VALIDATION) \
 		build
 
-# iOS 実機ビルド + インストール。DEVICE 未指定時は接続中 (connected) の実機を自動選択する
+# iOS 実機ビルド + インストール。DEVICE 未指定時は接続中 (connected) の実機を自動選択する。
+# Debug ビルドは開発用ストア (CloudKit 同期なし) を使うため、普段使いする実機には Release を入れる
 ios-device:
 	xcodebuild -project $(PROJECT) -scheme $(SCHEME) \
+		-configuration Release \
 		-destination 'generic/platform=iOS' \
 		-derivedDataPath $(DERIVED_DATA) \
 		-allowProvisioningUpdates -allowProvisioningDeviceRegistration \
@@ -49,5 +51,5 @@ ios-device:
 		echo "接続中の実機が見つかりません。make ios-device DEVICE=<identifier> で指定してください" >&2; \
 		exit 1; \
 	fi; \
-	xcrun devicectl device install app --device $$device $(DERIVED_DATA)/Build/Products/Debug-iphoneos/Nikki.app; \
+	xcrun devicectl device install app --device $$device $(DERIVED_DATA)/Build/Products/Release-iphoneos/Nikki.app; \
 	echo "起動するには: xcrun devicectl device process launch --device $$device com.bannzai.Nikki"
