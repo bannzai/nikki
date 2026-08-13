@@ -10,6 +10,13 @@ func canEvaluateUnlockAuthentication() -> Bool {
     LAContext().canEvaluatePolicy(.deviceOwnerAuthentication, error: nil)
 }
 
+/// 生体認証(Touch ID / Face ID)だけでロック解除の認証を評価できる(搭載かつ登録済み)かを返す。
+/// パスワードしか使えない環境を自動提示の対象から外すため、フォールバック込みの .deviceOwnerAuthentication ではなく
+/// 生体認証限定のポリシーで評価する。
+func canEvaluateBiometricsUnlockAuthentication() -> Bool {
+    LAContext().canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil)
+}
+
 /// ロック解除の認証を評価し、解除に成功したかを返す。キャンセル・失敗時は false を返す。
 /// 生体認証が未登録・失敗した場合でもパスコード / パスワードで解除できるよう .deviceOwnerAuthentication を使う。
 @MainActor

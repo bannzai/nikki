@@ -5,8 +5,8 @@ import AppKit
 
 /// 自動ロック時に表示するロック画面(1f)。背景の日記本文をぼかして中身を守り、
 /// 中央のオーバーレイで再開を促す。解除に成功すると locked を false に戻し、直前の画面がそのまま現れる。
-/// macOS ではウィンドウのアクティブ化を起点に解除認証を自動提示し、別の通常アプリが前面になったら
-/// 認証ダイアログを閉じる( https://github.com/bannzai/nikki/issues/52 )。
+/// macOS ではウィンドウのアクティブ化を起点に解除認証を自動提示し、別の通常アプリが前面になるか
+/// ウィンドウが最小化されたら認証ダイアログを閉じる( https://github.com/bannzai/nikki/issues/52 )。
 /// かつて自動提示は他アプリと行き来するたびにダイアログが残って邪魔なためやめた
 /// ( https://github.com/bannzai/nikki/issues/47 )が、非表示時にダイアログを閉じることで解消したため提示し直す。
 struct LockPage: View {
@@ -62,6 +62,16 @@ struct LockPage: View {
                 autoPromptArmed = true
             }
         }
+        // ウィンドウの最小化も認証ダイアログだけが残る非表示だが、アプリの前面切り替えが起きず
+        // didActivateApplicationNotification では検知できないため、最小化通知で閉じて引き直す。
+        .onReceive(
+            NotificationCenter.default
+                .publisher(for: NSWindow.didMiniaturizeNotification)
+                .receive(on: DispatchQueue.main)
+        ) { _ in
+            cancelUnlockAuthentication()
+            autoPromptArmed = true
+        }
         // ウィンドウが閉じられた時も認証ダイアログだけを残さないよう閉じる。
         .onDisappear {
             cancelUnlockAuthentication()
@@ -81,9 +91,10 @@ struct LockPage: View {
         if !NSApp.isActive || NSApp.keyWindow == nil {
             return
         }
-        // 評価できる認証手段がない端末(パスコード未設定のシミュレータ等)では、自動提示すると表示直後の即時解除になり
-        // ロック画面が無意味になるため、自動提示はせずボタンからの解除に委ねる。
-        if !canEvaluateUnlockAuthentication() {
+        // 生体認証を使えない環境では自動提示せず、ボタンからの解除に委ねる。
+        // パスワードしか使えない Mac では入力必須のパネルがアクティブ化のたびに割り込んで邪魔なため、
+        // パスコード未設定の端末(シミュレータ等)では自動提示が表示直後の即時解除になりロック画面が無意味になるため。
+        if !canEvaluateBiometricsUnlockAuthentication() {
             return
         }
         autoPromptArmed = false
