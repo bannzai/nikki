@@ -10,16 +10,20 @@ enum HomePageMode: Int, CaseIterable {
 /// ホーム画面の共通シャーシ。ロゴヘッダ・検索バー・「リスト / カレンダー」セグメント・新規作成 FAB をまとめ、
 /// 選択中セグメントに応じて時系列リスト(1g)とカレンダー(1h)を切り替える。
 /// 日記は @Query で読み、検索バーの入力でタイトル・本文に一致する日記へ絞り込む。
-/// 行のタップでエディタ、FAB でテンプレート一覧(1l)へ進む。
+/// 行のタップでエディタへ進む。FAB は日記を先に作成してからエディタへ進み、
+/// 既定のテンプレートがあればその内容を自動挿入し、なければテンプレート一覧(1l)の選択から入る。
 struct HomePage: View {
     /// 表示モードの選択状態。リスト派/カレンダー派の常用に合わせて起動をまたいで保持する。
     @AppStorage(.homePageMode) var homePageMode: HomePageMode = .list
 
+    /// 既定のテンプレートの id(UUID 文字列)。空のときは未設定。FAB の新規作成で自動挿入するテンプレートの解決に使う。
+    @AppStorage(.defaultTemplateID) var defaultTemplateID: String = ""
+
     /// 検索バーの入力。空のときは全件を表示する。
     @State var searchText: String = ""
 
-    /// FAB からのテンプレート一覧(1l)への遷移状態。
-    @State var templateListIsPresented: Bool = false
+    /// FAB が作成した日記。エディタへの遷移に使う。
+    @State var entry: JournalEntry?
 
     /// 検索バーのフォーカス。⌘F ショートカットからも当てられるようにここで持つ。
     @FocusState var searchFieldIsFocused: Bool
@@ -31,8 +35,11 @@ struct HomePage: View {
         order: .reverse
     ) var entries: [JournalEntry]
 
+    @Query(sort: \JournalTemplate.sortOrder) var templates: [JournalTemplate]
+
     @Environment(\.today) private var today
     @Environment(\.resetAutoLockTimer) private var resetAutoLockTimer
+    @Environment(\.modelContext) private var modelContext
 
     var body: some View {
         let filteredEntries = searchText.isEmpty ? entries : entries.filter { $0.matches(searchText: searchText) }
@@ -71,7 +78,7 @@ struct HomePage: View {
             }
 
             Button {
-                templateListIsPresented = true
+                createEntry()
             } label: {
                 // アイコンのみ表示しつつ、⌘ 長押しのショートカット一覧と VoiceOver に名前を出すため Label にする。
                 Label("新しい日記", systemImage: InkIcons.pen)
@@ -95,12 +102,36 @@ struct HomePage: View {
         .onChange(of: searchText) {
             resetAutoLockTimer()
         }
-        .navigationDestination(isPresented: $templateListIsPresented) {
-            TemplateListPage()
+        .navigationDestination(item: $entry) { entry in
+            // 既定のテンプレートが未設定のまま作成した日記は、まずテンプレート一覧(1l)の選択から入る。
+            EditorPage(entry: entry, templateListIsPresented: templates.first { $0.id.uuidString == defaultTemplateID } == nil)
         }
         .navigationDestination(for: JournalEntry.self) { entry in
             EditorPage(entry: entry)
         }
+    }
+
+    /// FAB の新規作成。既定のテンプレートがあればその内容({{date}} は今日で補完)を挿入した日記を、
+    /// なければ空の日記を作成・保存し、エディタへの遷移を起こす。
+    private func createEntry() {
+        // 日付が変わる瞬間に {{date}} の補完値と日記の date がずれないよう、同じ時刻を共有する。
+        let now = Date.now
+        let entry: JournalEntry
+        if let template = templates.first(where: { $0.id.uuidString == defaultTemplateID }) {
+            entry = JournalEntry(
+                templateMarkdown: TemplateVariableField.substitutedMarkdown(
+                    template: template,
+                    fields: TemplateVariableField.fields(template: template, today: now, includesDemoValues: false)
+                ),
+                date: now
+            )
+        } else {
+            entry = JournalEntry(date: now, title: "", bodyMarkdown: "", createdAt: now, updatedAt: now)
+        }
+        modelContext.insert(entry)
+        // 直後にアプリが kill されても作成した日記が残るよう明示保存する(平常時は autosave が保存する)。
+        try? modelContext.save()
+        self.entry = entry
     }
 
     private func segmentLabel(for mode: HomePageMode) -> String {

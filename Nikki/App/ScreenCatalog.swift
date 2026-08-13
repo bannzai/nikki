@@ -59,7 +59,7 @@ struct ScreenContent: View {
             EditorReorderPage(entry: SampleData.sampleEntry)
         case .templateList:
             NavigationStack {
-                TemplateListPage()
+                TemplateListPage(entry: SampleData.sampleEntry)
             }
         case .templateVariable:
             let template = SampleData.reflectionTemplate

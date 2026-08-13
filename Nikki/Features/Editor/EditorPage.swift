@@ -2,10 +2,15 @@ import SwiftUI
 import SwiftData
 
 /// エディタ。タイトルと本文 markdown をそのまま編集し、変更のたびに日記へ書き戻す。
-/// entry(@Model)が唯一の状態で、Binding のセッター経由でドメインメソッドに書き戻すため @State は持たない。
+/// entry(@Model)が唯一の状態で、Binding のセッター経由でドメインメソッドに書き戻す。
+/// ナビ右端の「テンプレート」からテンプレート一覧(1l)へ進み、選んだテンプレの内容で本文を置き換えられる。
 /// 選択ツールバー(1j)・ブロック並び替え(1k)は静的表現のままで、この画面はテキスト編集に徹する。
 struct EditorPage: View {
     let entry: JournalEntry
+
+    /// テンプレート一覧(1l)への遷移状態。既定のテンプレートが未設定のまま新規作成したときは、
+    /// 呼び出し側が true を渡して「ページができる → テンプレートを選ぶ」の順で選択から入る。
+    @State var templateListIsPresented: Bool = false
 
     @AppStorage(.textSize) var textSize: TextSize = .standard
 
@@ -20,7 +25,12 @@ struct EditorPage: View {
         case .standard: 15
         case .large: 17
         }
-        EditorScreenScaffold(caption: editorDateText(date: entry.date), onDismiss: { dismiss() }) {
+        EditorScreenScaffold(
+            caption: editorDateText(date: entry.date),
+            onDismiss: { dismiss() },
+            trailing: .text("テンプレート"),
+            onTrailing: { templateListIsPresented = true }
+        ) {
             VStack(alignment: .leading, spacing: 0) {
                 TextField(
                     "タイトル",
@@ -42,6 +52,9 @@ struct EditorPage: View {
             .padding(.top, 10)
         }
         .inkNavigationBarHidden()
+        .navigationDestination(isPresented: $templateListIsPresented) {
+            TemplateListPage(entry: entry)
+        }
         // キーボード入力はタッチとして拾えないため、書き込み(updatedAt の更新)を無操作タイマーのリセットにする。
         .onChange(of: entry.updatedAt) {
             resetAutoLockTimer()

@@ -3,21 +3,24 @@ import SwiftData
 
 /// テンプレート一覧(1l)。「今日はどの紙に書きますか。」の見出しの下に、
 /// 各テンプレをカード(タイトル + シェブロン + markdown プレビュー)で並べる。
-/// カードを選ぶと変数入力シート(1m)を重ね、シートが日記を作成すると entry 経由でエディタへ進む。
+/// カードを選ぶとその内容({{date}} は日記の日付で補完)で entry を置き換えて保存し、
+/// 次回の新規作成で自動挿入する既定のテンプレートとして記憶してエディタへ戻る。
+/// entry に入力があるときは、置き換えで入力内容が消えることをアラートで確認してから置き換える。
 struct TemplateListPage: View {
+    /// テンプレートを挿入する対象の日記。遷移元のエディタが表示中の日記を渡す。
+    let entry: JournalEntry
+
     @Query(sort: \JournalTemplate.sortOrder) var templates: [JournalTemplate]
 
-    /// 変数入力シートを開いているテンプレート。nil のときはシートを閉じている。
+    /// 置き換え確認アラートの対象テンプレート。nil のときはアラートを閉じている。
     @State var template: JournalTemplate?
-    /// 変数入力シートの入力状態。
-    @State var fields: [TemplateVariableField] = []
-    /// 変数入力シートが作成した日記。エディタへの遷移に使う。
-    @State var entry: JournalEntry?
-    /// シートを開いた時刻。{{date}} の補完値と作成する日記の date を一致させるために保持する。
-    @State var sheetOpenedAt: Date = .now
+    @State var replaceAlertIsPresented = false
+
+    /// 既定のテンプレートの id(UUID 文字列)。空のときは未設定。選んだテンプレートを次回の自動挿入用に記憶する。
+    @AppStorage(.defaultTemplateID) var defaultTemplateID: String = ""
 
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.resetAutoLockTimer) private var resetAutoLockTimer
+    @Environment(\.modelContext) private var modelContext
 
     var body: some View {
         VStack(spacing: 0) {
@@ -32,7 +35,7 @@ struct TemplateListPage: View {
 
                     VStack(spacing: 12) {
                         ForEach(templates) { template in
-                            TemplateCard(template: template) { open(template: template) }
+                            TemplateCard(template: template) { select(template: template) }
                         }
                     }
 
@@ -43,37 +46,41 @@ struct TemplateListPage: View {
         }
         .background(Color.inkPaper.ignoresSafeArea())
         .inkNavigationBarHidden()
-        // 変数入力シートのキーボード入力はタッチとして拾えないため、入力変化を無操作タイマーのリセットにする。
-        .onChange(of: fields) {
-            resetAutoLockTimer()
-        }
-        .overlay {
-            if template != nil {
-                ZStack(alignment: .bottom) {
-                    TemplateVariableBackdrop()
-                        .onTapGesture { template = nil }
-                    TemplateVariableSheet(template: $template, fields: $fields, entry: $entry, today: sheetOpenedAt)
-                }
-                .ignoresSafeArea()
-            }
-        }
-        .navigationDestination(item: $entry) { entry in
-            EditorPage(entry: entry)
+        .alert("入力内容の置き換え", isPresented: $replaceAlertIsPresented, presenting: template) { template in
+            Button("置き換える", role: .destructive) { apply(template: template) }
+            Button("キャンセル", role: .cancel) {}
+        } message: { template in
+            Text("「\(template.name)」を挿入すると、いま入力されている内容は消えます。")
         }
     }
 
-    /// カードで選んだテンプレートの変数入力シートを開く。
-    private func open(template: JournalTemplate) {
-        sheetOpenedAt = .now
-        fields = TemplateVariableField.fields(template: template, today: sheetOpenedAt, includesDemoValues: false)
-        self.template = template
+    /// カードで選んだテンプレートを適用する。entry に入力があるときは、消えることを確認してから適用する。
+    private func select(template: JournalTemplate) {
+        if entry.title.isEmpty && entry.bodyMarkdown.isEmpty {
+            apply(template: template)
+        } else {
+            self.template = template
+            replaceAlertIsPresented = true
+        }
+    }
+
+    /// テンプレートの内容で entry を置き換えて保存し、既定のテンプレートとして記憶してエディタへ戻る。
+    private func apply(template: JournalTemplate) {
+        entry.replace(templateMarkdown: TemplateVariableField.substitutedMarkdown(
+            template: template,
+            fields: TemplateVariableField.fields(template: template, today: entry.date, includesDemoValues: false)
+        ))
+        // エディタへ戻った直後にアプリが kill されても置き換えが残るよう明示保存する。
+        try? modelContext.save()
+        defaultTemplateID = template.id.uuidString
+        dismiss()
     }
 }
 
 struct TemplateListPage_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
-            TemplateListPage()
+            TemplateListPage(entry: SampleData.sampleEntry)
         }
         .modelContainer(SampleData.inMemoryContainer())
     }

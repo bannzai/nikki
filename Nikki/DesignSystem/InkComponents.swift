@@ -256,10 +256,19 @@ enum InkNavCenter {
     case caption(String)
 }
 
+enum InkNavTrailing {
+    // 右端ボタンなし
+    case none
+    // テキストボタン
+    case text(String)
+}
+
 struct InkNavBar: View {
     var leading: InkNavLeading = .none
     var center: InkNavCenter = .none
+    var trailing: InkNavTrailing = .none
     var onLeading: (() -> Void)? = nil
+    var onTrailing: (() -> Void)? = nil
 
     var body: some View {
         ZStack {
@@ -279,6 +288,7 @@ struct InkNavBar: View {
             HStack {
                 InkNavBarLeadingButton(leading: leading, onLeading: onLeading)
                 Spacer()
+                InkNavBarTrailingButton(trailing: trailing, onTrailing: onTrailing)
             }
         }
         .frame(height: 44)
@@ -306,6 +316,26 @@ struct InkNavBarLeadingButton: View {
             Button { onLeading?() } label: {
                 Image(systemName: InkIcons.chevronDown)
                     .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(Color.inkTextSecondary)
+            }
+            .buttonStyle(.plain)
+        }
+    }
+}
+
+/// InkNavBar の右端ボタン(なし / テキスト)。
+struct InkNavBarTrailingButton: View {
+    let trailing: InkNavTrailing
+    var onTrailing: (() -> Void)? = nil
+
+    var body: some View {
+        switch trailing {
+        case .none:
+            EmptyView()
+        case .text(let text):
+            Button { onTrailing?() } label: {
+                Text(text)
+                    .font(.ink(13.5, .regular))
                     .foregroundStyle(Color.inkTextSecondary)
             }
             .buttonStyle(.plain)
