@@ -114,17 +114,19 @@ struct HomePage: View {
     /// FAB の新規作成。既定のテンプレートがあればその内容({{date}} は今日で補完)を挿入した日記を、
     /// なければ空の日記を作成・保存し、エディタへの遷移を起こす。
     private func createEntry() {
+        // 日付が変わる瞬間に {{date}} の補完値と日記の date がずれないよう、同じ時刻を共有する。
+        let now = Date.now
         let entry: JournalEntry
         if let template = templates.first(where: { $0.id.uuidString == defaultTemplateID }) {
             entry = JournalEntry(
                 templateMarkdown: TemplateVariableField.substitutedMarkdown(
                     template: template,
-                    fields: TemplateVariableField.fields(template: template, today: .now, includesDemoValues: false)
+                    fields: TemplateVariableField.fields(template: template, today: now, includesDemoValues: false)
                 ),
-                date: .now
+                date: now
             )
         } else {
-            entry = JournalEntry(date: .now, title: "", bodyMarkdown: "", createdAt: .now, updatedAt: .now)
+            entry = JournalEntry(date: now, title: "", bodyMarkdown: "", createdAt: now, updatedAt: now)
         }
         modelContext.insert(entry)
         // 直後にアプリが kill されても作成した日記が残るよう明示保存する(平常時は autosave が保存する)。
