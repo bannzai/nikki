@@ -48,17 +48,22 @@ struct ArchivePage: View {
                                             showsSeparator: !(groupIndex == monthGroups.count - 1
                                                 && rowIndex == group.entries.count - 1)
                                         )
-                                    }
-                                    .buttonStyle(.plain)
-                                    .contextMenu {
-                                        Button {
-                                            entry.setArchived(false)
-                                            // 直後にアプリが kill されても結果が残るよう明示保存する(平常時は autosave が保存する)。
-                                            try? modelContext.save()
-                                        } label: {
-                                            Label("アーカイブから戻す", systemImage: InkIcons.unarchive)
+                                        // タイトルが短い行は大半が透明な余白で、そのままでは余白部分がヒットテストに
+                                        // 乗らずコンテキストメニューが開けないため、行の矩形全体を判定領域にする。
+                                        .contentShape(Rectangle())
+                                        // Button の外側に付けると macOS で右クリックに反応しないため、
+                                        // ラベル内側に付けて iOS の長押しと macOS の右クリックの両方を効かせる。
+                                        .contextMenu {
+                                            Button {
+                                                entry.setArchived(false)
+                                                // 直後にアプリが kill されても結果が残るよう明示保存する(平常時は autosave が保存する)。
+                                                try? modelContext.save()
+                                            } label: {
+                                                Label("アーカイブから戻す", systemImage: InkIcons.unarchive)
+                                            }
                                         }
                                     }
+                                    .buttonStyle(.plain)
                                 }
                             }
                         }

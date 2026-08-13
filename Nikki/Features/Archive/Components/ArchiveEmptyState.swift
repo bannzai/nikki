@@ -7,9 +7,16 @@ struct ArchiveEmptyState: View {
             Text("アーカイブした日記はありません。")
                 .font(.ink(15, .medium))
                 .foregroundStyle(Color.inkTextSecondary)
+            // アーカイブ操作の入口 (コンテキストメニュー) の開き方が OS で違うため、案内文言を分ける。
+            #if os(macOS)
+            Text("ホームの日記を右クリックすると、ここへしまえます。")
+                .font(.ink(12.5, .regular))
+                .foregroundStyle(Color.inkTextTertiary)
+            #else
             Text("ホームの日記を長押しすると、ここへしまえます。")
                 .font(.ink(12.5, .regular))
                 .foregroundStyle(Color.inkTextTertiary)
+            #endif
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
