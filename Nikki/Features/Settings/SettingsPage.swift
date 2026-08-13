@@ -24,6 +24,7 @@ struct SettingsPage: View {
     @State var archiveIsPresented = false
     @State var paywallSheetIsPresented = false
     @State var markdownExporterIsPresented = false
+    @State var deleteAllEntriesConfirmationDialogIsPresented = false
 
     @Query(sort: \JournalTemplate.sortOrder) var templates: [JournalTemplate]
     /// Markdown 書き出しは読んだときに時系列で並ぶよう古い順に取り出す。
@@ -31,6 +32,7 @@ struct SettingsPage: View {
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.plusActive) private var plusActive
+    @Environment(\.modelContext) private var modelContext
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -97,6 +99,12 @@ struct SettingsPage: View {
                                 title: "Markdown で書き出す",
                                 action: { markdownExporterIsPresented = true }
                             )
+                            // 遷移ではなく確認ダイアログを開くアクション行のため、シェブロンは出さない。
+                            InkListRow(
+                                title: "すべての日記を削除",
+                                showsChevron: false,
+                                action: { deleteAllEntriesConfirmationDialogIsPresented = true }
+                            )
                             InkListRow(
                                 title: "Nikki Plus",
                                 value: plusActive ? "加入中" : "未加入",
@@ -140,6 +148,14 @@ struct SettingsPage: View {
         }
         .sheet(isPresented: $paywallSheetIsPresented) {
             PaywallPage()
+        }
+        .confirmationDialog("すべての日記を削除", isPresented: $deleteAllEntriesConfirmationDialogIsPresented, titleVisibility: .visible) {
+            Button("すべての日記を削除", role: .destructive) {
+                // 直後にアプリが kill されても結果が残るよう save まで行う。失敗しても @Query の再評価でストアの実態に追従するため、ここではエラーを扱わない。
+                try? modelContext.deleteAllJournalEntries()
+            }
+        } message: {
+            Text("アーカイブした日記も含めて、すべての日記を削除します。この操作は取り消せません。")
         }
         .confirmationDialog("既定のテンプレート", isPresented: $defaultTemplateConfirmationDialogIsPresented, titleVisibility: .visible) {
             ForEach(templates) { template in

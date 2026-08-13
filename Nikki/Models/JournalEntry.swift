@@ -96,6 +96,19 @@ final class JournalEntry {
     }
 }
 
+// MARK: - 全削除
+
+extension ModelContext {
+    /// アーカイブ済みも含むすべての日記を削除して保存する。設定「すべての日記を削除」から呼ぶ。
+    /// delete(model:) のストアレベル一括削除は context を経由せず CloudKit へ削除が伝播しないため、1件ずつ削除する。
+    func deleteAllJournalEntries() throws {
+        for entry in try fetch(FetchDescriptor<JournalEntry>()) {
+            delete(entry)
+        }
+        try save()
+    }
+}
+
 // MARK: - Markdown 書き出し
 
 extension [JournalEntry] {

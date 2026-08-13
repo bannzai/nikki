@@ -1,4 +1,5 @@
 import Foundation
+import SwiftData
 import Testing
 @testable import Nikki
 
@@ -96,6 +97,21 @@ struct JournalEntryTests {
         #expect(entry.matches(searchText: "蝉"))
         #expect(entry.matches(searchText: "iced coffee"))
         #expect(!entry.matches(searchText: "雪"))
+    }
+
+    @Test("deleteAllJournalEntries はアーカイブ済みも含めて日記を全件削除し、テンプレートは残す")
+    @MainActor
+    func deleteAllJournalEntriesRemovesAllEntries() throws {
+        // SampleData の in-memory コンテナは通常の日記・アーカイブ済みの日記・テンプレートをシード済み。
+        // mainContext だけ取り出すとコンテナが解放されて SwiftData がクラッシュするため、コンテナ自体を保持する。
+        let container = SampleData.inMemoryContainer()
+        let context = container.mainContext
+        #expect(try context.fetchCount(FetchDescriptor<JournalEntry>()) > 0)
+
+        try context.deleteAllJournalEntries()
+
+        #expect(try context.fetchCount(FetchDescriptor<JournalEntry>()) == 0)
+        #expect(try context.fetchCount(FetchDescriptor<JournalTemplate>()) > 0)
     }
 
     @Test("exportMarkdown は日付見出し + 本文を水平線で区切って連結する")
