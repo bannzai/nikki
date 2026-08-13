@@ -31,6 +31,35 @@ struct JournalEntryTests {
         #expect(entry.bodyMarkdown == "ただの本文")
     }
 
+    @Test("replace がテンプレート markdown でタイトルと本文を置き換えて updatedAt を進める")
+    func replaceOverwritesTitleAndBody() {
+        let entry = JournalEntry(
+            date: .now,
+            title: "もとのタイトル",
+            bodyMarkdown: "もとの本文",
+            createdAt: .distantPast,
+            updatedAt: .distantPast
+        )
+        entry.replace(templateMarkdown: "# 2026年7月18日\n\n天気: 晴れ")
+        #expect(entry.title == "2026年7月18日")
+        #expect(entry.bodyMarkdown == "天気: 晴れ")
+        #expect(entry.updatedAt > .distantPast)
+    }
+
+    @Test("replace で先頭が H1 でなければタイトルは空になり全文が本文になる")
+    func replaceWithoutHeadingClearsTitle() {
+        let entry = JournalEntry(
+            date: .now,
+            title: "もとのタイトル",
+            bodyMarkdown: "もとの本文",
+            createdAt: .distantPast,
+            updatedAt: .distantPast
+        )
+        entry.replace(templateMarkdown: "ただの本文")
+        #expect(entry.title == "")
+        #expect(entry.bodyMarkdown == "ただの本文")
+    }
+
     @Test("setTitle / setBodyMarkdown が updatedAt を進める")
     func settersBumpUpdatedAt() {
         let entry = JournalEntry(

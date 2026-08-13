@@ -31,8 +31,20 @@ final class JournalEntry {
     }
 
     /// テンプレートから生成した markdown で日記を作る。
-    /// 先頭行が「# 」見出しならタイトルとして取り出し、残り(見出し直後の空行は除く)を本文にする。
     convenience init(templateMarkdown: String, date: Date) {
+        let (title, bodyMarkdown) = Self.titleAndBody(templateMarkdown: templateMarkdown)
+        self.init(
+            date: date,
+            title: title,
+            bodyMarkdown: bodyMarkdown,
+            createdAt: .now,
+            updatedAt: .now
+        )
+    }
+
+    /// テンプレート markdown をタイトルと本文に分解する。
+    /// 先頭行が「# 」見出しならタイトルとして取り出し、残り(見出し直後の空行は除く)を本文にする。
+    private static func titleAndBody(templateMarkdown: String) -> (title: String, bodyMarkdown: String) {
         var lines = templateMarkdown.components(separatedBy: .newlines)
         var title = ""
         let firstLine = lines.first?.trimmingCharacters(in: .whitespaces) ?? ""
@@ -43,13 +55,15 @@ final class JournalEntry {
                 lines.removeFirst()
             }
         }
-        self.init(
-            date: date,
-            title: title,
-            bodyMarkdown: lines.joined(separator: "\n"),
-            createdAt: .now,
-            updatedAt: .now
-        )
+        return (title, lines.joined(separator: "\n"))
+    }
+
+    /// title と bodyMarkdown をテンプレートから生成した markdown の内容で置き換え、updatedAt も同時に更新する。
+    func replace(templateMarkdown: String) {
+        let (title, bodyMarkdown) = Self.titleAndBody(templateMarkdown: templateMarkdown)
+        self.title = title
+        self.bodyMarkdown = bodyMarkdown
+        updatedAt = .now
     }
 
     /// title を更新し、updatedAt も同時に更新する。
