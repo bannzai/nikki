@@ -14,6 +14,7 @@
 /* Begin PBXFileReference section */
 		07FD79C6F7133FAB73E4C435 /* NikkiTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = NikkiTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		38B39791C2AB0FB5EC739A70 /* Nikki.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Nikki.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9E4C1A70B3D25F8146A7C001 /* NikkiUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = NikkiUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -43,6 +44,11 @@
 			path = NikkiTests;
 			sourceTree = "<group>";
 		};
+		9E4C1A70B3D25F8146A7C002 /* NikkiUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = NikkiUITests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +69,7 @@
 			children = (
 				38B39791C2AB0FB5EC739A70 /* Nikki.app */,
 				07FD79C6F7133FAB73E4C435 /* NikkiTests.xctest */,
+				9E4C1A70B3D25F8146A7C001 /* NikkiUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -72,6 +79,7 @@
 			children = (
 				152D1E6653A12D49B828BAF0 /* Nikki */,
 				3418E7616F6540FAF8D16402 /* NikkiTests */,
+				9E4C1A70B3D25F8146A7C002 /* NikkiUITests */,
 				C1F193C3C25AEDDCB3633E69 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -124,6 +132,27 @@
 			productReference = 07FD79C6F7133FAB73E4C435 /* NikkiTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		9E4C1A70B3D25F8146A7C003 /* NikkiUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9E4C1A70B3D25F8146A7C008 /* Build configuration list for PBXNativeTarget "NikkiUITests" */;
+			buildPhases = (
+				9E4C1A70B3D25F8146A7C004 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9E4C1A70B3D25F8146A7C005 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				9E4C1A70B3D25F8146A7C002 /* NikkiUITests */,
+			);
+			name = NikkiUITests;
+			packageProductDependencies = (
+			);
+			productName = NikkiUITests;
+			productReference = 9E4C1A70B3D25F8146A7C001 /* NikkiUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -136,6 +165,11 @@
 					54F30CD89F23FF354956763C = {
 						DevelopmentTeam = TQPN82UBBY;
 						ProvisioningStyle = Automatic;
+					};
+					9E4C1A70B3D25F8146A7C003 = {
+						DevelopmentTeam = TQPN82UBBY;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 54F30CD89F23FF354956763C;
 					};
 					FE442D62C95D3A6C1DBFD3A1 = {
 						DevelopmentTeam = TQPN82UBBY;
@@ -164,6 +198,7 @@
 			targets = (
 				54F30CD89F23FF354956763C /* Nikki */,
 				FE442D62C95D3A6C1DBFD3A1 /* NikkiTests */,
+				9E4C1A70B3D25F8146A7C003 /* NikkiUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -186,6 +221,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9E4C1A70B3D25F8146A7C004 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BB30DC9471FD946681143FF2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -196,6 +238,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		9E4C1A70B3D25F8146A7C005 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 54F30CD89F23FF354956763C /* Nikki */;
+		};
 		F8ABA416C469FE968BE85512 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 54F30CD89F23FF354956763C /* Nikki */;
@@ -203,6 +249,56 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		9E4C1A70B3D25F8146A7C006 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bannzai.NikkiUITests;
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Nikki;
+			};
+			name = Debug;
+		};
+		9E4C1A70B3D25F8146A7C007 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bannzai.NikkiUITests;
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Nikki;
+			};
+			name = Release;
+		};
 		0A277F8A25B763F69F1B2731 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -455,6 +551,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		9E4C1A70B3D25F8146A7C008 /* Build configuration list for PBXNativeTarget "NikkiUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9E4C1A70B3D25F8146A7C006 /* Debug */,
+				9E4C1A70B3D25F8146A7C007 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		541D6ACCE3BA87317A4073B4 /* Build configuration list for PBXNativeTarget "NikkiTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
