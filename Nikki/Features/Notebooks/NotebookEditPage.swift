@@ -18,7 +18,7 @@ struct NotebookEditPage: View {
         VStack(spacing: 0) {
             InkNavBar(leading: .back, center: .title("ノートの編集"), onLeading: { dismiss() })
             NotebookFormFields(
-                name: Binding(get: { notebook.name }, set: { notebook.setName(name: $0) }),
+                name: Binding(get: { notebook.name }, set: { setName(name: $0) }),
                 markdown: Binding(get: { notebook.template?.markdown ?? "" }, set: { setTemplateMarkdown(markdown: $0) })
             )
             // 最後の1冊まで消すと、新規日記の書き出し(既定のノートのテンプレート)が次回起動の
@@ -55,9 +55,25 @@ struct NotebookEditPage: View {
         }
     }
 
-    /// 書き出しの入力をテンプレートへ書き戻す。テンプレートを持たないノート(書き出しを空で作成した等)は、
-    /// 入力が始まったこのタイミングで作って紐付ける。
+    /// 名前の入力をノートへ書き戻す。作成フォームと同じく、名前のないノートが一覧・既定のノートの選択に
+    /// 並ばないよう、空白だけの入力は書き戻さない(入力欄を離れると元の名前に戻る)。
+    private func setName(name: String) {
+        if name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            return
+        }
+        notebook.setName(name: name)
+    }
+
+    /// 書き出しの入力をテンプレートへ書き戻す。作成フォームと意味を揃え、空白だけの書き出しは
+    /// 「テンプレートなし(ノートを選んだとき本文を置き換えない)」としてテンプレートごと削除する。
+    /// テンプレートを持たないノートで入力が始まったら、このタイミングで作って紐付ける。
     private func setTemplateMarkdown(markdown: String) {
+        if markdown.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            for template in notebook.templates ?? [] {
+                modelContext.delete(template)
+            }
+            return
+        }
         if let template = notebook.template {
             template.setMarkdown(markdown: markdown)
         } else {
