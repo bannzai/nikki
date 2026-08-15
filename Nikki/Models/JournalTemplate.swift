@@ -9,7 +9,9 @@ final class JournalTemplate {
     private(set) var id: UUID = UUID()
     private(set) var name: String = ""
     /// {{date}} {{weather}} 等の変数を含むマークダウン本文。
-    private(set) var markdown: String = ""
+    /// ユーザーが自由入力する書き出しの文章のため、日記の本文(JournalEntry.bodyMarkdown)と同じく
+    /// CloudKit の encrypted field として保存し、「開発者からも見えない」を担保する。
+    @Attribute(.allowsCloudEncryption) private(set) var markdown: String = ""
     /// ノート内での表示順。CloudKit 同期はレコードの取得順を保証しないため明示的に持つ。
     private(set) var sortOrder: Int = 0
 
