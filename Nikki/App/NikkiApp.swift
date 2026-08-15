@@ -76,24 +76,40 @@ struct NikkiApp: App {
     #endif
 
     /// 指定された設定で永続ストアを作る。
-    /// テンプレートが1件もない初回起動時は既定テンプレートをシードする。
-    /// シードはローカルの件数判定のみで行うため、同期前の複数端末が同時に初回起動すると重複し得る(既知の割り切り)。
     private static func persistentContainer(configuration: ModelConfiguration) -> ModelContainer {
         do {
             let container = try ModelContainer(
-                for: JournalEntry.self, JournalTemplate.self,
+                for: JournalEntry.self, JournalNotebook.self, JournalTemplate.self,
                 configurations: configuration
             )
-            if ((try? container.mainContext.fetchCount(FetchDescriptor<JournalTemplate>())) ?? 0) == 0 {
-                for template in SampleData.templates {
-                    container.mainContext.insert(template)
-                }
-                try? container.mainContext.save()
-            }
+            seedNotebooks(context: container.mainContext)
             return container
         } catch {
             fatalError("ModelContainer の生成に失敗: \(error)")
         }
+    }
+
+    /// ノートが1件もないときだけ、白紙({{date}} テンプレート)の既定ノート1冊を用意する(冪等)。
+    /// ノートを意識させない方針のため1冊だけシードし、新規日記は自動でこのノートに入る。
+    /// ノート導入前に作られたストアにはどのノートにも属さないテンプレートが残っているため、
+    /// その場合は既定ノートを入れ直さず、テンプレート1件につきノート1件を作って引き継ぐ。
+    /// 判定はローカルの件数だけで行うため、同期前の複数端末が同時に初回起動すると重複し得る(既知の割り切り)。
+    private static func seedNotebooks(context: ModelContext) {
+        if ((try? context.fetchCount(FetchDescriptor<JournalNotebook>())) ?? 0) > 0 {
+            return
+        }
+        let templates = (try? context.fetch(FetchDescriptor<JournalTemplate>(sortBy: [SortDescriptor(\.sortOrder)]))) ?? []
+        if templates.isEmpty {
+            context.insert(notebooks: SampleData.seedNotebooks)
+        } else {
+            for template in templates {
+                // 引き継いだノートのリマインドは、ユーザーが設定していない挙動を勝手に足さないよう「なし」で始める。
+                let notebook = JournalNotebook(name: template.name, reminderFrequency: .none, sortOrder: template.sortOrder)
+                context.insert(notebook)
+                notebook.add(template: template)
+            }
+        }
+        try? context.save()
     }
 }
 

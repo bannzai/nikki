@@ -3,7 +3,7 @@ import SwiftData
 
 /// デザインリファレンス(Nikki iOS.dc.html)と一致するサンプルデータ。
 /// 日付依存の画面には referenceToday(2026-07-18)を「今日」として渡す。
-/// JournalEntry / JournalTemplate は SwiftData の @Model(参照型)のため、複数のコンテナや
+/// JournalEntry / JournalNotebook / JournalTemplate は SwiftData の @Model(参照型)のため、複数のコンテナや
 /// プレビューで同じインスタンスを共有しないよう、アクセスごとに新しいインスタンスを作る。
 enum SampleData {
     // プレビュー・サンプルデータの再現性のため、参照日(2026-07-18 JST)と同じ暦・タイムゾーンに固定する。
@@ -95,48 +95,73 @@ enum SampleData {
         ]
     }
 
-    /// 初回起動時のシードにも使う既定テンプレート4種。
-    static var templates: [JournalTemplate] {
+    /// プレビュー・カタログ用ノートの中身。書く時間が決まっているノートにだけリマインドを入れる。
+    /// 並び順は配列の順そのもの、テンプレートの名前はノートの名前を使うため、ここには持たない。
+    /// 件数は macOS の confirmationDialog(NSAlert)がボタン4個までしか出せず、
+    /// 5件目以降が設定「既定のノート」から選べなくなるため、4件に留める。
+    private static var notebookSeeds: [(name: String, reminderFrequency: JournalReminderFrequency, markdown: String)] {
         [
-            JournalTemplate(
+            (
                 name: "白紙",
-                markdown: "# {{date}}",
-                sortOrder: 0
+                reminderFrequency: .none,
+                markdown: "# {{date}}"
             ),
-            JournalTemplate(
+            (
                 name: "朝の3行",
+                reminderFrequency: .daily,
                 markdown: """
                 # {{date}} の朝
                 - 今日たのしみなこと
                 - 今日やめておくこと
                 - ひとこと
-                """,
-                sortOrder: 1
+                """
             ),
-            JournalTemplate(
+            (
                 name: "一日の振り返り",
+                reminderFrequency: .daily,
                 markdown: """
                 # {{date}}
                 天気: {{weather}}
                 ## よかったこと
                 ## 明日のじぶんへ
-                """,
-                sortOrder: 2
+                """
             ),
-            JournalTemplate(
+            (
                 name: "旅の記録",
+                reminderFrequency: .none,
                 markdown: """
                 # {{place}} 1日目
                 ## 歩いたところ
                 ## たべたもの
-                """,
-                sortOrder: 3
+                """
             ),
         ]
     }
 
-    /// 変数入力シート(1m)が既定で開くテンプレート。
-    static var reflectionTemplate: JournalTemplate { templates[2] }
+    /// プレビュー・カタログ用の複数ノート。ノートごとに書き出し用のテンプレートを1件持ち、
+    /// ノート一覧のカードやリマインドのバッジなど、ノートが複数あるときの表示確認に使う。
+    static var notebooks: [JournalNotebook] {
+        notebookSeeds.enumerated().map { index, seed in
+            let notebook = JournalNotebook(name: seed.name, reminderFrequency: seed.reminderFrequency, sortOrder: index)
+            notebook.add(template: JournalTemplate(name: seed.name, markdown: seed.markdown, sortOrder: 0))
+            return notebook
+        }
+    }
+
+    /// 初回起動時にシードする既定ノート。ノートを意識させない方針のため、
+    /// {{date}} だけのテンプレートを持つ白紙の1冊だけを用意し、新規日記は自動でこのノートに入る。
+    static var seedNotebooks: [JournalNotebook] {
+        let seed = notebookSeeds[0]
+        let notebook = JournalNotebook(name: seed.name, reminderFrequency: seed.reminderFrequency, sortOrder: 0)
+        notebook.add(template: JournalTemplate(name: seed.name, markdown: seed.markdown, sortOrder: 0))
+        return [notebook]
+    }
+
+    /// 変数入力シート(1m)が既定で開くテンプレート(「一日の振り返り」ノートのもの)。
+    /// 見本(1m)は {{date}} と {{weather}} の2変数が並ぶ構成のため、変数を2つ持つこのテンプレートを使う。
+    static var reflectionTemplate: JournalTemplate {
+        JournalTemplate(name: notebookSeeds[2].name, markdown: notebookSeeds[2].markdown, sortOrder: 0)
+    }
 
     /// プレビューとカタログモードが使う、サンプルデータ投入済みの in-memory コンテナを作る。
     static func inMemoryContainer() -> ModelContainer {
@@ -144,7 +169,7 @@ enum SampleData {
             // cloudKitDatabase の既定 (.automatic) は entitlements のコンテナへ同期を試みるため、
             // プレビュー・カタログ・テストから CloudKit に触れないよう .none を明示する。
             let container = try ModelContainer(
-                for: JournalEntry.self, JournalTemplate.self,
+                for: JournalEntry.self, JournalNotebook.self, JournalTemplate.self,
                 configurations: ModelConfiguration(isStoredInMemoryOnly: true, cloudKitDatabase: .none)
             )
             for entry in entries {
@@ -153,9 +178,7 @@ enum SampleData {
             for entry in archivedEntries {
                 container.mainContext.insert(entry)
             }
-            for template in templates {
-                container.mainContext.insert(template)
-            }
+            container.mainContext.insert(notebooks: notebooks)
             return container
         } catch {
             fatalError("in-memory ModelContainer の生成に失敗: \(error)")

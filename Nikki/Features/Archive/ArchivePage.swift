@@ -12,7 +12,7 @@ struct ArchivePage: View {
     /// 行タップで開くエディタへの遷移状態。nil のときは一覧のまま。
     /// HomePage がルートに登録する navigationDestination(for: JournalEntry.self) は、
     /// isPresented 経由で2段 push したこの画面の NavigationLink(value:) からは解決されないことを
-    /// 実機検証で確認したため、TemplateListPage と同じ item ベースの遷移をこの画面に閉じて持つ。
+    /// 実機検証で確認したため、NotebookListPage と同じ item ベースの遷移をこの画面に閉じて持つ。
     @State var editorEntry: JournalEntry?
 
     @Environment(\.dismiss) private var dismiss

@@ -10,9 +10,13 @@ final class JournalTemplate {
     private(set) var name: String = ""
     /// {{date}} {{weather}} 等の変数を含むマークダウン本文。
     private(set) var markdown: String = ""
-    /// 一覧の表示順。CloudKit 同期はレコードの取得順を保証しないため明示的に持つ。
+    /// ノート内での表示順。CloudKit 同期はレコードの取得順を保証しないため明示的に持つ。
     private(set) var sortOrder: Int = 0
 
+    /// このテンプレートが属するノート。inverse は JournalNotebook.templates 側で宣言する。
+    private(set) var notebook: JournalNotebook?
+
+    // notebook は JournalNotebook.add(template:) から紐付けるため、引数から受け取らない。
     init(name: String, markdown: String, sortOrder: Int) {
         self.name = name
         self.markdown = markdown

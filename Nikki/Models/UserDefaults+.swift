@@ -51,7 +51,7 @@ extension AppStorage {
 extension UserDefaults {
     /// String を保存する UserDefaults キー。@AppStorage には対応する AppStorage.init を通して渡す。
     enum StringKey: String, CaseIterable {
-        case defaultTemplateID
+        case defaultNotebookID
 
         var key: String {
             "StringKey_\(rawValue)"

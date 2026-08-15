@@ -128,10 +128,27 @@ struct JournalEntryTests {
         #expect(!entry.matches(searchText: "雪"))
     }
 
-    @Test("deleteAllJournalEntries はアーカイブ済みも含めて日記を全件削除し、テンプレートは残す")
+    @Test("setNotebook が所属ノートを設定して updatedAt を進める")
+    func setNotebookAssignsNotebookAndBumpsUpdatedAt() {
+        let entry = JournalEntry(
+            date: .now,
+            title: "梅雨明け",
+            bodyMarkdown: "本文",
+            createdAt: .distantPast,
+            updatedAt: .distantPast
+        )
+        #expect(entry.notebook == nil)
+
+        let notebook = JournalNotebook(name: "寝る前", reminderFrequency: .daily, sortOrder: 0)
+        entry.setNotebook(notebook: notebook)
+        #expect(entry.notebook === notebook)
+        #expect(entry.updatedAt > .distantPast)
+    }
+
+    @Test("deleteAllJournalEntries はアーカイブ済みも含めて日記を全件削除し、ノートとテンプレートは残す")
     @MainActor
     func deleteAllJournalEntriesRemovesAllEntries() throws {
-        // SampleData の in-memory コンテナは通常の日記・アーカイブ済みの日記・テンプレートをシード済み。
+        // SampleData の in-memory コンテナは通常の日記・アーカイブ済みの日記・ノート(テンプレート付き)をシード済み。
         // mainContext だけ取り出すとコンテナが解放されて SwiftData がクラッシュするため、コンテナ自体を保持する。
         let container = SampleData.inMemoryContainer()
         let context = container.mainContext
@@ -140,6 +157,7 @@ struct JournalEntryTests {
         try context.deleteAllJournalEntries()
 
         #expect(try context.fetchCount(FetchDescriptor<JournalEntry>()) == 0)
+        #expect(try context.fetchCount(FetchDescriptor<JournalNotebook>()) > 0)
         #expect(try context.fetchCount(FetchDescriptor<JournalTemplate>()) > 0)
     }
 
