@@ -41,6 +41,11 @@ struct NotebookEditPage: View {
         .inkNavigationBarHidden()
         .confirmationDialog("ノートを削除", isPresented: $deleteConfirmationDialogIsPresented, titleVisibility: .visible) {
             Button("ノートを削除", role: .destructive) {
+                // ダイアログを開いている間に同期等で他のノートが消え、残り1冊になっていることがあるため、
+                // 確定の直前にも「最後の1冊は消せない」を検証する。
+                if notebooks.count < 2 {
+                    return
+                }
                 modelContext.delete(notebook)
                 // 直後にアプリが kill されても削除の結果が残るよう明示保存する(平常時は autosave が保存する)。
                 try? modelContext.save()

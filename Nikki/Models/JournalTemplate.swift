@@ -7,7 +7,9 @@ import SwiftData
 @Model
 final class JournalTemplate {
     private(set) var id: UUID = UUID()
-    private(set) var name: String = ""
+    /// テンプレートの名前はノートの名前(ユーザーの自由入力)を複製する運用のため、
+    /// JournalNotebook.name と同じく CloudKit の encrypted field として保存する。
+    @Attribute(.allowsCloudEncryption) private(set) var name: String = ""
     /// {{date}} {{weather}} 等の変数を含むマークダウン本文。
     /// ユーザーが自由入力する書き出しの文章のため、日記の本文(JournalEntry.bodyMarkdown)と同じく
     /// CloudKit の encrypted field として保存し、「開発者からも見えない」を担保する。

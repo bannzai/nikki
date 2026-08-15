@@ -20,7 +20,9 @@ enum JournalReminderFrequency: String, CaseIterable {
 @Model
 final class JournalNotebook {
     private(set) var id: UUID = UUID()
-    private(set) var name: String = ""
+    /// ユーザーが自由入力するノートの名前(「仕事」「育児」等、内容を推測できる)のため、
+    /// 日記の本文と同じく CloudKit の encrypted field として保存し、「開発者からも見えない」を担保する。
+    @Attribute(.allowsCloudEncryption) private(set) var name: String = ""
     /// JournalReminderFrequency の rawValue。
     /// SwiftData の enum プロパティは CloudKit 同期で値がずれる報告があるため、String の実値で保存する。
     private(set) var reminderFrequencyRawValue: String = JournalReminderFrequency.none.rawValue
