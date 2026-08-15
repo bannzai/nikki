@@ -7,9 +7,13 @@ import SwiftData
 @Model
 final class JournalTemplate {
     private(set) var id: UUID = UUID()
-    private(set) var name: String = ""
+    /// テンプレートの名前はノートの名前(ユーザーの自由入力)を複製する運用のため、
+    /// JournalNotebook.name と同じく CloudKit の encrypted field として保存する。
+    @Attribute(.allowsCloudEncryption) private(set) var name: String = ""
     /// {{date}} {{weather}} 等の変数を含むマークダウン本文。
-    private(set) var markdown: String = ""
+    /// ユーザーが自由入力する書き出しの文章のため、日記の本文(JournalEntry.bodyMarkdown)と同じく
+    /// CloudKit の encrypted field として保存し、「開発者からも見えない」を担保する。
+    @Attribute(.allowsCloudEncryption) private(set) var markdown: String = ""
     /// ノート内での表示順。CloudKit 同期はレコードの取得順を保証しないため明示的に持つ。
     private(set) var sortOrder: Int = 0
 
@@ -21,6 +25,16 @@ final class JournalTemplate {
         self.name = name
         self.markdown = markdown
         self.sortOrder = sortOrder
+    }
+
+    /// 名前を変更する。
+    func setName(name: String) {
+        self.name = name
+    }
+
+    /// markdown 本文を変更する。
+    func setMarkdown(markdown: String) {
+        self.markdown = markdown
     }
 
     /// markdown 中の {{variable}} を出現順・重複なしで抽出する。

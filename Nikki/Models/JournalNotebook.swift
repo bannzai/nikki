@@ -20,7 +20,9 @@ enum JournalReminderFrequency: String, CaseIterable {
 @Model
 final class JournalNotebook {
     private(set) var id: UUID = UUID()
-    private(set) var name: String = ""
+    /// ユーザーが自由入力するノートの名前(「仕事」「育児」等、内容を推測できる)のため、
+    /// 日記の本文と同じく CloudKit の encrypted field として保存し、「開発者からも見えない」を担保する。
+    @Attribute(.allowsCloudEncryption) private(set) var name: String = ""
     /// JournalReminderFrequency の rawValue。
     /// SwiftData の enum プロパティは CloudKit 同期で値がずれる報告があるため、String の実値で保存する。
     private(set) var reminderFrequencyRawValue: String = JournalReminderFrequency.none.rawValue
@@ -51,6 +53,15 @@ final class JournalNotebook {
     /// 日記を書き出すときに使うテンプレート。原則1件だが 1:N で持つため、表示順が先頭のものを使う。
     var template: JournalTemplate? {
         templates?.min { $0.sortOrder < $1.sortOrder }
+    }
+
+    /// 名前を変更する。テンプレートの名前はノートの名前を使う運用(シード・引き継ぎ・作成フォームで共通)のため、
+    /// 紐付いているテンプレートの名前も揃える。
+    func setName(name: String) {
+        self.name = name
+        for template in templates ?? [] {
+            template.setName(name: name)
+        }
     }
 
     /// テンプレートをこのノートに紐付ける。すでに紐付いているテンプレートは追加しない(冪等)。

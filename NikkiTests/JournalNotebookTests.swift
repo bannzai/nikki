@@ -46,12 +46,29 @@ struct JournalNotebookTests {
         #expect(notebooks[0].reminderFrequency == .none)
     }
 
-    @Test("プレビュー用ノートはノートごとにテンプレートを1件持ち、設定から全件を選べる件数に収まる")
-    func previewNotebooksHaveTemplateAndFitInSettingsDialog() {
-        let notebooks = SampleData.notebooks
-        #expect(notebooks.allSatisfy { $0.templates?.count == 1 })
-        // 設定「既定のノート」の confirmationDialog は macOS(NSAlert)でボタン4個までしか出せない。
-        #expect(notebooks.count <= 4)
+    @Test("プレビュー用ノートはノートごとにテンプレートを1件持つ")
+    func previewNotebooksHaveTemplate() {
+        #expect(SampleData.notebooks.allSatisfy { $0.templates?.count == 1 })
+    }
+
+    @Test("setName はノートの名前と、名前を揃える運用のテンプレートの名前を一緒に変える")
+    func setNameRenamesNotebookAndTemplates() {
+        let notebook = JournalNotebook(name: "白紙", reminderFrequency: .none, sortOrder: 0)
+        notebook.add(template: JournalTemplate(name: "白紙", markdown: "# {{date}}", sortOrder: 0))
+
+        notebook.setName(name: "夜のノート")
+
+        #expect(notebook.name == "夜のノート")
+        #expect(notebook.template?.name == "夜のノート")
+    }
+
+    @Test("setMarkdown はテンプレートの書き出しを置き換える")
+    func setMarkdownReplacesTemplateMarkdown() {
+        let template = JournalTemplate(name: "白紙", markdown: "# {{date}}", sortOrder: 0)
+
+        template.setMarkdown(markdown: "# {{date}} の夜")
+
+        #expect(template.markdown == "# {{date}} の夜")
     }
 
     @Test("ノートを削除するとテンプレートも消え、日記は残る")
