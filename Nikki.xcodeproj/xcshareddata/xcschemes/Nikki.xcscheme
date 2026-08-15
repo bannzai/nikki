@@ -49,6 +49,16 @@
                ReferencedContainer = "container:Nikki.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "9E4C1A70B3D25F8146A7C003"
+               BuildableName = "NikkiUITests.xctest"
+               BlueprintName = "NikkiUITests"
+               ReferencedContainer = "container:Nikki.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <CommandLineArguments>
       </CommandLineArguments>
