@@ -68,13 +68,18 @@ struct TemplateVariableSheet: View {
         }
     }
 
-    /// 変数を差し込んだ markdown から日記を作成・保存し、シートを閉じて親のエディタ遷移を起こす。
+    /// 変数を差し込んだ markdown から日記を作成し、テンプレートが属するノートに入れて保存し、
+    /// シートを閉じて親のエディタ遷移を起こす。
     private func start(template: JournalTemplate) {
         let entry = JournalEntry(
             templateMarkdown: TemplateVariableField.substitutedMarkdown(template: template, fields: fields),
             date: today
         )
         modelContext.insert(entry)
+        // 所属の設定は、日記が同じコンテキストに入ってから行う。
+        if let notebook = template.notebook {
+            entry.setNotebook(notebook: notebook)
+        }
         try? modelContext.save()
         self.template = nil
         self.entry = entry

@@ -10,13 +10,13 @@ struct SettingsPage: View {
     @AppStorage(.passkeyRegistered) var passkeyRegistered: Bool = false
     // README の「5秒タイプがなかったらロック」に合わせた既定値。
     @AppStorage(.autoLockSeconds) var autoLockSeconds: Int = 5
-    /// 既定のテンプレートの id(UUID 文字列)。空のときは未設定。
-    @AppStorage(.defaultTemplateID) var defaultTemplateID: String = ""
+    /// 既定のノートの id(UUID 文字列)。空のときは未設定。
+    @AppStorage(.defaultNotebookID) var defaultNotebookID: String = ""
     @AppStorage(.textSize) var textSize: TextSize = .standard
     // 見本(1n)の初期選択が「生成」(プリセット2番目)のため。
     @AppStorage(.paperColorPresetIndex) var paperColorPresetIndex: Int = 1
 
-    @State var defaultTemplateConfirmationDialogIsPresented = false
+    @State var defaultNotebookConfirmationDialogIsPresented = false
     @State var autoLockConfirmationDialogIsPresented = false
     @State var textSizeConfirmationDialogIsPresented = false
     @State var themeIsPresented = false
@@ -26,7 +26,7 @@ struct SettingsPage: View {
     @State var markdownExporterIsPresented = false
     @State var deleteAllEntriesConfirmationDialogIsPresented = false
 
-    @Query(sort: \JournalTemplate.sortOrder) var templates: [JournalTemplate]
+    @Query(sort: \JournalNotebook.sortOrder) var notebooks: [JournalNotebook]
     /// Markdown 書き出しは読んだときに時系列で並ぶよう古い順に取り出す。
     @Query(sort: \JournalEntry.date) var entries: [JournalEntry]
 
@@ -46,9 +46,9 @@ struct SettingsPage: View {
                         SettingsSectionLabel(text: "書くこと")
                         InkListSection {
                             InkListRow(
-                                title: "既定のテンプレート",
-                                value: templates.first { $0.id.uuidString == defaultTemplateID }?.name ?? "未設定",
-                                action: { defaultTemplateConfirmationDialogIsPresented = true }
+                                title: "既定のノート",
+                                value: notebooks.first { $0.id.uuidString == defaultNotebookID }?.name ?? "未設定",
+                                action: { defaultNotebookConfirmationDialogIsPresented = true }
                             )
                             InkListRow(
                                 title: "自動ロック",
@@ -157,10 +157,10 @@ struct SettingsPage: View {
         } message: {
             Text("アーカイブした日記も含めて、すべての日記を削除します。この操作は取り消せません。")
         }
-        .confirmationDialog("既定のテンプレート", isPresented: $defaultTemplateConfirmationDialogIsPresented, titleVisibility: .visible) {
-            ForEach(templates) { template in
-                Button(template.name) {
-                    defaultTemplateID = template.id.uuidString
+        .confirmationDialog("既定のノート", isPresented: $defaultNotebookConfirmationDialogIsPresented, titleVisibility: .visible) {
+            ForEach(notebooks) { notebook in
+                Button(notebook.name) {
+                    defaultNotebookID = notebook.id.uuidString
                 }
             }
         }

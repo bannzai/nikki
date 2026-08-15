@@ -1,8 +1,8 @@
 import SwiftUI
 
-/// テンプレート一覧(1l)の 1 枚分のカード。
-struct TemplateCard: View {
-    let template: JournalTemplate
+/// ノート一覧(1l)の 1 枚分のカード。
+struct NotebookCard: View {
+    let notebook: JournalNotebook
     let onTap: () -> Void
 
     var body: some View {
@@ -10,15 +10,18 @@ struct TemplateCard: View {
         Button(action: onTap) {
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
-                    Text(template.name)
+                    Text(notebook.name)
                         .font(.inkListItemTitle)
                         .foregroundStyle(Color.ink)
                     Spacer(minLength: 8)
+                    Text(reminderText(frequency: notebook.reminderFrequency))
+                        .font(.ink(11, .regular))
+                        .foregroundStyle(Color.inkTextQuaternary)
                     Image(systemName: InkIcons.chevronRight)
                         .font(.system(size: 13, weight: .semibold))
                         .foregroundStyle(Color.inkTextTertiary)
                 }
-                Text(template.markdown)
+                Text(notebook.template?.markdown ?? "")
                     .font(.inkMono(11.5))
                     .foregroundStyle(Color.inkTextTertiary)
                     .lineSpacing(inkLineSpacing(fontSize: 11.5, multiplier: 1.9))
@@ -32,12 +35,25 @@ struct TemplateCard: View {
         }
         .buttonStyle(.plain)
     }
+
+    /// リマインドの頻度の表示名。
+    private func reminderText(frequency: JournalReminderFrequency) -> String {
+        switch frequency {
+        case .none: return ""
+        case .daily: return "毎日"
+        case .weekly: return "毎週"
+        }
+    }
 }
 
-struct TemplateCard_Previews: PreviewProvider {
+struct NotebookCard_Previews: PreviewProvider {
     static var previews: some View {
-        TemplateCard(template: SampleData.reflectionTemplate, onTap: {})
-            .padding()
-            .background(Color.inkPaper)
+        VStack(spacing: 12) {
+            ForEach(SampleData.notebooks) { notebook in
+                NotebookCard(notebook: notebook, onTap: {})
+            }
+        }
+        .padding()
+        .background(Color.inkPaper)
     }
 }

@@ -14,7 +14,7 @@ enum Screen: String, CaseIterable, Identifiable {
     case editorWriting
     case editorSelection
     case editorReorder
-    case templateList
+    case notebookList
     case templateVariable
     case theme
     case paywall
@@ -57,9 +57,10 @@ struct ScreenContent: View {
             EditorSelectionPage(entry: SampleData.sampleEntry)
         case .editorReorder:
             EditorReorderPage(entry: SampleData.sampleEntry)
-        case .templateList:
+        case .notebookList:
+            // NotebookListPage は @Query でノートを読むため、in-memory コンテナ(SampleData 投入済み)の下で NavigationStack に載せる。
             NavigationStack {
-                TemplateListPage(entry: SampleData.sampleEntry)
+                NotebookListPage(entry: SampleData.sampleEntry)
             }
         case .templateVariable:
             let template = SampleData.reflectionTemplate
