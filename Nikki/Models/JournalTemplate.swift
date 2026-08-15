@@ -23,6 +23,16 @@ final class JournalTemplate {
         self.sortOrder = sortOrder
     }
 
+    /// 名前を変更する。
+    func setName(name: String) {
+        self.name = name
+    }
+
+    /// markdown 本文を変更する。
+    func setMarkdown(markdown: String) {
+        self.markdown = markdown
+    }
+
     /// markdown 中の {{variable}} を出現順・重複なしで抽出する。
     var variableNames: [String] {
         var result: [String] = []

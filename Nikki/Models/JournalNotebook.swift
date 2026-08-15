@@ -53,6 +53,15 @@ final class JournalNotebook {
         templates?.min { $0.sortOrder < $1.sortOrder }
     }
 
+    /// 名前を変更する。テンプレートの名前はノートの名前を使う運用(シード・引き継ぎ・作成フォームで共通)のため、
+    /// 紐付いているテンプレートの名前も揃える。
+    func setName(name: String) {
+        self.name = name
+        for template in templates ?? [] {
+            template.setName(name: name)
+        }
+    }
+
     /// テンプレートをこのノートに紐付ける。すでに紐付いているテンプレートは追加しない(冪等)。
     func add(template: JournalTemplate) {
         if templates?.contains(where: { $0.id == template.id }) == true {
