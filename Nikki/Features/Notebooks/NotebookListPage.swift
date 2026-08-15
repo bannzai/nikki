@@ -6,6 +6,7 @@ import SwiftData
 /// カードを選ぶと日記をそのノートに入れ、ノートのテンプレートの内容({{date}} は日記の日付で補完)で
 /// entry を置き換えて保存し、次回の新規作成で自動的に使う既定のノートとして記憶してエディタへ戻る。
 /// entry に入力があるときは、置き換えで入力内容が消えることをアラートで確認してから置き換える。
+/// 末尾の「＋ 新しいノート」からは作成フォーム(NotebookCreatePage)へ進む。
 struct NotebookListPage: View {
     /// ノートを決める対象の日記。遷移元のエディタが表示中の日記を渡す。
     let entry: JournalEntry
@@ -15,6 +16,9 @@ struct NotebookListPage: View {
     /// 置き換え確認アラートの対象ノート。nil のときはアラートを閉じている。
     @State var notebook: JournalNotebook?
     @State var replaceAlertIsPresented = false
+
+    /// 「＋ 新しいノート」の作成フォームへの遷移状態。
+    @State var notebookCreateIsPresented = false
 
     /// 既定のノートの id(UUID 文字列)。空のときは未設定。選んだノートを次回の自動挿入用に記憶する。
     @AppStorage(.defaultNotebookID) var defaultNotebookID: String = ""
@@ -39,13 +43,16 @@ struct NotebookListPage: View {
                         }
                     }
 
-                    NotebookNewFooter()
+                    NotebookNewFooter(onTap: { notebookCreateIsPresented = true })
                 }
                 .padding(.horizontal, 24)
             }
         }
         .background(Color.inkPaper.ignoresSafeArea())
         .inkNavigationBarHidden()
+        .navigationDestination(isPresented: $notebookCreateIsPresented) {
+            NotebookCreatePage()
+        }
         .alert("入力内容の置き換え", isPresented: $replaceAlertIsPresented, presenting: notebook) { notebook in
             Button("置き換える", role: .destructive) { apply(notebook: notebook) }
             Button("キャンセル", role: .cancel) {}

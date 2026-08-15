@@ -97,8 +97,6 @@ enum SampleData {
 
     /// プレビュー・カタログ用ノートの中身。書く時間が決まっているノートにだけリマインドを入れる。
     /// 並び順は配列の順そのもの、テンプレートの名前はノートの名前を使うため、ここには持たない。
-    /// 件数は macOS の confirmationDialog(NSAlert)がボタン4個までしか出せず、
-    /// 5件目以降が設定「既定のノート」から選べなくなるため、4件に留める。
     private static var notebookSeeds: [(name: String, reminderFrequency: JournalReminderFrequency, markdown: String)] {
         [
             (

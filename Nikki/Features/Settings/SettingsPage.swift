@@ -16,7 +16,8 @@ struct SettingsPage: View {
     // 見本(1n)の初期選択が「生成」(プリセット2番目)のため。
     @AppStorage(.paperColorPresetIndex) var paperColorPresetIndex: Int = 1
 
-    @State var defaultNotebookConfirmationDialogIsPresented = false
+    @State var notebookSettingsIsPresented = false
+    @State var defaultNotebookIsPresented = false
     @State var autoLockConfirmationDialogIsPresented = false
     @State var textSizeConfirmationDialogIsPresented = false
     @State var themeIsPresented = false
@@ -45,13 +46,19 @@ struct SettingsPage: View {
                     VStack(alignment: .leading, spacing: 0) {
                         SettingsSectionLabel(text: "書くこと")
                         InkListSection {
+                            // ノートを増やしたい人向けの管理(作成・編集・削除)の入り口。普段の書く流れには出さず、ここにだけ置く。
+                            InkListRow(
+                                title: "ノート",
+                                value: "\(notebooks.count)冊",
+                                action: { notebookSettingsIsPresented = true }
+                            )
                             // ノートが1冊の間はノートを意識させないため、選択肢が生まれる2冊以上のときだけ行を出す。
                             if notebooks.count >= 2 {
                                 InkListRow(
                                     title: "既定のノート",
                                     // 未設定のときは新規作成と同じ解決(先頭のノート)を表示する。
                                     value: (notebooks.first { $0.id.uuidString == defaultNotebookID } ?? notebooks.first)?.name ?? "未設定",
-                                    action: { defaultNotebookConfirmationDialogIsPresented = true }
+                                    action: { defaultNotebookIsPresented = true }
                                 )
                             }
                             InkListRow(
@@ -150,6 +157,12 @@ struct SettingsPage: View {
         .navigationDestination(isPresented: $archiveIsPresented) {
             ArchivePage()
         }
+        .navigationDestination(isPresented: $notebookSettingsIsPresented) {
+            NotebookSettingsPage()
+        }
+        .navigationDestination(isPresented: $defaultNotebookIsPresented) {
+            NotebookDefaultPage()
+        }
         .sheet(isPresented: $paywallSheetIsPresented) {
             PaywallPage()
         }
@@ -160,13 +173,6 @@ struct SettingsPage: View {
             }
         } message: {
             Text("アーカイブした日記も含めて、すべての日記を削除します。この操作は取り消せません。")
-        }
-        .confirmationDialog("既定のノート", isPresented: $defaultNotebookConfirmationDialogIsPresented, titleVisibility: .visible) {
-            ForEach(notebooks) { notebook in
-                Button(notebook.name) {
-                    defaultNotebookID = notebook.id.uuidString
-                }
-            }
         }
         .confirmationDialog("自動ロックまでの秒数", isPresented: $autoLockConfirmationDialogIsPresented, titleVisibility: .visible) {
             // 既定の5秒(README)を最短に、離席しがちな使い方向けの緩い選択肢を並べる。
