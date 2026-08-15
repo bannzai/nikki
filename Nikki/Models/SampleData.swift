@@ -95,7 +95,7 @@ enum SampleData {
         ]
     }
 
-    /// 初回起動時のシードにも使う既定ノートの中身。書く時間が決まっているノートにだけリマインドを入れる。
+    /// プレビュー・カタログ用ノートの中身。書く時間が決まっているノートにだけリマインドを入れる。
     /// 並び順は配列の順そのもの、テンプレートの名前はノートの名前を使うため、ここには持たない。
     /// 件数は macOS の confirmationDialog(NSAlert)がボタン4個までしか出せず、
     /// 5件目以降が設定「既定のノート」から選べなくなるため、4件に留める。
@@ -138,13 +138,23 @@ enum SampleData {
         ]
     }
 
-    /// 初回起動時のシードにも使う既定ノート。ノートごとに書き出し用のテンプレートを1件持つ。
+    /// プレビュー・カタログ用の複数ノート。ノートごとに書き出し用のテンプレートを1件持ち、
+    /// ノート一覧のカードやリマインドのバッジなど、ノートが複数あるときの表示確認に使う。
     static var notebooks: [JournalNotebook] {
         notebookSeeds.enumerated().map { index, seed in
             let notebook = JournalNotebook(name: seed.name, reminderFrequency: seed.reminderFrequency, sortOrder: index)
             notebook.add(template: JournalTemplate(name: seed.name, markdown: seed.markdown, sortOrder: 0))
             return notebook
         }
+    }
+
+    /// 初回起動時にシードする既定ノート。ノートを意識させない方針のため、
+    /// {{date}} だけのテンプレートを持つ白紙の1冊だけを用意し、新規日記は自動でこのノートに入る。
+    static var seedNotebooks: [JournalNotebook] {
+        let seed = notebookSeeds[0]
+        let notebook = JournalNotebook(name: seed.name, reminderFrequency: seed.reminderFrequency, sortOrder: 0)
+        notebook.add(template: JournalTemplate(name: seed.name, markdown: seed.markdown, sortOrder: 0))
+        return [notebook]
     }
 
     /// 変数入力シート(1m)が既定で開くテンプレート(「一日の振り返り」ノートのもの)。

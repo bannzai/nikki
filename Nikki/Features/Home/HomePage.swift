@@ -11,12 +11,13 @@ enum HomePageMode: Int, CaseIterable {
 /// 選択中セグメントに応じて時系列リスト(1g)とカレンダー(1h)を切り替える。
 /// 日記は @Query で読み、検索バーの入力でタイトル・本文に一致する日記へ絞り込む。
 /// 行のタップでエディタへ進む。FAB は日記を先に作成してからエディタへ進み、
-/// 既定のノートがあればそのテンプレートの内容を自動挿入し、なければノート一覧(1l)の選択から入る。
+/// 既定のノート(未設定なら先頭のノート)のテンプレートの内容を自動挿入する。
+/// ノートを意識させないため、作成時にノート選択は挟まない。
 struct HomePage: View {
     /// 表示モードの選択状態。リスト派/カレンダー派の常用に合わせて起動をまたいで保持する。
     @AppStorage(.homePageMode) var homePageMode: HomePageMode = .list
 
-    /// 既定のノートの id(UUID 文字列)。空のときは未設定。FAB の新規作成で使うノートの解決に使う。
+    /// 既定のノートの id(UUID 文字列)。空のときは未設定で、先頭のノートを既定として扱う。
     @AppStorage(.defaultNotebookID) var defaultNotebookID: String = ""
 
     /// 検索バーの入力。空のときは全件を表示する。
@@ -103,20 +104,19 @@ struct HomePage: View {
             resetAutoLockTimer()
         }
         .navigationDestination(item: $entry) { entry in
-            // ノートが決まらないまま作成した日記は、まずノート一覧(1l)の選択から入る。
-            EditorPage(entry: entry, notebookListIsPresented: entry.notebook == nil)
+            EditorPage(entry: entry)
         }
         .navigationDestination(for: JournalEntry.self) { entry in
             EditorPage(entry: entry)
         }
     }
 
-    /// FAB の新規作成。既定のノートがあればそのテンプレートの内容({{date}} は今日で補完)を挿入した日記を、
-    /// なければ空の日記を作成・保存し、エディタへの遷移を起こす。
+    /// FAB の新規作成。既定のノート(未設定なら先頭のノート)のテンプレートの内容({{date}} は今日で補完)を
+    /// 挿入した日記を作成・保存し、エディタへの遷移を起こす。
     private func createEntry() {
         // 日付が変わる瞬間に {{date}} の補完値と日記の date がずれないよう、同じ時刻を共有する。
         let now = Date.now
-        let notebook = notebooks.first { $0.id.uuidString == defaultNotebookID }
+        let notebook = notebooks.first { $0.id.uuidString == defaultNotebookID } ?? notebooks.first
         let entry: JournalEntry
         if let template = notebook?.template {
             entry = JournalEntry(

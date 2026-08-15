@@ -37,8 +37,17 @@ struct JournalNotebookTests {
         }
     }
 
-    @Test("既定ノートはノートごとにテンプレートを1件持ち、設定から全件を選べる件数に収まる")
-    func seedNotebooksHaveTemplateAndFitInSettingsDialog() {
+    @Test("初回シードはノートを意識させないよう、{{date}} テンプレートを持つ白紙1冊だけ")
+    func seedNotebooksHideNotebookConcept() {
+        let notebooks = SampleData.seedNotebooks
+        #expect(notebooks.count == 1)
+        #expect(notebooks[0].name == "白紙")
+        #expect(notebooks[0].template?.markdown == "# {{date}}")
+        #expect(notebooks[0].reminderFrequency == .none)
+    }
+
+    @Test("プレビュー用ノートはノートごとにテンプレートを1件持ち、設定から全件を選べる件数に収まる")
+    func previewNotebooksHaveTemplateAndFitInSettingsDialog() {
         let notebooks = SampleData.notebooks
         #expect(notebooks.allSatisfy { $0.templates?.count == 1 })
         // 設定「既定のノート」の confirmationDialog は macOS(NSAlert)でボタン4個までしか出せない。

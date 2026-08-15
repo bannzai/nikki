@@ -45,11 +45,15 @@ struct SettingsPage: View {
                     VStack(alignment: .leading, spacing: 0) {
                         SettingsSectionLabel(text: "書くこと")
                         InkListSection {
-                            InkListRow(
-                                title: "既定のノート",
-                                value: notebooks.first { $0.id.uuidString == defaultNotebookID }?.name ?? "未設定",
-                                action: { defaultNotebookConfirmationDialogIsPresented = true }
-                            )
+                            // ノートが1冊の間はノートを意識させないため、選択肢が生まれる2冊以上のときだけ行を出す。
+                            if notebooks.count >= 2 {
+                                InkListRow(
+                                    title: "既定のノート",
+                                    // 未設定のときは新規作成と同じ解決(先頭のノート)を表示する。
+                                    value: (notebooks.first { $0.id.uuidString == defaultNotebookID } ?? notebooks.first)?.name ?? "未設定",
+                                    action: { defaultNotebookConfirmationDialogIsPresented = true }
+                                )
+                            }
                             InkListRow(
                                 title: "自動ロック",
                                 value: "\(autoLockSeconds)秒",

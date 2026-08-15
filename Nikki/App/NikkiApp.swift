@@ -89,7 +89,8 @@ struct NikkiApp: App {
         }
     }
 
-    /// ノートが1件もないときだけ既定ノートを用意する(冪等)。
+    /// ノートが1件もないときだけ、白紙({{date}} テンプレート)の既定ノート1冊を用意する(冪等)。
+    /// ノートを意識させない方針のため1冊だけシードし、新規日記は自動でこのノートに入る。
     /// ノート導入前に作られたストアにはどのノートにも属さないテンプレートが残っているため、
     /// その場合は既定ノートを入れ直さず、テンプレート1件につきノート1件を作って引き継ぐ。
     /// 判定はローカルの件数だけで行うため、同期前の複数端末が同時に初回起動すると重複し得る(既知の割り切り)。
@@ -99,7 +100,7 @@ struct NikkiApp: App {
         }
         let templates = (try? context.fetch(FetchDescriptor<JournalTemplate>(sortBy: [SortDescriptor(\.sortOrder)]))) ?? []
         if templates.isEmpty {
-            context.insert(notebooks: SampleData.notebooks)
+            context.insert(notebooks: SampleData.seedNotebooks)
         } else {
             for template in templates {
                 // 引き継いだノートのリマインドは、ユーザーが設定していない挙動を勝手に足さないよう「なし」で始める。
