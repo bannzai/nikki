@@ -18,6 +18,10 @@ final class JournalEntry {
     /// ホームの @Query の絞り込み条件に使うため暗号化しない。
     private(set) var isArchived: Bool = false
 
+    /// この日記が属するノート。inverse は JournalNotebook.entries 側で宣言する。
+    /// ノートを決める前に日記を作れる作成フローのため、未所属(nil)を許す。
+    private(set) var notebook: JournalNotebook?
+
     // createdAt / updatedAt はサンプルデータで参照日時を固定するため引数から受け取る。
     // isArchived はサンプルデータでアーカイブ済みの日記を作るため引数から受け取る。
     // 新規作成の日記はアーカイブされていない状態で始まるため false を既定にする。
@@ -81,6 +85,12 @@ final class JournalEntry {
     /// isArchived を更新し、updatedAt も同時に更新する。
     func setArchived(_ isArchived: Bool) {
         self.isArchived = isArchived
+        updatedAt = .now
+    }
+
+    /// 所属するノートを更新し、updatedAt も同時に更新する。
+    func setNotebook(notebook: JournalNotebook) {
+        self.notebook = notebook
         updatedAt = .now
     }
 
