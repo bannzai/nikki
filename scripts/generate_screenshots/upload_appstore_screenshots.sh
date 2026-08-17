@@ -29,23 +29,49 @@ APP_IDENTIFIER="com.bannzai.Nikki"
 [ -n "${ASC_API_KEY_P8_BASE64:-}" ] || { echo "Error: ASC_API_KEY_P8_BASE64 is empty" >&2; exit 1; }
 
 # API キー JSON はリポジトリ外の一時ファイルに作り、終了時に必ず消す(秘匿情報を作業ツリーに残さない)。
+# 秘密鍵はプロセス一覧から見える jq の引数に載せず、権限を絞った一時ファイル経由(--rawfile)で渡す。
 API_KEY_JSON=$(mktemp -t nikki-asc-api-key)
-trap 'rm -f "$API_KEY_JSON"' EXIT
+API_KEY_P8=$(mktemp -t nikki-asc-api-key-p8)
+trap 'rm -f "$API_KEY_JSON" "$API_KEY_P8"' EXIT
+chmod 600 "$API_KEY_JSON" "$API_KEY_P8"
+echo "$ASC_API_KEY_P8_BASE64" | base64 -d > "$API_KEY_P8"
 jq -n \
     --arg key_id "$ASC_API_KEY_ID" \
     --arg issuer_id "$ASC_API_KEY_ISSUER_ID" \
-    --arg key "$(echo "$ASC_API_KEY_P8_BASE64" | base64 -d)" \
+    --rawfile key "$API_KEY_P8" \
     '{key_id: $key_id, issuer_id: $issuer_id, key: $key, in_house: false}' > "$API_KEY_JSON"
 
-# deliver は screenshots_path 配下のロケールディレクトリだけを見るため、
-# iOS 実行時に fastlane/screenshots/macos が誤って混ざることはない(逆も同様)。
+# --overwrite_screenshots は ASC 上の既存スクリーンショットを置き換えるため、
+# 部分生成のままアップロードすると未生成ぶんが公開候補から消える。全数が揃っている時だけ実行する。
+# Usage: verify_complete_screenshots <ベースディレクトリ> <device...>
+verify_complete_screenshots() {
+    local base=$1
+    shift
+    local missing=0
+    for locale in ja en-US; do
+        for page in 1 2 3 4 5 6; do
+            for device in "$@"; do
+                if [ ! -f "$base/$locale/${page}_${device}.png" ]; then
+                    echo "Error: $base/$locale/${page}_${device}.png がありません" >&2
+                    missing=1
+                fi
+            done
+        done
+    done
+    if [ "$missing" -ne 0 ]; then
+        echo "Error: スクリーンショットが揃っていません。generate_appstore_screenshots.sh で全デバイス・全言語・全ページを生成してから実行してください" >&2
+        return 1
+    fi
+}
+
 if [ "$TARGET" = "ios" ] || [ "$TARGET" = "all" ]; then
+    verify_complete_screenshots fastlane/screenshots/ios iphone ipad
     echo "==== Uploading iOS screenshots (iPhone 6.9 / iPad 13) ===="
     fastlane deliver \
         --api_key_path "$API_KEY_JSON" \
         --app_identifier "$APP_IDENTIFIER" \
         --platform ios \
-        --screenshots_path fastlane/screenshots \
+        --screenshots_path fastlane/screenshots/ios \
         --skip_binary_upload \
         --skip_metadata \
         --skip_app_version_update \
@@ -55,6 +81,7 @@ if [ "$TARGET" = "ios" ] || [ "$TARGET" = "all" ]; then
 fi
 
 if [ "$TARGET" = "osx" ] || [ "$TARGET" = "all" ]; then
+    verify_complete_screenshots fastlane/screenshots/macos mac
     echo "==== Uploading macOS screenshots (2880x1800) ===="
     fastlane deliver \
         --api_key_path "$API_KEY_JSON" \

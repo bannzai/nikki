@@ -38,6 +38,29 @@ while [ $# -gt 0 ]; do
     esac
 done
 
+# 未対応の値は撮影テスト側のフィルタで空になり「1枚も生成されないのに成功扱い」になるため、
+# 実行前に検証して弾く。
+case "$DEVICE" in
+    all | iphone | ipad | mac) ;;
+    *) echo "Error: 不明な device: $DEVICE (iphone | ipad | mac | all)" >&2; exit 1 ;;
+esac
+if [ -n "$LANGUAGES" ]; then
+    for language in ${LANGUAGES//,/ }; do
+        case "$language" in
+            ja | en) ;;
+            *) echo "Error: 不明な言語: $language (ja | en)" >&2; exit 1 ;;
+        esac
+    done
+fi
+if [ -n "$PAGES" ]; then
+    for page in ${PAGES//,/ }; do
+        case "$page" in
+            1 | 2 | 3 | 4 | 5 | 6) ;;
+            *) echo "Error: 不明なページ番号: $page (1-6)" >&2; exit 1 ;;
+        esac
+    done
+fi
+
 if [ "$DEVICE" = "all" ]; then
     DEVICES=(iphone ipad mac)
 else

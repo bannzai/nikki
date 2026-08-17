@@ -8,9 +8,10 @@
 # ピクセルサイズを検証してから fastlane/screenshots に配置する。
 #
 # 配置先:
-#   iphone / ipad: fastlane/screenshots/{ロケール}/{ページ}_{device}.png
+#   iphone / ipad: fastlane/screenshots/ios/{ロケール}/{ページ}_{device}.png
 #   mac:           fastlane/screenshots/macos/{ロケール}/{ページ}_{device}.png
-#   (deliver は iOS と macOS で screenshots_path を分けてアップロードするため階層を分ける)
+#   (deliver は screenshots_path 直下のディレクトリをロケールとして読むため、
+#    プラットフォームごとに互いを含まないルートに分ける)
 #
 # 【使い方】
 # $ ./scripts/generate_screenshots/organize_appstore_screenshots.sh <device>
@@ -35,7 +36,7 @@ if [ ! -f "$MANIFEST" ]; then
 fi
 
 case "$DEVICE" in
-    iphone | ipad) FASTLANE_BASE="fastlane/screenshots" ;;
+    iphone | ipad) FASTLANE_BASE="fastlane/screenshots/ios" ;;
     mac) FASTLANE_BASE="fastlane/screenshots/macos" ;;
     *)
         echo "Error: 不明な device: $DEVICE (iphone | ipad | mac)" >&2

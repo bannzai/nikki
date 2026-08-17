@@ -48,12 +48,14 @@ map_language_to_fastlane() {
 }
 
 # 指定した名前の撮影用シミュレータを冪等に用意し、UDID を出力する。
+# 既存端末は SIM_RUNTIME のデバイス一覧からだけ探す(旧ランタイムの同名端末を再利用すると
+# 固定 OS での再現性が失われるため。SIM_RUNTIME 更新時は新ランタイムで作り直される)。
 # Usage: ensure_simulator <名前> <デバイスタイプID>
 ensure_simulator() {
     local name=$1
     local device_type=$2
     local udid
-    udid=$(xcrun simctl list devices --json | jq -r --arg name "$name" '.devices[][] | select(.name == $name and .isAvailable) | .udid' | head -1)
+    udid=$(xcrun simctl list devices --json | jq -r --arg name "$name" --arg runtime "$SIM_RUNTIME" '.devices[$runtime] // [] | .[] | select(.name == $name and .isAvailable) | .udid' | head -1)
     if [ -z "$udid" ]; then
         udid=$(xcrun simctl create "$name" "$device_type" "$SIM_RUNTIME")
     fi

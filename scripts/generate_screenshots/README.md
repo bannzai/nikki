@@ -54,10 +54,13 @@
 ## 出力
 
 - 中間生成物: `scripts/generate_screenshots/artifacts/raw/{device}/` (xcresult と抽出 PNG。gitignore 対象)
-- 最終配置: `fastlane/screenshots/{ja,en-US}/{ページ}_{device}.png` (iOS)、`fastlane/screenshots/macos/{ja,en-US}/` (macOS)。いずれも gitignore 対象で、必要になったら本パイプラインで再生成する
+- 最終配置: `fastlane/screenshots/ios/{ja,en-US}/{ページ}_{device}.png` (iOS)、`fastlane/screenshots/macos/{ja,en-US}/` (macOS)。
+  deliver は screenshots_path 直下のディレクトリをロケールとして読むため、プラットフォームごとに互いを含まないルートに分けている。
+  いずれも gitignore 対象で、必要になったら本パイプラインで再生成する
 
 ## 注意
 
 - 撮影中に OS の通知バナーが出た場合はテスト側で消えるのを待ってから撮影する(`AppStoreScreenshotSnapshotUITests`)
-- シミュレータの OS は `appstore_screenshot_env.sh` の `SIM_RUNTIME` に固定している。ランタイム更新時はこの値を上げる
+- シミュレータの OS は `appstore_screenshot_env.sh` の `SIM_RUNTIME` に固定している。ランタイム更新時はこの値を上げる(既存端末は SIM_RUNTIME のランタイム内でだけ再利用され、旧ランタイムの同名端末は使われない)
 - deliver は画像のピクセルサイズからデバイス種別(6.9インチ / 13インチ / Mac)を判定する。サイズ検証は organize 時に `verify_png_size` が行う
+- upload は `--overwrite_screenshots` で ASC の既存スクリーンショットを置き換えるため、全ページ・全言語・全デバイスが揃っていない状態では実行前チェックで失敗する(部分生成のまま既存を消さないため)
