@@ -20,6 +20,14 @@ enum Screen: String, CaseIterable, Identifiable {
     case paywall
     case settings
     case archive
+    // App Store スクリーンショット(appstore-screenshot-builder パイプラインの撮影対象)。
+    // 言語は環境変数 NIKKI_APPSTORE_LANG(ja / en)で切り替える。
+    case appstore1
+    case appstore2
+    case appstore3
+    case appstore4
+    case appstore5
+    case appstore6
 
     var id: String { rawValue }
 }
@@ -80,6 +88,18 @@ struct ScreenContent: View {
             NavigationStack {
                 ArchivePage()
             }
+        case .appstore1:
+            AppStoreScreenshot1Page(language: .fromEnvironment(), canvas: .fromDevice())
+        case .appstore2:
+            AppStoreScreenshot2Page(language: .fromEnvironment(), canvas: .fromDevice())
+        case .appstore3:
+            AppStoreScreenshot3Page(language: .fromEnvironment(), canvas: .fromDevice())
+        case .appstore4:
+            AppStoreScreenshot4Page(language: .fromEnvironment(), canvas: .fromDevice())
+        case .appstore5:
+            AppStoreScreenshot5Page(language: .fromEnvironment(), canvas: .fromDevice())
+        case .appstore6:
+            AppStoreScreenshot6Page(language: .fromEnvironment(), canvas: .fromDevice())
         }
     }
 }
