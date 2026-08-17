@@ -18,8 +18,9 @@ Nikki は「誰にもみられない安心設計」の日記アプリです。
 ・日記はあなたの端末と、あなた自身の iCloud にだけ保存されます。開発者にも中身は見えません
 ・手が止まると自動でロック。Face ID / Touch ID でそっと開きます
 ・書くことに集中できる、余計なもののないエディタ。マークダウン互換で、見出しやチェックリストが書けます
-・「朝の3行」「一日の振り返り」などのテンプレートで、今日の紙を選んですぐ書き始められます
-・iPhone / iPad / Mac で同期。書いた日記はエクスポートでいつでも持ち出せます
+・「仕事」「育児」「旅の記録」など、ノートを分けて書けます。ノートごとに書き出しのテンプレートを設定できます
+・読み返さない日記はアーカイブへ。消さずに一覧から片付けられます
+・iPhone / iPad / Mac で同期。書いた日記はマークダウンでエクスポートして、いつでも持ち出せます
 
 AI も、解析も、共有もありません。ただの日記帳です。
 文章は自分の手で書いてこそ意味がある。そう思う人のための場所です。
@@ -41,8 +42,9 @@ Nikki is a journal built around one promise: no one else can see your words.
 - Entries live only on your device and in your own iCloud. Not even the developer can read them
 - Walk away and it locks itself. Face ID / Touch ID opens it again
 - A quiet, distraction-free editor with Markdown support: headings and checklists
-- Start writing right away with templates like "3 lines in the morning" and "Daily reflection"
-- Syncs across iPhone, iPad, and Mac. Export your journal anytime
+- Keep separate notebooks for work, family, travel and more. Each notebook starts new entries from its own template
+- Archive entries you are done with. They leave your list without being deleted
+- Syncs across iPhone, iPad, and Mac. Export your journal as Markdown anytime
 
 No AI. No analytics. No sharing. Just a diary.
 For people who believe writing matters most when it's written by hand.
