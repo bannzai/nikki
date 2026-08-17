@@ -23,6 +23,13 @@ cd "$SCRIPT_DIR/../.."
 TARGET=${1:-all}
 APP_IDENTIFIER="com.bannzai.Nikki"
 
+# 未対応の対象名 (mac 等のタイプミス) だと deliver を一度も呼ばずに成功終了してしまうため、
+# 認証情報・一時ファイルを扱う前に検証して弾く。
+case "$TARGET" in
+    ios | osx | all) ;;
+    *) echo "Error: 不明な対象: $TARGET (ios | osx | all)" >&2; exit 1 ;;
+esac
+
 # secret を空値で使わないよう、書き込み前に非空を確認する。
 [ -n "${ASC_API_KEY_ID:-}" ] || { echo "Error: ASC_API_KEY_ID is empty" >&2; exit 1; }
 [ -n "${ASC_API_KEY_ISSUER_ID:-}" ] || { echo "Error: ASC_API_KEY_ISSUER_ID is empty" >&2; exit 1; }
@@ -64,8 +71,16 @@ verify_complete_screenshots() {
     fi
 }
 
+# all のときに iOS だけ揃っていて macOS が欠けていると、iOS の deliver 後に失敗して
+# ASC の iOS 側だけ更新された状態で止まる。外部状態を変更する前に対象全プラットフォームを検証する。
 if [ "$TARGET" = "ios" ] || [ "$TARGET" = "all" ]; then
     verify_complete_screenshots fastlane/screenshots/ios iphone ipad
+fi
+if [ "$TARGET" = "osx" ] || [ "$TARGET" = "all" ]; then
+    verify_complete_screenshots fastlane/screenshots/macos mac
+fi
+
+if [ "$TARGET" = "ios" ] || [ "$TARGET" = "all" ]; then
     echo "==== Uploading iOS screenshots (iPhone 6.9 / iPad 13) ===="
     fastlane deliver \
         --api_key_path "$API_KEY_JSON" \
@@ -81,7 +96,6 @@ if [ "$TARGET" = "ios" ] || [ "$TARGET" = "all" ]; then
 fi
 
 if [ "$TARGET" = "osx" ] || [ "$TARGET" = "all" ]; then
-    verify_complete_screenshots fastlane/screenshots/macos mac
     echo "==== Uploading macOS screenshots (2880x1800) ===="
     fastlane deliver \
         --api_key_path "$API_KEY_JSON" \
