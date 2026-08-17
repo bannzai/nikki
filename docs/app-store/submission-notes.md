@@ -5,9 +5,22 @@
 
 ## App Privacy (プライバシーラベル)
 
-申告: **データは収集されません (Data Not Collected)**
+申告: **購入 (Purchase History) のみ収集 / ユーザーに紐付かない (Data Not Linked to You) / トラッキングなし**
+
+回答定義の SSOT: `fastlane/app_privacy_details.json` (appstore-app-privacy skill で ASC へ適用・publish する)
+
+- category: `PURCHASE_HISTORY`
+- purposes: `ANALYTICS`, `APP_FUNCTIONALITY`
+- data_protections: `DATA_NOT_LINKED_TO_YOU`
 
 根拠:
+
+- RevenueCat SDK (PaywallPage / RootPage で使用) を導入したため、当初方針の「データは収集されません (Data Not Collected)」から変更した。RevenueCat 公式ドキュメント ( https://www.revenuecat.com/docs/platform-resources/apple-platform-resources/apple-app-privacy ) は「If you are using RevenueCat, you must disclose that your app collects 'Purchases' information」とし、Purchase History の purposes には最低限 Analytics (Customer History / Charts / Experiments のダッシュボード機能) と App Functionality (不正防止のレシート検証・Entitlements) の両方を選ぶよう定めている
+- ユーザーへの紐付け: RevenueCat の匿名 app user ID のみを使用しており (`Purchases.logIn` やカスタム app user ID の設定はコードベースに存在しない)、個人を特定する手段がないため Data Not Linked to You。公式ドキュメントも「If you are using RevenueCat's anonymous app user ID's, and do not have a way to identify individual users, you can select 'No'.」としている
+- トラッキング: RevenueCat は購入履歴をアプリ横断の広告トラッキングに使わない (公式ドキュメント「RevenueCat, as a third-party, does not inherently use purchase history to track users across different apps for advertising.」)。IDFA・広告 SDK も未使用のため Data Used to Track You は申告しない
+- 今後 `Purchases.logIn` 等でカスタム ID を連携する場合は、Data Linked to You への変更と User ID category の追加が必要になる (再判定のトリガー)
+
+RevenueCat 以外は引き続き収集なし:
 
 - 日記データはユーザーの端末と iCloud private database (`iCloud.com.bannzai.Nikki`) にのみ保存され、開発者はアクセスできない。Apple のガイドライン上、開発者がアクセスできない iCloud private database のデータは「収集」に該当しない
 - アクセス解析・広告 SDK・トラッキングなし。開発者運営のサーバーなし
@@ -51,7 +64,7 @@
 
 ## エラートラッキング・監視
 
-方針: **導入しない**。「データは収集されません」のプライバシーラベルおよびプライバシーポリシーの
+方針: **導入しない**。プライバシーラベルの「購入以外は収集なし」の申告およびプライバシーポリシーの
 「アクセス解析なし」記述と整合させるため、サードパーティのクラッシュ解析・監視 SDK は入れない。
 クラッシュ把握は Apple 標準 (ユーザーが共有に同意した場合の Xcode Organizer / App Store Connect のクラッシュレポート) のみを使う。
 
