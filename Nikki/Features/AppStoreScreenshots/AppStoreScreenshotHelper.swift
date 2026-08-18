@@ -89,6 +89,9 @@ struct AppStoreScreenshotFrame<Content: View>: View {
             }
             // overlay の上端が safe area に押し下げられないよう、背景単体ではなく overlay 込みの全体をキャンバス全面に広げる。
             .ignoresSafeArea()
+            // 撮影テストが描画完了を待つための目印。起動画面や描画途中の画面を撮らないようにする。
+            .accessibilityElement(children: .contain)
+            .accessibilityIdentifier("AppStoreScreenshotFrame")
             // シミュレータ実機撮影で OS の時刻・電池・ホームインジケータが写り込まないようにする。
             #if os(iOS)
             .statusBarHidden(true)

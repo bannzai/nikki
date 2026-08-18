@@ -46,6 +46,11 @@ esac
 
 echo "==== Organizing $DEVICE screenshots to $FASTLANE_BASE ===="
 
+# 部分生成(言語・ページの絞り込み)で撮った分だけを上書きすると、同じデバイスの未選択画像に
+# 古い実装の画像が残ったまま全数チェックを通ってしまう。同デバイスの旧出力を先にすべて消し、
+# 全数チェックが「今回のコードで生成した一式」だけを数えるようにする(全数生成で再び揃う)。
+find "$FASTLANE_BASE" -type f -name "*_${DEVICE}.png" -delete 2>/dev/null || true
+
 jq -c '.[] | .attachments[]' "$MANIFEST" | while read -r attachment; do
     exported_file=$(echo "$attachment" | jq -r '.exportedFileName')
     suggested_name=$(echo "$attachment" | jq -r '.suggestedHumanReadableName')

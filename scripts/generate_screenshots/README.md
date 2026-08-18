@@ -60,7 +60,10 @@
 
 ## 注意
 
-- 撮影中に OS の通知バナーが出た場合はテスト側で消えるのを待ってから撮影する(`AppStoreScreenshotSnapshotUITests`)
+- 撮影テストは通常の `xcodebuild test -scheme Nikki` にも含まれるが、`SNAPSHOT_ENABLED=1` (run スクリプトが `TEST_RUNNER_` 経由で渡す) が無い時はスキップする。通常の UI テスト実行にアプリ再起動 12 回と大型 attachment を足さないため
+- 撮影はスクショ画面のルート要素 (`AppStoreScreenshotFrame`) の出現を待ってから行い、起動画面や描画途中を撮らない
+- 撮影中に OS の通知バナーが出た場合はテスト側で消えるのを待ってから撮影し、消えなければテストを失敗させる (バナーが重なった画像を成果物にしない)
+- 部分生成 (`-l` / `-n` の絞り込み) では organize が同デバイスの旧出力を先にすべて消すため、fastlane/screenshots は「今回のコードで生成した分」だけになる。アップロード前の全数チェックはこれを前提にしている (全数生成で再び揃う)
 - シミュレータの OS は `appstore_screenshot_env.sh` の `SIM_RUNTIME` に固定している。ランタイム更新時はこの値を上げる(既存端末は SIM_RUNTIME のランタイム内でだけ再利用され、旧ランタイムの同名端末は使われない)
 - deliver は画像のピクセルサイズからデバイス種別(6.9インチ / 13インチ / Mac)を判定する。サイズ検証は organize 時に `verify_png_size` が行う
 - upload は `--overwrite_screenshots` で ASC の既存スクリーンショットを置き換えるため、全ページ・全言語・全デバイスが揃っていない状態では実行前チェックで失敗する(部分生成のまま既存を消さないため)

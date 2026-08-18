@@ -44,21 +44,46 @@ case "$DEVICE" in
     all | iphone | ipad | mac) ;;
     *) echo "Error: 不明な device: $DEVICE (iphone | ipad | mac | all)" >&2; exit 1 ;;
 esac
-if [ -n "$LANGUAGES" ]; then
-    for language in ${LANGUAGES//,/ }; do
-        case "$language" in
-            ja | en) ;;
-            *) echo "Error: 不明な言語: $language (ja | en)" >&2; exit 1 ;;
+# 撮影テスト側と同じ「カンマだけで分割」の規則で検査する(空白区切りは1つの無効値として弾く)。
+# 空要素("ja,"、","等)も弾き、選択結果が空のまま撮影 0 回で成功扱いにならないようにする。
+validate_csv() {
+    local label=$1
+    local raw=$2
+    local allowed=$3
+    local rest=$raw
+    local item
+    local ok
+    local count=0
+    # 「カンマだけで分割」の規則で先頭から 1 要素ずつ切り出す(末尾が "," で終わる場合の空要素も検査する)。
+    # 空白を含む要素は 1 つの無効値として扱い、許可リストと完全一致する要素だけを数える。
+    while :; do
+        item=${rest%%,*}
+        ok=false
+        for candidate in $allowed; do
+            if [ "$item" = "$candidate" ]; then
+                ok=true
+            fi
+        done
+        if [ "$ok" = false ]; then
+            echo "Error: 不明な${label}: '$item' ($allowed のカンマ区切り)" >&2
+            exit 1
+        fi
+        count=$((count + 1))
+        case "$rest" in
+            *,*) rest=${rest#*,} ;;
+            *) break ;;
         esac
     done
+    if [ "$count" -eq 0 ]; then
+        echo "Error: ${label}が1つも指定されていません: '$raw'" >&2
+        exit 1
+    fi
+}
+if [ -n "$LANGUAGES" ]; then
+    validate_csv "言語" "$LANGUAGES" "ja en"
 fi
 if [ -n "$PAGES" ]; then
-    for page in ${PAGES//,/ }; do
-        case "$page" in
-            1 | 2 | 3 | 4 | 5 | 6) ;;
-            *) echo "Error: 不明なページ番号: $page (1-6)" >&2; exit 1 ;;
-        esac
-    done
+    validate_csv "ページ番号" "$PAGES" "1 2 3 4 5 6"
 fi
 
 if [ "$DEVICE" = "all" ]; then

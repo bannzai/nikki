@@ -5,6 +5,9 @@ import XCTest
 /// 全画面スクリーンショットを XCTAttachment として保存する。
 /// 実行は scripts/generate_screenshots/ のパイプラインから行い、xcresult から画像を抽出する。
 ///
+/// 通常の `xcodebuild test -scheme Nikki` にも含まれるが、パイプラインが渡す SNAPSHOT_ENABLED が無い時は
+/// 何もせずスキップする(通常の UI テスト実行に 12 回のアプリ再起動と大型 attachment を足さないため)。
+///
 /// プロジェクト既定の SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor のままだと、nonisolated な XCTestCase の
 /// init / setUp をオーバーライドできずビルドが通らないため、クラスは nonisolated にする(ContextMenuUITests と同じ)。
 nonisolated final class AppStoreScreenshotSnapshotUITests: XCTestCase {
@@ -15,6 +18,11 @@ nonisolated final class AppStoreScreenshotSnapshotUITests: XCTestCase {
 
     @MainActor
     func testSnapshot() throws {
+        try XCTSkipUnless(
+            ProcessInfo.processInfo.environment["SNAPSHOT_ENABLED"] == "1",
+            "スクリーンショット撮影は scripts/generate_screenshots/ のパイプラインからだけ実行する(SNAPSHOT_ENABLED=1)"
+        )
+
         // 撮影の再現性のため、アプリのデザイン(ライト固定)と縦向きに揃える。
         XCUIDevice.shared.appearance = .light
         #if !os(macOS)
@@ -27,16 +35,20 @@ nonisolated final class AppStoreScreenshotSnapshotUITests: XCTestCase {
                 app.launchEnvironment["NIKKI_SCREEN"] = page
                 app.launchEnvironment["NIKKI_APPSTORE_LANG"] = language
                 app.launch()
-                // カスタムフォントの適用とレイアウト確定を待つ。
-                sleep(1)
+
+                // 起動画面や描画途中を撮らないよう、スクショページのルート要素の出現を待つ。
+                // 初回起動やモデルコンテナ・カスタムフォントの初期化で 1 秒を超えることがあるため固定待機にしない。
+                let root = app.otherElements["AppStoreScreenshotFrame"].firstMatch
+                XCTAssertTrue(root.waitForExistence(timeout: 30), "\(page) (\(language)) のスクショ画面が表示されなかった")
 
                 // OS の通知バナー(Apple Intelligence の案内等)が画面上部に写り込むことがあるため、
                 // 出ていたら自動で消えるまで待ってから撮影する(実測でバナーが1枚に写り込んだ対策)。
+                // 消えなければ重なった画像を成果物にしないよう失敗させる。
                 let banner = XCUIApplication(bundleIdentifier: "com.apple.springboard")
                     .otherElements["NotificationShortLookView"]
                     .firstMatch
                 if banner.waitForExistence(timeout: 0.5) {
-                    _ = banner.waitForNonExistence(timeout: 15)
+                    XCTAssertTrue(banner.waitForNonExistence(timeout: 15), "\(page) (\(language)) の撮影前に通知バナーが消えなかった")
                 }
 
                 let attachment = XCTAttachment(screenshot: app.screenshot())

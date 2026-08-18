@@ -27,6 +27,9 @@ DEVICE=$1
 LANGUAGES=${2:-""}
 PAGES=${3:-""}
 
+# 撮影テストは通常の xcodebuild test に混ざらないよう SNAPSHOT_ENABLED が無ければスキップするため、
+# パイプラインからだけ明示的に有効化する。
+export TEST_RUNNER_SNAPSHOT_ENABLED=1
 if [ -n "$LANGUAGES" ]; then
     export TEST_RUNNER_SNAPSHOT_LANGUAGES="$LANGUAGES"
 fi
