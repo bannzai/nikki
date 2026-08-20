@@ -19,6 +19,12 @@ struct ThemePlusGateTests {
         #expect(effectivePaperColorPresetIndex(storedIndex: 0, plusActive: false) == 0)
         #expect(effectivePaperColorPresetIndex(storedIndex: 1, plusActive: false) == 1)
     }
+
+    @Test("プリセット範囲外の保存値は加入状態によらず生成へ倒す")
+    func effectiveIndexFallsBackWhenOutOfRange() {
+        #expect(effectivePaperColorPresetIndex(storedIndex: 99, plusActive: true) == 1)
+        #expect(effectivePaperColorPresetIndex(storedIndex: -1, plusActive: false) == 1)
+    }
 }
 
 extension ThemePlusGateTests {
