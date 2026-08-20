@@ -14,9 +14,9 @@ struct OnboardingEncryptionPage: View {
     }
 
     private let points: [Point] = [
-        Point(icon: InkIcons.pen, title: "書く", description: "日記は、まずこの端末の中に置かれます。"),
-        Point(icon: InkIcons.lock, title: "鍵をかける", description: "端末の中で暗号化。鍵は端末の外に出ません。"),
-        Point(icon: InkIcons.search, title: "読めるのは、あなただけ", description: "わたしたちのサーバーに届くのは、誰にも読めない暗号だけです。"),
+        Point(icon: InkIcons.pen, title: String(localized: "Write"), description: String(localized: "Your entries live on this device first.")),
+        Point(icon: InkIcons.lock, title: String(localized: "Lock it"), description: String(localized: "Encrypted on the device. The key never leaves it.")),
+        Point(icon: InkIcons.search, title: String(localized: "Only you can read it"), description: String(localized: "All that reaches our servers is ciphertext no one can read.")),
     ]
 
     var body: some View {
@@ -26,7 +26,7 @@ struct OnboardingEncryptionPage: View {
             VStack(alignment: .leading, spacing: 0) {
                 InkStepIndicator(step: 1, total: 2)
 
-                Text("鍵のかかった、\nあなただけの箱。")
+                Text("A locked box\nthat's yours alone.")
                     .font(.ink(24, .bold))
                     .lineSpacing(inkLineSpacing(fontSize: 24, multiplier: 1.65))
                     .foregroundStyle(Color.ink)
@@ -52,7 +52,7 @@ struct OnboardingEncryptionPage: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
 
-                Text("AI も、解析も、共有もありません。ただの日記帳です。")
+                Text("No AI, no analytics, no sharing. Just a journal.")
                     .font(.ink(12, .regular))
                     .lineSpacing(inkLineSpacing(fontSize: 12, multiplier: 1.9))
                     .foregroundStyle(Color.inkTextTertiary)
@@ -60,7 +60,7 @@ struct OnboardingEncryptionPage: View {
                     .frame(maxWidth: .infinity)
                     .padding(.bottom, 20)
 
-                Button("次へ") {
+                Button("Next") {
                     onboardingStep = .biometric
                 }
                 .buttonStyle(InkPrimaryButtonStyle())

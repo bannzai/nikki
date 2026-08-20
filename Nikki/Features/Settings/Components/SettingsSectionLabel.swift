@@ -16,7 +16,7 @@ struct SettingsSectionLabel: View {
 
 struct SettingsSectionLabel_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsSectionLabel(text: "書くこと")
+        SettingsSectionLabel(text: "Writing")
             .padding()
             .background(Color.inkPaper)
     }

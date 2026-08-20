@@ -16,7 +16,7 @@ struct NotebookEditPage: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            InkNavBar(leading: .back, center: .title("ノートの編集"), onLeading: { dismiss() })
+            InkNavBar(leading: .back, center: .title(String(localized: "Edit notebook")), onLeading: { dismiss() })
             NotebookFormFields(
                 name: Binding(get: { notebook.name }, set: { setName(name: $0) }),
                 markdown: Binding(get: { notebook.template?.markdown ?? "" }, set: { setTemplateMarkdown(markdown: $0) })
@@ -27,7 +27,7 @@ struct NotebookEditPage: View {
                 InkListSection {
                     // 遷移ではなく確認ダイアログを開くアクション行のため、シェブロンは出さない。
                     InkListRow(
-                        title: "ノートを削除",
+                        title: String(localized: "Delete notebook"),
                         showsChevron: false,
                         showsSeparator: false,
                         action: { deleteConfirmationDialogIsPresented = true }
@@ -39,8 +39,8 @@ struct NotebookEditPage: View {
         }
         .background(Color.inkPaper.ignoresSafeArea())
         .inkNavigationBarHidden()
-        .confirmationDialog("ノートを削除", isPresented: $deleteConfirmationDialogIsPresented, titleVisibility: .visible) {
-            Button("ノートを削除", role: .destructive) {
+        .confirmationDialog("Delete notebook", isPresented: $deleteConfirmationDialogIsPresented, titleVisibility: .visible) {
+            Button("Delete notebook", role: .destructive) {
                 // ダイアログを開いている間に同期等で他のノートが消え、残り1冊になっていることがあるため、
                 // 確定の直前にも「最後の1冊は消せない」を検証する。
                 if notebooks.count < 2 {
@@ -52,7 +52,7 @@ struct NotebookEditPage: View {
                 dismiss()
             }
         } message: {
-            Text("「\(notebook.name)」と書き出しのテンプレートを削除します。このノートの日記は削除されずに残ります。")
+            Text("This deletes “\(notebook.name)” and its template. Entries in this notebook are kept.")
         }
         .onDisappear {
             // 直後にアプリが kill されても編集内容が残るよう、画面を離れるときに明示保存する(平常時は autosave が保存する)。

@@ -43,8 +43,7 @@ struct HomeEntryRow: View {
     }
 
     private var weekdayLabel: String {
-        let symbols = ["日", "月", "火", "水", "木", "金", "土"]
-        return symbols[Calendar.display.component(.weekday, from: entry.date) - 1] + "曜"
+        entry.date.formatted(localizedPattern: "EEE")
     }
 }
 

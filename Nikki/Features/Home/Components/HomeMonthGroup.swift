@@ -10,7 +10,11 @@ struct HomeMonthGroup: Identifiable {
     var id: Int { year * 100 + month }
 
     /// 「2026年7月」形式の月見出し。
-    var title: String { "\(year)年\(month)月" }
+    var title: String {
+        // year と month は日記の日付から取り出した実在の年月のため date(from:) は失敗しない。フォールバックは型を満たすためだけに置く。
+        let date = Calendar.display.date(from: DateComponents(year: year, month: month)) ?? .now
+        return date.formatted(localizedPattern: "MMMM y")
+    }
 
     /// 日記を新しい月・日が先頭に来るよう降順に並べ、年月ごとにまとめる。
     static func grouped(from entries: [JournalEntry]) -> [HomeMonthGroup] {

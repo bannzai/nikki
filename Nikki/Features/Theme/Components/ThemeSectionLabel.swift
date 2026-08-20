@@ -14,7 +14,7 @@ struct ThemeSectionLabel: View {
 
 struct ThemeSectionLabel_Previews: PreviewProvider {
     static var previews: some View {
-        ThemeSectionLabel(text: "紙の色")
+        ThemeSectionLabel(text: "Paper color")
             .padding()
             .background(Color.inkPaper)
     }

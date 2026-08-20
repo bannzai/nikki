@@ -29,7 +29,7 @@ func evaluateUnlockAuthentication() async -> Bool {
             unlockAuthenticationContext = nil
         }
     }
-    return (try? await context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: "日記のロックを解除します")) == true
+    return (try? await context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: String(localized: "Unlock your journal"))) == true
 }
 
 /// 評価中のロック解除認証を中断し、表示中の認証ダイアログを閉じる。評価中でなければ何もしない(冪等)。

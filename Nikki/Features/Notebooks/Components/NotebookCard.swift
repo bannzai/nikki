@@ -40,8 +40,8 @@ struct NotebookCard: View {
     private func reminderText(frequency: JournalReminderFrequency) -> String {
         switch frequency {
         case .none: return ""
-        case .daily: return "毎日"
-        case .weekly: return "毎週"
+        case .daily: return String(localized: "Daily")
+        case .weekly: return String(localized: "Weekly")
         }
     }
 }

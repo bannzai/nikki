@@ -28,10 +28,10 @@ struct NotebookListPage: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            InkNavBar(leading: .back, center: .title("ノート"), onLeading: { dismiss() })
+            InkNavBar(leading: .back, center: .title(String(localized: "Notebooks")), onLeading: { dismiss() })
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
-                    Text("今日はどの紙に書きますか。")
+                    Text("Which page will you write on today?")
                         .font(.ink(12.5, .regular))
                         .foregroundStyle(Color.inkTextSecondary)
                         .lineSpacing(inkLineSpacing(fontSize: 12.5, multiplier: 1.9))
@@ -53,11 +53,11 @@ struct NotebookListPage: View {
         .navigationDestination(isPresented: $notebookCreateIsPresented) {
             NotebookCreatePage()
         }
-        .alert("入力内容の置き換え", isPresented: $replaceAlertIsPresented, presenting: notebook) { notebook in
-            Button("置き換える", role: .destructive) { apply(notebook: notebook) }
-            Button("キャンセル", role: .cancel) {}
+        .alert("Replace current content", isPresented: $replaceAlertIsPresented, presenting: notebook) { notebook in
+            Button("Replace", role: .destructive) { apply(notebook: notebook) }
+            Button("Cancel", role: .cancel) {}
         } message: { notebook in
-            Text("「\(notebook.name)」を選ぶと、いま入力されている内容は消えます。")
+            Text("Choosing “\(notebook.name)” will discard what you've written.")
         }
     }
 

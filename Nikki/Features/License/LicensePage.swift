@@ -30,7 +30,7 @@ struct LicensePage: View {
         ZStack {
             Color.inkPaper.ignoresSafeArea()
             VStack(spacing: 0) {
-                InkNavBar(leading: .back, center: .title("OSS ライセンス"), onLeading: { dismiss() })
+                InkNavBar(leading: .back, center: .title(String(localized: "Open source licenses")), onLeading: { dismiss() })
                 ScrollView {
                     // LicenseList の LicenseListView は List + NavigationLink で一覧を組むが、その行のタップは
                     // RootPage が自動ロック用に張る simultaneousGesture(DragGesture) に奪われて本文へ遷移しない。

@@ -10,7 +10,7 @@ struct NotebookNewFooter: View {
             HStack(spacing: 8) {
                 Image(systemName: InkIcons.add)
                     .font(.system(size: 14, weight: .regular))
-                Text("新しいノート")
+                Text("New notebook")
                     .font(.ink(13.5, .regular))
             }
             .foregroundStyle(Color.inkTextSecondary)

@@ -25,12 +25,12 @@ struct TemplateVariableSheet: View {
                     .frame(maxWidth: .infinity)
                     .padding(.bottom, 18)
 
-                Text("「\(template.name)」から作成")
+                Text("Create from “\(template.name)”")
                     .font(.ink(17, .bold))
                     .foregroundStyle(Color.ink)
                     .padding(.bottom, 4)
 
-                Text("埋めた言葉が、そのまま本文に入ります。")
+                Text("What you fill in goes straight into the entry.")
                     .font(.ink(12.5, .regular))
                     .foregroundStyle(Color.inkTextTertiary)
                     .padding(.bottom, 20)
@@ -44,7 +44,7 @@ struct TemplateVariableSheet: View {
                 TemplateMarkdownPreview(markdown: TemplateVariableField.substitutedMarkdown(template: template, fields: fields))
                     .padding(.top, 18)
 
-                Button("この内容ではじめる") {
+                Button("Start with this") {
                     start(template: template)
                 }
                 .buttonStyle(InkPrimaryButtonStyle())

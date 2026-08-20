@@ -15,7 +15,7 @@ struct NotebookSettingsPage: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            InkNavBar(leading: .back, center: .title("ノート"), onLeading: { dismiss() })
+            InkNavBar(leading: .back, center: .title(String(localized: "Notebooks")), onLeading: { dismiss() })
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     InkListSection {

@@ -16,7 +16,7 @@ struct NotebookDefaultPage: View {
         // 未設定のときは新規作成と同じ解決(先頭のノート)を選択中として見せる。
         let defaultNotebook = notebooks.first { $0.id.uuidString == defaultNotebookID } ?? notebooks.first
         VStack(spacing: 0) {
-            InkNavBar(leading: .back, center: .title("既定のノート"), onLeading: { dismiss() })
+            InkNavBar(leading: .back, center: .title(String(localized: "Default notebook")), onLeading: { dismiss() })
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     InkListSection {

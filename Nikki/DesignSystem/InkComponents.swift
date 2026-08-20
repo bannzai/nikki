@@ -82,7 +82,7 @@ struct InkFABButtonStyle: ButtonStyle {
 /// 検索バー。入力は呼び出し側の Binding に流し、絞り込み自体は呼び出し側が行う。
 struct InkSearchBar: View {
     // 見本(1g)のプレースホルダ文言。
-    var placeholder: String = "日記をさがす"
+    var placeholder: String = String(localized: "Search your journal")
     @Binding var text: String
     /// 呼び出し側がキーボードショートカット(⌘F)でフォーカスを当てるための binding。
     var isFocused: FocusState<Bool>.Binding

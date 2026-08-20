@@ -14,12 +14,12 @@ struct OnboardingWelcomePage: View {
                     .frame(maxWidth: .infinity)
 
                 VStack(alignment: .leading, spacing: 18) {
-                    Text("ここに書くことは、\nあなたしか読めません。")
+                    Text("What you write here,\nonly you can read.")
                         .font(.ink(25, .bold))
                         .lineSpacing(inkLineSpacing(fontSize: 25, multiplier: 1.7))
                         .foregroundStyle(Color.ink)
                         .fixedSize(horizontal: false, vertical: true)
-                    Text("日記はこの端末の中で暗号化されます。わたしたち開発者にも、中身を見ることはできません。")
+                    Text("Your journal is encrypted on this device. Not even we, the developers, can read it.")
                         .font(.ink(14.5, .regular))
                         .lineSpacing(inkLineSpacing(fontSize: 14.5, multiplier: 2.1))
                         .foregroundStyle(Color.inkTextSecondary)
@@ -27,7 +27,7 @@ struct OnboardingWelcomePage: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
 
-                Button("はじめる") {
+                Button("Get started") {
                     onboardingStep = .encryption
                 }
                 .buttonStyle(InkPrimaryButtonStyle())
