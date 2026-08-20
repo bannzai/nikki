@@ -32,7 +32,8 @@ Nikki の `Nikki/Models/` は現在プレーンな値型（`JournalEntry` / `Blo
 
 - SwiftData モデルや同期対象に保存する文字列プロパティは、多言語化の仕組み（`String(localized:)` 等）を通した値にする
 - Preview のサンプルデータも同様にする
-- 現在 Nikki は多言語化の仕組みを未導入で、文字列は日本語をハードコードしている。翻訳の仕組みを導入する際にこのルールを適用する（`localization-guidelines.md` を将来再移植する前提）
+- 文言は `Nikki/Localizable.xcstrings`（String Catalog）で管理する。キーは英語（開発言語 = en）で書き、日本語は翻訳として持つ。SwiftUI の `Text("...")` 等はそのままキーになり、`String` を受け取る箇所は `String(localized:)` を通す
+- 日付の表記は `Date.formatted(localizedPattern:)`（`Nikki/Models/Date+.swift`）で、DateFormatter のパターン自体を String Catalog で言語別に持つ（日本語はデザイン見本の表記を保ち、英語は App Store スクリーンショットの表記に合わせるため）
 
 ## プロパティ設計
 
