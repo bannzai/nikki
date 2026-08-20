@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// カレンダーの曜日ヘッダ(日〜土)。曜日の記号は端末の言語に追従させる。
+/// カレンダーの曜日ヘッダ(日〜土)。曜日の記号はアプリの表示言語に揃える。
 struct HomeCalendarWeekdayHeader: View {
     var body: some View {
         // 日グリッド(HomeCalendarDaysGrid)が日曜始まりで並べるため、ロケールの週の始まりによらず日曜から出す。

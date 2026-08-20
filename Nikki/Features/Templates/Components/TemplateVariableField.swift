@@ -66,7 +66,7 @@ struct TemplateVariableField: Identifiable, Equatable {
         "mood": String(localized: "Today's mood"),
     ]
 
-    /// {{date}} の補完値。本文に保存される文字列のため、表記は端末の言語に追従させる。
+    /// {{date}} の補完値。本文に保存される文字列のため、表記はアプリの表示言語に揃える。
     private static func dateText(_ date: Date, includesWeekday: Bool) -> String {
         includesWeekday
             ? date.formatted(localizedPattern: "EEEE, MMMM d, y")
