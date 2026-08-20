@@ -12,6 +12,7 @@ struct NotebookSettingsPage: View {
     @State var notebookCreateIsPresented = false
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.paperColor) private var paperColor
 
     var body: some View {
         VStack(spacing: 0) {
@@ -34,7 +35,7 @@ struct NotebookSettingsPage: View {
                 .padding(.top, 8)
             }
         }
-        .background(Color.inkPaper.ignoresSafeArea())
+        .background(paperColor.ignoresSafeArea())
         .inkNavigationBarHidden()
         .navigationDestination(item: $notebook) { notebook in
             NotebookEditPage(notebook: notebook)

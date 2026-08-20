@@ -11,6 +11,7 @@ struct NotebookDefaultPage: View {
     @AppStorage(.defaultNotebookID) var defaultNotebookID: String = ""
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.paperColor) private var paperColor
 
     var body: some View {
         // 未設定のときは新規作成と同じ解決(先頭のノート)を選択中として見せる。
@@ -44,7 +45,7 @@ struct NotebookDefaultPage: View {
                 .padding(.top, 8)
             }
         }
-        .background(Color.inkPaper.ignoresSafeArea())
+        .background(paperColor.ignoresSafeArea())
         .inkNavigationBarHidden()
     }
 }

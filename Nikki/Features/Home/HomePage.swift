@@ -41,11 +41,12 @@ struct HomePage: View {
     @Environment(\.today) private var today
     @Environment(\.resetAutoLockTimer) private var resetAutoLockTimer
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.paperColor) private var paperColor
 
     var body: some View {
         let filteredEntries = searchText.isEmpty ? entries : entries.filter { $0.matches(searchText: searchText) }
         ZStack(alignment: .bottomTrailing) {
-            Color.inkPaper.ignoresSafeArea()
+            paperColor.ignoresSafeArea()
 
             VStack(alignment: .leading, spacing: 0) {
                 VStack(alignment: .leading, spacing: 14) {
