@@ -9,11 +9,11 @@ struct AppStoreScreenshot2Page: View {
     var body: some View {
         let (title, subtitle) = switch language {
         case .ja: (
-            "手が止まると、\nそっとロック",
+            "手が止まると\nそっとロック",
             "Face ID / Touch ID でひらきます"
         )
         case .en: (
-            "Step away,\nand it locks itself",
+            "Step away\nand it locks itself",
             "Open again with Face ID / Touch ID"
         )
         }

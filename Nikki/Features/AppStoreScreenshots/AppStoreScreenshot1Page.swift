@@ -9,11 +9,11 @@ struct AppStoreScreenshot1Page: View {
     var body: some View {
         let (title, subtitle) = switch language {
         case .ja: (
-            "ここに書くことは、\nあなたしか読めません",
-            "日記は端末と、あなたの iCloud にだけ"
+            "ここに書くことは\nあなたしか読めません",
+            "日記は端末とあなたの iCloud にだけ"
         )
         case .en: (
-            "What you write here,\nonly you can read",
+            "What you write here\nonly you can read",
             "Entries live only on your device and your iCloud"
         )
         }

@@ -9,12 +9,12 @@ struct AppStoreScreenshot3Page: View {
     var body: some View {
         let (title, subtitle) = switch language {
         case .ja: (
-            "書くことに集中できる、\n静かなエディタ",
-            "マークダウン互換。見出しもチェックリストも"
+            "書くことに集中できる\n静かなエディタ",
+            "マークダウン互換で見出しもチェックリストも"
         )
         case .en: (
-            "A quiet editor,\nbuilt for writing",
-            "Markdown-friendly: headings and checklists"
+            "A quiet editor\nbuilt for writing",
+            "Markdown-friendly with headings and checklists"
         )
         }
         AppStoreScreenshotFrame(canvas: canvas, title: title, subtitle: subtitle) {

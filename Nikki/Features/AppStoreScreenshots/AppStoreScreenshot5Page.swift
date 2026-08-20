@@ -9,7 +9,7 @@ struct AppStoreScreenshot5Page: View {
     var body: some View {
         let (title, subtitle) = switch language {
         case .ja: (
-            "書いた日々を、\nカレンダーで振り返る",
+            "書いた日々を\nカレンダーで振り返る",
             "iPhone・iPad・Mac でいつでも同期"
         )
         case .en: (

@@ -10,12 +10,12 @@ struct AppStoreScreenshot4Page: View {
         // 機能(テンプレート)をタイトルで先に伝える。情緒的な「今日の紙を選ぶ」はサブに置く。
         let (title, subtitle) = switch language {
         case .ja: (
-            "テンプレートで、\nすぐ書きはじめる",
+            "テンプレートで\nすぐ書きはじめる",
             "「朝の3行」「一日の振り返り」から今日の紙を選ぶ"
         )
         case .en: (
             "Start right away\nwith templates",
-            "Pick today's page, like \"3 lines in the morning\""
+            "Pick today's page like \"3 lines in the morning\""
         )
         }
         AppStoreScreenshotFrame(canvas: canvas, title: title, subtitle: subtitle) {

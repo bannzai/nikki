@@ -9,7 +9,7 @@ struct AppStoreScreenshot6Page: View {
     var body: some View {
         let (title, subtitle) = switch language {
         case .ja: (
-            "紙の色を、\nじぶんの好みに",
+            "紙の色を\nじぶんの好みに",
             "テーマは Nikki Plus で解放"
         )
         case .en: (
