@@ -15,7 +15,7 @@ struct AppStoreScreenshot4Page: View {
         )
         case .en: (
             "Start right away\nwith templates",
-            "Pick today's page like \"3 lines in the morning\""
+            "Pick a template like \"3 lines in the morning\""
         )
         }
         AppStoreScreenshotFrame(canvas: canvas, title: title, subtitle: subtitle) {

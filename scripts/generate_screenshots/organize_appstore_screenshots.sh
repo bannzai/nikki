@@ -54,8 +54,14 @@ find "$FASTLANE_BASE" -type f -name "*_${DEVICE}.png" -delete 2>/dev/null || tru
 # デバイスごとに「どのコードから生成したか」の世代マーカーを残す。
 # アップロード側が同一アップロードに含まれるデバイス間 (iphone と ipad 等) で一致を検証し、
 # 片方だけ再生成した新旧混在の一式を公開しないようにする。
+# 指紋はここで再計算せず、撮影時に run スクリプトが保存したものをコピーする
+# (撮影後のソース変更で古い画像へ新しい世代が付かないようにするため)。
+if [ ! -f "$RAW_DIR/.generation" ]; then
+    echo "Error: 撮影時の世代マーカーがありません: $RAW_DIR/.generation (run_appstore_screenshots.sh から撮り直してください)" >&2
+    exit 1
+fi
 mkdir -p "$FASTLANE_BASE"
-screenshot_source_fingerprint > "$FASTLANE_BASE/.generation-$DEVICE"
+cp "$RAW_DIR/.generation" "$FASTLANE_BASE/.generation-$DEVICE"
 
 jq -c '.[] | .attachments[]' "$MANIFEST" | while read -r attachment; do
     exported_file=$(echo "$attachment" | jq -r '.exportedFileName')

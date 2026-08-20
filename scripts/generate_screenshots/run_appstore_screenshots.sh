@@ -68,6 +68,10 @@ RAW_DIR="$ARTIFACTS_DIR/raw/$DEVICE"
 rm -rf "$RESULT_BUNDLE" "$RAW_DIR"
 mkdir -p "$RAW_DIR"
 
+# 生成世代の指紋は撮影開始時点で確定して撮影結果と一緒に保存する
+# (organize 時に再計算すると、撮影後にソースを変えた場合に古い画像へ新しい世代が付くため)。
+screenshot_source_fingerprint > "$RAW_DIR/.generation"
+
 echo "==== Running snapshot test on $DEVICE ===="
 xcodebuild test-without-building \
     -project "$SCREENSHOT_PROJECT" \

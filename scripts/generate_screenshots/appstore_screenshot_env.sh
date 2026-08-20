@@ -62,10 +62,11 @@ ensure_simulator() {
     echo "$udid"
 }
 
-# スクショ画面・撮影コードの内容から生成世代の指紋を計算する。
-# git の HEAD だけでは未コミットの変更を区別できないため、ファイル内容のハッシュで計算する。
+# スクショの描画に影響するソースの内容から生成世代の指紋を計算する。
+# スクショ画面は DesignSystem や各 Feature の部品を埋め込むため、対象はアプリ全ソース + 撮影コードにする
+# (git の HEAD だけでは未コミットの変更を区別できないため、ファイル内容のハッシュで計算する)。
 screenshot_source_fingerprint() {
-    find Nikki/Features/AppStoreScreenshots NikkiUITests/AppStoreScreenshotSnapshotUITests.swift NikkiTests/AppStoreScreenshotRenderTests.swift -type f -name '*.swift' -print0 \
+    find Nikki NikkiUITests/AppStoreScreenshotSnapshotUITests.swift NikkiTests/AppStoreScreenshotRenderTests.swift -type f -name '*.swift' -print0 \
         | sort -z \
         | xargs -0 shasum -a 256 \
         | shasum -a 256 \

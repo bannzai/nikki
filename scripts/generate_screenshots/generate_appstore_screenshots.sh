@@ -26,13 +26,16 @@ cd "$SCRIPT_DIR/../.."
 DEVICE="all"
 LANGUAGES=""
 PAGES=""
+# -l / -n が「指定されたか」を空文字の値と区別して保持する (-l "" を未指定扱いにして全件生成しないため)。
+LANGUAGES_SET=false
+PAGES_SET=false
 SKIP_BUILD=false
 
 while [ $# -gt 0 ]; do
     case "$1" in
         -d) DEVICE=$2; shift 2 ;;
-        -l) LANGUAGES=$2; shift 2 ;;
-        -n) PAGES=$2; shift 2 ;;
+        -l) LANGUAGES=$2; LANGUAGES_SET=true; shift 2 ;;
+        -n) PAGES=$2; PAGES_SET=true; shift 2 ;;
         --skip-build) SKIP_BUILD=true; shift ;;
         *) echo "Error: 不明なオプション: $1" >&2; exit 1 ;;
     esac
@@ -79,10 +82,10 @@ validate_csv() {
         exit 1
     fi
 }
-if [ -n "$LANGUAGES" ]; then
+if [ "$LANGUAGES_SET" = true ]; then
     validate_csv "言語" "$LANGUAGES" "ja en"
 fi
-if [ -n "$PAGES" ]; then
+if [ "$PAGES_SET" = true ]; then
     validate_csv "ページ番号" "$PAGES" "1 2 3 4 5 6"
 fi
 
