@@ -3,6 +3,7 @@ import SwiftData
 
 /// デザインリファレンス(Nikki iOS.dc.html)と一致するサンプルデータ。
 /// 日付依存の画面には referenceToday(2026-07-18)を「今日」として渡す。
+/// 文言は String Catalog を通し、シード(永続化)・プレビューとも端末の言語で表示する(.claude/rules/coding-rules-entity.md)。
 /// JournalEntry / JournalNotebook / JournalTemplate は SwiftData の @Model(参照型)のため、複数のコンテナや
 /// プレビューで同じインスタンスを共有しないよう、アクセスごとに新しいインスタンスを作る。
 enum SampleData {
@@ -24,53 +25,53 @@ enum SampleData {
         [
             JournalEntry(
                 date: date(2026, 7, 18, 21, 4),
-                title: "梅雨明け",
-                bodyMarkdown: """
-                朝から蝉が鳴いていた。ベランダの鉢に水をやりながら、今年も夏が来たんだなと思う。
+                title: String(localized: "Summer begins"),
+                bodyMarkdown: String(localized: """
+                Cicadas were singing from early morning. Watering the pots on the balcony, I realized summer is here again.
 
-                アイスコーヒーを濃いめに淹れて、ベランダで飲んだ
+                Brewed a strong iced coffee and drank it on the balcony
 
-                ## 買ったもの
+                ## Things I bought
 
-                - [x] 麦茶のパック
-                - [ ] 蚊取り線香
+                - [x] Barley tea bags
+                - [ ] Mosquito coil
 
-                <img alt="夕焼けの写真">
+                <img alt="Photo of the sunset">
 
-                <details><summary>病院メモ(たたんでおく)</summary></details>
+                <details><summary>Hospital notes (folded away)</summary></details>
 
-                ## 夕方から
+                ## From the evening
 
-                風が涼しくなってきたので、窓を全部開けて麦茶を飲んだ。
-                """,
+                The wind turned cool, so I opened every window and drank barley tea.
+                """),
                 createdAt: date(2026, 7, 18, 21, 4),
                 updatedAt: date(2026, 7, 18, 21, 4)
             ),
             JournalEntry(
                 date: date(2026, 7, 16, 22, 10),
-                title: "何もない日",
-                bodyMarkdown: "特別なことは何もなかったけれど、それがよかった。夕方の風がすこし涼しくて、窓を全部開けた。",
+                title: String(localized: "A quiet day"),
+                bodyMarkdown: String(localized: "Nothing special happened, and that was the good part. The evening breeze felt cool, so I opened every window."),
                 createdAt: date(2026, 7, 16, 22, 10),
                 updatedAt: date(2026, 7, 16, 22, 10)
             ),
             JournalEntry(
                 date: date(2026, 7, 12, 20, 30),
-                title: "本屋にて",
-                bodyMarkdown: "目当ての本はなかったのに、気づいたら3冊買っていた。こういう寄り道のほうが、あとで効いてくる気がする。",
+                title: String(localized: "At the bookstore"),
+                bodyMarkdown: String(localized: "They didn't have the book I wanted, yet I left with three. These little detours pay off later."),
                 createdAt: date(2026, 7, 12, 20, 30),
                 updatedAt: date(2026, 7, 12, 20, 30)
             ),
             JournalEntry(
                 date: date(2026, 6, 29, 19, 45),
-                title: "雨の音",
-                bodyMarkdown: "一日じゅう雨。傘を忘れて駅で立ち尽くしたけれど、雨宿りの15分は悪くなかった。",
+                title: String(localized: "Sound of rain"),
+                bodyMarkdown: String(localized: "Rain all day. I forgot my umbrella and stood at the station, but fifteen minutes of shelter wasn't bad at all."),
                 createdAt: date(2026, 6, 29, 19, 45),
                 updatedAt: date(2026, 6, 29, 19, 45)
             ),
             JournalEntry(
                 date: date(2026, 6, 24, 21, 15),
-                title: "衣替え",
-                bodyMarkdown: "クローゼットを夏仕様に。去年の夏のシャツから、去年の夏のにおいがした。",
+                title: String(localized: "Wardrobe change"),
+                bodyMarkdown: String(localized: "Switched the closet to summer. Last year's shirts still smelled like last summer."),
                 createdAt: date(2026, 6, 24, 21, 15),
                 updatedAt: date(2026, 6, 24, 21, 15)
             ),
@@ -86,8 +87,8 @@ enum SampleData {
         [
             JournalEntry(
                 date: date(2026, 5, 3, 18, 20),
-                title: "連休の中日",
-                bodyMarkdown: "どこへも行かず、たまっていた写真を整理した。読み返すことはないけれど、残しておきたい日。",
+                title: String(localized: "Middle of the long weekend"),
+                bodyMarkdown: String(localized: "Went nowhere and sorted the photos that had piled up. A day I'll never reread, but want to keep."),
                 createdAt: date(2026, 5, 3, 18, 20),
                 updatedAt: date(2026, 5, 3, 18, 20),
                 isArchived: true
@@ -100,38 +101,38 @@ enum SampleData {
     private static var notebookSeeds: [(name: String, reminderFrequency: JournalReminderFrequency, markdown: String)] {
         [
             (
-                name: "白紙",
+                name: String(localized: "Blank page"),
                 reminderFrequency: .none,
                 markdown: "# {{date}}"
             ),
             (
-                name: "朝の3行",
+                name: String(localized: "3 lines in the morning"),
                 reminderFrequency: .daily,
-                markdown: """
-                # {{date}} の朝
-                - 今日たのしみなこと
-                - 今日やめておくこと
-                - ひとこと
-                """
+                markdown: String(localized: """
+                # Morning of {{date}}
+                - Looking forward to
+                - Skipping today
+                - One line
+                """)
             ),
             (
-                name: "一日の振り返り",
+                name: String(localized: "Daily reflection"),
                 reminderFrequency: .daily,
-                markdown: """
+                markdown: String(localized: """
                 # {{date}}
-                天気: {{weather}}
-                ## よかったこと
-                ## 明日のじぶんへ
-                """
+                Weather: {{weather}}
+                ## What went well
+                ## Note to tomorrow's me
+                """)
             ),
             (
-                name: "旅の記録",
+                name: String(localized: "Travel log"),
                 reminderFrequency: .none,
-                markdown: """
-                # {{place}} 1日目
-                ## 歩いたところ
-                ## たべたもの
-                """
+                markdown: String(localized: """
+                # {{place}} day 1
+                ## Where I walked
+                ## What I ate
+                """)
             ),
         ]
     }
