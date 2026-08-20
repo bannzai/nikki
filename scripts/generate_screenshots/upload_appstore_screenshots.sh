@@ -80,6 +80,34 @@ if [ "$TARGET" = "osx" ] || [ "$TARGET" = "all" ]; then
     verify_complete_screenshots fastlane/screenshots/macos mac
 fi
 
+# 同一アップロードに含まれるデバイス同士が同じコード世代から生成されているかを検証する
+# (iPhone だけ再生成して古い iPad 画像と混ぜて公開しないため)。
+# Usage: verify_same_generation <マーカーファイル...>
+verify_same_generation() {
+    local reference=""
+    local marker
+    for marker in "$@"; do
+        if [ ! -f "$marker" ]; then
+            echo "Error: 生成世代マーカーがありません: $marker (generate_appstore_screenshots.sh で生成し直してください)" >&2
+            return 1
+        fi
+        if [ -z "$reference" ]; then
+            reference=$(cat "$marker")
+        elif [ "$(cat "$marker")" != "$reference" ]; then
+            echo "Error: デバイス間で生成世代が一致しません ($*)。全デバイスを同じコードから生成し直してください" >&2
+            return 1
+        fi
+    done
+}
+
+if [ "$TARGET" = "ios" ]; then
+    verify_same_generation fastlane/screenshots/ios/.generation-iphone fastlane/screenshots/ios/.generation-ipad
+elif [ "$TARGET" = "osx" ]; then
+    verify_same_generation fastlane/screenshots/macos/.generation-mac
+else
+    verify_same_generation fastlane/screenshots/ios/.generation-iphone fastlane/screenshots/ios/.generation-ipad fastlane/screenshots/macos/.generation-mac
+fi
+
 if [ "$TARGET" = "ios" ] || [ "$TARGET" = "all" ]; then
     echo "==== Uploading iOS screenshots (iPhone 6.9 / iPad 13) ===="
     fastlane deliver \

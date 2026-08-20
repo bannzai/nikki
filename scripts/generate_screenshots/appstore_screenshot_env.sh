@@ -62,6 +62,16 @@ ensure_simulator() {
     echo "$udid"
 }
 
+# スクショ画面・撮影コードの内容から生成世代の指紋を計算する。
+# git の HEAD だけでは未コミットの変更を区別できないため、ファイル内容のハッシュで計算する。
+screenshot_source_fingerprint() {
+    find Nikki/Features/AppStoreScreenshots NikkiUITests/AppStoreScreenshotSnapshotUITests.swift NikkiTests/AppStoreScreenshotRenderTests.swift -type f -name '*.swift' -print0 \
+        | sort -z \
+        | xargs -0 shasum -a 256 \
+        | shasum -a 256 \
+        | awk '{print $1}'
+}
+
 # PNG のピクセルサイズが期待値と一致するか検証する。不一致なら異常終了する。
 # Usage: verify_png_size <PNGパス> <device(iphone|ipad|mac)>
 verify_png_size() {

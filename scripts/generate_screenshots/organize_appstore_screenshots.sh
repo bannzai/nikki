@@ -51,6 +51,12 @@ echo "==== Organizing $DEVICE screenshots to $FASTLANE_BASE ===="
 # 全数チェックが「今回のコードで生成した一式」だけを数えるようにする(全数生成で再び揃う)。
 find "$FASTLANE_BASE" -type f -name "*_${DEVICE}.png" -delete 2>/dev/null || true
 
+# デバイスごとに「どのコードから生成したか」の世代マーカーを残す。
+# アップロード側が同一アップロードに含まれるデバイス間 (iphone と ipad 等) で一致を検証し、
+# 片方だけ再生成した新旧混在の一式を公開しないようにする。
+mkdir -p "$FASTLANE_BASE"
+screenshot_source_fingerprint > "$FASTLANE_BASE/.generation-$DEVICE"
+
 jq -c '.[] | .attachments[]' "$MANIFEST" | while read -r attachment; do
     exported_file=$(echo "$attachment" | jq -r '.exportedFileName')
     suggested_name=$(echo "$attachment" | jq -r '.suggestedHumanReadableName')

@@ -13,6 +13,13 @@ import SwiftUI
 nonisolated final class AppStoreScreenshotRenderTests: XCTestCase {
     @MainActor
     func testRenderMacScreenshots() throws {
+        // 通常の xcodebuild test に 12 個の大型 attachment を足さないよう、
+        // パイプライン (run スクリプト) が渡す SNAPSHOT_ENABLED が無ければスキップする (UI 撮影テストと同じガード)。
+        try XCTSkipUnless(
+            ProcessInfo.processInfo.environment["SNAPSHOT_ENABLED"] == "1",
+            "スクリーンショット描画は scripts/generate_screenshots/ のパイプラインからだけ実行する(SNAPSHOT_ENABLED=1)"
+        )
+
         for language in filteredLanguages() {
             for page in filteredPages() {
                 let renderer = ImageRenderer(
