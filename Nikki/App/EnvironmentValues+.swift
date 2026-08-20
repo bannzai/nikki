@@ -12,4 +12,8 @@ extension EnvironmentValues {
     /// Nikki Plus(entitlement `plus`)が有効かどうか。
     /// RootPage が RevenueCat の customerInfoStream から更新して配る。未 configure(カタログ・テスト)では常に false。
     @Entry var plusActive: Bool = false
+
+    /// 実画面の紙地に使う色。テーマ(1n)の紙色プリセットを Plus の加入状態で倒した結果。
+    /// RootPage が AppStorage と plusActive から解決して配る。未注入(プレビュー・テスト)では既定の紙地。
+    @Entry var paperColor: Color = .inkPaper
 }

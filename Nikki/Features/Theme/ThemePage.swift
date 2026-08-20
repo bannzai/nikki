@@ -13,13 +13,9 @@ struct ThemePage: View {
 
     var body: some View {
         // Plus 失効後は保存値を残したまま無料範囲へ倒した添字で表示する(再加入で元の選択に戻る)。
-        let effectiveIndex = effectivePaperColorPresetIndex(storedIndex: paperColorPresetIndex, plusActive: plusActive)
-        // 保存済みの index がプリセットの範囲外(将来のプリセット変更等)でも落ちないよう既定の「生成」に倒す。
-        let paperColor = Color.paperColorPreset.indices.contains(effectiveIndex)
-            ? Color.paperColorPreset[effectiveIndex]
-            : Color.paperColorPreset[1]
+        let paperColor = effectivePaperColor(storedIndex: paperColorPresetIndex, plusActive: plusActive)
         ZStack {
-            Color.inkPaper.ignoresSafeArea()
+            paperColor.ignoresSafeArea()
             VStack(spacing: 0) {
                 InkNavBar(leading: .back, center: .title("テーマ"), onLeading: { dismiss() })
                 ScrollView {
@@ -97,4 +93,14 @@ func effectivePaperColorPresetIndex(storedIndex: Int, plusActive: Bool) -> Int {
         return 1
     }
     return storedIndex
+}
+
+/// 実際に紙地へ適用する紙色。effectivePaperColorPresetIndex で Plus 失効を倒した添字をプリセットの色に解決する。
+/// 保存済みの index がプリセットの範囲外(将来のプリセット変更等)でも落ちないよう既定の「生成」に倒す。
+func effectivePaperColor(storedIndex: Int, plusActive: Bool) -> Color {
+    let effectiveIndex = effectivePaperColorPresetIndex(storedIndex: storedIndex, plusActive: plusActive)
+    if Color.paperColorPreset.indices.contains(effectiveIndex) {
+        return Color.paperColorPreset[effectiveIndex]
+    }
+    return Color.paperColorPreset[1]
 }

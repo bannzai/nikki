@@ -18,6 +18,8 @@ struct RootPage: View {
     @AppStorage(.faceIDUnlockEnabled) var faceIDUnlockEnabled: Bool = true
     // README の「5秒タイプがなかったらロック」に合わせた既定値。
     @AppStorage(.autoLockSeconds) var autoLockSeconds: Int = 5
+    // ThemePage と同じ既定(「生成」)。
+    @AppStorage(.paperColorPresetIndex) var paperColorPresetIndex: Int = 1
 
     /// 配下へ environment で配る「今日」。フォアグラウンド復帰と日付変更のタイミングでのみ更新する。
     @State var today: Date = .now
@@ -55,6 +57,8 @@ struct RootPage: View {
             .environment(\.today, today)
             .environment(\.resetAutoLockTimer, registerActivity)
             .environment(\.plusActive, plusActive)
+            // テーマで選んだ紙色を実画面の紙地に配る。Plus 失効中は無料範囲へ倒した色になる。
+            .environment(\.paperColor, effectivePaperColor(storedIndex: paperColorPresetIndex, plusActive: plusActive))
             // 起動時キャッシュ→購入・復元・更新の順で customerInfo が流れてくるため、加入状態はこの1本で追従できる。
             .task {
                 if !Purchases.isConfigured {
