@@ -6,3 +6,6 @@ build/
 *.log
 tmp/
 var/
+# App Store スクリーンショットの生成物(scripts/generate_screenshots/ で再生成できる)
+scripts/generate_screenshots/artifacts/
+fastlane/screenshots/
