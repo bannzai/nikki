@@ -22,6 +22,8 @@ nonisolated final class ContextMenuUITests: XCTestCase {
         app.launchEnvironment["NIKKI_SCREEN"] = "entryList"
         // カタログモードは自動ロックを持つ RootPage を通らないが、issue #45 の前提に合わせて明示しておく。
         app.launchEnvironment["NIKKI_AUTOLOCK_DISABLED"] = "1"
+        // 文言は String Catalog で端末の言語に追従するため、シミュレータの言語設定によらず日本語の文言で要素を引けるよう固定する。
+        app.launchArguments += ["-AppleLanguages", "(ja)", "-AppleLocale", "ja_JP"]
         app.launch()
         return app
     }
