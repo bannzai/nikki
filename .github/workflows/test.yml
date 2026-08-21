@@ -41,9 +41,11 @@ jobs:
               exit 1
             }
           grep -E 'warning:|Test Suite|\*\* TEST' tmp/test.log || true
-          # StoreKit テストが skip のまま成功扱いになっていないことを検査する
-          if grep -E "Test Case .*StoreKitConfigurationTests.* skipped" tmp/test.log; then
-            echo "::error::StoreKitConfigurationTests が skip されています (実行可能な runtime を使ってください)" >&2
+          # StoreKit テストが skip・未実行のまま成功扱いになっていないことを検査する
+          # (失敗は xcodebuild 自体が非 0 で落とすため、ここでは「5 件が実行されて pass した」ことを確認する)
+          if [ "$(grep -cE "Test Case .*StoreKitConfigurationTests.* passed" tmp/test.log)" -lt 5 ]; then
+            echo "::error::StoreKitConfigurationTests の pass が 5 件未満です (skip または未実行の可能性。実行可能な runtime を使ってください)" >&2
+            grep -E "Test Case .*StoreKitConfigurationTests" tmp/test.log >&2 || true
             exit 1
           fi
       - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0

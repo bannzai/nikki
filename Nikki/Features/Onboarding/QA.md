@@ -1,7 +1,7 @@
 ---
 feature: Onboarding
 verification: mobile-mcp
-last_verified_commit: 96337de3d8717a2428e3fa4d4120727fab323a27
+last_verified_commit: da31688b6eaa28f714d9c3c264de77687e05f228
 last_verified_at: 2026-08-21
 ---
 
@@ -22,9 +22,12 @@ last_verified_at: 2026-08-21
 - [x] **生体認証の案内へ進む**: 「次へ」で、ステップ表示 (2/2) と端末の認証手段に合った図像・見出し・ボタン文言 (Face ID / Touch ID / パスコード・パスワード) の画面に進む
   - 自動化: manual（端末ごとの生体認証構成に依存する表示の目視確認）
   - iOS Simulator (iPhone / Face ID 対応機) では Face ID の図像・見出し「From now on, just your face.」・ボタン「Enable Face ID」が出た。Touch ID / パスコード端末での表示は未確認
-- [x] **完了してホームへ到達する**: 生体認証を有効にするボタン、またはパスキーを登録するボタンのどちらを押してもオンボーディングが終わり、日記一覧が表示される
+- [x] **完了してホームへ到達する**: 生体認証を有効にするボタンを押すとオンボーディングが終わり、日記一覧が表示される
   - 自動化: manual（初回起動フローの目視確認）
-  - 「Enable Face ID」で完了しホームへ到達することを確認。「Register a passkey」側は未確認
+  - 「Enable Face ID」で完了しホームへ到達することを確認した
+- [ ] **パスキー登録ボタンからも完了する**: パスキーを登録するボタンを押してもオンボーディングが終わり、日記一覧が表示される
+  - 自動化: manual（初回起動フローの目視確認）
+  - ⏭️ スキップ: シミュレータ確認は Enable Face ID 側のみ実施。コード上は両ボタンとも同じ完了処理 (OnboardingBiometricPage) だが実操作は未確認
 
 #### 動作確認
 <details>
@@ -57,12 +60,20 @@ last_verified_at: 2026-08-21
 
 </details>
 
-### **完了してホームへ到達する**: 生体認証を有効にするボタン、またはパスキーを登録するボタンのどちらを押してもオンボーディングが終わり、日記一覧が表示される
+### **完了してホームへ到達する**: 生体認証を有効にするボタンを押すとオンボーディングが終わり、日記一覧が表示される
 
 <details><summary>動作確認スクショ</summary>
 
 **確認日: 2026-08-21**
 <img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260821/eeb98caf-5136-4b80-96ac-8b4c7e5080ab.jpg" width="320">
+
+</details>
+
+### **パスキー登録ボタンからも完了する**: パスキーを登録するボタンを押してもオンボーディングが終わり、日記一覧が表示される
+
+<details><summary>動作確認スクショ</summary>
+
+（未実行）
 
 </details>
 

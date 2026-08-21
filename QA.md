@@ -1,7 +1,7 @@
 ---
 feature: _root
 verification: mobile-mcp
-last_verified_commit: 96337de3d8717a2428e3fa4d4120727fab323a27
+last_verified_commit: da31688b6eaa28f714d9c3c264de77687e05f228
 last_verified_at: 2026-08-21
 ---
 
@@ -65,8 +65,8 @@ last_verified_at: 2026-08-21
   - インストール直後の起動で welcome 画面から始まり、暗号化の説明 (1/2) → 生体認証の案内 (2/2) → ホームへ到達した
 - [x] **英語 UI**: 端末言語 en で全画面 (ホーム・エディタ・ノート・ロック・テンプレート・テーマ・設定・ペイウォール・アーカイブ) の文言・日付表記が英語で表示される
   - 自動化: manual（表示言語の目視確認）
-  - 英語ロケールの Simulator で、オンボーディング・ホーム (リスト / カレンダー / 検索)・エディタ・ノート・ロック・設定が英語で表示され、日付表記も「Friday, August 21」「August 2026」の英語表記だった。テーマ・ペイウォール・アーカイブは本バッチの担当外
-- [x] **日本語 UI**: 端末言語 ja で同画面群の文言・日付表記が日本語で表示される
+  - 英語ロケールの Simulator で全画面を確認済み (テーマ・ペイウォール・アーカイブ含む)。オンボーディング・ホーム (リスト / カレンダー / 検索)・エディタ・ノート・ロック・テンプレート・テーマ・設定・ペイウォール・アーカイブが英語で表示され、日付表記も「Friday, August 21」「August 2026」の英語表記だった
+- [x] **日本語 UI**: アプリ表示言語 ja で同画面群の文言・日付表記が日本語で表示される
   - 自動化: manual（表示言語の目視確認）
   - アプリの表示言語を ja にした Simulator で、オンボーディング・ホーム (リスト / カレンダー / 検索)・エディタ・ノート・テンプレート・ロック・テーマ・設定・ペイウォール・アーカイブ・OSS ライセンスが日本語で表示された。日付表記も月見出し「2026年8月」・一覧の曜日「金曜」・エディタとカレンダーの「8月21日 金曜日」・カレンダーの曜日ヘッダ「日月火水木金土」と日本語表記だった。未翻訳の文言は見つからなかった
 
@@ -89,13 +89,19 @@ last_verified_at: 2026-08-21
 <details><summary>動作確認スクショ</summary>
 
 **確認日: 2026-08-21**
+
+ホーム (1 枚目)、エディタ (2 枚目)、ロック (3 枚目)、テーマ (4 枚目)、ペイウォールの読み込み失敗パス (5 枚目)、アーカイブ一覧 (6 枚目)。
+
 <img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260821/233d9709-6524-4a8d-9d39-b7de0aada7dc.jpg" width="320">
 <img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260821/cc03d133-fc9a-4b76-bc95-039e85cc262c.jpg" width="320">
 <img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260821/f8bccb1f-faa0-416b-b957-a14e614464a2.jpg" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260821/7f937d41-6344-42f5-be63-c50d9f59c834.jpg" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260821/7640cf5b-6909-4dfb-9628-c1ae97eb630d.jpg" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260821/7b0924ee-d8a5-4dc1-adf2-aebb841e1d99.jpg" width="320">
 
 </details>
 
-### **日本語 UI**: 端末言語 ja で同画面群の文言・日付表記が日本語で表示される
+### **日本語 UI**: アプリ表示言語 ja で同画面群の文言・日付表記が日本語で表示される
 
 <details><summary>動作確認スクショ</summary>
 

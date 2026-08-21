@@ -135,7 +135,12 @@ nonisolated final class StoreKitConfigurationTests: XCTestCase {
             if await currentEntitledProductIDs().contains(productID) {
                 return true
             }
-            try? await Task.sleep(for: .milliseconds(200))
+            do {
+                try await Task.sleep(for: .milliseconds(200))
+            } catch {
+                // テストタスクのキャンセル時はポーリングを打ち切って未付与として返す
+                return false
+            }
         }
         return false
     }

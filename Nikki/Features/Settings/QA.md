@@ -1,7 +1,7 @@
 ---
 feature: Settings
 verification: mobile-mcp
-last_verified_commit: 96337de3d8717a2428e3fa4d4120727fab323a27
+last_verified_commit: da31688b6eaa28f714d9c3c264de77687e05f228
 last_verified_at: 2026-08-21
 ---
 
@@ -198,9 +198,12 @@ last_verified_at: 2026-08-21
 
 ## 4. データの書き出しと削除
 
-- [x] **Markdown の保存先を選べる**: 「Markdown で書き出す」からファイルの保存画面が開き、保存すると Nikki.md が書き出される。キャンセルしても設定画面が壊れない
+- [x] **Markdown の保存先を選べる**: 「Markdown で書き出す」からファイルの保存画面が開き、保存すると Nikki.md が書き出される
   - 自動化: manual（OS のファイル保存画面の操作を伴うため）
-  - 保存画面で「Save as Nikki」の状態で「On My iPhone」へ保存でき、保存後は設定画面へ戻った。Files アプリで 392 バイトのファイルが確認できた。キャンセル時の挙動は本バッチでは未確認
+  - 保存画面で「Save as Nikki」の状態で「On My iPhone」へ保存でき、保存後は設定画面へ戻った。Files アプリで 392 バイトのファイルが確認できた
+- [ ] **書き出しをキャンセルしても設定画面が壊れない**: ファイルの保存画面をキャンセルすると設定画面に戻り、表示と操作が壊れない
+  - 自動化: manual（OS のファイル保存画面の操作を伴うため）
+  - ⏭️ スキップ: 今回の QA セッションでは保存成功側のみ実施。キャンセル経路は次回 QA で確認する
 - [x] **書き出した内容が日記と一致する**: 書き出したファイルに、日付見出しと本文が古い順で並んでいる
   - 自動化: auto（NikkiTests/JournalEntryTests.swift）
   - Files アプリのプレビューで、`# 2026-08-21 <タイトル>` の見出しと本文が `---` 区切りで 4 件並び、ホームの新しい順とは逆 (= 古い順) であることを確認した。アーカイブ済みの日記も書き出しに含まれる
@@ -212,7 +215,7 @@ last_verified_at: 2026-08-21
 <details>
 <summary>動作確認エビデンス</summary>
 
-### **Markdown の保存先を選べる**: 「Markdown で書き出す」からファイルの保存画面が開き、保存すると Nikki.md が書き出される。キャンセルしても設定画面が壊れない
+### **Markdown の保存先を選べる**: 「Markdown で書き出す」からファイルの保存画面が開き、保存すると Nikki.md が書き出される
 
 <details><summary>動作確認スクショ</summary>
 
@@ -249,6 +252,14 @@ Files アプリのプレビューで開いた書き出し結果。
 <img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260821/ebde8c14-e587-42cc-9ee0-7511c1dbc309.jpg" width="320">
 <img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260821/09c92868-3ef4-4170-8292-0d5c70efee7e.jpg" width="320">
 <img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260821/c3443d67-fd00-46b7-9f5d-efedb4909696.jpg" width="320">
+
+</details>
+
+### **書き出しをキャンセルしても設定画面が壊れない**: ファイルの保存画面をキャンセルすると設定画面に戻り、表示と操作が壊れない
+
+<details><summary>動作確認スクショ</summary>
+
+（未実行）
 
 </details>
 
