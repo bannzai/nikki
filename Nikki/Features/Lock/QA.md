@@ -1,8 +1,8 @@
 ---
 feature: Lock
 verification: mobile-mcp
-last_verified_commit: null
-last_verified_at: null
+last_verified_commit: 96337de3d8717a2428e3fa4d4120727fab323a27
+last_verified_at: 2026-08-21
 ---
 
 # Lock QA
@@ -18,14 +18,18 @@ last_verified_at: null
 
 ## 1. 自動ロックの発動
 
-- [ ] **無操作でロックされる**: 日記を開いたまま設定した秒数だけ触らずにいると、画面がロック画面に切り替わる
+- [x] **無操作でロックされる**: 日記を開いたまま設定した秒数だけ触らずにいると、画面がロック画面に切り替わる
   - 自動化: manual（無操作の経過を待つ必要があり、E2E では自動ロック無効化 (NIKKI_AUTOLOCK_DISABLED) で避けている挙動そのもののため）
-- [ ] **操作中はロックされない**: 本文の入力・スクロール・タップを続けている間はロック画面が出ない (macOS はトラックパッドのスクロールとキー入力も操作として扱われる)
+  - 既定 (自動ロック 5 秒 / Face ID で解除オン) のまま、ホームで無操作にして 5 秒強でロック画面になった
+- [x] **操作中はロックされない**: 本文の入力・スクロール・タップを続けている間はロック画面が出ない (macOS はトラックパッドのスクロールとキー入力も操作として扱われる)
   - 自動化: manual（操作を続けながら経過時間を見る確認のため）
-- [ ] **自動ロックの秒数が反映される**: 設定でロックまでの秒数を変えると、次のロックがその秒数で発動する
+  - 自動ロック 30 秒に設定し、1.4 秒間隔のタップを 28 秒続けてもロック画面が出なかった。macOS のトラックパッドのスクロール・キー入力は iOS Simulator では確認できないため未確認
+- [x] **自動ロックの秒数が反映される**: 設定でロックまでの秒数を変えると、次のロックがその秒数で発動する
   - 自動化: manual（設定変更後に無操作の経過を待つ確認のため）
-- [ ] **Face ID で解除がオフならロックされない**: 設定で「Face ID で解除」をオフにすると、無操作のまま放置してもロック画面が出ない
+  - 5 秒から 30 秒へ変更後、最後のタップから 13 秒時点ではロックされず (5 秒設定ならロック済みの時点)、36 秒時点でロック画面になった
+- [x] **Face ID で解除がオフならロックされない**: 設定で「Face ID で解除」をオフにすると、無操作のまま放置してもロック画面が出ない
   - 自動化: manual（無操作の経過を待つ確認のため）
+  - トグルをオフにして 25 秒無操作で放置してもロック画面が出なかった (自動ロックは 5 秒設定のまま)
 
 #### 動作確認
 <details>
@@ -35,7 +39,8 @@ last_verified_at: null
 
 <details><summary>動作確認スクショ</summary>
 
-（未実行）
+**確認日: 2026-08-21**
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260821/1232ef9d-91cb-4962-9aae-a10d059ac6d4.jpg" width="320">
 
 </details>
 
@@ -43,7 +48,8 @@ last_verified_at: null
 
 <details><summary>動作確認スクショ</summary>
 
-（未実行）
+**確認日: 2026-08-21**
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260821/f8bccb1f-faa0-416b-b957-a14e614464a2.jpg" width="320">
 
 </details>
 
@@ -51,7 +57,8 @@ last_verified_at: null
 
 <details><summary>動作確認スクショ</summary>
 
-（未実行）
+**確認日: 2026-08-21**
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260821/621acb77-230d-4ace-82de-1cb05b08be72.jpg" width="320">
 
 </details>
 
@@ -59,7 +66,8 @@ last_verified_at: null
 
 <details><summary>動作確認スクショ</summary>
 
-（未実行）
+**確認日: 2026-08-21**
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260821/48c820b2-5830-4274-87dd-825b99e065ce.jpg" width="320">
 
 </details>
 
@@ -69,12 +77,14 @@ last_verified_at: null
 
 ## 2. ロック画面の見た目
 
-- [ ] **本文が読めない**: ロック中は背景が日記の骨組みだけになり、書いていた本文が読み取れない
+- [x] **本文が読めない**: ロック中は背景が日記の骨組みだけになり、書いていた本文が読み取れない
   - 自動化: manual（表示の目視確認）
-- [ ] **ロックの案内文言**: 「手が止まったのでそっと鍵をかけた」旨の見出し・説明と、解除を促す脚注が表示される
+- [x] **ロックの案内文言**: 「手が止まったのでそっと鍵をかけた」旨の見出し・説明と、解除を促す脚注が表示される
   - 自動化: manual（表示の目視確認）
-- [ ] **解除ボタンが端末の認証手段に合う**: 解除ボタンの文言とアイコンが端末で使える認証手段 (Face ID / Touch ID / パスコード・パスワード) に一致する
+  - 見出し「Locked, just in case」/ 説明「Your hands rested for a while, so we quietly locked the page.」/ 脚注「Unlock to pick up right where you left off」
+- [x] **解除ボタンが端末の認証手段に合う**: 解除ボタンの文言とアイコンが端末で使える認証手段 (Face ID / Touch ID / パスコード・パスワード) に一致する
   - 自動化: manual（端末ごとの生体認証構成に依存する表示の目視確認）
+  - Face ID 対応機の Simulator で、Face ID のアイコンと「Open with Face ID」の文言が出た。Touch ID / パスコードのみの端末は未確認
 
 #### 動作確認
 <details>
@@ -84,7 +94,8 @@ last_verified_at: null
 
 <details><summary>動作確認スクショ</summary>
 
-（未実行）
+**確認日: 2026-08-21**
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260821/1232ef9d-91cb-4962-9aae-a10d059ac6d4.jpg" width="320">
 
 </details>
 
@@ -92,7 +103,8 @@ last_verified_at: null
 
 <details><summary>動作確認スクショ</summary>
 
-（未実行）
+**確認日: 2026-08-21**
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260821/1232ef9d-91cb-4962-9aae-a10d059ac6d4.jpg" width="320">
 
 </details>
 
@@ -100,7 +112,8 @@ last_verified_at: null
 
 <details><summary>動作確認スクショ</summary>
 
-（未実行）
+**確認日: 2026-08-21**
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260821/1232ef9d-91cb-4962-9aae-a10d059ac6d4.jpg" width="320">
 
 </details>
 
@@ -112,10 +125,13 @@ last_verified_at: null
 
 - [ ] **認証に成功すると元の画面へ戻る**: 解除ボタンから認証を通すと、ロック前に開いていた画面がそのまま現れる
   - 自動化: manual（simulator は生体認証もパスコードも未設定のため認証ダイアログが出ず、ボタン押下でそのまま解除される。認証を伴う本来の解除は実機での確認が必要）
-- [ ] **認証をキャンセルするとロックが続く**: 認証ダイアログをキャンセル・失敗させるとロック画面のまま残り、日記が見えない
+  - ⏭️ スキップ: iOS Simulator は生体認証が未登録でデバイスパスコードも未設定のため、解除ボタンから出る「Enter iPhone Passcode for “Nikki”」を通せず、認証成功の経路を再現できない。実機での確認が必要
+- [x] **認証をキャンセルするとロックが続く**: 認証ダイアログをキャンセル・失敗させるとロック画面のまま残り、日記が見えない
   - 自動化: manual（認証ダイアログが出る実機でのみ確認できる）
+  - 解除ボタン → パスコード入力をキャンセルすると、ロック画面のまま残り本文はスケルトンのままだった
 - [ ] **ロック中は背後の画面を操作できない**: ロック中にキーボードショートカット (新規日記・検索) を押しても背後の画面の状態が変わらない
   - 自動化: manual（ハードウェアキーボードからのショートカット操作のため）
+  - ⏭️ スキップ: リモート iOS Simulator にハードウェアキーボードを接続できず、キーボードショートカット (新規日記・検索) を発火できない
 
 #### 動作確認
 <details>
@@ -133,7 +149,8 @@ last_verified_at: null
 
 <details><summary>動作確認スクショ</summary>
 
-（未実行）
+**確認日: 2026-08-21**
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260821/cfe81916-feb4-43f5-a837-ef8766b20e26.jpg" width="320">
 
 </details>
 
@@ -153,10 +170,13 @@ last_verified_at: null
 
 - [ ] **ウィンドウをアクティブにすると認証を求められる**: ロック中の Nikki のウィンドウを前面にすると、ボタンを押さなくても Touch ID の認証ダイアログが出る
   - 自動化: manual（macOS の実機で、Touch ID が登録された Mac でのみ確認できる）
+  - ⏭️ スキップ: iOS Simulator では macOS のウィンドウ連動を確認できない
 - [ ] **他アプリへ移ると認証ダイアログが消える**: 認証ダイアログが出ている状態で別のアプリを前面にすると、ダイアログが他アプリの上に残らず閉じる
   - 自動化: manual（macOS のウィンドウ操作を伴うため）
+  - ⏭️ スキップ: iOS Simulator では macOS のウィンドウ連動を確認できない
 - [ ] **最小化でも認証ダイアログが消える**: ウィンドウを最小化すると認証ダイアログが閉じ、復帰時に改めて認証を求められる
   - 自動化: manual（macOS のウィンドウ操作を伴うため）
+  - ⏭️ スキップ: iOS Simulator では macOS のウィンドウ連動を確認できない
 
 #### 動作確認
 <details>
