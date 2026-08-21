@@ -51,7 +51,12 @@ mark_failed() { FAILED=1; if [ $DRY_RUN -eq 1 ]; then log "[DIFF] $*"; else log 
 # ---- 1. カテゴリ ----
 log "== カテゴリ"
 APP_INFO=$(api GET "/v1/apps/$APP_ID/appInfos?fields[appInfos]=state")
-APP_INFO_ID=$(jq -r '.data[0].id' <<<"$APP_INFO")
+# 公開済みと編集中の appInfo が併存する場合があるため、編集対象の state を明示して選ぶ
+APP_INFO_ID=$(jq -r '[.data[] | select(.attributes.state == "PREPARE_FOR_SUBMISSION" or .attributes.state == "DEVELOPER_REJECTED" or .attributes.state == "REJECTED" or .attributes.state == "METADATA_REJECTED" or .attributes.state == "WAITING_FOR_REVIEW")] | first | .id // empty' <<<"$APP_INFO")
+if [ -z "$APP_INFO_ID" ]; then
+    echo "[NG] 編集可能な appInfo が見つからない (state 一覧: $(jq -r '[.data[].attributes.state] | join(",")' <<<"$APP_INFO"))" >&2
+    exit 1
+fi
 WANT_PRIMARY=$(jq -r '.categories.primary' "$CONFIG")
 WANT_SECONDARY=$(jq -r '.categories.secondary' "$CONFIG")
 get_categories() {
@@ -76,14 +81,18 @@ get_price() {
     # 価格スケジュール未作成でも /appPriceSchedule 本体はプレースホルダ (baseTerritory=USA) を返すため、
     # manualPrices の 404 を「未作成」の判定に使う
     local prices
-    prices=$(api_allow_404 GET "/v1/appPriceSchedules/$APP_ID/manualPrices?include=appPricePoint&fields[appPricePoints]=customerPrice")
+    prices=$(api_allow_404 GET "/v1/appPriceSchedules/$APP_ID/manualPrices?include=appPricePoint&fields[appPricePoints]=customerPrice&fields[appPrices]=startDate,endDate,appPricePoint")
     if [ "$(jq -r '.data' <<<"$prices")" = "null" ]; then
         echo "none"
         return
     fi
     local base price_point
     base=$(api GET "/v1/apps/$APP_ID/appPriceSchedule?include=baseTerritory" | jq -r '.data.relationships.baseTerritory.data.id')
-    price_point=$(jq -r '[.included[]? | select(.type=="appPricePoints") | .attributes.customerPrice] | first // "null"' <<<"$prices")
+    # 将来の価格変更や過去の期間が複数入り得るため、今日を含む期間 (startDate/endDate が null または今日を跨ぐ) の価格を現在価格とする
+    price_point=$(jq -r --arg today "$(date +%Y-%m-%d)" '
+        (.included // [] | map(select(.type=="appPricePoints")) | map({key:.id, value:.attributes.customerPrice}) | from_entries) as $pp
+        | [.data[] | select((.attributes.startDate == null or .attributes.startDate <= $today) and (.attributes.endDate == null or .attributes.endDate > $today))
+           | $pp[.relationships.appPricePoint.data.id]] | first // "null"' <<<"$prices")
     echo "$base $price_point"
 }
 CUR=$(get_price)
@@ -156,8 +165,11 @@ while read -r ver_id platform ver rd_id; do
         fi
     fi
     if [ "$rd_id" = "null" ]; then
-        [ $DRY_RUN -eq 1 ] && continue
-        mark_failed "$platform の審査連絡先を作成できなかった"
+        if [ $DRY_RUN -eq 1 ]; then
+            mark_failed "$platform の審査連絡先が未作成"
+        else
+            mark_failed "$platform の審査連絡先を作成できなかった"
+        fi
         continue
     fi
     CUR=$(get_review "$rd_id")
@@ -185,9 +197,22 @@ get_availability() {
 CUR=$(get_availability)
 log "現状: availableInNewTerritories/配信テリトリー数 = $CUR / 定義: $WANT_NEW $TOTAL"
 if [ "$CUR" != "$WANT_NEW $TOTAL" ] && [ $DRY_RUN -eq 0 ]; then
-    api POST "/v2/appAvailabilities" "$(jq -n --arg app "$APP_ID" --argjson new "$WANT_NEW" --argjson ts "$ALL_TERRITORIES" \
-        '{data:{type:"appAvailabilities",attributes:{availableInNewTerritories:$new},relationships:{app:{data:{type:"apps",id:$app}},territoryAvailabilities:{data:[$ts[] | {type:"territoryAvailabilities",id:("${t-" + . + "}")}]}}},
-          included:[$ts[] | {type:"territoryAvailabilities",id:("${t-" + . + "}"),attributes:{available:true},relationships:{territory:{data:{type:"territories",id:.}}}}]}')" >/dev/null
+    if [ "$CUR" = "none" ]; then
+        api POST "/v2/appAvailabilities" "$(jq -n --arg app "$APP_ID" --argjson new "$WANT_NEW" --argjson ts "$ALL_TERRITORIES" \
+            '{data:{type:"appAvailabilities",attributes:{availableInNewTerritories:$new},relationships:{app:{data:{type:"apps",id:$app}},territoryAvailabilities:{data:[$ts[] | {type:"territoryAvailabilities",id:("${t-" + . + "}")}]}}},
+              included:[$ts[] | {type:"territoryAvailabilities",id:("${t-" + . + "}"),attributes:{available:true},relationships:{territory:{data:{type:"territories",id:.}}}}]}')" >/dev/null
+    else
+        # 既存リソースがある場合は作成 API を再実行せず、無効になっているテリトリーを個別に更新する
+        # (appAvailabilities 自体の更新 API は無く、territoryAvailabilities の PATCH のみ提供されている)
+        while read -r ta_id; do
+            api PATCH "/v1/territoryAvailabilities/$ta_id" "$(jq -n --arg id "$ta_id" \
+                '{data:{type:"territoryAvailabilities",id:$id,attributes:{available:true}}}')" >/dev/null
+        done < <(api GET "/v2/appAvailabilities/$APP_ID/territoryAvailabilities?limit=200&fields[territoryAvailabilities]=available" \
+            | jq -r '.data[] | select(.attributes.available | not) | .id')
+        if [ "${CUR%% *}" != "$WANT_NEW" ]; then
+            mark_failed "availableInNewTerritories (現状 ${CUR%% *}) を更新する API が無い。App Store Connect で変更が必要"
+        fi
+    fi
     CUR=$(get_availability)
     log "適用後: $CUR"
 fi
