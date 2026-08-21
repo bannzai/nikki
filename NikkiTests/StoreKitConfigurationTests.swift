@@ -94,8 +94,8 @@ nonisolated final class StoreKitConfigurationTests: XCTestCase {
 
         _ = try await session.buyProduct(identifier: "nikki_plus_monthly")
 
-        let entitledProductIDs = await currentEntitledProductIDs()
-        XCTAssertTrue(entitledProductIDs.contains("nikki_plus_monthly"))
+        let granted = await waitUntilEntitled(productID: "nikki_plus_monthly")
+        XCTAssertTrue(granted)
     }
 
     /// 年額サブスクリプションのテスト購入でトランザクションが成立し、現在の entitlement に現れること
@@ -108,8 +108,8 @@ nonisolated final class StoreKitConfigurationTests: XCTestCase {
 
         _ = try await session.buyProduct(identifier: "nikki_plus_annual")
 
-        let entitledProductIDs = await currentEntitledProductIDs()
-        XCTAssertTrue(entitledProductIDs.contains("nikki_plus_annual"))
+        let granted = await waitUntilEntitled(productID: "nikki_plus_annual")
+        XCTAssertTrue(granted)
     }
 
     /// 買い切りのテスト購入でトランザクションが成立し、現在の entitlement に現れること
@@ -122,8 +122,22 @@ nonisolated final class StoreKitConfigurationTests: XCTestCase {
 
         _ = try await session.buyProduct(identifier: "nikki_plus_lifetime2")
 
-        let entitledProductIDs = await currentEntitledProductIDs()
-        XCTAssertTrue(entitledProductIDs.contains("nikki_plus_lifetime2"))
+        let granted = await waitUntilEntitled(productID: "nikki_plus_lifetime2")
+        XCTAssertTrue(granted)
+    }
+
+    /// buyProduct 後のトランザクションが Transaction.currentEntitlements へ反映されるまで待って、付与されたかを返す。
+    /// 反映は同期ではなく、CI の遅い runner ではポーリングなしの即時参照で取りこぼす (実測: iOS 26.2 で 2/5 件失敗)。
+    /// タイムアウトは CI の実測失敗が 1 秒未満のラグ起因のため、桁の余裕をとって 10 秒にしている
+    private func waitUntilEntitled(productID: String, timeout: TimeInterval = 10) async -> Bool {
+        let deadline = Date.now.addingTimeInterval(timeout)
+        while Date.now < deadline {
+            if await currentEntitledProductIDs().contains(productID) {
+                return true
+            }
+            try? await Task.sleep(for: .milliseconds(200))
+        }
+        return false
     }
 
     /// 検証済みトランザクションとして現在付与されている entitlement の productID
