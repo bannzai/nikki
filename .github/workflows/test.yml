@@ -1,0 +1,40 @@
+# ユニットテスト (NikkiTests) を GitHub Actions の macOS Runner 上で実行する。
+# ローカル Mac のリソースを使わずにテストを回すための経路 (UI 動作確認の simtunnel と同じ方針)
+name: test
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  unit-test:
+    runs-on: macos-26
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
+      - name: ユニットテスト (iOS Simulator)
+        # runner には署名用の証明書が無いため署名を省く。-skipPackagePluginValidation は
+        # LicenseList の BuildToolPlugin の信頼確認を省くため (simulator-session.yml と同じ理由)
+        run: |
+          mkdir -p tmp
+          xcodebuild -project Nikki.xcodeproj -scheme Nikki \
+            -destination 'platform=iOS Simulator,name=iPhone 17' \
+            -derivedDataPath tmp/DerivedData \
+            -skipPackagePluginValidation \
+            -only-testing:NikkiTests \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO \
+            test > tmp/test.log 2>&1 || {
+              echo "テストに失敗。ログ末尾:" >&2
+              tail -n 200 tmp/test.log >&2
+              exit 1
+            }
+          grep -E 'warning:|Test Suite|\*\* TEST' tmp/test.log || true
+      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        if: always()
+        with:
+          name: test-log
+          path: tmp/test.log
