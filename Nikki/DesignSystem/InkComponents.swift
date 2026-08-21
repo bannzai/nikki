@@ -312,6 +312,9 @@ struct InkNavBarLeadingButton: View {
                     .foregroundStyle(Color.inkTextSecondary)
             }
             .buttonStyle(.plain)
+            // シンボルだけのボタンはラベルが環境依存になり、XCUITest が iOS のキーボードのキーや
+            // macOS のウィンドウ操作ボタンと取り違えるため、識別子で一意に引けるようにする。
+            .accessibilityIdentifier("ink-nav-back")
         case .dismiss:
             Button { onLeading?() } label: {
                 Image(systemName: InkIcons.chevronDown)
