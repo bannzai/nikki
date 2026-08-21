@@ -151,9 +151,12 @@ get_review() {
     api GET "/v1/appStoreReviewDetails/$rd_id?fields[appStoreReviewDetails]=contactFirstName,contactLastName,contactPhone,contactEmail,demoAccountRequired" \
         | jq -S '.data.attributes'
 }
-if [ "$(jq '.data | length' <<<"$VERSIONS")" -eq 0 ]; then
-    mark_failed "PREPARE_FOR_SUBMISSION のバージョンが 0 件 (審査連絡先を設定する対象が無い)"
-fi
+# Nikki は iOS / macOS の両方を提出するため、両プラットフォームのバージョンが揃っていることを検証する
+for platform in IOS MAC_OS; do
+    if [ "$(jq --arg pf "$platform" '[.data[] | select(.attributes.platform == $pf)] | length' <<<"$VERSIONS")" -eq 0 ]; then
+        mark_failed "$platform の PREPARE_FOR_SUBMISSION バージョンが無い (審査連絡先を設定する対象が無い)"
+    fi
+done
 while read -r ver_id platform ver rd_id; do
     log "- $platform $ver (version $ver_id)"
     if [ "$rd_id" = "null" ]; then
