@@ -2,3 +2,7 @@
 # .md へのリンクは jekyll-relative-links (Pages 既定プラグイン) が公開 URL に変換する。
 title: Nikki
 theme: jekyll-theme-primer
+
+# 開発者向け手順 (simtunnel.md) は Pages に載せない
+exclude:
+  - simtunnel.md
