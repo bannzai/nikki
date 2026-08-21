@@ -72,3 +72,16 @@ RevenueCat 以外は引き続き収集なし:
 
 - 利用規約 / プライバシーポリシー (日英) は `docs/legal/` に markdown で用意し、GitHub Pages (main ブランチ /docs, Jekyll) で公開する
 - 公開 URL: https://bannzai.github.io/nikki/legal/terms-ja.html ほか (.md は Jekyll が .html に変換する)
+
+## 提出前の ASC 設定 (カテゴリ・価格・年齢制限・審査連絡先・販売地域)
+
+定義の SSOT: `fastlane/asc_submission_settings.json`。適用と検証は `scripts/asc_apply_submission_settings.sh` で行う
+(現状 GET → 差分があれば適用 → 再 GET で検証。定義どおりなら書き込まない)。`--dry-run` で差分確認のみできる。
+
+- カテゴリ: primary = ライフスタイル (`LIFESTYLE`)、secondary = 仕事効率化 (`PRODUCTIVITY`)
+- アプリ本体の価格: 無料 (ベーステリトリー JPN、customerPrice 0)。有料機能はすべて IAP (RevenueCat) で提供する
+- 年齢制限指定: 全質問「なし」(enum は `NONE`、真偽値は `false`)。日記アプリで該当項目がないため。iOS / macOS 共通の appInfo に紐付く
+- App Review 連絡先: iOS / macOS 各バージョンの `appStoreReviewDetails` に設定。デモアカウントはアカウント不要アプリのため「不要」。
+  電話番号は個人情報のためリポジトリに含めず、環境変数 `ASC_REVIEW_CONTACT_PHONE` (E.164 形式) で渡す
+- 販売地域: 全テリトリー (`availableInNewTerritories: true` + 全テリトリー available)
+- 新しいバージョンを作成したら、審査連絡先はバージョンごとのリソースのため同スクリプトを再実行する

@@ -1,0 +1,48 @@
+{
+  "appId": "6799104638",
+  "categories": {
+    "primary": "LIFESTYLE",
+    "secondary": "PRODUCTIVITY"
+  },
+  "price": {
+    "baseTerritory": "JPN",
+    "customerPrice": "0"
+  },
+  "ageRatingDeclaration": {
+    "advertising": false,
+    "ageAssurance": false,
+    "alcoholTobaccoOrDrugUseOrReferences": "NONE",
+    "contests": "NONE",
+    "gambling": false,
+    "gamblingSimulated": "NONE",
+    "gunsOrOtherWeapons": "NONE",
+    "healthOrWellnessTopics": false,
+    "horrorOrFearThemes": "NONE",
+    "lootBox": false,
+    "matureOrSuggestiveThemes": "NONE",
+    "medicalOrTreatmentInformation": "NONE",
+    "messagingAndChat": false,
+    "parentalControls": false,
+    "profanityOrCrudeHumor": "NONE",
+    "sexualContentGraphicAndNudity": "NONE",
+    "sexualContentOrNudity": "NONE",
+    "socialMedia": false,
+    "socialMediaAgeRestricted": false,
+    "unrestrictedWebAccess": false,
+    "userGeneratedContent": false,
+    "violenceCartoonOrFantasy": "NONE",
+    "violenceRealistic": "NONE",
+    "violenceRealisticProlongedGraphicOrSadistic": "NONE",
+    "ageRatingOverrideV2": "NONE",
+    "koreaAgeRatingOverride": "NONE"
+  },
+  "reviewDetail": {
+    "contactFirstName": "Yudai",
+    "contactLastName": "Hirose",
+    "contactEmail": "bannzai.app@gmail.com",
+    "demoAccountRequired": false
+  },
+  "availability": {
+    "availableInNewTerritories": true
+  }
+}
