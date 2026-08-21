@@ -65,6 +65,14 @@ nonisolated final class NotebookEditUITests: XCTestCase {
         nameField.coordinate(withNormalizedOffset: CGVector(dx: 0.95, dy: 0.5)).tap()
         nameField.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: 30))
 
+        // フォーカスやキー配送に失敗したまま最終 assert が偽陽性で通らないよう、空になったことを確認する。
+        // 空の TextField の value は空文字ではなくプレースホルダ文字列として現れることがあるため、両方を許容する。
+        let nameFieldValue = nameField.value as? String
+        XCTAssertTrue(
+            nameFieldValue == nil || nameFieldValue == "" || nameFieldValue == "ノートの名前",
+            "名前欄が空になること (value: \(nameFieldValue ?? "nil"))"
+        )
+
         // iOS はキーボードのキー(次のキーボード等)も app.buttons に並ぶため、リターンで
         // キーボードを閉じてから、InkNavBar の戻るで一覧へ戻る。
         nameField.typeText("\n")
