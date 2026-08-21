@@ -11,9 +11,11 @@ struct EditorScreenScaffold<Content: View>: View {
     var onTrailing: (() -> Void)? = nil
     @ViewBuilder var content: Content
 
+    @Environment(\.paperColor) private var paperColor
+
     var body: some View {
         ZStack {
-            Color.inkPaper.ignoresSafeArea()
+            paperColor.ignoresSafeArea()
             VStack(spacing: 0) {
                 InkNavBar(leading: .dismiss, center: .caption(caption), trailing: trailing, onLeading: onDismiss, onTrailing: onTrailing)
                 content

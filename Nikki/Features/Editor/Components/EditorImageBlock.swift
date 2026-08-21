@@ -4,6 +4,8 @@ import SwiftUI
 struct EditorImageBlock: View {
     let label: String
 
+    @Environment(\.paperColor) private var paperColor
+
     var body: some View {
         ZStack {
             EditorDiagonalStripes()
@@ -14,7 +16,7 @@ struct EditorImageBlock: View {
                 .padding(.vertical, 4)
                 .background(
                     RoundedRectangle(cornerRadius: 6, style: .continuous)
-                        .fill(Color.inkPaper.opacity(0.9))
+                        .fill(paperColor.opacity(0.9))
                 )
         }
         .frame(maxWidth: .infinity)

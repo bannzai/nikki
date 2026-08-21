@@ -34,10 +34,11 @@ struct SettingsPage: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.plusActive) private var plusActive
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.paperColor) private var paperColor
 
     var body: some View {
         ZStack(alignment: .top) {
-            Color.inkPaper.ignoresSafeArea()
+            paperColor.ignoresSafeArea()
 
             VStack(spacing: 0) {
                 InkNavBar(leading: .back, center: .title(String(localized: "Settings")), onLeading: { dismiss() })

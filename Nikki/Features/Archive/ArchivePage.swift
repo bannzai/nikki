@@ -17,11 +17,12 @@ struct ArchivePage: View {
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.paperColor) private var paperColor
 
     var body: some View {
         let archivedEntries = entries.filter { $0.isArchived }
         ZStack(alignment: .top) {
-            Color.inkPaper.ignoresSafeArea()
+            paperColor.ignoresSafeArea()
 
             VStack(spacing: 0) {
                 InkNavBar(leading: .back, center: .title(String(localized: "Archived entries")), onLeading: { dismiss() })

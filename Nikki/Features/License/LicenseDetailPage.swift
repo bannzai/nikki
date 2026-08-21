@@ -6,10 +6,11 @@ struct LicenseDetailPage: View {
     let library: Library
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.paperColor) private var paperColor
 
     var body: some View {
         ZStack {
-            Color.inkPaper.ignoresSafeArea()
+            paperColor.ignoresSafeArea()
             VStack(spacing: 0) {
                 InkNavBar(leading: .back, center: .title(library.name), onLeading: { dismiss() })
                 LicenseView(library: library)

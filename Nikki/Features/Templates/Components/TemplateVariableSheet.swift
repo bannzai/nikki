@@ -16,6 +16,8 @@ struct TemplateVariableSheet: View {
     @Environment(\.modelContext) private var modelContext
     @FocusState private var focusedFieldName: String?
 
+    @Environment(\.paperColor) private var paperColor
+
     var body: some View {
         if let template {
             VStack(alignment: .leading, spacing: 0) {
@@ -62,7 +64,7 @@ struct TemplateVariableSheet: View {
                     topTrailingRadius: 24,
                     style: .continuous
                 )
-                .fill(Color.inkPaper)
+                .fill(paperColor)
                 .shadow(color: Color.ink.opacity(0.18), radius: 20, x: 0, y: -12)
             )
         }

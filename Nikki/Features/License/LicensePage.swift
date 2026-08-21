@@ -25,10 +25,11 @@ struct LicensePage: View {
     @State var selectedLibrary: Library?
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.paperColor) private var paperColor
 
     var body: some View {
         ZStack {
-            Color.inkPaper.ignoresSafeArea()
+            paperColor.ignoresSafeArea()
             VStack(spacing: 0) {
                 InkNavBar(leading: .back, center: .title(String(localized: "Open source licenses")), onLeading: { dismiss() })
                 ScrollView {

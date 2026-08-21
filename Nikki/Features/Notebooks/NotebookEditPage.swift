@@ -13,6 +13,7 @@ struct NotebookEditPage: View {
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.paperColor) private var paperColor
 
     var body: some View {
         VStack(spacing: 0) {
@@ -37,7 +38,7 @@ struct NotebookEditPage: View {
                 .padding(.bottom, 24)
             }
         }
-        .background(Color.inkPaper.ignoresSafeArea())
+        .background(paperColor.ignoresSafeArea())
         .inkNavigationBarHidden()
         .confirmationDialog("Delete notebook", isPresented: $deleteConfirmationDialogIsPresented, titleVisibility: .visible) {
             Button("Delete notebook", role: .destructive) {

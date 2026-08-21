@@ -13,13 +13,9 @@ struct ThemePage: View {
 
     var body: some View {
         // Plus 失効後は保存値を残したまま無料範囲へ倒した添字で表示する(再加入で元の選択に戻る)。
-        let effectiveIndex = effectivePaperColorPresetIndex(storedIndex: paperColorPresetIndex, plusActive: plusActive)
-        // 保存済みの index がプリセットの範囲外(将来のプリセット変更等)でも落ちないよう既定の「生成」に倒す。
-        let paperColor = Color.paperColorPreset.indices.contains(effectiveIndex)
-            ? Color.paperColorPreset[effectiveIndex]
-            : Color.paperColorPreset[1]
+        let paperColor = effectivePaperColor(storedIndex: paperColorPresetIndex, plusActive: plusActive)
         ZStack {
-            Color.inkPaper.ignoresSafeArea()
+            paperColor.ignoresSafeArea()
             VStack(spacing: 0) {
                 InkNavBar(leading: .back, center: .title(String(localized: "Theme")), onLeading: { dismiss() })
                 ScrollView {
@@ -91,10 +87,19 @@ func paperColorPresetRequiresPlus(index: Int) -> Bool {
 }
 
 /// 実際に適用する紙色プリセットの添字。Plus が無効な間は Plus 限定の保存値を無料の既定「生成」(index 1)へ倒す。
+/// 保存済みの index がプリセットの範囲外(将来のプリセット変更等)の場合も、表示名・スウォッチ・紙色のどの利用側でも落ちないよう「生成」へ倒す。
 /// 保存値自体は書き換えない(再加入した時に元の選択へ戻すため)。
 func effectivePaperColorPresetIndex(storedIndex: Int, plusActive: Bool) -> Int {
+    if !Color.paperColorPreset.indices.contains(storedIndex) {
+        return 1
+    }
     if paperColorPresetRequiresPlus(index: storedIndex) && !plusActive {
         return 1
     }
     return storedIndex
+}
+
+/// 実際に紙地へ適用する紙色。effectivePaperColorPresetIndex で正規化した添字のプリセット色。
+func effectivePaperColor(storedIndex: Int, plusActive: Bool) -> Color {
+    Color.paperColorPreset[effectivePaperColorPresetIndex(storedIndex: storedIndex, plusActive: plusActive)]
 }
