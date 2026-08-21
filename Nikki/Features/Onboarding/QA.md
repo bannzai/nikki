@@ -1,7 +1,7 @@
 ---
 feature: Onboarding
 verification: mobile-mcp
-last_verified_commit: da31688b6eaa28f714d9c3c264de77687e05f228
+last_verified_commit: d98adda51bb84172361270215c3648563c4899ea
 last_verified_at: 2026-08-21
 ---
 
@@ -19,9 +19,12 @@ last_verified_at: 2026-08-21
   - 自動化: manual（初回状態を作るにはアプリの再インストールが必要で E2E 化していない）
 - [x] **暗号化の説明へ進む**: 「はじめる」で、書く / 鍵をかける / 読めるのはあなただけ の3項目とステップ表示 (1/2) がある画面に進む
   - 自動化: manual（初回起動フローの目視確認）
-- [x] **生体認証の案内へ進む**: 「次へ」で、ステップ表示 (2/2) と端末の認証手段に合った図像・見出し・ボタン文言 (Face ID / Touch ID / パスコード・パスワード) の画面に進む
+- [x] **生体認証の案内へ進む**: 「次へ」で、ステップ表示 (2/2) と Face ID 端末に合った図像・見出し・ボタン文言の画面に進む
   - 自動化: manual（端末ごとの生体認証構成に依存する表示の目視確認）
-  - iOS Simulator (iPhone / Face ID 対応機) では Face ID の図像・見出し「From now on, just your face.」・ボタン「Enable Face ID」が出た。Touch ID / パスコード端末での表示は未確認
+  - iOS Simulator (iPhone / Face ID 対応機) では Face ID の図像・見出し「From now on, just your face.」・ボタン「Enable Face ID」が出た
+- [ ] **Touch ID / パスコード端末の生体認証案内**: Touch ID 端末では Touch ID の図像・文言、生体認証を使えない端末ではパスコード・パスワードの文言に切り替わる
+  - 自動化: manual（端末ごとの生体認証構成に依存する表示の目視確認）
+  - ⏭️ スキップ: Touch ID 搭載・生体認証なしの構成は iOS Simulator で用意できない。Touch ID 実機またはローカル macOS ビルドでの確認に回す
 - [x] **完了してホームへ到達する**: 生体認証を有効にするボタンを押すとオンボーディングが終わり、日記一覧が表示される
   - 自動化: manual（初回起動フローの目視確認）
   - 「Enable Face ID」で完了しホームへ到達することを確認した
@@ -51,7 +54,7 @@ last_verified_at: 2026-08-21
 
 </details>
 
-### **生体認証の案内へ進む**: 「次へ」で、ステップ表示 (2/2) と端末の認証手段に合った図像・見出し・ボタン文言 (Face ID / Touch ID / パスコード・パスワード) の画面に進む
+### **生体認証の案内へ進む**: 「次へ」で、ステップ表示 (2/2) と Face ID 端末に合った図像・見出し・ボタン文言の画面に進む
 
 <details><summary>動作確認スクショ</summary>
 
@@ -70,6 +73,14 @@ last_verified_at: 2026-08-21
 </details>
 
 ### **パスキー登録ボタンからも完了する**: パスキーを登録するボタンを押してもオンボーディングが終わり、日記一覧が表示される
+
+<details><summary>動作確認スクショ</summary>
+
+（未実行）
+
+</details>
+
+### **Touch ID / パスコード端末の生体認証案内**: Touch ID 端末では Touch ID の図像・文言、生体認証を使えない端末ではパスコード・パスワードの文言に切り替わる
 
 <details><summary>動作確認スクショ</summary>
 
