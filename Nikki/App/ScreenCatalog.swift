@@ -82,7 +82,10 @@ struct ScreenContent: View {
         case .paywall:
             PaywallPage()
         case .settings:
-            SettingsPage()
+            // SettingsPage はノート管理・テーマ等へ navigationDestination で遷移するため、NavigationStack に載せる。
+            NavigationStack {
+                SettingsPage()
+            }
         case .archive:
             // ArchivePage は @Query でアーカイブ済みの日記を読むため、NavigationStack に載せる。
             NavigationStack {
