@@ -16,13 +16,21 @@ jobs:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           persist-credentials: false
+      - name: iOS 26.2 simulator を用意
+        # StoreKit テスト (StoreKitConfigurationTests) は iOS 26.5 simulator の既知の問題で skip される。
+        # 全件 skip のまま CI が成功扱いになるのを避けるため、runner に同梱される iOS 26.2 runtime の
+        # simulator を明示的に作成してテストを実行する (runtime が無ければここで失敗して気づける)
+        run: |
+          xcrun simctl list runtimes
+          UDID=$(xcrun simctl create "test-ios-26-2" "iPhone 17" "com.apple.CoreSimulator.SimRuntime.iOS-26-2")
+          echo "SIMULATOR_UDID=$UDID" >> "$GITHUB_ENV"
       - name: ユニットテスト (iOS Simulator)
         # runner には署名用の証明書が無いため署名を省く。-skipPackagePluginValidation は
         # LicenseList の BuildToolPlugin の信頼確認を省くため (simulator-session.yml と同じ理由)
         run: |
           mkdir -p tmp
           xcodebuild -project Nikki.xcodeproj -scheme Nikki \
-            -destination 'platform=iOS Simulator,name=iPhone 17' \
+            -destination "id=$SIMULATOR_UDID" \
             -derivedDataPath tmp/DerivedData \
             -skipPackagePluginValidation \
             -only-testing:NikkiTests \
@@ -33,6 +41,11 @@ jobs:
               exit 1
             }
           grep -E 'warning:|Test Suite|\*\* TEST' tmp/test.log || true
+          # StoreKit テストが skip のまま成功扱いになっていないことを検査する
+          if grep -E "Test Case .*StoreKitConfigurationTests.* skipped" tmp/test.log; then
+            echo "::error::StoreKitConfigurationTests が skip されています (実行可能な runtime を使ってください)" >&2
+            exit 1
+          fi
       - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         if: always()
         with:

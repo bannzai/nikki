@@ -21,7 +21,6 @@
       "Bash(xcrun simctl:*)",
       "Bash(maestro:*)",
       "Bash(bash /Users/bannzai/.claude/skills/ios-simulator/scripts/ios-wda.sh:*)",
-      "Bash(gh api:*)",
       "mcp__mobile",
       "Bash(xcodebuild:*)",
       "mcp__xcodebuildmcp"
