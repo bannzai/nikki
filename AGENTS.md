@@ -24,6 +24,14 @@ Nikki は同一コードで iOS と macOS の両方をビルドする。プラ�
 片方のプラットフォームで検証できなかった場合は、未検証であることと理由を PR に明記する
 (実例: コンテキストメニューが iOS の長押しでは動き、macOS の右クリックでは開けなかった https://github.com/bannzai/nikki/pull/43 )。
 
+## シミュレータでの動作確認は simtunnel を使う
+
+iOS Simulator を使う動作確認・E2E・スクリーンショット撮影は、ローカル Mac の simulator ではなく
+simtunnel (GitHub Actions macOS Runner 上のリモート simulator。起動 workflow: `.github/workflows/simulator-session.yml`) を使う。
+経路の判断と起動・接続の手順は ios-simulator skill の Phase 1 に従う。
+simtunnel が利用できない場合 (Actions 障害・tailnet 未接続等) に限りローカル simulator を代替として使ってよく、
+その場合は理由を PR に明記する。
+
 <!-- qa-config begin -->
 ## QA
 
