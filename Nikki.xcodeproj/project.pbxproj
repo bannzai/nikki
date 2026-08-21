@@ -25,6 +25,17 @@
 		9D3A1F204C8B4E67A2D5B301 /* Exceptions for "Nikki" folder in "Nikki" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				"Features/Archive/QA.md",
+				"Features/Editor/QA.md",
+				"Features/Home/QA.md",
+				"Features/License/QA.md",
+				"Features/Lock/QA.md",
+				"Features/Notebooks/QA.md",
+				"Features/Onboarding/QA.md",
+				"Features/Paywall/QA.md",
+				"Features/Settings/QA.md",
+				"Features/Templates/QA.md",
+				"Features/Theme/QA.md",
 				"Info-macOS.plist",
 				Info.plist,
 				"Nikki-macOS.entitlements",
