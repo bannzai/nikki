@@ -54,7 +54,12 @@ APP_INFO=$(api GET "/v1/apps/$APP_ID/appInfos?fields[appInfos]=state")
 # 公開済みと編集中の appInfo が併存する場合があるため、編集対象の state を明示して選ぶ
 APP_INFO_ID=$(jq -r '[.data[] | select(.attributes.state == "PREPARE_FOR_SUBMISSION" or .attributes.state == "DEVELOPER_REJECTED" or .attributes.state == "REJECTED" or .attributes.state == "METADATA_REJECTED" or .attributes.state == "WAITING_FOR_REVIEW")] | first | .id // empty' <<<"$APP_INFO")
 if [ -z "$APP_INFO_ID" ]; then
-    echo "[NG] 編集可能な appInfo が見つからない (state 一覧: $(jq -r '[.data[].attributes.state] | join(",")' <<<"$APP_INFO"))" >&2
+    # 編集中の appInfo が無い (公開済みのみ) 場合は、公開済み (READY_FOR_DISTRIBUTION) を対象にする
+    APP_INFO_ID=$(jq -r '[.data[] | select(.attributes.state == "READY_FOR_DISTRIBUTION")] | first | .id // empty' <<<"$APP_INFO")
+    [ -n "$APP_INFO_ID" ] && log "[WARN] 編集中の appInfo が無いため公開済みの appInfo を対象にする"
+fi
+if [ -z "$APP_INFO_ID" ]; then
+    echo "[NG] 対象の appInfo が見つからない (state 一覧: $(jq -r '[.data[].attributes.state] | join(",")' <<<"$APP_INFO"))" >&2
     exit 1
 fi
 WANT_PRIMARY=$(jq -r '.categories.primary' "$CONFIG")
@@ -114,6 +119,8 @@ fi
 # ---- 3. 年齢制限指定 ----
 log "== 年齢制限指定"
 WANT_AGE=$(jq -S '.ageRatingDeclaration' "$CONFIG")
+# 宣言レコードは appInfo と同じ id とは限らないため、GET で得た自身の id を PATCH に使う
+AGE_ID=$(api GET "/v1/appInfos/$APP_INFO_ID/ageRatingDeclaration?fields[ageRatingDeclarations]=kidsAgeBand" | jq -r '.data.id')
 get_age() {
     # 定義に含まれるキーだけを比較対象にする (kidsAgeBand / deprecated な ageRatingOverride 等は比較しない)
     api GET "/v1/appInfos/$APP_INFO_ID/ageRatingDeclaration" \
@@ -124,7 +131,7 @@ if [ "$CUR" != "$WANT_AGE" ]; then
     log "差分 (現状 → 定義):"
     jq -n --argjson cur "$CUR" --argjson want "$WANT_AGE" '$want | to_entries[] | select($cur[.key] != .value) | "  \(.key): \($cur[.key]) → \(.value)"' -r
     if [ $DRY_RUN -eq 0 ]; then
-        api PATCH "/v1/ageRatingDeclarations/$APP_INFO_ID" "$(jq -n --arg id "$APP_INFO_ID" --argjson a "$WANT_AGE" \
+        api PATCH "/v1/ageRatingDeclarations/$AGE_ID" "$(jq -n --arg id "$AGE_ID" --argjson a "$WANT_AGE" \
             '{data:{type:"ageRatingDeclarations",id:$id,attributes:$a}}')" >/dev/null
         CUR=$(get_age)
     fi
@@ -144,6 +151,9 @@ get_review() {
     api GET "/v1/appStoreReviewDetails/$rd_id?fields[appStoreReviewDetails]=contactFirstName,contactLastName,contactPhone,contactEmail,demoAccountRequired" \
         | jq -S '.data.attributes'
 }
+if [ "$(jq '.data | length' <<<"$VERSIONS")" -eq 0 ]; then
+    mark_failed "PREPARE_FOR_SUBMISSION のバージョンが 0 件 (審査連絡先を設定する対象が無い)"
+fi
 while read -r ver_id platform ver rd_id; do
     log "- $platform $ver (version $ver_id)"
     if [ "$rd_id" = "null" ]; then
