@@ -9,12 +9,16 @@
 /* Begin PBXBuildFile section */
 		D4A1B2C3E5F60718293A4B13 /* LicenseList in Frameworks */ = {isa = PBXBuildFile; productRef = D4A1B2C3E5F60718293A4B12 /* LicenseList */; };
 		D4A1B2C3E5F60718293A4B03 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = D4A1B2C3E5F60718293A4B02 /* RevenueCat */; };
+		A1E5F0C4D2B34A5687C90101 /* StoreKitTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1E5F0C4D2B34A5687C90102 /* StoreKitTest.framework */; };
+		A1E5F0C4D2B34A5687C90103 /* Nikki.storekit in Resources */ = {isa = PBXBuildFile; fileRef = A1E5F0C4D2B34A5687C90104 /* Nikki.storekit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		07FD79C6F7133FAB73E4C435 /* NikkiTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = NikkiTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		38B39791C2AB0FB5EC739A70 /* Nikki.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Nikki.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E4C1A70B3D25F8146A7C001 /* NikkiUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = NikkiUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1E5F0C4D2B34A5687C90102 /* StoreKitTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKitTest.framework; path = System/Library/Frameworks/StoreKitTest.framework; sourceTree = SDKROOT; };
+		A1E5F0C4D2B34A5687C90104 /* Nikki.storekit */ = {isa = PBXFileReference; lastKnownFileType = text.json.storekit; path = Nikki.storekit; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -61,6 +65,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A1E5F0C4D2B34A5687C90105 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1E5F0C4D2B34A5687C90101 /* StoreKitTest.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -80,6 +92,7 @@
 				152D1E6653A12D49B828BAF0 /* Nikki */,
 				3418E7616F6540FAF8D16402 /* NikkiTests */,
 				9E4C1A70B3D25F8146A7C002 /* NikkiUITests */,
+				A1E5F0C4D2B34A5687C90104 /* Nikki.storekit */,
 				C1F193C3C25AEDDCB3633E69 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -116,6 +129,8 @@
 			buildConfigurationList = 541D6ACCE3BA87317A4073B4 /* Build configuration list for PBXNativeTarget "NikkiTests" */;
 			buildPhases = (
 				80E49BA6DC6B7983C7906190 /* Sources */,
+				A1E5F0C4D2B34A5687C90105 /* Frameworks */,
+				A1E5F0C4D2B34A5687C90106 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -208,6 +223,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A1E5F0C4D2B34A5687C90106 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1E5F0C4D2B34A5687C90103 /* Nikki.storekit in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
