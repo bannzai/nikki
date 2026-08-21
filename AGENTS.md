@@ -31,3 +31,14 @@ simtunnel (GitHub Actions macOS Runner 上のリモート simulator。起動 wor
 経路の判断と起動・接続の手順は ios-simulator skill の Phase 1 に従う。
 simtunnel が利用できない場合 (Actions 障害・tailnet 未接続等) に限りローカル simulator を代替として使ってよく、
 その場合は理由を PR に明記する。
+
+<!-- qa-config begin -->
+## QA
+
+本リポジトリは QA.md 体系で手動 QA を管理する (整備: setup-qa skill、実施・記録: run-qa skill)。ルートの `QA.md` が起点で、feature ごとの QA.md がテスト項目と最終実行記録を持つ。
+
+- 機能実装・UI 変更を含む PR は、作成前に該当 feature の QA を実施し、結果 (チェック・エビデンス・`last_verified_commit` / `last_verified_at`) を QA.md に記録する。未検証の項目は未検証である旨を QA.md に明記する (検証したことにしない)
+- QA 対象 feature・対象外 feature・横断確認項目はルート `QA.md` を参照する
+- QA.md のフォーマットは setup-qa skill の `references/qa-md-format.md` を SSOT とする (skill が無い環境では本リポジトリの既存 QA.md の形式に合わせる)
+- 新規 feature の追加時は setup-qa skill の雛形で対応する QA.md を新設する
+<!-- qa-config end -->

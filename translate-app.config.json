@@ -1,0 +1,20 @@
+{
+  "$comment": "check の実行: bash ~/.claude/skills/translate-app-xcstrings/scripts/translate-app-xcstrings.sh check --config translate-app.config.json (CI からは --json で機械可読出力)",
+  "format": "xcstrings",
+  "path": "Nikki/Localizable.xcstrings",
+  "source_language": "en",
+  "target_languages": ["ja"],
+  "engine": "codex",
+  "model": "gpt-5.6-luna",
+  "context": "誰にもみられない安心設計の日記アプリ。日記は端末とユーザー自身の iCloud にだけ保存され、手が止まると自動でロックし Face ID / Touch ID で開く。書くことに集中できる余白のある文体で、命令調を避けてやわらかく訳す。固有名詞 Nikki / Nikki Plus は訳さない",
+  "source_dirs": ["Nikki"],
+  "glossary": {
+    "Nikki": { "ja": "Nikki" },
+    "Nikki Plus": { "ja": "Nikki Plus" },
+    "Notebook": { "ja": "ノート" },
+    "Archive": { "ja": "アーカイブ" }
+  },
+  "style": {
+    "ja": "です・ます調。日記アプリの静かなトーンを保ち、感嘆符を使わない"
+  }
+}

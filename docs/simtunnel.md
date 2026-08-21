@@ -51,7 +51,7 @@ simtunnel down nikki
 ## 制約
 
 - Debug ビルドは開発用ストアを使うため CloudKit 同期は行われない。Simulator には署名なしの `.app` を入れる
-- runner の Simulator は英語ロケール。日本語 UI を確認する時は Simulator の設定アプリから言語を切り替える
+- runner の Simulator は英語ロケール。日本語 UI を確認する時は、Simulator の設定アプリから端末言語を切り替えるのではなく、アプリを `-AppleLanguages (ja) -AppleLocale ja_JP` の起動引数付きで起動してアプリプロセスの表示言語だけを ja にする。設定アプリでの端末言語切り替えは SpringBoard を再起動させ、その巻き添えで WDA (XCUITest runner) が落ち、session workflow が全 WDA の無応答を検知してセッションごと終了させてしまう。起動引数は WDA の `POST /session/<sid>/wda/apps/launch` の `arguments` で渡す (`ios-wda.sh launch` は bundleId しか送らないため直接 POST する)。この経路では OS 側の UI (システムダイアログ・キーボード・App Store の通貨) は英語 / US のまま
 - 所要時間の目安: ビルド + セッション準備で 15 分程度。macOS runner の並列上限 (Free プランで 5) はアカウント全体で共有するため、使い終わったら `down` する
 - public リポジトリのため Actions のログ・artifact (スクリーンショット含む) は公開される
 - Maestro / XCUITest / `xcrun simctl` を伴う検証はローカルからリモート Simulator に対して実行できない。ローカルの Simulator で行う

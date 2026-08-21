@@ -1,0 +1,146 @@
+{
+  "appPolicies": {
+    "eula": "",
+    "policies": [
+      {
+        "locale": "ja_JP",
+        "policyText": "",
+        "policyURL": ""
+      }
+    ]
+  },
+  "identifier": "A1B2C3D4",
+  "nonRenewingSubscriptions": [],
+  "products": [
+    {
+      "displayPrice": "12000",
+      "familyShareable": false,
+      "internalID": "C1000001",
+      "localizations": [
+        {
+          "description": "Nikki Plus を一度の支払いでずっと利用できます",
+          "displayName": "Nikki Plus 買い切り",
+          "locale": "ja_JP"
+        }
+      ],
+      "productID": "nikki_plus_lifetime2",
+      "referenceName": "Lifetime",
+      "type": "NonConsumable"
+    }
+  ],
+  "settings": {
+    "_failTransactionsEnabled": false,
+    "_locale": "ja_JP",
+    "_storefront": "JPN",
+    "_storeKitErrors": [
+      {
+        "current": null,
+        "enabled": false,
+        "name": "Load Products"
+      },
+      {
+        "current": null,
+        "enabled": false,
+        "name": "Purchase"
+      },
+      {
+        "current": null,
+        "enabled": false,
+        "name": "Verification"
+      },
+      {
+        "current": null,
+        "enabled": false,
+        "name": "App Store Sync"
+      },
+      {
+        "current": null,
+        "enabled": false,
+        "name": "Subscription Status"
+      },
+      {
+        "current": null,
+        "enabled": false,
+        "name": "App Transaction"
+      },
+      {
+        "current": null,
+        "enabled": false,
+        "name": "Manage Subscriptions Sheet"
+      },
+      {
+        "current": null,
+        "enabled": false,
+        "name": "Refund Request Sheet"
+      },
+      {
+        "current": null,
+        "enabled": false,
+        "name": "Offer Code Redeem Sheet"
+      }
+    ]
+  },
+  "subscriptionGroups": [
+    {
+      "id": "B1000001",
+      "localizations": [
+        {
+          "description": "Nikki Plus",
+          "displayName": "Nikki Plus",
+          "locale": "ja_JP"
+        }
+      ],
+      "name": "Nikki Plus",
+      "subscriptions": [
+        {
+          "adHocOffers": [],
+          "codeOffers": [],
+          "displayPrice": "300",
+          "familyShareable": false,
+          "groupNumber": 1,
+          "internalID": "S1000001",
+          "introductoryOffer": null,
+          "localizations": [
+            {
+              "description": "テーマの解放など Nikki Plus の機能を利用できます",
+              "displayName": "Nikki Plus 月ごと",
+              "locale": "ja_JP"
+            }
+          ],
+          "productID": "nikki_plus_monthly",
+          "recurringSubscriptionPeriod": "P1M",
+          "referenceName": "nikki_plus_monthly",
+          "subscriptionGroupID": "B1000001",
+          "type": "RecurringSubscription",
+          "winbackOffers": []
+        },
+        {
+          "adHocOffers": [],
+          "codeOffers": [],
+          "displayPrice": "3000",
+          "familyShareable": false,
+          "groupNumber": 1,
+          "internalID": "S1000002",
+          "introductoryOffer": null,
+          "localizations": [
+            {
+              "description": "テーマの解放など Nikki Plus の機能を利用できます",
+              "displayName": "Nikki Plus 年ごと",
+              "locale": "ja_JP"
+            }
+          ],
+          "productID": "nikki_plus_annual",
+          "recurringSubscriptionPeriod": "P1Y",
+          "referenceName": "nikki_plus_annual",
+          "subscriptionGroupID": "B1000001",
+          "type": "RecurringSubscription",
+          "winbackOffers": []
+        }
+      ]
+    }
+  ],
+  "version": {
+    "major": 4,
+    "minor": 0
+  }
+}

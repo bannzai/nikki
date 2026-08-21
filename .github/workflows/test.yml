@@ -1,0 +1,55 @@
+# ユニットテスト (NikkiTests) を GitHub Actions の macOS Runner 上で実行する。
+# ローカル Mac のリソースを使わずにテストを回すための経路 (UI 動作確認の simtunnel と同じ方針)
+name: test
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  unit-test:
+    runs-on: macos-26
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
+      - name: iOS 26.2 simulator を用意
+        # StoreKit テスト (StoreKitConfigurationTests) は iOS 26.5 simulator の既知の問題で skip される。
+        # 全件 skip のまま CI が成功扱いになるのを避けるため、runner に同梱される iOS 26.2 runtime の
+        # simulator を明示的に作成してテストを実行する (runtime が無ければここで失敗して気づける)
+        run: |
+          xcrun simctl list runtimes
+          UDID=$(xcrun simctl create "test-ios-26-2" "iPhone 17" "com.apple.CoreSimulator.SimRuntime.iOS-26-2")
+          echo "SIMULATOR_UDID=$UDID" >> "$GITHUB_ENV"
+      - name: ユニットテスト (iOS Simulator)
+        # runner には署名用の証明書が無いため署名を省く。-skipPackagePluginValidation は
+        # LicenseList の BuildToolPlugin の信頼確認を省くため (simulator-session.yml と同じ理由)
+        run: |
+          mkdir -p tmp
+          xcodebuild -project Nikki.xcodeproj -scheme Nikki \
+            -destination "id=$SIMULATOR_UDID" \
+            -derivedDataPath tmp/DerivedData \
+            -skipPackagePluginValidation \
+            -only-testing:NikkiTests \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO \
+            test > tmp/test.log 2>&1 || {
+              echo "テストに失敗。ログ末尾:" >&2
+              tail -n 200 tmp/test.log >&2
+              exit 1
+            }
+          grep -E 'warning:|Test Suite|\*\* TEST' tmp/test.log || true
+          # StoreKit テストが skip・未実行のまま成功扱いになっていないことを検査する
+          # (失敗は xcodebuild 自体が非 0 で落とすため、ここでは「5 件が実行されて pass した」ことを確認する)
+          if [ "$(grep -cE "Test Case .*StoreKitConfigurationTests.* passed" tmp/test.log)" -lt 5 ]; then
+            echo "::error::StoreKitConfigurationTests の pass が 5 件未満です (skip または未実行の可能性。実行可能な runtime を使ってください)" >&2
+            grep -E "Test Case .*StoreKitConfigurationTests" tmp/test.log >&2 || true
+            exit 1
+          fi
+      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        if: always()
+        with:
+          name: test-log
+          path: tmp/test.log
