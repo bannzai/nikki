@@ -1,11 +1,16 @@
 import SwiftUI
 import SwiftData
 
-/// ノートの編集(設定 > ノート > ノートの行から)。名前と書き出しのテンプレート(markdown)を直接編集し、
+/// ノートの編集(設定 > ノート > ノートの行から)。書き出しのテンプレート(markdown)は直接編集し、
 /// 変更のたびにドメインメソッドで書き戻す(エディタと同じ即時反映)。
+/// 名前は編集バッファに持ち、画面を離れるときにまとめて確定する。即時反映にすると1文字ずつ削除する
+/// 過程の「非空の途中状態」が都度書き戻され、空にして離れたときに最後の1文字が残るため(issue #79)。
 /// 削除するとテンプレートも一緒に消え、日記はどのノートにも属さないまま残る(モデルの削除ルール)。
 struct NotebookEditPage: View {
     let notebook: JournalNotebook
+
+    /// 名前欄の編集バッファ。画面を離れるときに notebook へ確定する。
+    @State var name: String
 
     @State var deleteConfirmationDialogIsPresented = false
 
@@ -15,11 +20,17 @@ struct NotebookEditPage: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.paperColor) private var paperColor
 
+    // @State(名前の編集バッファ)の初期値を notebook から導出するため、カスタム init を定義する。
+    init(notebook: JournalNotebook) {
+        self.notebook = notebook
+        self._name = State(initialValue: notebook.name)
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             InkNavBar(leading: .back, center: .title(String(localized: "Edit notebook")), onLeading: { dismiss() })
             NotebookFormFields(
-                name: Binding(get: { notebook.name }, set: { setName(name: $0) }),
+                name: $name,
                 markdown: Binding(get: { notebook.template?.markdown ?? "" }, set: { setTemplateMarkdown(markdown: $0) })
             )
             // 最後の1冊まで消すと、新規日記の書き出し(既定のノートのテンプレート)が次回起動の
@@ -56,18 +67,16 @@ struct NotebookEditPage: View {
             Text("This deletes “\(notebook.name)” and its template. Entries in this notebook are kept.")
         }
         .onDisappear {
+            // 作成フォームと同じく、名前のないノートが一覧・既定のノートの選択に並ばないよう、
+            // 空白だけの名前は確定しない(空にしたまま離れると編集開始時点の名前のまま残る)。
+            // 削除して閉じたときは、コンテキストから外れたモデルに触れないよう書き戻さない。
+            if !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+               !notebook.isDeleted, notebook.modelContext != nil {
+                notebook.setName(name: name)
+            }
             // 直後にアプリが kill されても編集内容が残るよう、画面を離れるときに明示保存する(平常時は autosave が保存する)。
             try? modelContext.save()
         }
-    }
-
-    /// 名前の入力をノートへ書き戻す。作成フォームと同じく、名前のないノートが一覧・既定のノートの選択に
-    /// 並ばないよう、空白だけの入力は書き戻さない(入力欄を離れると元の名前に戻る)。
-    private func setName(name: String) {
-        if name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            return
-        }
-        notebook.setName(name: name)
     }
 
     /// 書き出しの入力をテンプレートへ書き戻す。作成フォームと意味を揃え、空白だけの書き出しは
