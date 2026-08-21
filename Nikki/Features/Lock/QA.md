@@ -1,7 +1,7 @@
 ---
 feature: Lock
 verification: mobile-mcp
-last_verified_commit: da31688b6eaa28f714d9c3c264de77687e05f228
+last_verified_commit: 3e326cc010af19f557876954fde3897e457e5e29
 last_verified_at: 2026-08-21
 ---
 
@@ -47,7 +47,7 @@ last_verified_at: 2026-08-21
 
 </details>
 
-### **操作中はロックされない**: 本文の入力・スクロール・タップを続けている間はロック画面が出ない
+### **タップ操作中はロックされない**: タップを続けている間はロック画面が出ない
 
 <details><summary>動作確認スクショ</summary>
 
@@ -71,14 +71,6 @@ last_verified_at: 2026-08-21
 
 **確認日: 2026-08-21**
 <img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260821/48c820b2-5830-4274-87dd-825b99e065ce.jpg" width="320">
-
-</details>
-
-### **タップ操作中はロックされない**: タップを続けている間はロック画面が出ない
-
-<details><summary>動作確認スクショ</summary>
-
-（未実行）
 
 </details>
 
