@@ -11,13 +11,13 @@ struct LockFaceIDButton: View {
     var body: some View {
         // 生体認証が使えない端末(パスコード未設定・生体認証なしの Mac 等)は OS の用語(macOS: パスワード、iOS / iPadOS: パスコード)に合わせる。
         #if os(macOS)
-        let fallback = (InkIcons.lock, "パスワードで開く")
+        let fallback = (InkIcons.lock, String(localized: "Open with password"))
         #else
-        let fallback = (InkIcons.lock, "パスコードで開く")
+        let fallback = (InkIcons.lock, String(localized: "Open with passcode"))
         #endif
         let (systemName, title) = switch currentBiometryType() {
-        case .faceID: (InkIcons.faceID, "Face ID で開く")
-        case .touchID: (InkIcons.touchID, "Touch ID で開く")
+        case .faceID: (InkIcons.faceID, String(localized: "Open with Face ID"))
+        case .touchID: (InkIcons.touchID, String(localized: "Open with Touch ID"))
         default: fallback
         }
         Button {

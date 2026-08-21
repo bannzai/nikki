@@ -41,7 +41,7 @@ struct JournalNotebookTests {
     func seedNotebooksHideNotebookConcept() {
         let notebooks = SampleData.seedNotebooks
         #expect(notebooks.count == 1)
-        #expect(notebooks[0].name == "白紙")
+        #expect(notebooks[0].name == String(localized: "Blank page"))
         #expect(notebooks[0].template?.markdown == "# {{date}}")
         #expect(notebooks[0].reminderFrequency == .none)
     }

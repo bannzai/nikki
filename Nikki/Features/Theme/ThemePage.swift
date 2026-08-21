@@ -21,12 +21,12 @@ struct ThemePage: View {
         ZStack {
             Color.inkPaper.ignoresSafeArea()
             VStack(spacing: 0) {
-                InkNavBar(leading: .back, center: .title("テーマ"), onLeading: { dismiss() })
+                InkNavBar(leading: .back, center: .title(String(localized: "Theme")), onLeading: { dismiss() })
                 ScrollView {
                     VStack(alignment: .leading, spacing: 0) {
                         ThemePreviewCard(paperColor: paperColor)
                             .padding(.bottom, 22)
-                        ThemeSectionLabel(text: "紙の色")
+                        ThemeSectionLabel(text: String(localized: "Paper color"))
                             .padding(.bottom, 10)
 
                         HStack(spacing: 14) {
@@ -47,12 +47,12 @@ struct ThemePage: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.bottom, 24)
 
-                        ThemeSectionLabel(text: "背景画像")
+                        ThemeSectionLabel(text: String(localized: "Background image"))
                             .padding(.bottom, 10)
                         ThemeBackgroundImageCard()
                             .padding(.bottom, 24)
 
-                        Text("テーマはこの端末の中だけに保存されます。")
+                        Text("Your theme is saved only on this device.")
                             .font(.ink(11.5))
                             .lineSpacing(inkLineSpacing(fontSize: 11.5, multiplier: 1.9))
                             .foregroundStyle(Color.inkTextTertiary)
@@ -75,11 +75,11 @@ struct ThemePage: View {
 /// テーマ画面のスウォッチと設定画面(1r)の「テーマ」行の値表示で使う。
 func paperColorPresetLabel(index: Int) -> String {
     switch index {
-    case 0: return "白"
-    case 1: return "生成"
-    case 2: return "薄鼠"
-    case 3: return "青磁"
-    case 4: return "桜鼠"
+    case 0: return String(localized: "White")
+    case 1: return String(localized: "Cream")
+    case 2: return String(localized: "Ash")
+    case 3: return String(localized: "Celadon")
+    case 4: return String(localized: "Sakura")
     default: return ""
     }
 }

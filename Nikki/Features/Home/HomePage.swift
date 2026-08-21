@@ -82,7 +82,7 @@ struct HomePage: View {
                 createEntry()
             } label: {
                 // アイコンのみ表示しつつ、⌘ 長押しのショートカット一覧と VoiceOver に名前を出すため Label にする。
-                Label("新しい日記", systemImage: InkIcons.pen)
+                Label("New entry", systemImage: InkIcons.pen)
                     .labelStyle(.iconOnly)
             }
             .buttonStyle(InkFABButtonStyle())
@@ -92,7 +92,7 @@ struct HomePage: View {
         }
         // ハードウェアキーボード(iPad / Mac)から検索フィールドへフォーカスするためのショートカット。画面には出さない。
         .background {
-            Button("日記をさがす") {
+            Button("Search your journal") {
                 searchFieldIsFocused = true
             }
             .keyboardShortcut("f", modifiers: .command)
@@ -141,8 +141,8 @@ struct HomePage: View {
 
     private func segmentLabel(for mode: HomePageMode) -> String {
         switch mode {
-        case .list: return "リスト"
-        case .calendar: return "カレンダー"
+        case .list: return String(localized: "List")
+        case .calendar: return String(localized: "Calendar")
         }
     }
 }

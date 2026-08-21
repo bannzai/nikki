@@ -64,9 +64,9 @@ struct ThemeColorSwatch: View {
 struct ThemeColorSwatch_Previews: PreviewProvider {
     static var previews: some View {
         HStack(spacing: 14) {
-            ThemeColorSwatch(index: 0, label: "白", selectedIndex: .constant(1), locked: false, paywallSheetIsPresented: .constant(false))
-            ThemeColorSwatch(index: 1, label: "生成", selectedIndex: .constant(1), locked: false, paywallSheetIsPresented: .constant(false))
-            ThemeColorSwatch(index: 2, label: "薄鼠", selectedIndex: .constant(1), locked: true, paywallSheetIsPresented: .constant(false))
+            ThemeColorSwatch(index: 0, label: "White", selectedIndex: .constant(1), locked: false, paywallSheetIsPresented: .constant(false))
+            ThemeColorSwatch(index: 1, label: "Cream", selectedIndex: .constant(1), locked: false, paywallSheetIsPresented: .constant(false))
+            ThemeColorSwatch(index: 2, label: "Ash", selectedIndex: .constant(1), locked: true, paywallSheetIsPresented: .constant(false))
         }
         .padding()
         .background(Color.inkPaper)

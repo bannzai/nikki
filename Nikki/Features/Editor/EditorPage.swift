@@ -30,12 +30,12 @@ struct EditorPage: View {
         EditorScreenScaffold(
             caption: editorDateText(date: entry.date),
             onDismiss: { dismiss() },
-            trailing: notebooks.count >= 2 ? .text("ノート") : .none,
+            trailing: notebooks.count >= 2 ? .text(String(localized: "Notebooks")) : .none,
             onTrailing: { notebookListIsPresented = true }
         ) {
             VStack(alignment: .leading, spacing: 0) {
                 TextField(
-                    "タイトル",
+                    "Title",
                     text: Binding(get: { entry.title }, set: { entry.setTitle($0) }),
                     axis: .vertical
                 )

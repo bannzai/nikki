@@ -9,16 +9,16 @@ struct NotebookFormFields: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
-                Text("名前")
+                Text("Name")
                     .font(.ink(12, .medium))
                     .foregroundStyle(Color.inkTextTertiary)
                     .padding(.horizontal, 2)
                     .padding(.bottom, 8)
 
                 TextField(
-                    "ノートの名前",
+                    "Notebook name",
                     text: $name,
-                    prompt: Text("ノートの名前")
+                    prompt: Text("Notebook name")
                         .font(.ink(14.5, .regular))
                         .foregroundStyle(Color.inkTextTertiary)
                 )
@@ -33,7 +33,7 @@ struct NotebookFormFields: View {
                 )
                 .padding(.bottom, 24)
 
-                Text("書き出し")
+                Text("Template")
                     .font(.ink(12, .medium))
                     .foregroundStyle(Color.inkTextTertiary)
                     .padding(.horizontal, 2)
@@ -55,7 +55,7 @@ struct NotebookFormFields: View {
                     )
                     .padding(.bottom, 8)
 
-                Text("このノートの新しい日記は、この内容から書きはじめます。{{date}} は日記の日付に置き換わります。")
+                Text("New entries in this notebook start with this content. {{date}} is replaced with the entry's date.")
                     .font(.ink(11.5, .regular))
                     .foregroundStyle(Color.inkTextTertiary)
                     .lineSpacing(inkLineSpacing(fontSize: 11.5, multiplier: 1.9))

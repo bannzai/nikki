@@ -29,7 +29,7 @@ struct TemplateVariableField: Identifiable, Equatable {
                     isAuto: false,
                     value: includesDemoValues ? (demoValues[name] ?? "") : "",
                     bodyValue: nil,
-                    placeholder: placeholders[name] ?? "ここに入力"
+                    placeholder: placeholders[name] ?? String(localized: "Type here")
                 )
             }
             return TemplateVariableField(
@@ -56,19 +56,20 @@ struct TemplateVariableField: Identifiable, Equatable {
         }
     }
 
-    private static let demoValues: [String: String] = ["weather": "晴れのち夕立", "place": "鎌倉"]
+    private static let demoValues: [String: String] = [
+        "weather": String(localized: "Sunny, then a shower"),
+        "place": String(localized: "Kamakura"),
+    ]
     private static let placeholders: [String: String] = [
-        "weather": "きょうの天気",
-        "place": "どこへ行った?",
-        "mood": "きょうの気分",
+        "weather": String(localized: "Today's weather"),
+        "place": String(localized: "Where did you go?"),
+        "mood": String(localized: "Today's mood"),
     ]
 
+    /// {{date}} の補完値。本文に保存される文字列のため、表記はアプリの表示言語に揃える。
     private static func dateText(_ date: Date, includesWeekday: Bool) -> String {
-        let formatter = DateFormatter()
-        // 表記はデザイン見本の日本語形式で固定し、日付の区切りだけ端末のタイムゾーンに追従させる。
-        formatter.locale = Locale(identifier: "ja_JP")
-        formatter.timeZone = .autoupdatingCurrent
-        formatter.dateFormat = includesWeekday ? "y年M月d日 EEEE" : "y年M月d日"
-        return formatter.string(from: date)
+        includesWeekday
+            ? date.formatted(localizedPattern: "EEEE, MMMM d, y")
+            : date.formatted(localizedPattern: "MMMM d, y")
     }
 }

@@ -35,9 +35,7 @@ struct HomeCalendarPreviewCard: View {
     }
 
     private var dateLabel: String {
-        let comps = Calendar.display.dateComponents([.month, .day, .weekday], from: entry.date)
-        let symbols = ["日", "月", "火", "水", "木", "金", "土"]
-        return "\(comps.month ?? 0)月\(comps.day ?? 0)日 \(symbols[(comps.weekday ?? 1) - 1])曜日"
+        entry.date.formatted(localizedPattern: "EEEE, MMMM d")
     }
 
     private var timeLabel: String {

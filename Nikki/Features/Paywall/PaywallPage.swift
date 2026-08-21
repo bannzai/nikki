@@ -43,18 +43,18 @@ struct PaywallPage: View {
                             .padding(.top, 10)
                             .padding(.bottom, 16)
 
-                        Text("日記の見た目を、もっとじぶん好みに。")
+                        Text("Make your journal look more like you.")
                             .font(.ink(15, .regular))
                             .foregroundStyle(PaywallPage.headlineColor)
                             .lineSpacing(inkLineSpacing(fontSize: 15, multiplier: 2.0))
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.bottom, 26)
 
-                        PaywallBenefitRow(title: "テーマを増やす", description: "薄鼠・青磁・桜鼠。紙の色をすべて解放。")
+                        PaywallBenefitRow(title: String(localized: "More themes"), description: String(localized: "Ash, Celadon, and Sakura. Unlock every paper color."))
                             .padding(.bottom, 28)
 
                         if lifetimePurchased {
-                            Text("買い切りを購入済みのため、Nikki Plus はずっと有効です。")
+                            Text("You own the lifetime purchase, so Nikki Plus stays active forever.")
                                 .font(.ink(12.5, .regular))
                                 .foregroundStyle(Color.inkTextSecondary)
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -64,9 +64,9 @@ struct PaywallPage: View {
                             HStack(spacing: 12) {
                                 if offering?.monthly != nil || !Purchases.isConfigured {
                                     PaywallPlanCard(
-                                        title: "月ごと",
+                                        title: String(localized: "Monthly"),
                                         price: planPrice(package: offering?.monthly, samplePrice: "¥300"),
-                                        caption: "/月",
+                                        caption: String(localized: "/month"),
                                         badge: nil,
                                         isSelected: selectedPlan == .monthly,
                                         onTap: { selectedPlan = .monthly }
@@ -74,7 +74,7 @@ struct PaywallPage: View {
                                 }
                                 if offering?.annual != nil || !Purchases.isConfigured {
                                     PaywallPlanCard(
-                                        title: "年ごと",
+                                        title: String(localized: "Yearly"),
                                         price: planPrice(package: offering?.annual, samplePrice: "¥3,000"),
                                         caption: annualPerMonthCaption(),
                                         badge: annualSavingsBadge(),
@@ -87,9 +87,9 @@ struct PaywallPage: View {
 
                             if offering?.lifetime != nil || !Purchases.isConfigured {
                                 PaywallPlanCard(
-                                    title: "買い切り",
+                                    title: String(localized: "Lifetime"),
                                     price: planPrice(package: offering?.lifetime, samplePrice: "¥12,000"),
-                                    caption: "一度の購入で、ずっと",
+                                    caption: String(localized: "Pay once, keep forever"),
                                     badge: nil,
                                     isSelected: selectedPlan == .lifetime,
                                     onTap: { selectedPlan = .lifetime }
@@ -98,10 +98,10 @@ struct PaywallPage: View {
                                 // 買い切りを購入しても既存の自動更新サブスクは解約されないため、加入中は明示して管理画面へ誘導する。
                                 if subscriptionActive {
                                     VStack(alignment: .leading, spacing: 4) {
-                                        Text("買い切りを購入しても、加入中のサブスクリプションは自動では解約されません。購入後に App Store のサブスクリプション設定から解約してください。")
+                                        Text("Buying the lifetime plan doesn't cancel your current subscription automatically. After purchasing, cancel it from your App Store subscription settings.")
                                             .foregroundStyle(Color.inkTextTertiary)
                                             .lineSpacing(inkLineSpacing(fontSize: 11.5, multiplier: 1.9))
-                                        Button("サブスクリプションを管理") {
+                                        Button("Manage subscription") {
                                             openURL(URL(string: "https://apps.apple.com/account/subscriptions")!)
                                         }
                                         .foregroundStyle(Color.ink)
@@ -120,9 +120,9 @@ struct PaywallPage: View {
 
                         if offeringLoadFailed {
                             HStack(spacing: 8) {
-                                Text("価格を読み込めませんでした。")
+                                Text("Couldn't load prices.")
                                     .foregroundStyle(Color.inkTextTertiary)
-                                Button("再読み込み") {
+                                Button("Retry") {
                                     Task {
                                         await loadOffering()
                                     }
@@ -135,7 +135,7 @@ struct PaywallPage: View {
                     }
                 }
 
-                Button(purchasing ? "処理中…" : "Nikki Plus をはじめる") {
+                Button(purchasing ? "Processing…" : "Start Nikki Plus") {
                     Task {
                         await purchase()
                     }
@@ -145,16 +145,17 @@ struct PaywallPage: View {
                 .padding(.top, 14)
 
                 HStack(spacing: 22) {
-                    PaywallFooterLink(title: "購入の復元") {
+                    PaywallFooterLink(title: String(localized: "Restore purchases")) {
                         Task {
                             await restore()
                         }
                     }
-                    PaywallFooterLink(title: "利用規約") {
-                        openURL(URL(string: "https://bannzai.github.io/nikki/legal/terms-ja.html")!)
+                    // 規約・プライバシーポリシーは言語ごとのページがあるため、URL も String Catalog で言語別に持つ。
+                    PaywallFooterLink(title: String(localized: "Terms of Use")) {
+                        openURL(URL(string: String(localized: "https://bannzai.github.io/nikki/legal/terms-en.html"))!)
                     }
-                    PaywallFooterLink(title: "プライバシー") {
-                        openURL(URL(string: "https://bannzai.github.io/nikki/legal/privacy-ja.html")!)
+                    PaywallFooterLink(title: String(localized: "Privacy")) {
+                        openURL(URL(string: String(localized: "https://bannzai.github.io/nikki/legal/privacy-en.html"))!)
                     }
                 }
                 .padding(.top, 14)
@@ -201,24 +202,24 @@ struct PaywallPage: View {
         if let storeProduct = offering?.annual?.storeProduct {
             if let pricePerMonth = storeProduct.pricePerMonth,
                let formatted = storeProduct.priceFormatter?.string(from: pricePerMonth) {
-                return "\(formatted)/月"
+                return String(localized: "\(formatted)/month")
             }
-            return "/年"
+            return String(localized: "/year")
         }
         // 未 configure(カタログ・プレビュー)の見本表示。
-        return "¥250/月"
+        return String(localized: "¥250/month")
     }
 
     /// 年プランの「◯ヶ月ぶんお得」バッジ。実価格から算出し、算出できない・得にならない場合は表示しない。
     private func annualSavingsBadge() -> String? {
         if let monthly = offering?.monthly, let annual = offering?.annual {
             if let months = annualSavingsMonths(monthlyPrice: monthly.storeProduct.price, annualPrice: annual.storeProduct.price) {
-                return "\(months)ヶ月ぶんお得"
+                return String(localized: "\(months) months free")
             }
             return nil
         }
         // 未 configure(カタログ・プレビュー)は見本価格(¥300/¥3,000)相当の2ヶ月で表示する。
-        return Purchases.isConfigured ? nil : "2ヶ月ぶんお得"
+        return Purchases.isConfigured ? nil : String(localized: "\(2) months free")
     }
 
     /// current offering(`default`)を取得する。未 configure(カタログ・プレビュー)では何もしない。
@@ -270,11 +271,11 @@ struct PaywallPage: View {
                 dismiss()
             } else {
                 // 商品と entitlement の紐付け不備・反映遅延で、購入が成功しても plus が有効にならないケースを黙殺しない。
-                paywallAlertMessage = "購入は完了しましたが、プランの反映を確認できませんでした。時間をおいて「購入の復元」をお試しください。"
+                paywallAlertMessage = String(localized: "The purchase went through, but the plan couldn't be confirmed yet. Please try “Restore purchases” in a little while.")
                 paywallAlertIsPresented = true
             }
         } catch {
-            paywallAlertMessage = "購入を完了できませんでした。\(error.localizedDescription)"
+            paywallAlertMessage = String(localized: "The purchase couldn't be completed. \(error.localizedDescription)")
             paywallAlertIsPresented = true
         }
     }
@@ -294,11 +295,11 @@ struct PaywallPage: View {
             if customerInfo.entitlements[Const.revenueCatPlusEntitlementID]?.isActive == true {
                 dismiss()
             } else {
-                paywallAlertMessage = "復元できる購入が見つかりませんでした。"
+                paywallAlertMessage = String(localized: "No purchases to restore.")
                 paywallAlertIsPresented = true
             }
         } catch {
-            paywallAlertMessage = "購入を復元できませんでした。\(error.localizedDescription)"
+            paywallAlertMessage = String(localized: "Purchases couldn't be restored. \(error.localizedDescription)")
             paywallAlertIsPresented = true
         }
     }

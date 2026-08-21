@@ -4,10 +4,10 @@ import SwiftUI
 struct HomeSearchEmptyState: View {
     var body: some View {
         VStack(spacing: 10) {
-            Text("みつかりませんでした。")
+            Text("Nothing found.")
                 .font(.ink(15, .medium))
                 .foregroundStyle(Color.inkTextSecondary)
-            Text("ちがう言葉で、さがしてみてください。")
+            Text("Try searching with different words.")
                 .font(.ink(12.5, .regular))
                 .foregroundStyle(Color.inkTextTertiary)
         }

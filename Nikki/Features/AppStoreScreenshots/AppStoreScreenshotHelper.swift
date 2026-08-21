@@ -2,7 +2,7 @@ import SwiftUI
 
 #if DEBUG
 /// App Store スクリーンショットの言語。キャッチコピーとモック画面内の文言を切り替える。
-/// アプリ本体は未ローカライズ(日本語ハードコード)のため、String Catalog ではなく
+/// 撮影はシミュレータの言語設定に依存せず環境変数で言語を指定するため、アプリ本体の String Catalog ではなく
 /// スクショ機能内の switch で言語別文言を持つ。
 enum AppStoreScreenshotLanguage: String {
     case ja

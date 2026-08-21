@@ -6,7 +6,7 @@ struct EditorReorderPage: View {
     let entry: JournalEntry
 
     var body: some View {
-        EditorScreenScaffold(caption: "並び替え — 指を離すと確定", onDismiss: {}) {
+        EditorScreenScaffold(caption: String(localized: "Reorder — release to confirm"), onDismiss: {}) {
             VStack(alignment: .leading, spacing: 10) {
                 let paragraphs = entry.blocks.paragraphTexts
                 let headings = entry.blocks.headingTexts

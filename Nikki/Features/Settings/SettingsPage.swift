@@ -40,59 +40,59 @@ struct SettingsPage: View {
             Color.inkPaper.ignoresSafeArea()
 
             VStack(spacing: 0) {
-                InkNavBar(leading: .back, center: .title("設定"), onLeading: { dismiss() })
+                InkNavBar(leading: .back, center: .title(String(localized: "Settings")), onLeading: { dismiss() })
 
                 ScrollView {
                     VStack(alignment: .leading, spacing: 0) {
-                        SettingsSectionLabel(text: "書くこと")
+                        SettingsSectionLabel(text: String(localized: "Writing"))
                         InkListSection {
                             // ノートを増やしたい人向けの管理(作成・編集・削除)の入り口。普段の書く流れには出さず、ここにだけ置く。
                             InkListRow(
-                                title: "ノート",
-                                value: "\(notebooks.count)冊",
+                                title: String(localized: "Notebooks"),
+                                value: String(localized: "\(notebooks.count) notebooks"),
                                 action: { notebookSettingsIsPresented = true }
                             )
                             // ノートが1冊の間はノートを意識させないため、選択肢が生まれる2冊以上のときだけ行を出す。
                             if notebooks.count >= 2 {
                                 InkListRow(
-                                    title: "既定のノート",
+                                    title: String(localized: "Default notebook"),
                                     // 未設定のときは新規作成と同じ解決(先頭のノート)を表示する。
-                                    value: (notebooks.first { $0.id.uuidString == defaultNotebookID } ?? notebooks.first)?.name ?? "未設定",
+                                    value: (notebooks.first { $0.id.uuidString == defaultNotebookID } ?? notebooks.first)?.name ?? String(localized: "Not set"),
                                     action: { defaultNotebookIsPresented = true }
                                 )
                             }
                             InkListRow(
-                                title: "自動ロック",
-                                value: "\(autoLockSeconds)秒",
+                                title: String(localized: "Auto-lock"),
+                                value: String(localized: "\(autoLockSeconds) seconds"),
                                 showsSeparator: false,
                                 action: { autoLockConfirmationDialogIsPresented = true }
                             )
                         }
                         .padding(.bottom, 20)
 
-                        SettingsSectionLabel(text: "鍵")
+                        SettingsSectionLabel(text: String(localized: "Lock"))
                         InkListSection {
-                            InkListRow(title: "Face ID で解除", trailing: AnyView(SettingsToggle(isOn: $faceIDUnlockEnabled)))
+                            InkListRow(title: String(localized: "Unlock with Face ID"), trailing: AnyView(SettingsToggle(isOn: $faceIDUnlockEnabled)))
                             // パスキーの登録フローが未実装で遷移先がないため、シェブロンは出さない。
                             InkListRow(
-                                title: "パスキー",
-                                value: passkeyRegistered ? "登録済み" : "未登録",
+                                title: String(localized: "Passkey"),
+                                value: passkeyRegistered ? String(localized: "Registered") : String(localized: "Not registered"),
                                 showsChevron: false,
                                 showsSeparator: false
                             )
                         }
                         .padding(.bottom, 20)
 
-                        SettingsSectionLabel(text: "外観")
+                        SettingsSectionLabel(text: String(localized: "Appearance"))
                         InkListSection {
                             InkListRow(
-                                title: "テーマ",
+                                title: String(localized: "Theme"),
                                 // Plus 失効時はテーマ画面のフォールバックと同じ実効値を表示する。
                                 value: paperColorPresetLabel(index: effectivePaperColorPresetIndex(storedIndex: paperColorPresetIndex, plusActive: plusActive)),
                                 action: { themeIsPresented = true }
                             )
                             InkListRow(
-                                title: "文字の大きさ",
+                                title: String(localized: "Text size"),
                                 value: textSizeLabel(textSize),
                                 showsSeparator: false,
                                 action: { textSizeConfirmationDialogIsPresented = true }
@@ -100,42 +100,42 @@ struct SettingsPage: View {
                         }
                         .padding(.bottom, 20)
 
-                        SettingsSectionLabel(text: "データ")
+                        SettingsSectionLabel(text: String(localized: "Data"))
                         InkListSection {
                             InkListRow(
-                                title: "アーカイブした日記",
+                                title: String(localized: "Archived entries"),
                                 action: { archiveIsPresented = true }
                             )
                             InkListRow(
-                                title: "Markdown で書き出す",
+                                title: String(localized: "Export as Markdown"),
                                 action: { markdownExporterIsPresented = true }
                             )
                             // 遷移ではなく確認ダイアログを開くアクション行のため、シェブロンは出さない。
                             InkListRow(
-                                title: "すべての日記を削除",
+                                title: String(localized: "Delete all entries"),
                                 showsChevron: false,
                                 action: { deleteAllEntriesConfirmationDialogIsPresented = true }
                             )
                             InkListRow(
                                 title: "Nikki Plus",
-                                value: plusActive ? "加入中" : "未加入",
+                                value: plusActive ? String(localized: "Active") : String(localized: "Not subscribed"),
                                 showsSeparator: false,
                                 action: { paywallSheetIsPresented = true }
                             )
                         }
                         .padding(.bottom, 20)
 
-                        SettingsSectionLabel(text: "このアプリについて")
+                        SettingsSectionLabel(text: String(localized: "About"))
                         InkListSection {
                             InkListRow(
-                                title: "OSS ライセンス",
+                                title: String(localized: "Open source licenses"),
                                 showsSeparator: false,
                                 action: { licenseIsPresented = true }
                             )
                         }
                         .padding(.bottom, 20)
 
-                        Text("Nikki 1.0.0 — あなたの日記は、この端末の中に。")
+                        Text("Nikki 1.0.0 — Your journal stays on this device.")
                             .font(.ink(11, .regular))
                             .foregroundStyle(Color.inkTextQuaternary)
                             .frame(maxWidth: .infinity, alignment: .center)
@@ -166,23 +166,23 @@ struct SettingsPage: View {
         .sheet(isPresented: $paywallSheetIsPresented) {
             PaywallPage()
         }
-        .confirmationDialog("すべての日記を削除", isPresented: $deleteAllEntriesConfirmationDialogIsPresented, titleVisibility: .visible) {
-            Button("すべての日記を削除", role: .destructive) {
+        .confirmationDialog("Delete all entries", isPresented: $deleteAllEntriesConfirmationDialogIsPresented, titleVisibility: .visible) {
+            Button("Delete all entries", role: .destructive) {
                 // 直後にアプリが kill されても結果が残るよう save まで行う。失敗しても @Query の再評価でストアの実態に追従するため、ここではエラーを扱わない。
                 try? modelContext.deleteAllJournalEntries()
             }
         } message: {
-            Text("アーカイブした日記も含めて、すべての日記を削除します。この操作は取り消せません。")
+            Text("This deletes every entry, including archived ones. This cannot be undone.")
         }
-        .confirmationDialog("自動ロックまでの秒数", isPresented: $autoLockConfirmationDialogIsPresented, titleVisibility: .visible) {
+        .confirmationDialog("Seconds until auto-lock", isPresented: $autoLockConfirmationDialogIsPresented, titleVisibility: .visible) {
             // 既定の5秒(README)を最短に、離席しがちな使い方向けの緩い選択肢を並べる。
             ForEach([5, 10, 30, 60], id: \.self) { seconds in
-                Button("\(seconds)秒") {
+                Button("\(seconds) seconds") {
                     autoLockSeconds = seconds
                 }
             }
         }
-        .confirmationDialog("文字の大きさ", isPresented: $textSizeConfirmationDialogIsPresented, titleVisibility: .visible) {
+        .confirmationDialog("Text size", isPresented: $textSizeConfirmationDialogIsPresented, titleVisibility: .visible) {
             ForEach(TextSize.allCases, id: \.self) { size in
                 Button(textSizeLabel(size)) {
                     textSize = size
@@ -202,9 +202,9 @@ struct SettingsPage: View {
     /// TextSize の表示名。
     private func textSizeLabel(_ textSize: TextSize) -> String {
         switch textSize {
-        case .small: return "小さめ"
-        case .standard: return "標準"
-        case .large: return "大きめ"
+        case .small: return String(localized: "Small")
+        case .standard: return String(localized: "Standard")
+        case .large: return String(localized: "Large")
         }
     }
 }

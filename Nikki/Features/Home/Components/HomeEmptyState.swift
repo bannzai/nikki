@@ -4,10 +4,10 @@ import SwiftUI
 struct HomeEmptyState: View {
     var body: some View {
         VStack(spacing: 10) {
-            Text("まだ日記はありません。")
+            Text("No entries yet.")
                 .font(.ink(15, .medium))
                 .foregroundStyle(Color.inkTextSecondary)
-            Text("最初の一枚は、右下のペンから。")
+            Text("Start your first one with the pen at the bottom right.")
                 .font(.ink(12.5, .regular))
                 .foregroundStyle(Color.inkTextTertiary)
         }

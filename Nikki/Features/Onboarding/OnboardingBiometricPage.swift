@@ -9,13 +9,13 @@ struct OnboardingBiometricPage: View {
     var body: some View {
         // 生体認証が使えない端末(パスコード未設定・生体認証なしの Mac 等)は OS の用語(macOS: パスワード、iOS / iPadOS: パスコード)に合わせる。
         #if os(macOS)
-        let fallback = (InkIcons.lock, "つぎからは、\nかんたんに。", "開きっぱなしの画面は自動でロック。パスワードがそっと鍵を開けます。", "自動ロックを有効にする")
+        let fallback = (InkIcons.lock, String(localized: "From now on,\nit's easy."), String(localized: "Left open, the screen locks itself. Your password quietly opens it again."), String(localized: "Enable auto-lock"))
         #else
-        let fallback = (InkIcons.lock, "つぎからは、\nかんたんに。", "開きっぱなしの画面は自動でロック。パスコードがそっと鍵を開けます。", "自動ロックを有効にする")
+        let fallback = (InkIcons.lock, String(localized: "From now on,\nit's easy."), String(localized: "Left open, the screen locks itself. Your passcode quietly opens it again."), String(localized: "Enable auto-lock"))
         #endif
         let (systemName, headline, description, primaryButtonTitle) = switch currentBiometryType() {
-        case .faceID: (InkIcons.faceID, "つぎからは、\n顔だけで。", "開きっぱなしの画面は自動でロック。Face ID がそっと鍵を開けます。", "Face ID を有効にする")
-        case .touchID: (InkIcons.touchID, "つぎからは、\n指先だけで。", "開きっぱなしの画面は自動でロック。Touch ID がそっと鍵を開けます。", "Touch ID を有効にする")
+        case .faceID: (InkIcons.faceID, String(localized: "From now on,\njust your face."), String(localized: "Left open, the screen locks itself. Face ID quietly opens it again."), String(localized: "Enable Face ID"))
+        case .touchID: (InkIcons.touchID, String(localized: "From now on,\njust a fingertip."), String(localized: "Left open, the screen locks itself. Touch ID quietly opens it again."), String(localized: "Enable Touch ID"))
         default: fallback
         }
         ZStack {
@@ -50,7 +50,7 @@ struct OnboardingBiometricPage: View {
                         onboardingCompleted = true
                     }
                     .buttonStyle(InkPrimaryButtonStyle())
-                    Button("パスキーを登録する") {
+                    Button("Register a passkey") {
                         onboardingCompleted = true
                     }
                     .buttonStyle(InkSecondaryButtonStyle())

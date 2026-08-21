@@ -10,10 +10,10 @@ struct LockOverlay: View {
             LockPadlockCircle()
 
             VStack(spacing: 8) {
-                Text("鍵をかけておきました")
+                Text("Locked, just in case")
                     .font(.ink(16, .bold))
                     .foregroundStyle(Color.ink)
-                Text("しばらく手が止まっていたので、\nそっとロックしました。")
+                Text("Your hands rested for a while,\nso we quietly locked the page.")
                     .font(.ink(12.5, .regular))
                     .foregroundStyle(Color.inkTextSecondary)
                     .multilineTextAlignment(.center)
@@ -23,7 +23,7 @@ struct LockOverlay: View {
             LockFaceIDButton(locked: $locked)
                 .padding(.top, 8)
 
-            Text("解除すると、さっきの続きに戻ります")
+            Text("Unlock to pick up right where you left off")
                 .font(.ink(12, .regular))
                 .foregroundStyle(Color.inkTextTertiary)
         }

@@ -40,7 +40,7 @@ struct HomeListBody: View {
                                         // 直後にアプリが kill されても結果が残るよう明示保存する(平常時は autosave が保存する)。
                                         try? modelContext.save()
                                     } label: {
-                                        Label("アーカイブ", systemImage: InkIcons.archive)
+                                        Label("Archive", systemImage: InkIcons.archive)
                                     }
                                 }
                             }

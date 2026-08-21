@@ -19,8 +19,8 @@ struct NotebookCreatePage: View {
         VStack(spacing: 0) {
             InkNavBar(
                 leading: .back,
-                center: .title("新しいノート"),
-                trailing: .text("作成"),
+                center: .title(String(localized: "New notebook")),
+                trailing: .text(String(localized: "Create")),
                 onLeading: { dismiss() },
                 onTrailing: { create() }
             )

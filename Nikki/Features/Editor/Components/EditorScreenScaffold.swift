@@ -26,7 +26,7 @@ struct EditorScreenScaffold<Content: View>: View {
 struct EditorScreenScaffold_Previews: PreviewProvider {
     static var previews: some View {
         EditorScreenScaffold(caption: "7月18日 土曜日", onDismiss: {}) {
-            Text("本文")
+            Text(verbatim: "本文")
                 .padding()
         }
     }

@@ -4,7 +4,7 @@ import SwiftUI
 struct EditorSelectionToolbar: View {
     var body: some View {
         HStack(spacing: 2) {
-            Text("本文")
+            Text("Body")
                 .font(.ink(13.5, .regular))
                 .foregroundStyle(EditorPalette.inkGray)
                 .padding(.horizontal, 10)

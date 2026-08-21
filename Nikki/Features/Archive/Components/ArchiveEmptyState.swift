@@ -4,16 +4,16 @@ import SwiftUI
 struct ArchiveEmptyState: View {
     var body: some View {
         VStack(spacing: 10) {
-            Text("アーカイブした日記はありません。")
+            Text("No archived entries.")
                 .font(.ink(15, .medium))
                 .foregroundStyle(Color.inkTextSecondary)
             // アーカイブ操作の入口 (コンテキストメニュー) の開き方が OS で違うため、案内文言を分ける。
             #if os(macOS)
-            Text("ホームの日記を右クリックすると、ここへしまえます。")
+            Text("Right-click an entry on Home to tuck it away here.")
                 .font(.ink(12.5, .regular))
                 .foregroundStyle(Color.inkTextTertiary)
             #else
-            Text("ホームの日記を長押しすると、ここへしまえます。")
+            Text("Press and hold an entry on Home to tuck it away here.")
                 .font(.ink(12.5, .regular))
                 .foregroundStyle(Color.inkTextTertiary)
             #endif

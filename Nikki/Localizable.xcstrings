@@ -1,0 +1,1735 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "# Morning of {{date}}\n- Looking forward to\n- Skipping today\n- One line": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "# {{date}} の朝\n- 今日たのしみなこと\n- 今日やめておくこと\n- ひとこと"
+          }
+        }
+      }
+    },
+    "# {{date}}\nWeather: {{weather}}\n## What went well\n## Note to tomorrow's me": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "# {{date}}\n天気: {{weather}}\n## よかったこと\n## 明日のじぶんへ"
+          }
+        }
+      }
+    },
+    "# {{place}} day 1\n## Where I walked\n## What I ate": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "# {{place}} 1日目\n## 歩いたところ\n## たべたもの"
+          }
+        }
+      }
+    },
+    "%@/month": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@/月"
+          }
+        }
+      }
+    },
+    "%lld months free": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld month free"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld months free"
+                }
+              }
+            }
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lldヶ月ぶんお得"
+          }
+        }
+      }
+    },
+    "%lld notebooks": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld notebook"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld notebooks"
+                }
+              }
+            }
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld冊"
+          }
+        }
+      }
+    },
+    "%lld seconds": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld second"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld seconds"
+                }
+              }
+            }
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld秒"
+          }
+        }
+      }
+    },
+    "/month": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "/月"
+          }
+        }
+      }
+    },
+    "/year": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "/年"
+          }
+        }
+      }
+    },
+    "3 lines in the morning": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "朝の3行"
+          }
+        }
+      }
+    },
+    "A locked box\nthat's yours alone.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "鍵のかかった、\nあなただけの箱。"
+          }
+        }
+      }
+    },
+    "A quiet day": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "何もない日"
+          }
+        }
+      }
+    },
+    "About": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このアプリについて"
+          }
+        }
+      }
+    },
+    "Active": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "加入中"
+          }
+        }
+      }
+    },
+    "All that reaches our servers is ciphertext no one can read.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "わたしたちのサーバーに届くのは、誰にも読めない暗号だけです。"
+          }
+        }
+      }
+    },
+    "Appearance": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "外観"
+          }
+        }
+      }
+    },
+    "Archive": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "アーカイブ"
+          }
+        }
+      }
+    },
+    "Archived entries": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "アーカイブした日記"
+          }
+        }
+      }
+    },
+    "Ash": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "薄鼠"
+          }
+        }
+      }
+    },
+    "Ash, Celadon, and Sakura. Unlock every paper color.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "薄鼠・青磁・桜鼠。紙の色をすべて解放。"
+          }
+        }
+      }
+    },
+    "At the bookstore": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本屋にて"
+          }
+        }
+      }
+    },
+    "Auto": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "自動"
+          }
+        }
+      }
+    },
+    "Auto-lock": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "自動ロック"
+          }
+        }
+      }
+    },
+    "Background image": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "背景画像"
+          }
+        }
+      }
+    },
+    "Blank page": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "白紙"
+          }
+        }
+      }
+    },
+    "Body": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本文"
+          }
+        }
+      }
+    },
+    "Buying the lifetime plan doesn't cancel your current subscription automatically. After purchasing, cancel it from your App Store subscription settings.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "買い切りを購入しても、加入中のサブスクリプションは自動では解約されません。購入後に App Store のサブスクリプション設定から解約してください。"
+          }
+        }
+      }
+    },
+    "Calendar": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カレンダー"
+          }
+        }
+      }
+    },
+    "Cancel": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "キャンセル"
+          }
+        }
+      }
+    },
+    "Celadon": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "青磁"
+          }
+        }
+      }
+    },
+    "Choose from Photos": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "写真から選ぶ"
+          }
+        }
+      }
+    },
+    "Choosing “%@” will discard what you've written.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「%@」を選ぶと、いま入力されている内容は消えます。"
+          }
+        }
+      }
+    },
+    "Cicadas were singing from early morning. Watering the pots on the balcony, I realized summer is here again.\n\nBrewed a strong iced coffee and drank it on the balcony\n\n## Things I bought\n\n- [x] Barley tea bags\n- [ ] Mosquito coil\n\n<img alt=\"Photo of the sunset\">\n\n<details><summary>Hospital notes (folded away)</summary></details>\n\n## From the evening\n\nThe wind turned cool, so I opened every window and drank barley tea.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "朝から蝉が鳴いていた。ベランダの鉢に水をやりながら、今年も夏が来たんだなと思う。\n\nアイスコーヒーを濃いめに淹れて、ベランダで飲んだ\n\n## 買ったもの\n\n- [x] 麦茶のパック\n- [ ] 蚊取り線香\n\n<img alt=\"夕焼けの写真\">\n\n<details><summary>病院メモ(たたんでおく)</summary></details>\n\n## 夕方から\n\n風が涼しくなってきたので、窓を全部開けて麦茶を飲んだ。"
+          }
+        }
+      }
+    },
+    "Cicadas were singing this morning. Summer is here again.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "朝から蝉が鳴いていた。今年も夏が来たんだなと思う。"
+          }
+        }
+      }
+    },
+    "Couldn't load prices.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "価格を読み込めませんでした。"
+          }
+        }
+      }
+    },
+    "Cream": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "生成"
+          }
+        }
+      }
+    },
+    "Create": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "作成"
+          }
+        }
+      }
+    },
+    "Create from “%@”": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「%@」から作成"
+          }
+        }
+      }
+    },
+    "Daily": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "毎日"
+          }
+        }
+      }
+    },
+    "Daily reflection": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一日の振り返り"
+          }
+        }
+      }
+    },
+    "Data": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "データ"
+          }
+        }
+      }
+    },
+    "Default notebook": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "既定のノート"
+          }
+        }
+      }
+    },
+    "Delete all entries": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "すべての日記を削除"
+          }
+        }
+      }
+    },
+    "Delete notebook": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ノートを削除"
+          }
+        }
+      }
+    },
+    "EEE": {
+      "comment": "DateFormatter のパターン。一覧の行の曜日(例: Sat / 土曜)",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EEE'曜'"
+          }
+        }
+      }
+    },
+    "EEEE, MMMM d": {
+      "comment": "DateFormatter のパターン。日記の日付(例: Saturday, July 18 / 7月18日 土曜日)",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "M月d日 EEEE"
+          }
+        }
+      }
+    },
+    "EEEE, MMMM d, y": {
+      "comment": "DateFormatter のパターン。テンプレートの {{date}} の表示値(例: Saturday, July 18, 2026 / 2026年7月18日 土曜日)",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "y年M月d日 EEEE"
+          }
+        }
+      }
+    },
+    "Edit notebook": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ノートの編集"
+          }
+        }
+      }
+    },
+    "Enable Face ID": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Face ID を有効にする"
+          }
+        }
+      }
+    },
+    "Enable Touch ID": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touch ID を有効にする"
+          }
+        }
+      }
+    },
+    "Enable auto-lock": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "自動ロックを有効にする"
+          }
+        }
+      }
+    },
+    "Encrypted on the device. The key never leaves it.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "端末の中で暗号化。鍵は端末の外に出ません。"
+          }
+        }
+      }
+    },
+    "Export as Markdown": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Markdown で書き出す"
+          }
+        }
+      }
+    },
+    "From now on,\nit's easy.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "つぎからは、\nかんたんに。"
+          }
+        }
+      }
+    },
+    "From now on,\njust a fingertip.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "つぎからは、\n指先だけで。"
+          }
+        }
+      }
+    },
+    "From now on,\njust your face.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "つぎからは、\n顔だけで。"
+          }
+        }
+      }
+    },
+    "Get started": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "はじめる"
+          }
+        }
+      }
+    },
+    "Kamakura": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "鎌倉"
+          }
+        }
+      }
+    },
+    "Large": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "大きめ"
+          }
+        }
+      }
+    },
+    "Left open, the screen locks itself. Face ID quietly opens it again.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "開きっぱなしの画面は自動でロック。Face ID がそっと鍵を開けます。"
+          }
+        }
+      }
+    },
+    "Left open, the screen locks itself. Touch ID quietly opens it again.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "開きっぱなしの画面は自動でロック。Touch ID がそっと鍵を開けます。"
+          }
+        }
+      }
+    },
+    "Left open, the screen locks itself. Your passcode quietly opens it again.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "開きっぱなしの画面は自動でロック。パスコードがそっと鍵を開けます。"
+          }
+        }
+      }
+    },
+    "Left open, the screen locks itself. Your password quietly opens it again.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "開きっぱなしの画面は自動でロック。パスワードがそっと鍵を開けます。"
+          }
+        }
+      }
+    },
+    "Lifetime": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "買い切り"
+          }
+        }
+      }
+    },
+    "List": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "リスト"
+          }
+        }
+      }
+    },
+    "Lock": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "鍵"
+          }
+        }
+      }
+    },
+    "Lock it": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "鍵をかける"
+          }
+        }
+      }
+    },
+    "Locked, just in case": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "鍵をかけておきました"
+          }
+        }
+      }
+    },
+    "MMMM d, y": {
+      "comment": "DateFormatter のパターン。テンプレートの {{date}} の本文値(例: July 18, 2026 / 2026年7月18日)",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "y年M月d日"
+          }
+        }
+      }
+    },
+    "MMMM y": {
+      "comment": "DateFormatter のパターン。月の見出し(例: July 2026 / 2026年7月)",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "y年M月"
+          }
+        }
+      }
+    },
+    "Make your journal look more like you.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "日記の見た目を、もっとじぶん好みに。"
+          }
+        }
+      }
+    },
+    "Manage subscription": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "サブスクリプションを管理"
+          }
+        }
+      }
+    },
+    "Middle of the long weekend": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "連休の中日"
+          }
+        }
+      }
+    },
+    "Monthly": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "月ごと"
+          }
+        }
+      }
+    },
+    "More themes": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "テーマを増やす"
+          }
+        }
+      }
+    },
+    "Name": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "名前"
+          }
+        }
+      }
+    },
+    "New entries in this notebook start with this content. {{date}} is replaced with the entry's date.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このノートの新しい日記は、この内容から書きはじめます。{{date}} は日記の日付に置き換わります。"
+          }
+        }
+      }
+    },
+    "New entry": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新しい日記"
+          }
+        }
+      }
+    },
+    "New notebook": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新しいノート"
+          }
+        }
+      }
+    },
+    "Next": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "次へ"
+          }
+        }
+      }
+    },
+    "Nikki 1.0.0 — Your journal stays on this device.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nikki 1.0.0 — あなたの日記は、この端末の中に。"
+          }
+        }
+      }
+    },
+    "No AI, no analytics, no sharing. Just a journal.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AI も、解析も、共有もありません。ただの日記帳です。"
+          }
+        }
+      }
+    },
+    "No archived entries.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "アーカイブした日記はありません。"
+          }
+        }
+      }
+    },
+    "No entries yet.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "まだ日記はありません。"
+          }
+        }
+      }
+    },
+    "No purchases to restore.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "復元できる購入が見つかりませんでした。"
+          }
+        }
+      }
+    },
+    "None": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "なし"
+          }
+        }
+      }
+    },
+    "Not registered": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未登録"
+          }
+        }
+      }
+    },
+    "Not set": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未設定"
+          }
+        }
+      }
+    },
+    "Not subscribed": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未加入"
+          }
+        }
+      }
+    },
+    "Notebook name": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ノートの名前"
+          }
+        }
+      }
+    },
+    "Notebooks": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ノート"
+          }
+        }
+      }
+    },
+    "Nothing found.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "みつかりませんでした。"
+          }
+        }
+      }
+    },
+    "Nothing special happened, and that was the good part. The evening breeze felt cool, so I opened every window.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "特別なことは何もなかったけれど、それがよかった。夕方の風がすこし涼しくて、窓を全部開けた。"
+          }
+        }
+      }
+    },
+    "Only you can read it": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "読めるのは、あなただけ"
+          }
+        }
+      }
+    },
+    "Open source licenses": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OSS ライセンス"
+          }
+        }
+      }
+    },
+    "Open with Face ID": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Face ID で開く"
+          }
+        }
+      }
+    },
+    "Open with Touch ID": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touch ID で開く"
+          }
+        }
+      }
+    },
+    "Open with passcode": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "パスコードで開く"
+          }
+        }
+      }
+    },
+    "Open with password": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "パスワードで開く"
+          }
+        }
+      }
+    },
+    "Paper color": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "紙の色"
+          }
+        }
+      }
+    },
+    "Passkey": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "パスキー"
+          }
+        }
+      }
+    },
+    "Pay once, keep forever": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一度の購入で、ずっと"
+          }
+        }
+      }
+    },
+    "Press and hold an entry on Home to tuck it away here.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ホームの日記を長押しすると、ここへしまえます。"
+          }
+        }
+      }
+    },
+    "Preview": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "プレビュー"
+          }
+        }
+      }
+    },
+    "Privacy": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "プライバシー"
+          }
+        }
+      }
+    },
+    "Processing…": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "処理中…"
+          }
+        }
+      }
+    },
+    "Purchases couldn't be restored. %@": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "購入を復元できませんでした。%@"
+          }
+        }
+      }
+    },
+    "Rain all day. I forgot my umbrella and stood at the station, but fifteen minutes of shelter wasn't bad at all.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一日じゅう雨。傘を忘れて駅で立ち尽くしたけれど、雨宿りの15分は悪くなかった。"
+          }
+        }
+      }
+    },
+    "Register a passkey": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "パスキーを登録する"
+          }
+        }
+      }
+    },
+    "Registered": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "登録済み"
+          }
+        }
+      }
+    },
+    "Reorder — release to confirm": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "並び替え — 指を離すと確定"
+          }
+        }
+      }
+    },
+    "Replace": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "置き換える"
+          }
+        }
+      }
+    },
+    "Replace current content": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "入力内容の置き換え"
+          }
+        }
+      }
+    },
+    "Restore purchases": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "購入の復元"
+          }
+        }
+      }
+    },
+    "Retry": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "再読み込み"
+          }
+        }
+      }
+    },
+    "Right-click an entry on Home to tuck it away here.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ホームの日記を右クリックすると、ここへしまえます。"
+          }
+        }
+      }
+    },
+    "Sakura": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "桜鼠"
+          }
+        }
+      }
+    },
+    "Search your journal": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "日記をさがす"
+          }
+        }
+      }
+    },
+    "Seconds until auto-lock": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "自動ロックまでの秒数"
+          }
+        }
+      }
+    },
+    "Settings": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "設定"
+          }
+        }
+      }
+    },
+    "Small": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "小さめ"
+          }
+        }
+      }
+    },
+    "Sound of rain": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "雨の音"
+          }
+        }
+      }
+    },
+    "Standard": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "標準"
+          }
+        }
+      }
+    },
+    "Start Nikki Plus": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nikki Plus をはじめる"
+          }
+        }
+      }
+    },
+    "Start with this": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この内容ではじめる"
+          }
+        }
+      }
+    },
+    "Start your first one with the pen at the bottom right.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最初の一枚は、右下のペンから。"
+          }
+        }
+      }
+    },
+    "Summer begins": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "梅雨明け"
+          }
+        }
+      }
+    },
+    "Sunny, then a shower": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "晴れのち夕立"
+          }
+        }
+      }
+    },
+    "Switched the closet to summer. Last year's shirts still smelled like last summer.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "クローゼットを夏仕様に。去年の夏のシャツから、去年の夏のにおいがした。"
+          }
+        }
+      }
+    },
+    "Template": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "書き出し"
+          }
+        }
+      }
+    },
+    "Terms of Use": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "利用規約"
+          }
+        }
+      }
+    },
+    "Text size": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "文字の大きさ"
+          }
+        }
+      }
+    },
+    "The purchase couldn't be completed. %@": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "購入を完了できませんでした。%@"
+          }
+        }
+      }
+    },
+    "The purchase went through, but the plan couldn't be confirmed yet. Please try “Restore purchases” in a little while.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "購入は完了しましたが、プランの反映を確認できませんでした。時間をおいて「購入の復元」をお試しください。"
+          }
+        }
+      }
+    },
+    "Theme": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "テーマ"
+          }
+        }
+      }
+    },
+    "They didn't have the book I wanted, yet I left with three. These little detours pay off later.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "目当ての本はなかったのに、気づいたら3冊買っていた。こういう寄り道のほうが、あとで効いてくる気がする。"
+          }
+        }
+      }
+    },
+    "This deletes every entry, including archived ones. This cannot be undone.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "アーカイブした日記も含めて、すべての日記を削除します。この操作は取り消せません。"
+          }
+        }
+      }
+    },
+    "This deletes “%@” and its template. Entries in this notebook are kept.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「%@」と書き出しのテンプレートを削除します。このノートの日記は削除されずに残ります。"
+          }
+        }
+      }
+    },
+    "Title": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "タイトル"
+          }
+        }
+      }
+    },
+    "Today's mood": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "きょうの気分"
+          }
+        }
+      }
+    },
+    "Today's weather": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "きょうの天気"
+          }
+        }
+      }
+    },
+    "Travel log": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "旅の記録"
+          }
+        }
+      }
+    },
+    "Try searching with different words.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ちがう言葉で、さがしてみてください。"
+          }
+        }
+      }
+    },
+    "Type here": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ここに入力"
+          }
+        }
+      }
+    },
+    "Unarchive": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "アーカイブから戻す"
+          }
+        }
+      }
+    },
+    "Unlock to pick up right where you left off": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "解除すると、さっきの続きに戻ります"
+          }
+        }
+      }
+    },
+    "Unlock with Face ID": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Face ID で解除"
+          }
+        }
+      }
+    },
+    "Unlock your journal": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "日記のロックを解除します"
+          }
+        }
+      }
+    },
+    "Wardrobe change": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "衣替え"
+          }
+        }
+      }
+    },
+    "Weekly": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "毎週"
+          }
+        }
+      }
+    },
+    "Went nowhere and sorted the photos that had piled up. A day I'll never reread, but want to keep.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "どこへも行かず、たまっていた写真を整理した。読み返すことはないけれど、残しておきたい日。"
+          }
+        }
+      }
+    },
+    "What you fill in goes straight into the entry.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "埋めた言葉が、そのまま本文に入ります。"
+          }
+        }
+      }
+    },
+    "What you write here,\nonly you can read.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ここに書くことは、\nあなたしか読めません。"
+          }
+        }
+      }
+    },
+    "Where did you go?": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "どこへ行った?"
+          }
+        }
+      }
+    },
+    "Which page will you write on today?": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今日はどの紙に書きますか。"
+          }
+        }
+      }
+    },
+    "White": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "白"
+          }
+        }
+      }
+    },
+    "Write": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "書く"
+          }
+        }
+      }
+    },
+    "Writing": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "書くこと"
+          }
+        }
+      }
+    },
+    "Yearly": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "年ごと"
+          }
+        }
+      }
+    },
+    "You own the lifetime purchase, so Nikki Plus stays active forever.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "買い切りを購入済みのため、Nikki Plus はずっと有効です。"
+          }
+        }
+      }
+    },
+    "Your entries live on this device first.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "日記は、まずこの端末の中に置かれます。"
+          }
+        }
+      }
+    },
+    "Your hands rested for a while,\nso we quietly locked the page.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "しばらく手が止まっていたので、\nそっとロックしました。"
+          }
+        }
+      }
+    },
+    "Your journal is encrypted on this device. Not even we, the developers, can read it.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "日記はこの端末の中で暗号化されます。わたしたち開発者にも、中身を見ることはできません。"
+          }
+        }
+      }
+    },
+    "Your theme is saved only on this device.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "テーマはこの端末の中だけに保存されます。"
+          }
+        }
+      }
+    },
+    "https://bannzai.github.io/nikki/legal/privacy-en.html": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "https://bannzai.github.io/nikki/legal/privacy-ja.html"
+          }
+        }
+      }
+    },
+    "https://bannzai.github.io/nikki/legal/terms-en.html": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "https://bannzai.github.io/nikki/legal/terms-ja.html"
+          }
+        }
+      }
+    },
+    "¥250/month": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¥250/月"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

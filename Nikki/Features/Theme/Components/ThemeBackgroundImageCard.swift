@@ -4,9 +4,9 @@ import SwiftUI
 struct ThemeBackgroundImageCard: View {
     var body: some View {
         InkListSection {
-            InkListRow(title: "写真から選ぶ", action: {})
+            InkListRow(title: String(localized: "Choose from Photos"), action: {})
             HStack(spacing: 8) {
-                Text("なし")
+                Text("None")
                     .font(.ink(14.5, .regular))
                     .foregroundStyle(Color.inkTextSecondary)
                 Spacer(minLength: 8)

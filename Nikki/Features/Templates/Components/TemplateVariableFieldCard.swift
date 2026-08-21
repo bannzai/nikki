@@ -15,7 +15,7 @@ struct TemplateVariableFieldCard: View {
                     .foregroundStyle(Color.inkLabelGray)
                 if field.isAuto {
                     Spacer(minLength: 8)
-                    Text("自動")
+                    Text("Auto")
                         .font(.inkMono(10.5))
                         .foregroundStyle(Color.inkTextTertiary)
                         .padding(.horizontal, 7)
