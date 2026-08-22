@@ -545,6 +545,16 @@
         }
       }
     },
+    "Done": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "完了"
+          }
+        }
+      }
+    },
     "EEE": {
       "comment": "DateFormatter のパターン。一覧の行の曜日(例: Sat / 土曜)",
       "localizations": {

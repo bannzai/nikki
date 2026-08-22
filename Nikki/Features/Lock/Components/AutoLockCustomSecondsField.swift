@@ -32,9 +32,24 @@ struct AutoLockCustomSecondsField: View {
                         commitCustomSeconds()
                     }
                 }
+                #if os(iOS)
+                // .numberPad にはリターンキーがなく onSubmit が発火しないため、キーボード上に確定の導線を置く。
+                .toolbar {
+                    ToolbarItemGroup(placement: .keyboard) {
+                        Spacer()
+                        Button("Done") {
+                            fieldIsFocused = false
+                        }
+                    }
+                }
+                #endif
             Text("seconds")
                 .font(.ink(13.5, .regular))
                 .foregroundStyle(Color.inkTextSecondary)
+        }
+        // フォーカスしたまま画面を離れた(戻る等)場合もフォーカス喪失イベントに頼らず入力を確定する。
+        .onDisappear {
+            commitCustomSeconds()
         }
     }
 
