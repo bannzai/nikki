@@ -8,7 +8,6 @@ extension UserDefaults {
     enum BoolKey: String, CaseIterable {
         case onboardingCompleted
         case faceIDUnlockEnabled
-        case passkeyRegistered
         /// 既定のテンプレートのシード(または既存データの確認)をこの端末で終えたかどうか。
         /// 「すべてのテンプレートを削除」した空の状態を、次回起動のシードが勝手に復活させないための目印。
         case notebooksSeeded

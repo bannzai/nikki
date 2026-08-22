@@ -1,9 +1,9 @@
 import SwiftUI
 
-/// オンボーディング 1e: 生体認証(Face ID / Touch ID) / パスキー登録を促す最終ステップ。
+/// オンボーディング 1e: 生体認証(Face ID / Touch ID)を促す最終ステップ。
 /// 端末で使える生体認証に合わせて図像と文言を出し分ける。
 struct OnboardingBiometricPage: View {
-    /// オンボーディングの完了状態。生体認証 / パスキーの実登録は未実装のため、どちらのボタンも完了として扱う。
+    /// オンボーディングの完了状態。生体認証の実登録は OS 設定に委ねるため、ボタンは完了として扱う。
     @Binding var onboardingCompleted: Bool
 
     var body: some View {
@@ -45,16 +45,11 @@ struct OnboardingBiometricPage: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
 
-                VStack(spacing: 12) {
-                    Button(primaryButtonTitle) {
-                        onboardingCompleted = true
-                    }
-                    .buttonStyle(InkPrimaryButtonStyle())
-                    Button("Register a passkey") {
-                        onboardingCompleted = true
-                    }
-                    .buttonStyle(InkSecondaryButtonStyle())
+                // パスキーは未実装のため「パスキーを登録する」ボタンは置かない(実装時に戻す。issue #84)。
+                Button(primaryButtonTitle) {
+                    onboardingCompleted = true
                 }
+                .buttonStyle(InkPrimaryButtonStyle())
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .padding(.horizontal, 28)

@@ -6,19 +6,14 @@ import UniformTypeIdentifiers
 /// 各行の選択・切り替えを AppStorage の typed key へ永続化する。
 struct SettingsPage: View {
     @AppStorage(.faceIDUnlockEnabled) var faceIDUnlockEnabled: Bool = true
-    /// パスキーの登録状態。登録フロー自体は未実装のため、現状は常に未登録のまま表示だけ実値に追従する。
-    @AppStorage(.passkeyRegistered) var passkeyRegistered: Bool = false
     // README の「5秒タイプがなかったらロック」に合わせた既定値。
     @AppStorage(.autoLockSeconds) var autoLockSeconds: Int = 5
-    /// 既定のテンプレートの id(UUID 文字列)。空のときは未設定。
-    @AppStorage(.defaultNotebookID) var defaultNotebookID: String = ""
     @AppStorage(.textSize) var textSize: TextSize = .standard
     // 見本(1n)の初期選択が「生成」(プリセット2番目)のため。
     @AppStorage(.paperColorPresetIndex) var paperColorPresetIndex: Int = 1
 
     @State var notebookSettingsIsPresented = false
-    @State var defaultNotebookIsPresented = false
-    @State var autoLockConfirmationDialogIsPresented = false
+    @State var autoLockIsPresented = false
     @State var textSizeConfirmationDialogIsPresented = false
     @State var themeIsPresented = false
     @State var licenseIsPresented = false
@@ -53,34 +48,20 @@ struct SettingsPage: View {
                                 value: String(localized: "\(notebooks.count) templates"),
                                 action: { notebookSettingsIsPresented = true }
                             )
-                            // テンプレートが1件の間は選択肢がないため、選択肢が生まれる2件以上のときだけ行を出す。
-                            if notebooks.count >= 2 {
-                                InkListRow(
-                                    title: String(localized: "Default template"),
-                                    // 未設定のときは新規作成と同じ解決(先頭のテンプレート)を表示する。
-                                    value: (notebooks.first { $0.id.uuidString == defaultNotebookID } ?? notebooks.first)?.name ?? String(localized: "Not set"),
-                                    action: { defaultNotebookIsPresented = true }
-                                )
-                            }
                             InkListRow(
                                 title: String(localized: "Auto-lock"),
-                                value: String(localized: "\(autoLockSeconds) seconds"),
+                                // Plus 失効時は自動ロックのフォールバックと同じ実効値を表示する。
+                                value: String(localized: "\(effectiveAutoLockSeconds(storedSeconds: autoLockSeconds, plusActive: plusActive)) seconds"),
                                 showsSeparator: false,
-                                action: { autoLockConfirmationDialogIsPresented = true }
+                                action: { autoLockIsPresented = true }
                             )
                         }
                         .padding(.bottom, 20)
 
                         SettingsSectionLabel(text: String(localized: "Lock"))
                         InkListSection {
-                            InkListRow(title: String(localized: "Unlock with Face ID"), trailing: AnyView(SettingsToggle(isOn: $faceIDUnlockEnabled)))
-                            // パスキーの登録フローが未実装で遷移先がないため、シェブロンは出さない。
-                            InkListRow(
-                                title: String(localized: "Passkey"),
-                                value: passkeyRegistered ? String(localized: "Registered") : String(localized: "Not registered"),
-                                showsChevron: false,
-                                showsSeparator: false
-                            )
+                            // パスキーは未実装のため行を置かない(実装したらここに登録行を戻す。issue #84)。
+                            InkListRow(title: String(localized: "Unlock with Face ID"), showsSeparator: false, trailing: AnyView(SettingsToggle(isOn: $faceIDUnlockEnabled)))
                         }
                         .padding(.bottom, 20)
 
@@ -161,8 +142,8 @@ struct SettingsPage: View {
         .navigationDestination(isPresented: $notebookSettingsIsPresented) {
             NotebookSettingsPage()
         }
-        .navigationDestination(isPresented: $defaultNotebookIsPresented) {
-            NotebookDefaultPage()
+        .navigationDestination(isPresented: $autoLockIsPresented) {
+            AutoLockPage()
         }
         .sheet(isPresented: $paywallSheetIsPresented) {
             PaywallPage()
@@ -174,14 +155,6 @@ struct SettingsPage: View {
             }
         } message: {
             Text("This deletes every entry, including archived ones. This cannot be undone.")
-        }
-        .confirmationDialog("Seconds until auto-lock", isPresented: $autoLockConfirmationDialogIsPresented, titleVisibility: .visible) {
-            // 既定の5秒(README)を最短に、離席しがちな使い方向けの緩い選択肢を並べる。
-            ForEach([5, 10, 30, 60], id: \.self) { seconds in
-                Button("\(seconds) seconds") {
-                    autoLockSeconds = seconds
-                }
-            }
         }
         .confirmationDialog("Text size", isPresented: $textSizeConfirmationDialogIsPresented, titleVisibility: .visible) {
             ForEach(TextSize.allCases, id: \.self) { size in
