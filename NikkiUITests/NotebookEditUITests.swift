@@ -1,6 +1,6 @@
 import XCTest
 
-/// ノート編集画面で名前を1文字ずつバックスペースで空にしたまま戻ったとき、削除途中の1文字ではなく
+/// テンプレート編集画面で名前を1文字ずつバックスペースで空にしたまま戻ったとき、削除途中の1文字ではなく
 /// 元の名前(編集開始時点の名前)が残ることを検証する (issue #79)。
 /// 「1文字ずつ削除して離脱」というイベントの並びが本質の不具合のため、実イベントを送る XCUITest で機械検証する。
 ///
@@ -28,17 +28,17 @@ nonisolated final class NotebookEditUITests: XCTestCase {
         return app
     }
 
-    /// 設定 > ノート > 「一日の振り返り」の編集画面まで進み、名前の入力欄を返す。
+    /// 設定 > テンプレート > 「一日の振り返り」の編集画面まで進み、名前の入力欄を返す。
     @MainActor
     private func openedNotebookNameField(app: XCUIApplication) -> XCUIElement {
-        // 設定のノート行は「ノート」の題と「4冊」の値が1つのラベルに結合される。「既定のノート」行と
-        // 取り違えないよう、冊数の値で引く。
-        let notebooksRow = app.buttons.matching(NSPredicate(format: "label CONTAINS %@", "冊")).firstMatch
-        XCTAssertTrue(notebooksRow.waitForExistence(timeout: 10), "設定にノートの行が表示されること")
+        // 設定のテンプレート行は「テンプレート」の題と「4件」の値が1つのラベルに結合される。「既定のテンプレート」行と
+        // 取り違えないよう、件数の値で引く。
+        let notebooksRow = app.buttons.matching(NSPredicate(format: "label CONTAINS %@", "件")).firstMatch
+        XCTAssertTrue(notebooksRow.waitForExistence(timeout: 10), "設定にテンプレートの行が表示されること")
         notebooksRow.tap()
 
         let notebookRow = app.buttons.matching(NSPredicate(format: "label CONTAINS %@", "一日の振り返り")).firstMatch
-        XCTAssertTrue(notebookRow.waitForExistence(timeout: 5), "ノート一覧に「一日の振り返り」が表示されること")
+        XCTAssertTrue(notebookRow.waitForExistence(timeout: 5), "テンプレート一覧に「一日の振り返り」が表示されること")
         notebookRow.tap()
 
         // 編集画面の入力欄は名前の TextField 1つだけ(書き出しは TextEditor)。
@@ -69,7 +69,7 @@ nonisolated final class NotebookEditUITests: XCTestCase {
         // 空の TextField の value は空文字ではなくプレースホルダ文字列として現れることがあるため、両方を許容する。
         let nameFieldValue = nameField.value as? String
         XCTAssertTrue(
-            nameFieldValue == nil || nameFieldValue == "" || nameFieldValue == "ノートの名前",
+            nameFieldValue == nil || nameFieldValue == "" || nameFieldValue == "テンプレートの名前",
             "名前欄が空になること (value: \(nameFieldValue ?? "nil"))"
         )
 
