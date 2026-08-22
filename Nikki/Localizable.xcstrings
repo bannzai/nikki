@@ -285,6 +285,16 @@
         }
       }
     },
+    "Auto-lock by the second": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1秒きざみの自動ロック"
+          }
+        }
+      }
+    },
     "Background image": {
       "localizations": {
         "ja": {
@@ -451,6 +461,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "「%@」から作成"
+          }
+        }
+      }
+    },
+    "Custom": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カスタム"
           }
         }
       }
@@ -1270,6 +1290,16 @@
         }
       }
     },
+    "Set the seconds until auto-lock exactly how you like, down to the second.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "自動ロックまでの秒数を1秒きざみで自由に設定できます。"
+          }
+        }
+      }
+    },
     "Settings": {
       "localizations": {
         "ja": {
@@ -1660,6 +1690,16 @@
         }
       }
     },
+    "With Nikki Plus, set the seconds until auto-lock exactly how you like, down to the second.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nikki Plus では、自動ロックまでの秒数を1秒きざみで自由に設定できます。"
+          }
+        }
+      }
+    },
     "Write": {
       "localizations": {
         "ja": {
@@ -1766,6 +1806,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "https://bannzai.github.io/nikki/legal/terms-ja.html"
+          }
+        }
+      }
+    },
+    "seconds": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "秒"
           }
         }
       }

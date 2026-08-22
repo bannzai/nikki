@@ -102,7 +102,8 @@ struct RootPage: View {
                     return
                 }
                 #endif
-                try? await Task.sleep(for: .seconds(autoLockSeconds))
+                // Plus 失効中はプリセット外のカスタム秒数を既定へ倒した実効値でロックする。
+                try? await Task.sleep(for: .seconds(effectiveAutoLockSeconds(storedSeconds: autoLockSeconds, plusActive: plusActive)))
                 if Task.isCancelled {
                     return
                 }

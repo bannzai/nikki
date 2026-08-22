@@ -3,7 +3,7 @@ import RevenueCat
 
 /// サブスク訴求 / ペイウォール画面(1q「Nikki Plus」)。
 /// 料金プランは offering `default` の packages から表示し、購入・復元は RevenueCat 経由で行う。
-/// 特典の記載は現時点で実際に解放される機能(プレミアムテーマ)のみに絞る(同期・テンプレート等は各ゲートの実装時に追加する)。
+/// 特典の記載は実際に解放される機能(プレミアムテーマ・自動ロックのカスタム秒数)のみに絞る(同期等は各ゲートの実装時に追加する)。
 struct PaywallPage: View {
     /// 見本(1q)では年プランを選択済みとして墨枠強調しているため、初期選択は年プラン。
     /// offering に年プランが無い場合は loadOffering() で購入可能なプランへ倒す。
@@ -51,6 +51,9 @@ struct PaywallPage: View {
                             .padding(.bottom, 26)
 
                         PaywallBenefitRow(title: String(localized: "More themes"), description: String(localized: "Ash, Celadon, and Sakura. Unlock every paper color."))
+                            .padding(.bottom, 16)
+
+                        PaywallBenefitRow(title: String(localized: "Auto-lock by the second"), description: String(localized: "Set the seconds until auto-lock exactly how you like, down to the second."))
                             .padding(.bottom, 28)
 
                         if lifetimePurchased {
