@@ -147,11 +147,12 @@ enum SampleData {
         }
     }
 
-    /// 初回起動時にシードする既定ノート。ノートを意識させない方針のため、
+    /// 初回起動のシードと「既定のテンプレートを復元」で使う既定ノート。ノートを意識させない方針のため、
     /// {{date}} だけのテンプレートを持つ白紙の1冊だけを用意し、新規日記は自動でこのノートに入る。
-    static var seedNotebooks: [JournalNotebook] {
+    /// 復元では既存テンプレートの末尾に並べるため、表示順を引数から受け取る(初回シードは 0)。
+    static func seedNotebooks(sortOrder: Int) -> [JournalNotebook] {
         let seed = notebookSeeds[0]
-        let notebook = JournalNotebook(name: seed.name, reminderFrequency: seed.reminderFrequency, sortOrder: 0)
+        let notebook = JournalNotebook(name: seed.name, reminderFrequency: seed.reminderFrequency, sortOrder: sortOrder)
         notebook.add(template: JournalTemplate(name: seed.name, markdown: seed.markdown, sortOrder: 0))
         return [notebook]
     }

@@ -87,3 +87,21 @@ extension ModelContext {
         }
     }
 }
+
+// MARK: - 全削除
+
+extension ModelContext {
+    /// すべてのテンプレート(ノートと書き出しの JournalTemplate)を削除して保存する。
+    /// 設定 > テンプレート の「すべてのテンプレートを削除」から呼ぶ。日記はノート削除の nullify ルールで残る。
+    /// ノート導入前のストアに残った、どのノートにも属さない JournalTemplate も一緒に消すため、両モデルを直接全件削除する。
+    /// delete(model:) のストアレベル一括削除は context を経由せず CloudKit へ削除が伝播しないため、1件ずつ削除する。
+    func deleteAllJournalNotebooks() throws {
+        for notebook in try fetch(FetchDescriptor<JournalNotebook>()) {
+            delete(notebook)
+        }
+        for template in try fetch(FetchDescriptor<JournalTemplate>()) {
+            delete(template)
+        }
+        try save()
+    }
+}
