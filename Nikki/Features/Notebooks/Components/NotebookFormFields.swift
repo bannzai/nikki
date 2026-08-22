@@ -1,7 +1,7 @@
 import SwiftUI
 
-/// ノートの作成・編集フォームの入力欄(名前 + 書き出しのテンプレート markdown)。
-/// 作成(まだノートが無い)と編集(ノートへ書き戻す)の両方から使うため、値は Binding で受け取る。
+/// テンプレートの作成・編集フォームの入力欄(名前 + 書き出しの markdown)。
+/// 作成(まだテンプレートが無い)と編集(テンプレートへ書き戻す)の両方から使うため、値は Binding で受け取る。
 struct NotebookFormFields: View {
     @Binding var name: String
     @Binding var markdown: String
@@ -16,9 +16,9 @@ struct NotebookFormFields: View {
                     .padding(.bottom, 8)
 
                 TextField(
-                    "Notebook name",
+                    "Template name",
                     text: $name,
-                    prompt: Text("Notebook name")
+                    prompt: Text("Template name")
                         .font(.ink(14.5, .regular))
                         .foregroundStyle(Color.inkTextTertiary)
                 )
@@ -33,7 +33,7 @@ struct NotebookFormFields: View {
                 )
                 .padding(.bottom, 24)
 
-                Text("Template")
+                Text("Content")
                     .font(.ink(12, .medium))
                     .foregroundStyle(Color.inkTextTertiary)
                     .padding(.horizontal, 2)
@@ -55,7 +55,7 @@ struct NotebookFormFields: View {
                     )
                     .padding(.bottom, 8)
 
-                Text("New entries in this notebook start with this content. {{date}} is replaced with the entry's date.")
+                Text("New entries using this template start with this content. {{date}} is replaced with the entry's date.")
                     .font(.ink(11.5, .regular))
                     .foregroundStyle(Color.inkTextTertiary)
                     .lineSpacing(inkLineSpacing(fontSize: 11.5, multiplier: 1.9))

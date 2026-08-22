@@ -1,8 +1,7 @@
 import SwiftUI
 import SwiftData
 
-/// 設定 > ノート のノート管理一覧。行のタップで編集へ、末尾の「＋ 新しいノート」で作成へ進む。
-/// ノートを2冊以上に増やしたい人向けの導線のため、普段の書く流れには出さず設定の中に置く。
+/// 設定 > テンプレート のテンプレート管理一覧。行のタップで編集へ、末尾の「＋ 新しいテンプレート」で作成へ進む。
 struct NotebookSettingsPage: View {
     @Query(sort: \JournalNotebook.sortOrder) var notebooks: [JournalNotebook]
 
@@ -16,7 +15,7 @@ struct NotebookSettingsPage: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            InkNavBar(leading: .back, center: .title(String(localized: "Notebooks")), onLeading: { dismiss() })
+            InkNavBar(leading: .back, center: .title(String(localized: "Templates")), onLeading: { dismiss() })
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     InkListSection {

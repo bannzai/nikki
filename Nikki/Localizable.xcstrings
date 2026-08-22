@@ -69,34 +69,6 @@
         }
       }
     },
-    "%lld notebooks": {
-      "localizations": {
-        "en": {
-          "variations": {
-            "plural": {
-              "one": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "%lld notebook"
-                }
-              },
-              "other": {
-                "stringUnit": {
-                  "state": "translated",
-                  "value": "%lld notebooks"
-                }
-              }
-            }
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld冊"
-          }
-        }
-      }
-    },
     "%lld seconds": {
       "localizations": {
         "en": {
@@ -121,6 +93,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld秒"
+          }
+        }
+      }
+    },
+    "%lld templates": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld template"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld templates"
+                }
+              }
+            }
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld件"
           }
         }
       }
@@ -365,6 +365,16 @@
         }
       }
     },
+    "Choose the template for this entry.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この日記に使うテンプレートを選べます。"
+          }
+        }
+      }
+    },
     "Choosing “%@” will discard what you've written.": {
       "localizations": {
         "ja": {
@@ -391,6 +401,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "朝から蝉が鳴いていた。今年も夏が来たんだなと思う。"
+          }
+        }
+      }
+    },
+    "Content": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "書き出し"
           }
         }
       }
@@ -465,12 +485,12 @@
         }
       }
     },
-    "Default notebook": {
+    "Default template": {
       "localizations": {
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "既定のノート"
+            "value": "既定のテンプレート"
           }
         }
       }
@@ -485,12 +505,12 @@
         }
       }
     },
-    "Delete notebook": {
+    "Delete template": {
       "localizations": {
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "ノートを削除"
+            "value": "テンプレートを削除"
           }
         }
       }
@@ -528,12 +548,12 @@
         }
       }
     },
-    "Edit notebook": {
+    "Edit template": {
       "localizations": {
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "ノートの編集"
+            "value": "テンプレートの編集"
           }
         }
       }
@@ -820,12 +840,12 @@
         }
       }
     },
-    "New entries in this notebook start with this content. {{date}} is replaced with the entry's date.": {
+    "New entries using this template start with this content. {{date}} is replaced with the entry's date.": {
       "localizations": {
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "このノートの新しい日記は、この内容から書きはじめます。{{date}} は日記の日付に置き換わります。"
+            "value": "このテンプレートの新しい日記は、この内容から書きはじめます。{{date}} は日記の日付に置き換わります。"
           }
         }
       }
@@ -840,12 +860,12 @@
         }
       }
     },
-    "New notebook": {
+    "New template": {
       "localizations": {
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "新しいノート"
+            "value": "新しいテンプレート"
           }
         }
       }
@@ -946,26 +966,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "未加入"
-          }
-        }
-      }
-    },
-    "Notebook name": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ノートの名前"
-          }
-        }
-      }
-    },
-    "Notebooks": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ノート"
           }
         }
       }
@@ -1355,7 +1355,27 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "書き出し"
+            "value": "テンプレート"
+          }
+        }
+      }
+    },
+    "Template name": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "テンプレートの名前"
+          }
+        }
+      }
+    },
+    "Templates": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "テンプレート"
           }
         }
       }
@@ -1430,12 +1450,12 @@
         }
       }
     },
-    "This deletes “%@” and its template. Entries in this notebook are kept.": {
+    "This deletes “%@”. Entries written with this template are kept.": {
       "localizations": {
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "「%@」と書き出しのテンプレートを削除します。このノートの日記は削除されずに残ります。"
+            "value": "「%@」を削除します。このテンプレートで書いた日記は削除されずに残ります。"
           }
         }
       }
@@ -1596,16 +1616,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "どこへ行った?"
-          }
-        }
-      }
-    },
-    "Which page will you write on today?": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "今日はどの紙に書きますか。"
           }
         }
       }
