@@ -1,7 +1,7 @@
 ---
 feature: Editor
 verification: mobile-mcp
-last_verified_commit: 2f8b4ab97dc9113a82b5f76671c2de80fc1f55e5
+last_verified_commit: 0921aeff51f8f93a4905449ddfad41b38cd374ee
 last_verified_at: 2026-08-22
 ---
 
@@ -25,12 +25,17 @@ last_verified_at: 2026-08-22
 - [x] **過去のタイトルは本文の見出しへ移る**: タイトル付きの古い日記を開くと、タイトルが本文先頭の「# タイトル」見出しに移って表示され、内容は失われない
   - 自動化: NikkiTests/JournalEntryTests.swift (mergeTitleIntoBodyMarkdown) + manual（開いた直後の本文先頭を目視で確認する）
   - 2026-08-22 macOS (Debug、カタログの entryList) でタイトル「梅雨明け」の日記を開くと、本文先頭が「# 梅雨明け」になった (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/c7fc112d-35c2-49af-aa6b-d6e2406d14f6.png)
+- [x] **日本語入力の変換中テキストが消えない**: 日本語 IME でひらがなを続けて入力しても、変換中 (未確定) のテキストが入力途中で消えない。確定した文字も残る (issue #86 の再発確認)
+  - 自動化: manual（IME の変換中状態はプログラム入力では作れず、実キーボード入力での確認が必要なため）
+  - 2026-08-22 macOS (Debug) で日本語入力ソースからローマ字で「kakikukeko」を 1.2 秒間隔で入力し、変換中の「かきくけこ」が全文字保持された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/d7071786-3b64-41ab-921f-8d0647cb7072.png)。修正前ビルドでは同じ操作で変換中テキストが全て消えることを再現済み (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/86f3c71e-9c30-487d-814b-a4960896f6dc.png)
+  - 2026-08-22 ローカル iOS Simulator のかなキーボードで「かたなはま」を 2 秒前後の間隔で入力し、変換中テキストが全文字保持された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/980a7c16-1a28-459f-b7f6-410fc16cb34e.png)
 - [x] **日付が上部に出る**: 画面上部に日記の日付が「7月18日 土曜日」の形式 (英語表示では「Saturday, July 18」) で出る
   - 自動化: manual（日付の表記を目視で確認する）
   - 2026-08-22 ローカル iOS Simulator (日本語) で「8月22日 土曜日」
 - [x] **閉じるとホームに反映される**: 左上の閉じるボタンでホームへ戻ると、その日記の行が本文の抜粋で表示される (タイトルのない日記は空のタイトル行を出さない)
   - 自動化: manual（画面をまたいだ反映を目視で確認する）
   - 2026-08-22 ローカル iOS Simulator で、閉じた直後のホームに本文の抜粋だけの行が出た (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/9501fb65-25a9-40fd-93c6-12ce758b1c53.png)
+  - 2026-08-22 編集中の本文を @State に持つ変更 (issue #86) 後も、iOS で「かたなはま」を確定して閉じた直後のホームに抜粋が出た (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/961222cf-0103-465c-809d-3d78fd7773fb.png)。macOS でも同様に反映された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/91031702-4f76-4e4b-9dce-91d7e98254cb.png)
 - [x] **アプリを終了しても書いた内容が残る**: 書いた直後にアプリを終了して起動し直し、同じ日記を開くと本文が残っている
   - 自動化: manual（アプリの終了と再起動をまたいだ永続化を実操作で確認する）
   - 2026-08-22 ローカル iOS Simulator で、terminate → 再起動後もホームに本文の抜粋が残っていた
