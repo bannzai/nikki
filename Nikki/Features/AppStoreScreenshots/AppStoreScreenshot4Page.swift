@@ -46,11 +46,13 @@ struct AppStoreScreenshotNotebookScreen: View {
                     .padding(.bottom, 16)
 
                 VStack(spacing: 12) {
-                    ForEach(Array(AppStoreScreenshotDiary.notebookCards(language: language).enumerated()), id: \.offset) { _, card in
+                    ForEach(Array(AppStoreScreenshotDiary.notebookCards(language: language).enumerated()), id: \.offset) { index, card in
                         AppStoreScreenshotNotebookCard(
                             name: card.name,
                             reminder: card.remindsDaily ? reminderDaily : "",
-                            markdown: card.markdown
+                            markdown: card.markdown,
+                            // 実画面と同じく、既定 (先頭の白紙) が選ばれている状態を見せる。
+                            isSelected: index == 0
                         )
                     }
                 }
@@ -61,13 +63,15 @@ struct AppStoreScreenshotNotebookScreen: View {
     }
 }
 
-/// ノートカードのモック。NotebookCard と同じ見た目(名前 + リマインド + シェブロン + markdown プレビュー)で、
+/// テンプレートカードのモック。NotebookCard と同じ見た目(名前 + リマインド + チェック/シェブロン + markdown プレビュー)で、
 /// 文言を言語別に渡せる静的表現にする。
 struct AppStoreScreenshotNotebookCard: View {
     let name: String
-    /// リマインド頻度の表示文言。空のときは表示しない(リマインドなしのノート)。
+    /// リマインド頻度の表示文言。空のときは表示しない(リマインドなしのテンプレート)。
     let reminder: String
     let markdown: String
+    /// このカードのテンプレートが選択中かどうか。NotebookCard と同じくチェックで表す。
+    let isSelected: Bool
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -79,9 +83,9 @@ struct AppStoreScreenshotNotebookCard: View {
                 Text(reminder)
                     .font(.ink(11, .regular))
                     .foregroundStyle(Color.inkTextQuaternary)
-                Image(systemName: InkIcons.chevronRight)
+                Image(systemName: isSelected ? InkIcons.checkmark : InkIcons.chevronRight)
                     .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(Color.inkTextTertiary)
+                    .foregroundStyle(isSelected ? Color.ink : Color.inkTextTertiary)
             }
             Text(markdown)
                 .font(.inkMono(11.5))

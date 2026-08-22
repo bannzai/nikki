@@ -37,6 +37,8 @@ struct NotebookCard: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        // 選択状態はチェックの絵柄だけでなく、VoiceOver 等の支援技術にも選択中として伝える。
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 
     /// リマインドの頻度の表示名。

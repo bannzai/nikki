@@ -67,9 +67,10 @@ nonisolated final class NotebookEditUITests: XCTestCase {
 
         // フォーカスやキー配送に失敗したまま最終 assert が偽陽性で通らないよう、空になったことを確認する。
         // 空の TextField の value は空文字ではなくプレースホルダ文字列として現れることがあるため、両方を許容する。
+        // value が取得できない (nil) 場合は空を確認できていないため、成功として扱わず失敗させる。
         let nameFieldValue = nameField.value as? String
         XCTAssertTrue(
-            nameFieldValue == nil || nameFieldValue == "" || nameFieldValue == "テンプレートの名前",
+            nameFieldValue == "" || nameFieldValue == "テンプレートの名前",
             "名前欄が空になること (value: \(nameFieldValue ?? "nil"))"
         )
 
