@@ -19,9 +19,12 @@ struct HomeEntryRow: View {
                 .frame(width: 44)
 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(entry.title)
-                        .font(.inkListItemTitle)
-                        .foregroundStyle(Color.ink)
+                    // タイトル入力の廃止後はタイトルのない日記が通常のため、空のタイトル行で余白を空けない。
+                    if !entry.title.isEmpty {
+                        Text(entry.title)
+                            .font(.inkListItemTitle)
+                            .foregroundStyle(Color.ink)
+                    }
                     Text(entry.excerpt)
                         .font(.ink(13))
                         .lineSpacing(inkLineSpacing(fontSize: 13, multiplier: 1.8))

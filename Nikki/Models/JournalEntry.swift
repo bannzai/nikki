@@ -35,44 +35,33 @@ final class JournalEntry {
     }
 
     /// テンプレートから生成した markdown で日記を作る。
+    /// タイトル入力の廃止に伴い、テンプレートの先頭見出しも分解せず全文をそのまま本文にする。
     convenience init(templateMarkdown: String, date: Date) {
-        let (title, bodyMarkdown) = Self.titleAndBody(templateMarkdown: templateMarkdown)
         self.init(
             date: date,
-            title: title,
-            bodyMarkdown: bodyMarkdown,
+            title: "",
+            bodyMarkdown: templateMarkdown,
             createdAt: .now,
             updatedAt: .now
         )
     }
 
-    /// テンプレート markdown をタイトルと本文に分解する。
-    /// 先頭行が「# 」見出しならタイトルとして取り出し、残り(見出し直後の空行は除く)を本文にする。
-    private static func titleAndBody(templateMarkdown: String) -> (title: String, bodyMarkdown: String) {
-        var lines = templateMarkdown.components(separatedBy: .newlines)
-        var title = ""
-        let firstLine = lines.first?.trimmingCharacters(in: .whitespaces) ?? ""
-        if firstLine.hasPrefix("# ") {
-            title = String(firstLine.dropFirst("# ".count))
-            lines.removeFirst()
-            while let next = lines.first, next.trimmingCharacters(in: .whitespaces).isEmpty {
-                lines.removeFirst()
-            }
-        }
-        return (title, lines.joined(separator: "\n"))
-    }
-
-    /// title と bodyMarkdown をテンプレートから生成した markdown の内容で置き換え、updatedAt も同時に更新する。
+    /// 本文をテンプレートから生成した markdown の内容で置き換え、updatedAt も同時に更新する。
+    /// タイトル入力の廃止後もタイトル付きの過去データが残るため、置き換え時にタイトルも空へ揃える。
     func replace(templateMarkdown: String) {
-        let (title, bodyMarkdown) = Self.titleAndBody(templateMarkdown: templateMarkdown)
-        self.title = title
-        self.bodyMarkdown = bodyMarkdown
+        title = ""
+        bodyMarkdown = templateMarkdown
         updatedAt = .now
     }
 
-    /// title を更新し、updatedAt も同時に更新する。
-    func setTitle(_ title: String) {
-        self.title = title
+    /// タイトル入力の廃止に伴い、過去に入力されたタイトルを本文先頭の見出しへ移す(エディタを開いたときに呼ぶ)。
+    /// タイトルが空なら何もしない(冪等)。
+    func mergeTitleIntoBodyMarkdown() {
+        if title.isEmpty {
+            return
+        }
+        bodyMarkdown = bodyMarkdown.isEmpty ? "# \(title)" : "# \(title)\n\n\(bodyMarkdown)"
+        title = ""
         updatedAt = .now
     }
 

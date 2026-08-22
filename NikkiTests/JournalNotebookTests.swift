@@ -39,11 +39,12 @@ struct JournalNotebookTests {
 
     @Test("初回シードはノートを意識させないよう、{{date}} テンプレートを持つ白紙1冊だけ")
     func seedNotebooksHideNotebookConcept() {
-        let notebooks = SampleData.seedNotebooks
+        let notebooks = SampleData.seedNotebooks(sortOrder: 3)
         #expect(notebooks.count == 1)
         #expect(notebooks[0].name == String(localized: "Blank page"))
         #expect(notebooks[0].template?.markdown == "# {{date}}")
         #expect(notebooks[0].reminderFrequency == .none)
+        #expect(notebooks[0].sortOrder == 3)
     }
 
     @Test("プレビュー用ノートはノートごとにテンプレートを1件持つ")
@@ -89,5 +90,23 @@ struct JournalNotebookTests {
         #expect(try context.fetchCount(FetchDescriptor<JournalTemplate>()) == templateCount - 1)
         #expect(try context.fetchCount(FetchDescriptor<JournalEntry>()) > 0)
         #expect(entry.notebook == nil)
+    }
+
+    @Test("deleteAllJournalNotebooks はノートと、どのノートにも属さないテンプレートも全件削除し、日記は残す")
+    @MainActor
+    func deleteAllJournalNotebooksRemovesNotebooksAndOrphanTemplates() throws {
+        // mainContext だけ取り出すとコンテナが解放されて SwiftData がクラッシュするため、コンテナ自体を保持する。
+        let container = SampleData.inMemoryContainer()
+        let context = container.mainContext
+        // ノート導入前のストアに残る、どのノートにも属さないテンプレートも一緒に消えることを確認する。
+        context.insert(JournalTemplate(name: "孤立した紙", markdown: "# {{date}}", sortOrder: 99))
+        try context.save()
+        #expect(try context.fetchCount(FetchDescriptor<JournalNotebook>()) > 0)
+
+        try context.deleteAllJournalNotebooks()
+
+        #expect(try context.fetchCount(FetchDescriptor<JournalNotebook>()) == 0)
+        #expect(try context.fetchCount(FetchDescriptor<JournalTemplate>()) == 0)
+        #expect(try context.fetchCount(FetchDescriptor<JournalEntry>()) > 0)
     }
 }

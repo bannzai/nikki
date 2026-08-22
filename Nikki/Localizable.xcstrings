@@ -285,6 +285,16 @@
         }
       }
     },
+    "Auto-lock by the second": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1秒きざみの自動ロック"
+          }
+        }
+      }
+    },
     "Background image": {
       "localizations": {
         "ja": {
@@ -455,6 +465,16 @@
         }
       }
     },
+    "Custom": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カスタム"
+          }
+        }
+      }
+    },
     "Daily": {
       "localizations": {
         "ja": {
@@ -505,12 +525,32 @@
         }
       }
     },
+    "Delete all templates": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "すべてのテンプレートを削除"
+          }
+        }
+      }
+    },
     "Delete template": {
       "localizations": {
         "ja": {
           "stringUnit": {
             "state": "translated",
             "value": "テンプレートを削除"
+          }
+        }
+      }
+    },
+    "Done": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "完了"
           }
         }
       }
@@ -1200,6 +1240,16 @@
         }
       }
     },
+    "Restore the default template": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "既定のテンプレートを復元"
+          }
+        }
+      }
+    },
     "Retry": {
       "localizations": {
         "ja": {
@@ -1246,6 +1296,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "自動ロックまでの秒数"
+          }
+        }
+      }
+    },
+    "Set the seconds until auto-lock exactly how you like, down to the second.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "自動ロックまでの秒数を1秒きざみで自由に設定できます。"
           }
         }
       }
@@ -1450,6 +1510,16 @@
         }
       }
     },
+    "This deletes every template. Entries written with them are kept.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "すべてのテンプレートを削除します。テンプレートで書いた日記はそのまま残ります。"
+          }
+        }
+      }
+    },
     "This deletes “%@”. Entries written with this template are kept.": {
       "localizations": {
         "ja": {
@@ -1630,12 +1700,32 @@
         }
       }
     },
+    "With Nikki Plus, set the seconds until auto-lock exactly how you like, down to the second.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nikki Plus では、自動ロックまでの秒数を1秒きざみで自由に設定できます。"
+          }
+        }
+      }
+    },
     "Write": {
       "localizations": {
         "ja": {
           "stringUnit": {
             "state": "translated",
             "value": "書く"
+          }
+        }
+      }
+    },
+    "Write here…": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ここに本文を書く…"
           }
         }
       }
@@ -1726,6 +1816,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "https://bannzai.github.io/nikki/legal/terms-ja.html"
+          }
+        }
+      }
+    },
+    "seconds": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "秒"
           }
         }
       }

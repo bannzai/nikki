@@ -1,8 +1,8 @@
 ---
 feature: Onboarding
 verification: mobile-mcp
-last_verified_commit: d98adda51bb84172361270215c3648563c4899ea
-last_verified_at: 2026-08-21
+last_verified_commit: 2f8b4ab97dc9113a82b5f76671c2de80fc1f55e5
+last_verified_at: 2026-08-22
 ---
 
 # Onboarding QA
@@ -28,9 +28,9 @@ last_verified_at: 2026-08-21
 - [x] **完了してホームへ到達する**: 生体認証を有効にするボタンを押すとオンボーディングが終わり、日記一覧が表示される
   - 自動化: manual（初回起動フローの目視確認）
   - 「Enable Face ID」で完了しホームへ到達することを確認した
-- [ ] **パスキー登録ボタンからも完了する**: パスキーを登録するボタンを押してもオンボーディングが終わり、日記一覧が表示される
-  - 自動化: manual（初回起動フローの目視確認）
-  - ⏭️ スキップ: シミュレータ確認は Enable Face ID 側のみ実施。コード上は両ボタンとも同じ完了処理 (OnboardingBiometricPage) だが実操作は未確認
+- [x] **パスキー登録ボタンは出ない**: パスキーは未実装のため「パスキーを登録する」ボタンを撤去した (実装時に戻す)。最終ステップのボタンは生体認証を有効にするものだけが出る
+  - 自動化: manual（最終ステップの表示を目視で確認する）
+  - 2026-08-22 macOS (Debug、カタログの biometric) でボタンが1つだけなことを確認
 
 #### 動作確認
 <details>
@@ -69,14 +69,6 @@ last_verified_at: 2026-08-21
 
 **確認日: 2026-08-21**
 <img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260821/eeb98caf-5136-4b80-96ac-8b4c7e5080ab.jpg" width="320">
-
-</details>
-
-### **パスキー登録ボタンからも完了する**: パスキーを登録するボタンを押してもオンボーディングが終わり、日記一覧が表示される
-
-<details><summary>動作確認スクショ</summary>
-
-（未実行）
 
 </details>
 

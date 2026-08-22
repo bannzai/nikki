@@ -94,13 +94,28 @@ struct NikkiApp: App {
     /// ノート導入前に作られたストアにはどのノートにも属さないテンプレートが残っているため、
     /// その場合は既定ノートを入れ直さず、テンプレート1件につきノート1件を作って引き継ぐ。
     /// 判定はローカルの件数だけで行うため、同期前の複数端末が同時に初回起動すると重複し得る(既知の割り切り)。
+    /// 一度シード(または既存データの確認)を終えた端末では、「すべてのテンプレートを削除」で空にした状態を
+    /// 次回起動が勝手に復活させないよう何もしない。消したテンプレートは設定 > テンプレート の
+    /// 「既定のテンプレートを復元」で戻せる。UserDefaults(.appGroups)の目印は DEBUG の開発用ストアと
+    /// Release ストアで共有される割り切りがあるが、1台の端末で両ストアを使い分けるのは開発機だけに留まる。
+    /// 完了の目印は、既存データの確認またはシードの保存に成功したときだけ残す。取得・保存の一時失敗でも
+    /// 目印が残ると、既定テンプレートがないまま次回以降の起動が何もしなくなるため、失敗時は次回起動で再試行する。
     private static func seedNotebooks(context: ModelContext) {
-        if ((try? context.fetchCount(FetchDescriptor<JournalNotebook>())) ?? 0) > 0 {
+        if UserDefaults.appGroups.bool(forKey: UserDefaults.BoolKey.notebooksSeeded.key) {
             return
         }
-        let templates = (try? context.fetch(FetchDescriptor<JournalTemplate>(sortBy: [SortDescriptor(\.sortOrder)]))) ?? []
+        guard let notebookCount = try? context.fetchCount(FetchDescriptor<JournalNotebook>()) else {
+            return
+        }
+        if notebookCount > 0 {
+            UserDefaults.appGroups.set(true, forKey: UserDefaults.BoolKey.notebooksSeeded.key)
+            return
+        }
+        guard let templates = try? context.fetch(FetchDescriptor<JournalTemplate>(sortBy: [SortDescriptor(\.sortOrder)])) else {
+            return
+        }
         if templates.isEmpty {
-            context.insert(notebooks: SampleData.seedNotebooks)
+            context.insert(notebooks: SampleData.seedNotebooks(sortOrder: 0))
         } else {
             for template in templates {
                 // 引き継いだノートのリマインドは、ユーザーが設定していない挙動を勝手に足さないよう「なし」で始める。
@@ -109,7 +124,9 @@ struct NikkiApp: App {
                 notebook.add(template: template)
             }
         }
-        try? context.save()
+        if (try? context.save()) != nil {
+            UserDefaults.appGroups.set(true, forKey: UserDefaults.BoolKey.notebooksSeeded.key)
+        }
     }
 }
 

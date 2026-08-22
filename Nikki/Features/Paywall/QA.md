@@ -1,8 +1,8 @@
 ---
 feature: Paywall
 verification: mobile-mcp
-last_verified_commit: 96337de3d8717a2428e3fa4d4120727fab323a27
-last_verified_at: 2026-08-21
+last_verified_commit: 2f8b4ab97dc9113a82b5f76671c2de80fc1f55e5
+last_verified_at: 2026-08-22
 ---
 
 # Paywall QA
@@ -27,6 +27,9 @@ last_verified_at: 2026-08-21
 
 ## 1. プランの表示と選択
 
+- [x] **特典が2件表示される**: 特典として「テーマを増やす」と「1秒きざみの自動ロック」の2件が説明つきで表示される (実際に解放される機能のみを載せる方針)
+  - 自動化: manual（特典の文言を目視で確認する）
+  - 2026-08-22 ローカル iOS Simulator で、設定 > 自動ロック > カスタム から開いたペイウォールに2件の特典が表示された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/04e48518-8ffb-4cfa-9147-5e53d02cc0e5.png)
 - [ ] **3プランの価格と期間の表示**: 設定 > Nikki Plus を開くと、月ごと ¥300 (/月)・年ごと ¥3,000・買い切り ¥12,000 (一度の購入で、ずっと) の3枚のカードが表示される
   - 自動化: auto（NikkiTests/StoreKitConfigurationTests.swift が3商品の価格・期間・種別の解決を検証。iOS 26.5 の simulator では skip されるため 26.2 以下の runtime で実行する。カードの並びと文言はシミュレータで目視確認する）
   - ⏭️ スキップ: simtunnel の runner Simulator は App Store / RevenueCat へ接続できず、ペイウォールが「Couldn't load prices.（価格を読み込めませんでした。）」の読み込み失敗パスになるためカードが表示されない。価格・期間・種別の解決は StoreKit テスト NikkiTests/StoreKitConfigurationTests.swift で機械検証済み (iOS 26.2 で 5 件 pass)。カードの並びと文言は TestFlight 配布後の人間確認に回す

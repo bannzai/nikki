@@ -18,8 +18,6 @@ struct NotebookEditPage: View {
 
     @State var deleteConfirmationDialogIsPresented = false
 
-    @Query(sort: \JournalNotebook.sortOrder) var notebooks: [JournalNotebook]
-
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @Environment(\.paperColor) private var paperColor
@@ -39,31 +37,24 @@ struct NotebookEditPage: View {
                 name: $name,
                 markdown: Binding(get: { notebook.template?.markdown ?? "" }, set: { setTemplateMarkdown(markdown: $0) })
             )
-            // 最後の1件まで消すと、新規日記の書き出し(既定のテンプレート)が次回起動の
-            // 入れ直しまで無くなるため、2件以上あるときだけ削除できる。
-            if notebooks.count >= 2 {
-                InkListSection {
-                    // 遷移ではなく確認ダイアログを開くアクション行のため、シェブロンは出さない。
-                    InkListRow(
-                        title: String(localized: "Delete template"),
-                        showsChevron: false,
-                        showsSeparator: false,
-                        action: { deleteConfirmationDialogIsPresented = true }
-                    )
-                }
-                .padding(.horizontal, 24)
-                .padding(.bottom, 24)
+            // 最後の1件まで削除できる(テンプレート0件の新規日記は白紙で始まり、
+            // 既定のテンプレートは設定 > テンプレート の「既定のテンプレートを復元」で戻せる)。
+            InkListSection {
+                // 遷移ではなく確認ダイアログを開くアクション行のため、シェブロンは出さない。
+                InkListRow(
+                    title: String(localized: "Delete template"),
+                    showsChevron: false,
+                    showsSeparator: false,
+                    action: { deleteConfirmationDialogIsPresented = true }
+                )
             }
+            .padding(.horizontal, 24)
+            .padding(.bottom, 24)
         }
         .background(paperColor.ignoresSafeArea())
         .inkNavigationBarHidden()
         .confirmationDialog("Delete template", isPresented: $deleteConfirmationDialogIsPresented, titleVisibility: .visible) {
             Button("Delete template", role: .destructive) {
-                // ダイアログを開いている間に同期等で他のテンプレートが消え、残り1件になっていることがあるため、
-                // 確定の直前にも「最後の1件は消せない」を検証する。
-                if notebooks.count < 2 {
-                    return
-                }
                 modelContext.delete(notebook)
                 // 直後にアプリが kill されても削除の結果が残るよう明示保存する(平常時は autosave が保存する)。
                 try? modelContext.save()

@@ -90,6 +90,11 @@ struct RootPage: View {
             .onChange(of: autoLockSeconds) {
                 lastActivityAt = .now
             }
+            // 加入状態の変化でも無操作タイマーを引き直す。失効でカスタム秒数から既定へ倒れたとき、
+            // スリープ中のタイマーが古い(長い)秒数のまま残らないようにする。
+            .onChange(of: plusActive) {
+                lastActivityAt = .now
+            }
             // 無操作起点から設定秒数が経ったらロックする。バックグラウンドで中断された場合も、
             // 復帰時に期限超過ならそのまま発火してロックされる。
             .task(id: lastActivityAt) {
@@ -102,7 +107,8 @@ struct RootPage: View {
                     return
                 }
                 #endif
-                try? await Task.sleep(for: .seconds(autoLockSeconds))
+                // Plus 失効中はプリセット外のカスタム秒数を既定へ倒した実効値でロックする。
+                try? await Task.sleep(for: .seconds(effectiveAutoLockSeconds(storedSeconds: autoLockSeconds, plusActive: plusActive)))
                 if Task.isCancelled {
                     return
                 }
@@ -144,12 +150,15 @@ struct RootPage: View {
         }
     }
 
-    /// 無操作起点を更新する。スクロール等の連続タッチで再描画とタイマー引き直しが過剰にならないよう1秒単位に間引く。
+    /// 無操作起点を更新する。スクロール等の連続タッチで再描画とタイマー引き直しが過剰にならないよう間引く。
+    /// 間引き幅はロック秒数の半分(上限1秒)。最小の1秒設定でも、操作中の更新が間引きで捨てられて
+    /// ロックの期限が先に来ることがないようにする。
     private func registerActivity() {
         if locked {
             return
         }
-        if Date.now.timeIntervalSince(lastActivityAt) >= 1 {
+        let throttleSeconds = min(1, Double(effectiveAutoLockSeconds(storedSeconds: autoLockSeconds, plusActive: plusActive)) / 2)
+        if Date.now.timeIntervalSince(lastActivityAt) >= throttleSeconds {
             lastActivityAt = .now
         }
     }
