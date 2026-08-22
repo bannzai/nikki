@@ -16,10 +16,13 @@ struct HomeCalendarPreviewCard: View {
             }
             .padding(.bottom, 6)
 
-            Text(entry.title)
-                .font(.ink(14.5, .bold))
-                .foregroundStyle(Color.ink)
-                .padding(.bottom, 3)
+            // タイトル入力の廃止後はタイトルのない日記が通常のため、空のタイトル行で余白を空けない。
+            if !entry.title.isEmpty {
+                Text(entry.title)
+                    .font(.ink(14.5, .bold))
+                    .foregroundStyle(Color.ink)
+                    .padding(.bottom, 3)
+            }
 
             Text(entry.excerpt)
                 .font(.ink(12.5))

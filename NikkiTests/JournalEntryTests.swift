@@ -4,35 +4,18 @@ import Testing
 @testable import Nikki
 
 struct JournalEntryTests {
-    @Test("テンプレート markdown の先頭 H1 をタイトルに取り出す")
-    func templateMarkdownSplitsTitle() {
+    @Test("テンプレート markdown は先頭見出しも分解せず全文を本文にする")
+    func templateMarkdownKeepsWholeBody() {
         let entry = JournalEntry(
             templateMarkdown: "# 2026年7月18日\n天気: 晴れ\n## よかったこと",
             date: .now
         )
-        #expect(entry.title == "2026年7月18日")
-        #expect(entry.bodyMarkdown == "天気: 晴れ\n## よかったこと")
-    }
-
-    @Test("H1 直後の空行は本文に含めない")
-    func templateMarkdownDropsBlankLinesAfterTitle() {
-        let entry = JournalEntry(
-            templateMarkdown: "# タイトル\n\n\n本文",
-            date: .now
-        )
-        #expect(entry.title == "タイトル")
-        #expect(entry.bodyMarkdown == "本文")
-    }
-
-    @Test("先頭が H1 でなければ全文を本文にする")
-    func templateMarkdownWithoutHeading() {
-        let entry = JournalEntry(templateMarkdown: "ただの本文", date: .now)
         #expect(entry.title == "")
-        #expect(entry.bodyMarkdown == "ただの本文")
+        #expect(entry.bodyMarkdown == "# 2026年7月18日\n天気: 晴れ\n## よかったこと")
     }
 
-    @Test("replace がテンプレート markdown でタイトルと本文を置き換えて updatedAt を進める")
-    func replaceOverwritesTitleAndBody() {
+    @Test("replace がテンプレート markdown を全文本文にし、タイトルを空へ揃えて updatedAt を進める")
+    func replaceOverwritesBodyAndClearsTitle() {
         let entry = JournalEntry(
             date: .now,
             title: "もとのタイトル",
@@ -41,41 +24,66 @@ struct JournalEntryTests {
             updatedAt: .distantPast
         )
         entry.replace(templateMarkdown: "# 2026年7月18日\n\n天気: 晴れ")
-        #expect(entry.title == "2026年7月18日")
-        #expect(entry.bodyMarkdown == "天気: 晴れ")
+        #expect(entry.title == "")
+        #expect(entry.bodyMarkdown == "# 2026年7月18日\n\n天気: 晴れ")
         #expect(entry.updatedAt > .distantPast)
     }
 
-    @Test("replace で先頭が H1 でなければタイトルは空になり全文が本文になる")
-    func replaceWithoutHeadingClearsTitle() {
-        let entry = JournalEntry(
-            date: .now,
-            title: "もとのタイトル",
-            bodyMarkdown: "もとの本文",
-            createdAt: .distantPast,
-            updatedAt: .distantPast
-        )
-        entry.replace(templateMarkdown: "ただの本文")
-        #expect(entry.title == "")
-        #expect(entry.bodyMarkdown == "ただの本文")
-    }
-
-    @Test("setTitle / setBodyMarkdown が updatedAt を進める")
+    @Test("setBodyMarkdown が updatedAt を進める")
     func settersBumpUpdatedAt() {
         let entry = JournalEntry(
             date: .now,
-            title: "はじめのタイトル",
+            title: "",
             bodyMarkdown: "はじめの本文",
             createdAt: .distantPast,
             updatedAt: .distantPast
         )
-        entry.setTitle("あたらしいタイトル")
-        #expect(entry.title == "あたらしいタイトル")
-        #expect(entry.updatedAt > .distantPast)
-
         entry.setBodyMarkdown("あたらしい本文")
         #expect(entry.bodyMarkdown == "あたらしい本文")
         #expect(entry.updatedAt > .distantPast)
+    }
+
+    @Test("mergeTitleIntoBodyMarkdown がタイトルを本文先頭の見出しへ移して updatedAt を進める")
+    func mergeTitleMovesTitleIntoBody() {
+        let entry = JournalEntry(
+            date: .now,
+            title: "梅雨明け",
+            bodyMarkdown: "朝から蝉が鳴いていた。",
+            createdAt: .distantPast,
+            updatedAt: .distantPast
+        )
+        entry.mergeTitleIntoBodyMarkdown()
+        #expect(entry.title == "")
+        #expect(entry.bodyMarkdown == "# 梅雨明け\n\n朝から蝉が鳴いていた。")
+        #expect(entry.updatedAt > .distantPast)
+    }
+
+    @Test("mergeTitleIntoBodyMarkdown は本文が空ならタイトルの見出しだけを本文にする")
+    func mergeTitleIntoEmptyBody() {
+        let entry = JournalEntry(
+            date: .now,
+            title: "梅雨明け",
+            bodyMarkdown: "",
+            createdAt: .distantPast,
+            updatedAt: .distantPast
+        )
+        entry.mergeTitleIntoBodyMarkdown()
+        #expect(entry.title == "")
+        #expect(entry.bodyMarkdown == "# 梅雨明け")
+    }
+
+    @Test("mergeTitleIntoBodyMarkdown はタイトルが空なら何もしない(冪等)")
+    func mergeTitleDoesNothingWithoutTitle() {
+        let entry = JournalEntry(
+            date: .now,
+            title: "",
+            bodyMarkdown: "# 梅雨明け\n\n本文",
+            createdAt: .distantPast,
+            updatedAt: .distantPast
+        )
+        entry.mergeTitleIntoBodyMarkdown()
+        #expect(entry.bodyMarkdown == "# 梅雨明け\n\n本文")
+        #expect(entry.updatedAt == .distantPast)
     }
 
     @Test("新規作成の日記はアーカイブされていない状態で始まる")

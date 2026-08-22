@@ -1670,6 +1670,16 @@
         }
       }
     },
+    "Write here…": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ここに本文を書く…"
+          }
+        }
+      }
+    },
     "Writing": {
       "localizations": {
         "ja": {
