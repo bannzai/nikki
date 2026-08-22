@@ -11,6 +11,16 @@ enum OnboardingStep: String {
     case biometric
 }
 
+/// 自動ロックの無操作起点。View の @State(Date) で持つとテキスト編集のたびに RootPage 配下の
+/// 全画面が再評価され、日本語入力の変換中テキストが破棄される(issue #86)ため、
+/// 書き込みで再描画を起こさない参照型で持ち、ロック判定タスクが読み取る。
+/// 参照を共有して書き込む器が必要なため、関数ではなく class にする。
+@MainActor
+final class AutoLockActivity {
+    /// 無操作の起点時刻。タッチ・テキスト編集(macOS では NSEvent も)のたびに更新する。
+    var lastActivityAt: Date = .now
+}
+
 struct RootPage: View {
     @AppStorage(.onboardingCompleted) var onboardingCompleted: Bool = false
     /// 進行途中でアプリを終了しても続きのステップから再開できるよう永続化する。
@@ -23,8 +33,9 @@ struct RootPage: View {
 
     /// 配下へ environment で配る「今日」。フォアグラウンド復帰と日付変更のタイミングでのみ更新する。
     @State var today: Date = .now
-    /// 自動ロックの無操作起点。タッチとテキスト編集で更新する。
-    @State var lastActivityAt: Date = .now
+    // 自動ロックの無操作起点。@State はインスタンスを View の生存期間で保持するためで、
+    // 中身(lastActivityAt)の書き込みは再描画を起こさない(AutoLockActivity のコメント参照)。
+    @State var autoLockActivity = AutoLockActivity()
     /// 自動ロック中かどうか。README の「開きっぱなしの端末を他人が触るのを防ぐ」UI ゲート。
     @State var locked: Bool = false
     /// Nikki Plus の加入状態。customerInfoStream の更新に追従し、environment で配下へ配る。
@@ -77,27 +88,13 @@ struct RootPage: View {
             .onReceive(NotificationCenter.default.publisher(for: .NSCalendarDayChanged).receive(on: DispatchQueue.main)) { _ in
                 today = .now
             }
-            .onChange(of: locked) {
-                // 解除直後から無操作の計測をやり直す。
-                if !locked {
-                    lastActivityAt = .now
-                }
-            }
-            // 設定の変更でも無操作タイマーを引き直し、次の計測へ新しい値を反映する。
-            .onChange(of: faceIDUnlockEnabled) {
-                lastActivityAt = .now
-            }
-            .onChange(of: autoLockSeconds) {
-                lastActivityAt = .now
-            }
-            // 加入状態の変化でも無操作タイマーを引き直す。失効でカスタム秒数から既定へ倒れたとき、
-            // スリープ中のタイマーが古い(長い)秒数のまま残らないようにする。
-            .onChange(of: plusActive) {
-                lastActivityAt = .now
-            }
             // 無操作起点から設定秒数が経ったらロックする。バックグラウンドで中断された場合も、
             // 復帰時に期限超過ならそのまま発火してロックされる。
-            .task(id: lastActivityAt) {
+            // 計測をやり直す契機(初回表示・ロック解除・Face ID 設定/秒数/加入状態の変化)は
+            // id の変化によるタスクの再起動として受け、無操作起点はタスクの起動時に引き直す。
+            // 操作(registerActivity)は起点の書き込みだけで再描画もタスク再起動も起こさず、
+            // 期限に目覚めたタスクが、起点が進んでいれば新しい期限まで眠り直す(issue #86)。
+            .task(id: [locked, faceIDUnlockEnabled, autoLockSeconds, plusActive] as [AnyHashable]) {
                 if locked || !faceIDUnlockEnabled {
                     return
                 }
@@ -107,12 +104,21 @@ struct RootPage: View {
                     return
                 }
                 #endif
-                // Plus 失効中はプリセット外のカスタム秒数を既定へ倒した実効値でロックする。
-                try? await Task.sleep(for: .seconds(effectiveAutoLockSeconds(storedSeconds: autoLockSeconds, plusActive: plusActive)))
-                if Task.isCancelled {
-                    return
+                autoLockActivity.lastActivityAt = .now
+                while true {
+                    // Plus 失効中はプリセット外のカスタム秒数を既定へ倒した実効値でロックする。
+                    let deadline = autoLockActivity.lastActivityAt.addingTimeInterval(
+                        Double(effectiveAutoLockSeconds(storedSeconds: autoLockSeconds, plusActive: plusActive))
+                    )
+                    if Date.now >= deadline {
+                        locked = true
+                        return
+                    }
+                    try? await Task.sleep(for: .seconds(deadline.timeIntervalSinceNow))
+                    if Task.isCancelled {
+                        return
+                    }
                 }
-                locked = true
             }
             #if os(macOS)
             // macOS のスクロールホイール・トラックパッドのスクロールは SwiftUI のジェスチャに乗らず
@@ -150,16 +156,11 @@ struct RootPage: View {
         }
     }
 
-    /// 無操作起点を更新する。スクロール等の連続タッチで再描画とタイマー引き直しが過剰にならないよう間引く。
-    /// 間引き幅はロック秒数の半分(上限1秒)。最小の1秒設定でも、操作中の更新が間引きで捨てられて
-    /// ロックの期限が先に来ることがないようにする。
+    /// 無操作起点を更新する。書き込み先が再描画を起こさない参照型のため、間引かず毎回更新する。
     private func registerActivity() {
         if locked {
             return
         }
-        let throttleSeconds = min(1, Double(effectiveAutoLockSeconds(storedSeconds: autoLockSeconds, plusActive: plusActive)) / 2)
-        if Date.now.timeIntervalSince(lastActivityAt) >= throttleSeconds {
-            lastActivityAt = .now
-        }
+        autoLockActivity.lastActivityAt = .now
     }
 }
