@@ -82,7 +82,7 @@ issue #82 でユーザー向けの用語を「ノート」から「テンプレ�
 <details><summary>動作確認スクショ</summary>
 
 **確認日: 2026-08-22** (1件時の編集画面に削除行がある)
-<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/ff75605a-d71a-4c89-85dd-2c55900c1196.png" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/ff75605a-d71a-4c89-85dd-2c55900c1196.png" alt="テンプレートが1件だけの編集画面に「テンプレートを削除」の行が表示されている" width="320">
 
 </details>
 

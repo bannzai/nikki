@@ -1,11 +1,15 @@
 import SwiftUI
 
 /// 自動ロックのカスタム秒数の入力欄(AutoLockPage の「カスタム」行の trailing)。
-/// 保存できる値(autoLockCustomSecondsRange の整数)を入力したときだけ保存値へ書き戻し、
-/// 途中入力・空・範囲外では保存値を変えない(直前の設定のままロックし続ける)。
+/// 入力途中の接頭辞(「3601」と打つ途中の「360」等)を保存しないよう、保存は編集完了
+/// (リターン・フォーカス喪失)時にだけ行い、値全体を検証してから書き戻す。
+/// 範囲外・数値でない入力は保存値を変えず、入力欄を保存値の表示に戻す。
 struct AutoLockCustomSecondsField: View {
     @Binding var customSecondsText: String
     @Binding var autoLockSeconds: Int
+
+    /// 入力欄のフォーカス。フォーカスが外れたタイミングを編集完了として保存する。
+    @FocusState var fieldIsFocused: Bool
 
     var body: some View {
         HStack(spacing: 6) {
@@ -19,14 +23,30 @@ struct AutoLockCustomSecondsField: View {
                 #if os(iOS)
                 .keyboardType(.numberPad)
                 #endif
-                .onChange(of: customSecondsText) {
-                    if let seconds = Int(customSecondsText), autoLockCustomSecondsRange.contains(seconds) {
-                        autoLockSeconds = seconds
+                .focused($fieldIsFocused)
+                .onSubmit {
+                    commitCustomSeconds()
+                }
+                .onChange(of: fieldIsFocused) {
+                    if !fieldIsFocused {
+                        commitCustomSeconds()
                     }
                 }
             Text("seconds")
                 .font(.ink(13.5, .regular))
                 .foregroundStyle(Color.inkTextSecondary)
+        }
+    }
+
+    /// 編集完了時に入力の全体を検証して保存する。空のまま(未入力・プリセット選択中)は何もしない。
+    private func commitCustomSeconds() {
+        if customSecondsText.isEmpty {
+            return
+        }
+        if let seconds = Int(customSecondsText), autoLockCustomSecondsRange.contains(seconds) {
+            autoLockSeconds = seconds
+        } else {
+            customSecondsText = String(autoLockSeconds)
         }
     }
 }

@@ -78,11 +78,13 @@ struct NotebookSettingsPage: View {
     }
 
     /// 初回シードと同じ既定のテンプレート(白紙)を一覧の末尾へ入れ直す。
-    /// 同じ名前・同じ書き出しのテンプレートが既にあるときは重複させない(冪等)。
+    /// 同じ書き出しのテンプレートが既にあるときは重複させない(冪等)。
+    /// 名前はロケールで変わる(String(localized:) の値が永続化される)ため、既存の判定には使わず、
+    /// 言語に依存しない書き出し markdown(既定は "# {{date}}" のリテラル)だけで判定する。
     private func restoreSeedNotebooks() {
         let seeds = SampleData.seedNotebooks(sortOrder: (notebooks.last?.sortOrder ?? -1) + 1)
         let restored = seeds.filter { seed in
-            !notebooks.contains { $0.name == seed.name && $0.template?.markdown == seed.template?.markdown }
+            !notebooks.contains { $0.template?.markdown == seed.template?.markdown }
         }
         if restored.isEmpty {
             return
