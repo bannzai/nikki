@@ -25,6 +25,10 @@ struct EditorPage: View {
     /// (離脱・バックグラウンド移行・アプリ終了)でだけ書き戻す。
     @State var draftBodyMarkdown: String = ""
 
+    /// この画面で本文が編集されたかどうか。未編集のまま離脱したとき、表示中に CloudKit 同期などで
+    /// entry 側が進んでいた場合に、開いた時点の古い draft で entry を上書きしないための目印。
+    @State var draftBodyMarkdownIsEdited: Bool = false
+
     /// 本文のフォーカス。開いたら本文へ当て、どこに書けばいいか迷わせない。
     @FocusState var bodyFieldIsFocused: Bool
 
@@ -78,6 +82,10 @@ struct EditorPage: View {
         }
         // キーボード入力はタッチとして拾えないため、編集中の本文の変化を無操作タイマーのリセットにする。
         .onChange(of: draftBodyMarkdown) {
+            // entry と同じ値への変化は、開いた直後の初期化やテンプレート適用後の再同期であって編集ではない。
+            if draftBodyMarkdown != entry.bodyMarkdown {
+                draftBodyMarkdownIsEdited = true
+            }
             resetAutoLockTimer()
         }
         .navigationDestination(isPresented: $notebookListIsPresented) {
@@ -88,6 +96,8 @@ struct EditorPage: View {
         .onChange(of: notebookListIsPresented) {
             if !notebookListIsPresented {
                 draftBodyMarkdown = entry.bodyMarkdown
+                // 遷移前の書きかけは遷移時に書き戻し済みで、この再同期は entry を正とした引き直しのため、未編集の状態に戻す。
+                draftBodyMarkdownIsEdited = false
             }
         }
         .onDisappear {
@@ -107,9 +117,11 @@ struct EditorPage: View {
         #endif
     }
 
-    /// 編集中の本文を entry へ書き戻して保存する。変更がなければ書き戻しは行わない(冪等)。
+    /// 編集中の本文を entry へ書き戻して保存する。この画面で編集していない・変更がない場合は
+    /// 書き戻しを行わない(冪等)。編集していない間に CloudKit 同期などで entry 側が進んでいても、
+    /// 開いた時点の古い draft で上書きしないようにする。
     private func commitDraft() {
-        if entry.bodyMarkdown != draftBodyMarkdown {
+        if draftBodyMarkdownIsEdited && entry.bodyMarkdown != draftBodyMarkdown {
             entry.setBodyMarkdown(draftBodyMarkdown)
         }
         try? modelContext.save()

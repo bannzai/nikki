@@ -28,7 +28,7 @@ last_verified_at: 2026-08-22
 - [x] **日本語入力の変換中テキストが消えない**: 日本語 IME でひらがなを続けて入力しても、変換中 (未確定) のテキストが入力途中で消えない。確定した文字も残る (issue #86 の再発確認)
   - 自動化: manual（IME の変換中状態はプログラム入力では作れず、実キーボード入力での確認が必要なため）
   - 2026-08-22 macOS (Debug) で日本語入力ソースからローマ字で「kakikukeko」を 1.2 秒間隔で入力し、変換中の「かきくけこ」が全文字保持された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/d7071786-3b64-41ab-921f-8d0647cb7072.png)。修正前ビルドでは同じ操作で変換中テキストが全て消えることを再現済み (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/86f3c71e-9c30-487d-814b-a4960896f6dc.png)
-  - 2026-08-22 ローカル iOS Simulator のかなキーボードで「かたなはま」を 2 秒前後の間隔で入力し、変換中テキストが全文字保持された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/980a7c16-1a28-459f-b7f6-410fc16cb34e.png)
+  - 2026-08-22 ローカル iOS Simulator のかなキーボードで「かたなはま」を 2 秒前後の間隔で入力し、変換中テキストが全文字保持された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/980a7c16-1a28-459f-b7f6-410fc16cb34e.png)。ローカル simulator を使ったのは、修正前後のローカルビルドを `xcrun simctl install` で差し替えて比較し、日本語キーボードの有効化 (`simctl spawn defaults write`) も必要な、ローカルの simctl を伴う手順のため (ios-simulator skill Phase 1 のローカルに倒す条件に該当)
 - [x] **日付が上部に出る**: 画面上部に日記の日付が「7月18日 土曜日」の形式 (英語表示では「Saturday, July 18」) で出る
   - 自動化: manual（日付の表記を目視で確認する）
   - 2026-08-22 ローカル iOS Simulator (日本語) で「8月22日 土曜日」
@@ -39,6 +39,7 @@ last_verified_at: 2026-08-22
 - [x] **アプリを終了しても書いた内容が残る**: 書いた直後にアプリを終了して起動し直し、同じ日記を開くと本文が残っている
   - 自動化: manual（アプリの終了と再起動をまたいだ永続化を実操作で確認する）
   - 2026-08-22 ローカル iOS Simulator で、terminate → 再起動後もホームに本文の抜粋が残っていた
+  - 2026-08-22 macOS (Debug) で、エディタに「cmdq test body」を入力して開いたまま ⌘Q → 再起動すると、ホームに本文が残っていた (エディタ表示中のアプリ終了は willTerminateNotification 経由の書き戻し。 https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/a5040e50-02ff-4b9e-a64b-f05285e8dc95.png)
 
 #### 動作確認
 <details>
