@@ -1,11 +1,11 @@
 import SwiftUI
 import SwiftData
 
-/// ノートの編集(設定 > ノート > ノートの行から)。書き出しのテンプレート(markdown)は直接編集し、
+/// テンプレートの編集(設定 > テンプレート > テンプレートの行から)。書き出し(markdown)は直接編集し、
 /// 変更のたびにドメインメソッドで書き戻す(エディタと同じ即時反映)。
 /// 名前は編集バッファに持ち、画面を離れるときにまとめて確定する。即時反映にすると1文字ずつ削除する
 /// 過程の「非空の途中状態」が都度書き戻され、空にして離れたときに最後の1文字が残るため(issue #79)。
-/// 削除するとテンプレートも一緒に消え、日記はどのノートにも属さないまま残る(モデルの削除ルール)。
+/// 削除しても、このテンプレートで書いた日記はどのノートにも属さないまま残る(モデルの削除ルール)。
 struct NotebookEditPage: View {
     let notebook: JournalNotebook
 
@@ -34,18 +34,18 @@ struct NotebookEditPage: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            InkNavBar(leading: .back, center: .title(String(localized: "Edit notebook")), onLeading: { dismiss() })
+            InkNavBar(leading: .back, center: .title(String(localized: "Edit template")), onLeading: { dismiss() })
             NotebookFormFields(
                 name: $name,
                 markdown: Binding(get: { notebook.template?.markdown ?? "" }, set: { setTemplateMarkdown(markdown: $0) })
             )
-            // 最後の1冊まで消すと、新規日記の書き出し(既定のノートのテンプレート)が次回起動の
-            // 入れ直しまで無くなるため、2冊以上あるときだけ削除できる。
+            // 最後の1件まで消すと、新規日記の書き出し(既定のテンプレート)が次回起動の
+            // 入れ直しまで無くなるため、2件以上あるときだけ削除できる。
             if notebooks.count >= 2 {
                 InkListSection {
                     // 遷移ではなく確認ダイアログを開くアクション行のため、シェブロンは出さない。
                     InkListRow(
-                        title: String(localized: "Delete notebook"),
+                        title: String(localized: "Delete template"),
                         showsChevron: false,
                         showsSeparator: false,
                         action: { deleteConfirmationDialogIsPresented = true }
@@ -57,10 +57,10 @@ struct NotebookEditPage: View {
         }
         .background(paperColor.ignoresSafeArea())
         .inkNavigationBarHidden()
-        .confirmationDialog("Delete notebook", isPresented: $deleteConfirmationDialogIsPresented, titleVisibility: .visible) {
-            Button("Delete notebook", role: .destructive) {
-                // ダイアログを開いている間に同期等で他のノートが消え、残り1冊になっていることがあるため、
-                // 確定の直前にも「最後の1冊は消せない」を検証する。
+        .confirmationDialog("Delete template", isPresented: $deleteConfirmationDialogIsPresented, titleVisibility: .visible) {
+            Button("Delete template", role: .destructive) {
+                // ダイアログを開いている間に同期等で他のテンプレートが消え、残り1件になっていることがあるため、
+                // 確定の直前にも「最後の1件は消せない」を検証する。
                 if notebooks.count < 2 {
                     return
                 }
@@ -70,7 +70,7 @@ struct NotebookEditPage: View {
                 dismiss()
             }
         } message: {
-            Text("This deletes “\(notebook.name)” and its template. Entries in this notebook are kept.")
+            Text("This deletes “\(notebook.name)”. Entries written with this template are kept.")
         }
         .onDisappear {
             commitName()
@@ -87,9 +87,9 @@ struct NotebookEditPage: View {
         }
     }
 
-    /// 名前の編集内容をノートへ確定する。この画面で編集していない(確定済みの名前と差分がない)ときは、
+    /// 名前の編集内容をテンプレートへ確定する。この画面で編集していない(確定済みの名前と差分がない)ときは、
     /// 表示中に同期などで変わった保存済みの名前を上書きしないよう何もしない。
-    /// 作成フォームと同じく、名前のないノートが一覧・既定のノートの選択に並ばないよう、
+    /// 作成フォームと同じく、名前のないテンプレートが一覧・既定のテンプレートの選択に並ばないよう、
     /// 空白だけの名前は確定しない(空にしたまま離れると編集開始時点の名前のまま残る)。
     /// 削除して閉じたときは、コンテキストから外れたモデルに触れないよう書き戻さない。
     private func commitName() {
@@ -106,9 +106,9 @@ struct NotebookEditPage: View {
         originalName = name
     }
 
-    /// 書き出しの入力をテンプレートへ書き戻す。作成フォームと意味を揃え、空白だけの書き出しは
-    /// 「テンプレートなし(ノートを選んだとき本文を置き換えない)」としてテンプレートごと削除する。
-    /// テンプレートを持たないノートで入力が始まったら、このタイミングで作って紐付ける。
+    /// 書き出しの入力を JournalTemplate へ書き戻す。作成フォームと意味を揃え、空白だけの書き出しは
+    /// 「差し込む内容なし(選んだとき本文を置き換えない)」として JournalTemplate ごと削除する。
+    /// 書き出しを持たないテンプレートで入力が始まったら、このタイミングで作って紐付ける。
     private func setTemplateMarkdown(markdown: String) {
         if markdown.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             for template in notebook.templates ?? [] {

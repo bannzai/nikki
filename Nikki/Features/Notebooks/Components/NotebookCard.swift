@@ -1,8 +1,10 @@
 import SwiftUI
 
-/// ノート一覧(1l)の 1 枚分のカード。
+/// テンプレート一覧(1l)の 1 枚分のカード。いま日記に使われているテンプレートにはチェックを付ける。
 struct NotebookCard: View {
     let notebook: JournalNotebook
+    /// このカードのテンプレートが、いま日記に使われている(選択中)かどうか。
+    let isSelected: Bool
     let onTap: () -> Void
 
     var body: some View {
@@ -17,9 +19,10 @@ struct NotebookCard: View {
                     Text(reminderText(frequency: notebook.reminderFrequency))
                         .font(.ink(11, .regular))
                         .foregroundStyle(Color.inkTextQuaternary)
-                    Image(systemName: InkIcons.chevronRight)
+                    // 選択中はタップの誘導(シェブロン)ではなく、選ばれていることを示すチェックにする。
+                    Image(systemName: isSelected ? InkIcons.checkmark : InkIcons.chevronRight)
                         .font(.system(size: 13, weight: .semibold))
-                        .foregroundStyle(Color.inkTextTertiary)
+                        .foregroundStyle(isSelected ? Color.ink : Color.inkTextTertiary)
                 }
                 Text(notebook.template?.markdown ?? "")
                     .font(.inkMono(11.5))
@@ -49,8 +52,8 @@ struct NotebookCard: View {
 struct NotebookCard_Previews: PreviewProvider {
     static var previews: some View {
         VStack(spacing: 12) {
-            ForEach(SampleData.notebooks) { notebook in
-                NotebookCard(notebook: notebook, onTap: {})
+            ForEach(Array(SampleData.notebooks.enumerated()), id: \.element.id) { index, notebook in
+                NotebookCard(notebook: notebook, isSelected: index == 0, onTap: {})
             }
         }
         .padding()

@@ -10,7 +10,7 @@ struct SettingsPage: View {
     @AppStorage(.passkeyRegistered) var passkeyRegistered: Bool = false
     // README の「5秒タイプがなかったらロック」に合わせた既定値。
     @AppStorage(.autoLockSeconds) var autoLockSeconds: Int = 5
-    /// 既定のノートの id(UUID 文字列)。空のときは未設定。
+    /// 既定のテンプレートの id(UUID 文字列)。空のときは未設定。
     @AppStorage(.defaultNotebookID) var defaultNotebookID: String = ""
     @AppStorage(.textSize) var textSize: TextSize = .standard
     // 見本(1n)の初期選択が「生成」(プリセット2番目)のため。
@@ -47,17 +47,17 @@ struct SettingsPage: View {
                     VStack(alignment: .leading, spacing: 0) {
                         SettingsSectionLabel(text: String(localized: "Writing"))
                         InkListSection {
-                            // ノートを増やしたい人向けの管理(作成・編集・削除)の入り口。普段の書く流れには出さず、ここにだけ置く。
+                            // テンプレートの管理(作成・編集・削除)の入り口。
                             InkListRow(
-                                title: String(localized: "Notebooks"),
-                                value: String(localized: "\(notebooks.count) notebooks"),
+                                title: String(localized: "Templates"),
+                                value: String(localized: "\(notebooks.count) templates"),
                                 action: { notebookSettingsIsPresented = true }
                             )
-                            // ノートが1冊の間はノートを意識させないため、選択肢が生まれる2冊以上のときだけ行を出す。
+                            // テンプレートが1件の間は選択肢がないため、選択肢が生まれる2件以上のときだけ行を出す。
                             if notebooks.count >= 2 {
                                 InkListRow(
-                                    title: String(localized: "Default notebook"),
-                                    // 未設定のときは新規作成と同じ解決(先頭のノート)を表示する。
+                                    title: String(localized: "Default template"),
+                                    // 未設定のときは新規作成と同じ解決(先頭のテンプレート)を表示する。
                                     value: (notebooks.first { $0.id.uuidString == defaultNotebookID } ?? notebooks.first)?.name ?? String(localized: "Not set"),
                                     action: { defaultNotebookIsPresented = true }
                                 )

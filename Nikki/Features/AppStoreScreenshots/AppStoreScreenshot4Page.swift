@@ -1,17 +1,17 @@
 import SwiftUI
 
 #if DEBUG
-/// スクショ4枚目: ノート一覧(テンプレート選択)。今日の紙を選んですぐ書き始められることを訴求する。
+/// スクショ4枚目: テンプレート一覧。テンプレートを選んですぐ書き始められることを訴求する。
 struct AppStoreScreenshot4Page: View {
     let language: AppStoreScreenshotLanguage
     let canvas: AppStoreScreenshotCanvas
 
     var body: some View {
-        // 機能(テンプレート)をタイトルで先に伝える。情緒的な「今日の紙を選ぶ」はサブに置く。
+        // 機能(テンプレート)をタイトルで先に伝える。使い方の具体例はサブに置く。
         let (title, subtitle) = switch language {
         case .ja: (
             "テンプレートで\nすぐ書きはじめる",
-            "「朝の3行」「一日の振り返り」から今日の紙を選ぶ"
+            "「朝の3行」「一日の振り返り」から今日のテンプレートを選ぶ"
         )
         case .en: (
             "Start right away\nwith templates",
@@ -24,8 +24,8 @@ struct AppStoreScreenshot4Page: View {
     }
 }
 
-/// ノート一覧(テンプレート選択)のモック画面。実際の NotebookListPage と同じ構成
-/// (ナビ + 見出し + ノートカードの並び)を、文言を言語別に渡せる静的表現で再現する
+/// テンプレート一覧のモック画面。実際の NotebookListPage と同じ構成
+/// (ナビ + 見出し + テンプレートカードの並び)を、文言を言語別に渡せる静的表現で再現する
 /// (NotebookListPage はナビタイトル・リマインド表示が日本語固定のため)。
 struct AppStoreScreenshotNotebookScreen: View {
     let language: AppStoreScreenshotLanguage
@@ -33,8 +33,8 @@ struct AppStoreScreenshotNotebookScreen: View {
 
     var body: some View {
         let (navTitle, heading, reminderDaily) = switch language {
-        case .ja: ("ノート", "今日はどの紙に書きますか。", "毎日")
-        case .en: ("Notebooks", "Which page will you write on today?", "Daily")
+        case .ja: ("テンプレート", "この日記に使うテンプレートを選べます。", "毎日")
+        case .en: ("Templates", "Choose the template for this entry.", "Daily")
         }
         VStack(spacing: 0) {
             InkNavBar(leading: .back, center: .title(navTitle))

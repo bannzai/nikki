@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// 一覧末尾の「＋ 新しいノート」フッタ。タップで作成フォームへ進む。
+/// 一覧末尾の「＋ 新しいテンプレート」フッタ。タップで作成フォームへ進む。
 struct NotebookNewFooter: View {
     let onTap: () -> Void
 
@@ -10,7 +10,7 @@ struct NotebookNewFooter: View {
             HStack(spacing: 8) {
                 Image(systemName: InkIcons.add)
                     .font(.system(size: 14, weight: .regular))
-                Text("New notebook")
+                Text("New template")
                     .font(.ink(13.5, .regular))
             }
             .foregroundStyle(Color.inkTextSecondary)

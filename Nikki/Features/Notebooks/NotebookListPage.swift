@@ -1,26 +1,27 @@
 import SwiftUI
 import SwiftData
 
-/// ノート一覧(1l)。「今日はどの紙に書きますか。」の見出しの下に、
-/// 各ノートをカード(名前 + リマインドの頻度 + シェブロン + テンプレートの markdown プレビュー)で並べる。
-/// カードを選ぶと日記をそのノートに入れ、ノートのテンプレートの内容({{date}} は日記の日付で補完)で
-/// entry を置き換えて保存し、次回の新規作成で自動的に使う既定のノートとして記憶してエディタへ戻る。
+/// テンプレート一覧(1l)。日記に使うテンプレートをカード(名前 + リマインドの頻度 +
+/// テンプレートの markdown プレビュー)で並べ、いま日記に使われているものにチェックを付ける
+/// (新規日記は既定のテンプレートが選ばれた状態になる。issue #82)。
+/// カードを選ぶとそのテンプレートの内容({{date}} は日記の日付で補完)で entry を置き換えて保存し、
+/// 次回の新規作成で自動的に使う既定のテンプレートとして記憶してエディタへ戻る。
 /// entry に入力があるときは、置き換えで入力内容が消えることをアラートで確認してから置き換える。
-/// 末尾の「＋ 新しいノート」からは作成フォーム(NotebookCreatePage)へ進む。
+/// 末尾の「＋ 新しいテンプレート」からは作成フォーム(NotebookCreatePage)へ進む。
 struct NotebookListPage: View {
-    /// ノートを決める対象の日記。遷移元のエディタが表示中の日記を渡す。
+    /// テンプレートを決める対象の日記。遷移元のエディタが表示中の日記を渡す。
     let entry: JournalEntry
 
     @Query(sort: \JournalNotebook.sortOrder) var notebooks: [JournalNotebook]
 
-    /// 置き換え確認アラートの対象ノート。nil のときはアラートを閉じている。
+    /// 置き換え確認アラートの対象テンプレート。nil のときはアラートを閉じている。
     @State var notebook: JournalNotebook?
     @State var replaceAlertIsPresented = false
 
-    /// 「＋ 新しいノート」の作成フォームへの遷移状態。
+    /// 「＋ 新しいテンプレート」の作成フォームへの遷移状態。
     @State var notebookCreateIsPresented = false
 
-    /// 既定のノートの id(UUID 文字列)。空のときは未設定。選んだノートを次回の自動挿入用に記憶する。
+    /// 既定のテンプレートの id(UUID 文字列)。空のときは未設定。選んだテンプレートを次回の自動挿入用に記憶する。
     @AppStorage(.defaultNotebookID) var defaultNotebookID: String = ""
 
     @Environment(\.dismiss) private var dismiss
@@ -29,10 +30,10 @@ struct NotebookListPage: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            InkNavBar(leading: .back, center: .title(String(localized: "Notebooks")), onLeading: { dismiss() })
+            InkNavBar(leading: .back, center: .title(String(localized: "Templates")), onLeading: { dismiss() })
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
-                    Text("Which page will you write on today?")
+                    Text("Choose the template for this entry.")
                         .font(.ink(12.5, .regular))
                         .foregroundStyle(Color.inkTextSecondary)
                         .lineSpacing(inkLineSpacing(fontSize: 12.5, multiplier: 1.9))
@@ -40,7 +41,11 @@ struct NotebookListPage: View {
 
                     VStack(spacing: 12) {
                         ForEach(notebooks) { notebook in
-                            NotebookCard(notebook: notebook) { select(notebook: notebook) }
+                            NotebookCard(
+                                notebook: notebook,
+                                isSelected: notebook.id == entry.notebook?.id,
+                                onTap: { select(notebook: notebook) }
+                            )
                         }
                     }
 
@@ -62,7 +67,7 @@ struct NotebookListPage: View {
         }
     }
 
-    /// カードで選んだノートを適用する。entry に入力があるときは、消えることを確認してから適用する。
+    /// カードで選んだテンプレートを適用する。entry に入力があるときは、消えることを確認してから適用する。
     private func select(notebook: JournalNotebook) {
         if entry.title.isEmpty && entry.bodyMarkdown.isEmpty {
             apply(notebook: notebook)
@@ -72,10 +77,10 @@ struct NotebookListPage: View {
         }
     }
 
-    /// 日記をノートに入れ、ノートのテンプレートの内容で置き換えて保存し、既定のノートとして記憶してエディタへ戻る。
+    /// 日記をテンプレートに紐付け、その内容で本文を置き換えて保存し、既定のテンプレートとして記憶してエディタへ戻る。
     private func apply(notebook: JournalNotebook) {
         entry.setNotebook(notebook: notebook)
-        // テンプレートを持たないノートは置き換えるものがないため、所属だけ変えて本文はそのまま残す。
+        // 書き出しを持たないテンプレートは置き換えるものがないため、紐付けだけ変えて本文はそのまま残す。
         if let template = notebook.template {
             entry.replace(templateMarkdown: TemplateVariableField.substitutedMarkdown(
                 template: template,
