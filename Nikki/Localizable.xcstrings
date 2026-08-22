@@ -505,6 +505,16 @@
         }
       }
     },
+    "Delete all templates": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "すべてのテンプレートを削除"
+          }
+        }
+      }
+    },
     "Delete template": {
       "localizations": {
         "ja": {
@@ -1200,6 +1210,16 @@
         }
       }
     },
+    "Restore the default template": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "既定のテンプレートを復元"
+          }
+        }
+      }
+    },
     "Retry": {
       "localizations": {
         "ja": {
@@ -1446,6 +1466,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "アーカイブした日記も含めて、すべての日記を削除します。この操作は取り消せません。"
+          }
+        }
+      }
+    },
+    "This deletes every template. Entries written with them are kept.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "すべてのテンプレートを削除します。テンプレートで書いた日記はそのまま残ります。"
           }
         }
       }
