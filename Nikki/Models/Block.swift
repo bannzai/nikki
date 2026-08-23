@@ -150,16 +150,18 @@ nonisolated extension Block {
             return nil
         }
         return .details(
-            summary: firstMatch(pattern: "<summary>(.*?)</summary>", line: rawLine) ?? "",
+            // summary の開始タグは属性付き (<summary class="…">) も許す。
+            summary: firstMatch(pattern: "<summary\\b[^>]*>(.*?)</summary>", line: rawLine) ?? "",
             isCollapsed: !detailsIsOpen(line: rawLine),
             rawMarkdown: rawLine
         )
     }
 
-    /// details の開始タグ内の open 属性。値なし (open) と値付き (open="…" / open='…' / open=xxx) の両方に
-    /// マッチし、前の空白ごと取り除ける形にしている。Regex は Sendable でなく static に持てないため、都度生成する。
+    /// details の開始タグ内の open 属性。値なし (open) と値付き (open="…" / open='…' / open=xxx、
+    /// = の前後の空白も許す) の両方にマッチし、前の空白ごと取り除ける形にしている。
+    /// Regex は Sendable でなく static に持てないため、都度生成する。
     private static func detailsOpenAttribute() -> Regex<Substring> {
-        #/\s+open(?:=(?:"[^"]*"|'[^']*'|[^\s>]*))?(?=\s|$)/#
+        #/\s+open(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]*))?(?=\s|$)/#
     }
 
     /// details 行の開始タグ (最初の > まで) に open 属性があるかどうか。属性の位置を問わず判定し、

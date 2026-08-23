@@ -65,6 +65,18 @@ struct BlockEditingTests {
         #expect(Block.markdown(blocks: blocks) == "<details><summary>病院メモ</summary></details>")
         blocks.toggleDetails(blockID: blockID)
         #expect(Block.markdown(blocks: blocks) == "<details open><summary>病院メモ</summary></details>")
+
+        // = の前後に空白がある open 属性も、値ごと丸ごと外れて構文を壊さない。
+        var spacedBlocks = Block.blocks(fromMarkdown: "<details open = \"open\"><summary>病院メモ</summary></details>")
+        let spacedBlockID = spacedBlocks[0].id
+        spacedBlocks.toggleDetails(blockID: spacedBlockID)
+        #expect(Block.markdown(blocks: spacedBlocks) == "<details><summary>病院メモ</summary></details>")
+    }
+
+    @Test("summary の開始タグに属性があっても要約を読める")
+    func readsSummaryWithAttributes() {
+        let blocks = Block.blocks(fromMarkdown: "<details><summary class=\"memo\">病院メモ</summary></details>")
+        #expect(blocks.firstDetailsSummary == "病院メモ")
     }
 
     @Test("本文が空のブロックと項目は書き出しから外れる")
