@@ -24,6 +24,32 @@ struct BlockEditingTests {
         #expect(Block.markdown(blocks: blocks) == "<details><summary>病院メモ</summary></details>")
     }
 
+    @Test("先頭以外の位置の open 属性も重複させずに付け外しできる")
+    func togglesDetailsOpenAttributeAtAnyPosition() {
+        // open が後方の属性でも「開いている」と読む。
+        var blocks = Block.blocks(fromMarkdown: "<details class=\"memo\" open><summary>病院メモ</summary></details>")
+        let blockID = blocks[0].id
+        if case .details(_, _, let isCollapsed, _) = blocks[0] {
+            #expect(isCollapsed == false)
+        } else {
+            Issue.record("details としてパースされていない: \(blocks)")
+        }
+
+        // たたむと後方の open だけが外れ、開き直しても open は1つのまま。
+        blocks.toggleDetails(blockID: blockID)
+        #expect(Block.markdown(blocks: blocks) == "<details class=\"memo\"><summary>病院メモ</summary></details>")
+        blocks.toggleDetails(blockID: blockID)
+        #expect(Block.markdown(blocks: blocks) == "<details open class=\"memo\"><summary>病院メモ</summary></details>")
+
+        // summary の文中の「open」には反応しない。
+        let summaryBlocks = Block.blocks(fromMarkdown: "<details><summary>open 予定の店</summary></details>")
+        if case .details(_, _, let isCollapsed, _) = summaryBlocks[0] {
+            #expect(isCollapsed == true)
+        } else {
+            Issue.record("details としてパースされていない: \(summaryBlocks)")
+        }
+    }
+
     @Test("本文が空のブロックと項目は書き出しから外れる")
     func dropsEmptyText() {
         let blocks: [Block] = [

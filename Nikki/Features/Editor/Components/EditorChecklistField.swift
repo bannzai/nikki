@@ -30,7 +30,9 @@ struct EditorChecklistField: View {
                     // 打ち消し線を描画せず、macOS では完了の切り替え直後に文字色も更新されないため
                     // (1操作遅れで反映される)、完了の見た目は Text で描画する。文字を直したいときは
                     // チェックを外してから編集する。
-                    if item.done {
+                    // ただし本文が空の項目(「- [x] 」の変換直後)と入力中の項目は、入力欄が無いと項目名を
+                    // 書けない・入力の途中で欄が消えるため、完了でも TextField のまま出す。
+                    if item.done && !item.text.isEmpty && focusedFieldID != item.id {
                         Text(item.text)
                             .font(.ink(bodyFontSize, .regular))
                             .foregroundStyle(Color.inkTextTertiary)
@@ -39,7 +41,7 @@ struct EditorChecklistField: View {
                         TextField("", text: textBinding(itemID: item.id), axis: .vertical)
                             .textFieldStyle(.plain)
                             .font(.ink(bodyFontSize, .regular))
-                            .foregroundStyle(Color.ink)
+                            .foregroundStyle(item.done ? Color.inkTextTertiary : Color.ink)
                             .focused($focusedFieldID, equals: item.id)
                             // Return が改行ではなく確定として届くプラットフォームでは、この経路で次の項目を用意する
                             // (改行として届くプラットフォームでは textBinding 側が改行で項目を分ける)。

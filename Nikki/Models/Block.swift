@@ -150,9 +150,35 @@ nonisolated extension Block {
         }
         return .details(
             summary: firstMatch(pattern: "<summary>(.*?)</summary>", line: line) ?? "",
-            isCollapsed: !line.hasPrefix("<details open"),
+            isCollapsed: !detailsIsOpen(line: line),
             rawMarkdown: rawLine
         )
+    }
+
+    /// details 行の開始タグ (最初の > まで) に open 属性があるかどうか。属性の位置を問わず判定し、
+    /// summary の文中に「open」とあっても反応しない。
+    private static func detailsIsOpen(line: String) -> Bool {
+        guard let tagEnd = line.firstIndex(of: ">") else {
+            return false
+        }
+        return line[..<tagEnd].contains(#/\sopen(?=\s|$)/#)
+    }
+
+    /// details 行の開始タグの open 属性を付け外しした行。opens が true なら追加、false なら除去する。
+    /// summary 以外の属性や書き方は元の行のまま保ち、open が先頭以外の位置にあっても重複させない。
+    static func togglingDetailsOpenAttribute(rawMarkdown: String, opens: Bool) -> String {
+        if opens {
+            // 既に open が付いている行はそのまま返す(冪等)。
+            if detailsIsOpen(line: rawMarkdown) {
+                return rawMarkdown
+            }
+            return rawMarkdown.replacing("<details", with: "<details open", maxReplacements: 1)
+        }
+        guard let tagEnd = rawMarkdown.firstIndex(of: ">") else {
+            return rawMarkdown
+        }
+        // 除去は開始タグの中だけを対象にし、summary の文中の「open」を巻き込まない。
+        return String(rawMarkdown[..<tagEnd]).replacing(#/\s+open(?=\s|$)/#, with: "", maxReplacements: 1) + String(rawMarkdown[tagEnd...])
     }
 
     /// name="値" 形式の HTML 属性値を取り出す。
@@ -361,14 +387,15 @@ nonisolated extension [Block] {
         }
     }
 
-    /// details の開閉を反転する。
+    /// details の開閉を反転する。書き戻し用の rawMarkdown 側も open 属性を付け外しして裏返す。
     mutating func toggleDetails(blockID: UUID) {
         if let index = firstIndex(where: { $0.id == blockID }), case .details(let id, let summary, let isCollapsed, let rawMarkdown) = self[index] {
-            // 書き戻し用の rawMarkdown 側も open 属性を付け外しして裏返す。summary 以外の属性や書き方は元の行のまま保つ。
-            let toggledRawMarkdown = isCollapsed
-                ? rawMarkdown.replacing("<details", with: "<details open", maxReplacements: 1)
-                : rawMarkdown.replacing("<details open", with: "<details", maxReplacements: 1)
-            self[index] = .details(id: id, summary: summary, isCollapsed: !isCollapsed, rawMarkdown: toggledRawMarkdown)
+            self[index] = .details(
+                id: id,
+                summary: summary,
+                isCollapsed: !isCollapsed,
+                rawMarkdown: Block.togglingDetailsOpenAttribute(rawMarkdown: rawMarkdown, opens: isCollapsed)
+            )
         }
     }
 

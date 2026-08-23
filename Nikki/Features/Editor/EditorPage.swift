@@ -138,6 +138,9 @@ struct EditorPage: View {
             if entry.bodyMarkdown != bodyMarkdown {
                 entry.setBodyMarkdown(bodyMarkdown)
             }
+            // 書き戻した時点の状態を新しい未編集の基準にする。バックグラウンド移行の中間保存の後に
+            // 開いた時点の内容へ手で戻した場合も、次の書き戻しで「編集」として保存されるようにする。
+            openedBlocks = draftBlocks
         }
         try? modelContext.save()
     }

@@ -156,14 +156,18 @@ last_verified_at: 2026-08-23
   - 自動化: NikkiTests/BlockEditingTests.swift (togglesChecklistItemDone) + manual
   - macOS で切り替えの即時反映 (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/8f338314-392c-438e-aaa1-5332fddbf051.png) と開き直し後の保持 (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/abecee74-a207-47a6-bd05-46d845f44f64.png) を確認
   - iOS でタップした項目が打ち消し線+灰になり (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/c8ea81ef-7d0f-4f88-92e7-03a6a209bd29.jpg)、開き直しても保持された
-- [x] **details のタップで開閉し保存される**: details カードをタップするとシェブロンが ▶ / ▼ に切り替わり、markdown の open 属性として書き戻される
-  - 自動化: NikkiTests/BlockEditingTests.swift (togglesDetailsOpen) + manual
+- [x] **details のタップで開閉し保存される**: details カードをタップするとシェブロンが ▶ / ▼ に切り替わり、markdown の open 属性として書き戻される (open が先頭以外の位置の属性でも重複させずに付け外しされる)
+  - 自動化: NikkiTests/BlockEditingTests.swift (togglesDetailsOpen / togglesDetailsOpenAttributeAtAnyPosition) + manual
   - macOS (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/5a427ab6-64d3-470f-8adc-daa393ade4a5.png) と iOS (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/d5c5ffe1-725c-4eeb-b920-916e7f3b8410.jpg) で開閉を確認
 - [x] **記法を打ち終えるとその場でブロックに変わる**: 段落に「- [ ] 」「- [x] 」「# 」〜「### 」を打ち終えると、その場でチェックリスト・見出しに変わり、続きを入力できる位置へフォーカスが移る
   - 自動化: NikkiTests/BlockEditingTests.swift (convertsMarkdownPrefix / movesFieldAfterConversion) + manual
   - iOS で「- [ ] 」がチェックボックスに変わり (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/a3b0bc42-6e45-4e4b-9b7f-79ab1b8573da.jpg)、「# 」が見出しに変わって続きが見出しの書体で入力できた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/15a62765-7011-48d7-b941-362fe5961236.jpg)
   - macOS でも「- [ ] 」がチェックボックスに変わり、続けて打った文字がそのまま項目の本文に入った (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/0dd538b2-b494-4f24-8180-124cfbd6ee28.png)。初回実装では変換直後にフォーカスが失われて入力が消えており、フォーカス移動を次の runloop に遅らせて解消した
   - フォーカス移動の遅延後、iOS でも変換 → 続きの入力 → Return での項目追加が変わらず動くことを再確認した (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/2f58680e-c00c-49f6-8068-ec8e563474c2.jpg)
+  - macOS で「- [x] 」からの変換直後も入力欄が出て、続けて項目名を入力できた (完了項目は本文が空・入力中の間は TextField のまま出す。 https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/cad3d43e-eee5-4797-bb6a-eea0f36e2f4e.png)
+- [x] **中間保存の後に元へ戻した編集も保存される**: 本文を編集してアプリをバックグラウンドへ移した後 (中間保存)、開いた時点の内容へ手で戻して閉じると、戻した状態が保存される
+  - 自動化: manual（バックグラウンド移行をまたいだ書き戻しの基準更新を実操作で確認する）
+  - macOS で「XTEST」を入力 → 他アプリへ切り替え (中間保存) → 戻って削除 → 閉じて開き直すと、XTEST が残っていない元の内容に戻っていた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/9bef589d-e285-427e-840f-853d62b04d91.png)
 - [x] **Return でブロック・項目が増える**: 段落・見出しで Return すると次の段落へ移り、チェックリスト項目で Return すると次の項目が増え、空の項目で Return するとリストから抜けて段落に戻る
   - 自動化: NikkiTests/BlockEditingTests.swift (splitsBlockByNewline / insertsChecklistItemAfterItem / exitsChecklistFromEmptyItem / splitsChecklistAtEmptyMiddleItem) + manual
   - iOS で段落→チェックリスト2項目→空項目で脱出→見出し、の一連の入力ができた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/15a62765-7011-48d7-b941-362fe5961236.jpg)
