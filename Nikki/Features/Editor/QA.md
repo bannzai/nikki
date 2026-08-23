@@ -1,7 +1,7 @@
 ---
 feature: Editor
 verification: mobile-mcp
-last_verified_commit: f8565c9a2ad3cc2d74804e40aa157f3df64b099f
+last_verified_commit: 9dbb3c0f2ad04a8998544249ee32109e0c0a893e
 last_verified_at: 2026-08-24
 ---
 
@@ -159,6 +159,7 @@ last_verified_at: 2026-08-24
 - [x] **details のタップで開閉し保存される**: details カードをタップするとシェブロンが ▶ / ▼ に切り替わり、markdown の open 属性として書き戻される (open が先頭以外の位置の属性でも重複させずに付け外しされる)
   - 自動化: NikkiTests/BlockEditingTests.swift (togglesDetailsOpen / togglesDetailsOpenAttributeAtAnyPosition) + manual
   - macOS (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/5a427ab6-64d3-470f-8adc-daa393ade4a5.png) と iOS (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/d5c5ffe1-725c-4eeb-b920-916e7f3b8410.jpg) で開閉を確認
+  - レビュー対応 (details/img のタグ名境界・open 属性の大文字と引用符対応・アクセシビリティ表示) 後の最終ツリー (9dbb3c0) でも macOS で再確認: タップで ▶→▼ (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/d3037137-cb83-4ab5-bbad-9d453c6a1eab.png)、閉じて開き直しても ▼ のまま (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/931f02e7-0d33-49cd-92e5-d6c640a2b8fc.png)、再タップで ▶ に戻った (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/48d35617-01ff-48c0-a355-f3611a9ec13d.png)。パーサの変更点自体は BlockMarkdownTests / BlockEditingTests (計 71 件 pass) で担保し、iOS は同一コードのため再スクリーンショットは省略
 - [x] **記法を打ち終えるとその場でブロックに変わる**: 段落に「- [ ] 」「- [x] 」「# 」〜「### 」を打ち終えると、その場でチェックリスト・見出しに変わり、続きを入力できる位置へフォーカスが移る
   - 自動化: NikkiTests/BlockEditingTests.swift (convertsMarkdownPrefix / movesFieldAfterConversion) + manual
   - iOS で「- [ ] 」がチェックボックスに変わり (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/a3b0bc42-6e45-4e4b-9b7f-79ab1b8573da.jpg)、「# 」が見出しに変わって続きが見出しの書体で入力できた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/15a62765-7011-48d7-b941-362fe5961236.jpg)
