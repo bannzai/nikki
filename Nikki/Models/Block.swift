@@ -150,8 +150,7 @@ nonisolated extension Block {
             return nil
         }
         return .details(
-            // summary の開始タグは属性付き (<summary class="…">) も許す。
-            summary: firstMatch(pattern: "<summary\\b[^>]*>(.*?)</summary>", line: rawLine) ?? "",
+            summary: detailsSummary(line: rawLine) ?? "",
             isCollapsed: !detailsIsOpen(line: rawLine),
             rawMarkdown: rawLine
         )
@@ -170,11 +169,11 @@ nonisolated extension Block {
         return line[afterTagName].isWhitespace || line[afterTagName] == ">" || line[afterTagName] == "/"
     }
 
-    /// details の開始タグの終端 (引用符の外にある最初の >)。<details title="a > b"> のように
-    /// 引用符付きの値が > を含んでも、値の中を終端と誤認しない。
-    private static func detailsTagEnd(line: String) -> String.Index? {
+    /// start から探した、引用符の外にある最初の >。<details title="a > b"> のように
+    /// 引用符付きの属性値が > を含んでも、値の中を開始タグの終端と誤認しない。
+    private static func tagEnd(line: String, start: String.Index) -> String.Index? {
         var quote: Character?
-        var index = line.startIndex
+        var index = start
         while index < line.endIndex {
             let character = line[index]
             if let currentQuote = quote {
@@ -191,12 +190,22 @@ nonisolated extension Block {
         return nil
     }
 
+    /// <summary> 開始タグ (属性付きも許す) と </summary> に挟まれた要約。summary タグが無ければ nil。
+    private static func detailsSummary(line: String) -> String? {
+        guard let summaryStart = line.range(of: "<summary"),
+              let summaryTagEnd = tagEnd(line: line, start: summaryStart.upperBound),
+              let summaryClose = line.range(of: "</summary>", range: summaryTagEnd..<line.endIndex) else {
+            return nil
+        }
+        return String(line[line.index(after: summaryTagEnd)..<summaryClose.lowerBound])
+    }
+
     /// details の開始タグ (最初の > まで) にある open 属性の範囲 (直前の空白を含む)。無ければ nil。
     /// 属性を先頭から順に読み、引用符付きの値の中は読み飛ばすため、値の文中や summary の文中の
     /// 「open」には反応しない。値なし (open) と値付き (open="…" / open='…' / open=xxx、= の前後の空白も許す)
     /// の両方を1つの属性として扱う。
     private static func detailsOpenAttributeRange(line: String) -> Range<String.Index>? {
-        guard hasTag(name: "details", line: line), let tagEnd = detailsTagEnd(line: line) else {
+        guard hasTag(name: "details", line: line), let tagEnd = tagEnd(line: line, start: line.startIndex) else {
             return nil
         }
         var index = line.index(line.startIndex, offsetBy: "<details".count)

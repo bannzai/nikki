@@ -79,6 +79,12 @@ struct BlockEditingTests {
         #expect(blocks.firstDetailsSummary == "病院メモ")
     }
 
+    @Test("summary 属性値内の > を要約本文として扱わない")
+    func readsSummaryAfterQuotedGreaterThan() {
+        let blocks = Block.blocks(fromMarkdown: "<details><summary title=\"a > b\">病院メモ</summary></details>")
+        #expect(blocks.firstDetailsSummary == "病院メモ")
+    }
+
     @Test("属性値の文中の open は属性として扱わない")
     func ignoresOpenInsideAttributeValue() {
         var blocks = Block.blocks(fromMarkdown: "<details title=\"is open now\"><summary>病院メモ</summary></details>")
