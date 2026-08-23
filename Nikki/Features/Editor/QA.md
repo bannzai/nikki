@@ -1,7 +1,7 @@
 ---
 feature: Editor
 verification: mobile-mcp
-last_verified_commit: d9585fcd65790594b7374c16f0461d0b14d48aa7
+last_verified_commit: b9bcc03e1f92547707fb0519c2717889b6631de6
 last_verified_at: 2026-08-23
 ---
 
@@ -162,10 +162,18 @@ last_verified_at: 2026-08-23
 - [x] **記法を打ち終えるとその場でブロックに変わる**: 段落に「- [ ] 」「- [x] 」「# 」〜「### 」を打ち終えると、その場でチェックリスト・見出しに変わり、続きを入力できる位置へフォーカスが移る
   - 自動化: NikkiTests/BlockEditingTests.swift (convertsMarkdownPrefix / movesFieldAfterConversion) + manual
   - iOS で「- [ ] 」がチェックボックスに変わり (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/a3b0bc42-6e45-4e4b-9b7f-79ab1b8573da.jpg)、「# 」が見出しに変わって続きが見出しの書体で入力できた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/15a62765-7011-48d7-b941-362fe5961236.jpg)
+  - macOS でも「- [ ] 」がチェックボックスに変わり、続けて打った文字がそのまま項目の本文に入った (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/0dd538b2-b494-4f24-8180-124cfbd6ee28.png)。初回実装では変換直後にフォーカスが失われて入力が消えており、フォーカス移動を次の runloop に遅らせて解消した
+  - フォーカス移動の遅延後、iOS でも変換 → 続きの入力 → Return での項目追加が変わらず動くことを再確認した (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/2f58680e-c00c-49f6-8068-ec8e563474c2.jpg)
 - [x] **Return でブロック・項目が増える**: 段落・見出しで Return すると次の段落へ移り、チェックリスト項目で Return すると次の項目が増え、空の項目で Return するとリストから抜けて段落に戻る
-  - 自動化: NikkiTests/BlockEditingTests.swift (splitsBlockByNewline / insertsChecklistItemAfterItem / exitsChecklistFromEmptyItem) + manual
+  - 自動化: NikkiTests/BlockEditingTests.swift (splitsBlockByNewline / insertsChecklistItemAfterItem / exitsChecklistFromEmptyItem / splitsChecklistAtEmptyMiddleItem) + manual
   - iOS で段落→チェックリスト2項目→空項目で脱出→見出し、の一連の入力ができた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/15a62765-7011-48d7-b941-362fe5961236.jpg)
+  - macOS で段落の Return で次の段落へ移れた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/f8ffdd1d-2de8-42a2-a280-1baeaf2c795b.png)。チェックリスト項目の Return で次の項目が増えた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/0dd538b2-b494-4f24-8180-124cfbd6ee28.png)
+- [x] **チェックボックスはボックスの外側少しまでタップできる**: 見た目は 19pt のまま、ボックスの周囲までタップの当たり判定が広がっている
+  - 自動化: manual（ボックスの外側をクリック・タップして切り替わることを確認する）
+  - macOS でボックス右外側のクリックで切り替わった (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/0b9cb9dd-c8ed-46fb-a792-9fec7a75b57e.png)
+  - iOS でもボックス右外側のタップで切り替わった (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/5c0da118-591d-4f79-8ad3-72b748e826cc.jpg)
 - 補足 (既知の制限):
   - img・details ブロックはエディタから削除できない (テキストの編集経路が無いため)。削除導線は別途扱う
   - 完了したチェック項目の文字は編集できない (チェックを外してから編集する)。入力欄 (TextField) は打ち消し線を描画できないため、完了項目は静的な文字で描画している
   - 貼り付け等で段落の途中に入った記法の行は、その場では変わらず、次に開いたときにブロックとして表示される
+  - macOS で行の途中で Return しても、カーソル以降は次のブロックへ移らない (Return が onSubmit として届き、SwiftUI の TextField からキャレット位置を取得できないため末尾扱いになる)。iOS は改行がキャレット位置に入るため、その位置でブロックが分かれる
