@@ -18,8 +18,9 @@
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0.0</string>
+	<!-- ビルド番号はビルド設定から取る。配布 workflow (ios-deploy.yml) が run_number 由来の値を CURRENT_PROJECT_VERSION に渡すため、ここを固定値にすると同じ番号で再アップロードして拒否される -->
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<!-- 独自の暗号実装を持たず、HTTPS と iCloud(CloudKit) の OS 標準暗号化のみを使うため輸出コンプライアンスの免除区分に該当する。提出ごとの申告質問を省くためここで宣言する -->
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
