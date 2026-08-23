@@ -49,9 +49,9 @@ struct BlockMarkdownTests {
                 ChecklistItem(text: "済み", done: true),
                 ChecklistItem(text: "未了", done: false),
             ]),
-            .image(label: "写真"),
-            .details(summary: "折りたたみ", isCollapsed: true),
-            .details(summary: "ひらいたまま", isCollapsed: false),
+            .image(label: "写真", rawMarkdown: "<img alt=\"写真\">"),
+            .details(summary: "折りたたみ", isCollapsed: true, rawMarkdown: "<details><summary>折りたたみ</summary></details>"),
+            .details(summary: "ひらいたまま", isCollapsed: false, rawMarkdown: "<details open><summary>ひらいたまま</summary></details>"),
         ]
         #expect(Block.markdown(blocks: blocks) == """
         # 見出し
@@ -87,6 +87,20 @@ struct BlockMarkdownTests {
         #expect(contents(of: blocks) == ["#### 深すぎる見出し", "- ただの箇条書き", "天気: 晴れ"])
     }
 
+    @Test("details を接頭辞に持つ別タグは details にしない")
+    func keepsDetailsPrefixedTagAsParagraph() {
+        // <details-panel> のようなカスタム要素を details と誤認すると、開閉のたびに開始タグが壊れる。
+        let blocks = Block.blocks(fromMarkdown: "<details-panel>メモ</details-panel>")
+        #expect(contents(of: blocks) == ["<details-panel>メモ</details-panel>"])
+    }
+
+    @Test("img を接頭辞に持つ別タグは画像ブロックにしない")
+    func keepsImagePrefixedTagAsParagraph() {
+        // <img-card> を画像ブロックに誤認すると、編集経路の無いプレースホルダになり元の行へアクセスできなくなる。
+        let blocks = Block.blocks(fromMarkdown: "<img-card>写真</img-card>")
+        #expect(contents(of: blocks) == ["<img-card>写真</img-card>"])
+    }
+
     @Test("空行はチェックリストの区切りになる")
     func blankLineSplitsChecklists() {
         let blocks = Block.blocks(fromMarkdown: "- [ ] 前半\n\n- [ ] 後半")
@@ -97,7 +111,7 @@ struct BlockMarkdownTests {
     func readsDetailsOpenAttribute() {
         let blocks = Block.blocks(fromMarkdown: "<details open><summary>メモ</summary></details>")
         #expect(blocks.count == 1)
-        if case .details(_, let summary, let isCollapsed) = blocks[0] {
+        if case .details(_, let summary, let isCollapsed, _) = blocks[0] {
             #expect(summary == "メモ")
             #expect(isCollapsed == false)
         } else {
@@ -108,6 +122,39 @@ struct BlockMarkdownTests {
     @Test("img の alt が無ければ src をラベルにする")
     func imageLabelFallsBackToSrc() {
         let blocks = Block.blocks(fromMarkdown: "<img src=\"https://example.com/photo.png\">")
-        #expect(contents(of: blocks) == ["<img alt=\"https://example.com/photo.png\">"])
+        if case .image(_, let label, _) = blocks[0] {
+            #expect(label == "https://example.com/photo.png")
+        } else {
+            Issue.record("img としてパースされていない: \(blocks)")
+        }
+    }
+
+    @Test("パースが解釈しない書き方は元の行のまま書き戻す")
+    func preservesUnrecognizedSyntax() {
+        // img の src やサポート外の属性、details の属性、段落の行内の空白を書き戻しで失わない。
+        let markdown = """
+        <img src="https://example.com/photo.png" width="100">
+
+        <details class="memo"><summary>病院メモ</summary></details>
+
+          行頭に空白のある段落
+        """
+        #expect(Block.markdown(blocks: Block.blocks(fromMarkdown: markdown)) == markdown)
+    }
+
+    @Test("インデントされた記法はブロックにせず段落として書き戻す")
+    func keepsIndentedSyntaxAsParagraph() {
+        // インデントをチェックリスト等に変換すると書き戻しでインデントが失われるため、記法の判定は行頭に限る。
+        let markdown = """
+        - [ ] 行頭のチェックリスト
+
+            - [ ] インデントされた行
+
+          # インデントされた見出し
+        """
+        let blocks = Block.blocks(fromMarkdown: markdown)
+        #expect(blocks.firstChecklistItems.map(\.text) == ["行頭のチェックリスト"])
+        #expect(blocks.paragraphTexts == ["    - [ ] インデントされた行", "  # インデントされた見出し"])
+        #expect(Block.markdown(blocks: blocks) == markdown)
     }
 }

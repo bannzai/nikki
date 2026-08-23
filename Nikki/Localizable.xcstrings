@@ -415,6 +415,16 @@
         }
       }
     },
+    "Collapsed": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "たたんでいます"
+          }
+        }
+      }
+    },
     "Content": {
       "localizations": {
         "ja": {
@@ -634,6 +644,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "端末の中で暗号化。鍵は端末の外に出ません。"
+          }
+        }
+      }
+    },
+    "Expanded": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ひらいています"
           }
         }
       }
