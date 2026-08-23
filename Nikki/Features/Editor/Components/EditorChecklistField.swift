@@ -23,6 +23,8 @@ struct EditorChecklistField: View {
                         EmptyView()
                     }
                     .toggleStyle(EditorCheckboxToggleStyle(boxSpacing: 0))
+                    // ラベルが EmptyView のため、VoiceOver が項目を区別できるよう項目の本文を名前にする。
+                    .accessibilityLabel(item.text)
 
                     // 完了した項目は入力欄ではなくカタログと同じ静的な文字にする。TextField は
                     // 打ち消し線を描画せず、macOS では完了の切り替え直後に文字色も更新されないため
@@ -76,7 +78,11 @@ struct EditorChecklistField: View {
             get: { items.first { $0.id == itemID }?.text ?? "" },
             set: { text in
                 if let fieldID = blocks.updateChecklistItem(itemID: itemID, text: text) {
-                    focusedFieldID = fieldID
+                    // 項目の分割・リスト脱出の直後は移動先の入力欄がまだ描画されていないため、即時に代入すると
+                    // macOS で first responder が失われて続きの入力が消える。次の runloop で移す。
+                    DispatchQueue.main.async {
+                        focusedFieldID = fieldID
+                    }
                 }
             }
         )

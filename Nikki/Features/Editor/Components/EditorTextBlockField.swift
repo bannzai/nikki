@@ -35,7 +35,11 @@ struct EditorTextBlockField: View {
             get: { block.editableText ?? "" },
             set: { text in
                 if let fieldID = blocks.updateEditableText(blockID: block.id, text: text) {
-                    focusedFieldID = fieldID
+                    // 記法変換・分割の直後は移動先の入力欄がまだ描画されていないため、即時に代入すると
+                    // macOS で first responder が失われて続きの入力が消える。次の runloop で移す。
+                    DispatchQueue.main.async {
+                        focusedFieldID = fieldID
+                    }
                 }
             }
         )

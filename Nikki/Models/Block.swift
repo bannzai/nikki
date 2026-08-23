@@ -18,8 +18,10 @@ enum Block: Identifiable, Hashable {
     case heading(id: UUID = UUID(), level: Int, text: String)
     case paragraph(id: UUID = UUID(), text: String)
     case checklist(id: UUID = UUID(), items: [ChecklistItem])
-    case image(id: UUID = UUID(), label: String)
-    case details(id: UUID = UUID(), summary: String, isCollapsed: Bool)
+    // img / details の rawMarkdown は本文にあった元の行そのもの。表示は label / summary で行い、
+    // 書き戻しは rawMarkdown を使うことで、パースが解釈しない属性(src 等)や書き方を失わない。
+    case image(id: UUID = UUID(), label: String, rawMarkdown: String)
+    case details(id: UUID = UUID(), summary: String, isCollapsed: Bool, rawMarkdown: String)
 
     // 編集ヘルパー(下の「編集」セクション)が nonisolated な純粋関数からブロックを探せるようにする。
     nonisolated var id: UUID {
@@ -27,8 +29,8 @@ enum Block: Identifiable, Hashable {
         case .heading(let id, _, _): return id
         case .paragraph(let id, _): return id
         case .checklist(let id, _): return id
-        case .image(let id, _): return id
-        case .details(let id, _, _): return id
+        case .image(let id, _, _): return id
+        case .details(let id, _, _, _): return id
         }
     }
 }
@@ -65,12 +67,13 @@ nonisolated extension Block {
             flushChecklist()
             if let heading = heading(fromLine: line) {
                 blocks.append(heading)
-            } else if let image = image(fromLine: line) {
+            } else if let image = image(line: line, rawLine: rawLine) {
                 blocks.append(image)
-            } else if let details = details(fromLine: line) {
+            } else if let details = details(line: line, rawLine: rawLine) {
                 blocks.append(details)
             } else {
-                blocks.append(.paragraph(text: line))
+                // 書き戻しで行内の空白まで元のまま残るよう、トリムした line ではなく元の行を持つ。
+                blocks.append(.paragraph(text: rawLine))
             }
         }
         flushChecklist()
@@ -87,12 +90,10 @@ nonisolated extension Block {
                 return text
             case .checklist(_, let items):
                 return items.map { "- [\($0.done ? "x" : " ")] \($0.text)" }.joined(separator: "\n")
-            case .image(_, let label):
-                return "<img alt=\"\(label)\">"
-            case .details(_, let summary, let isCollapsed):
-                return isCollapsed
-                    ? "<details><summary>\(summary)</summary></details>"
-                    : "<details open><summary>\(summary)</summary></details>"
+            case .image(_, _, let rawMarkdown):
+                return rawMarkdown
+            case .details(_, _, _, let rawMarkdown):
+                return rawMarkdown
             }
         }
         .joined(separator: "\n\n")
@@ -131,22 +132,26 @@ nonisolated extension Block {
         return nil
     }
 
-    /// <img> タグの行。表示ラベルは alt 属性、無ければ src 属性から取る。
-    private static func image(fromLine line: String) -> Block? {
+    /// <img> タグの行。表示ラベルは alt 属性、無ければ src 属性から取り、書き戻し用に元の行を保持する。
+    private static func image(line: String, rawLine: String) -> Block? {
         if !line.hasPrefix("<img") {
             return nil
         }
-        return .image(label: attributeValue(name: "alt", line: line) ?? attributeValue(name: "src", line: line) ?? "")
+        return .image(
+            label: attributeValue(name: "alt", line: line) ?? attributeValue(name: "src", line: line) ?? "",
+            rawMarkdown: rawLine
+        )
     }
 
-    /// <details> タグの行。<summary> の中身を要約に、open 属性の有無を開閉状態に読む。
-    private static func details(fromLine line: String) -> Block? {
+    /// <details> タグの行。<summary> の中身を要約に、open 属性の有無を開閉状態に読み、書き戻し用に元の行を保持する。
+    private static func details(line: String, rawLine: String) -> Block? {
         if !line.hasPrefix("<details") {
             return nil
         }
         return .details(
             summary: firstMatch(pattern: "<summary>(.*?)</summary>", line: line) ?? "",
-            isCollapsed: !line.hasPrefix("<details open")
+            isCollapsed: !line.hasPrefix("<details open"),
+            rawMarkdown: rawLine
         )
     }
 
@@ -188,12 +193,12 @@ nonisolated extension [Block] {
 
     /// 最初の img ブロックのラベル。
     var firstImageLabel: String? {
-        compactMap { if case .image(_, let label) = $0 { return label } else { return nil } }.first
+        compactMap { if case .image(_, let label, _) = $0 { return label } else { return nil } }.first
     }
 
     /// 最初の details ブロックの要約。
     var firstDetailsSummary: String? {
-        compactMap { if case .details(_, let summary, _) = $0 { return summary } else { return nil } }.first
+        compactMap { if case .details(_, let summary, _, _) = $0 { return summary } else { return nil } }.first
     }
 }
 
@@ -358,8 +363,12 @@ nonisolated extension [Block] {
 
     /// details の開閉を反転する。
     mutating func toggleDetails(blockID: UUID) {
-        if let index = firstIndex(where: { $0.id == blockID }), case .details(let id, let summary, let isCollapsed) = self[index] {
-            self[index] = .details(id: id, summary: summary, isCollapsed: !isCollapsed)
+        if let index = firstIndex(where: { $0.id == blockID }), case .details(let id, let summary, let isCollapsed, let rawMarkdown) = self[index] {
+            // 書き戻し用の rawMarkdown 側も open 属性を付け外しして裏返す。summary 以外の属性や書き方は元の行のまま保つ。
+            let toggledRawMarkdown = isCollapsed
+                ? rawMarkdown.replacing("<details", with: "<details open", maxReplacements: 1)
+                : rawMarkdown.replacing("<details open", with: "<details", maxReplacements: 1)
+            self[index] = .details(id: id, summary: summary, isCollapsed: !isCollapsed, rawMarkdown: toggledRawMarkdown)
         }
     }
 
@@ -373,18 +382,23 @@ nonisolated extension [Block] {
         return nil
     }
 
-    /// チェックリストから項目を取り除き、リストの直後に空の段落を置く。
-    /// 項目が無くなったチェックリストは段落そのものに置き換える。続けて入力する段落の id を返す。
+    /// チェックリストから項目を取り除き、その項目があった位置に空の段落を置く。
+    /// 途中の項目から抜けたときは前後の項目を別々のチェックリストに分け、その間に段落を挟む
+    /// (段落をリスト全体の後ろへ動かすと、入力位置と項目の順序が変わってしまうため)。
+    /// 前後に項目が無い側のチェックリストは作らない。続けて入力する段落の id を返す。
     private mutating func exitChecklist(blockIndex: Int, itemIndex: Int) -> UUID? {
-        if case .checklist(let id, var items) = self[blockIndex] {
-            items.remove(at: itemIndex)
+        if case .checklist(let id, let items) = self[blockIndex] {
             let paragraph = Block.paragraph(text: "")
-            if items.isEmpty {
-                self[blockIndex] = paragraph
-            } else {
-                self[blockIndex] = .checklist(id: id, items: items)
-                insert(paragraph, at: blockIndex + 1)
+            var replacement: [Block] = []
+            // この extension 内で Array と書くと Array<Block> に束縛されるため、要素型を明示する。
+            if itemIndex > 0 {
+                replacement.append(.checklist(id: id, items: Array<ChecklistItem>(items[..<itemIndex])))
             }
+            replacement.append(paragraph)
+            if itemIndex + 1 < items.count {
+                replacement.append(.checklist(items: Array<ChecklistItem>(items[(itemIndex + 1)...])))
+            }
+            replaceSubrange(blockIndex...blockIndex, with: replacement)
             return paragraph.id
         }
         return nil

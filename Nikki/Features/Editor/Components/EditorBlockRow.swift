@@ -27,9 +27,9 @@ struct EditorBlockRow: View {
                 focusedFieldID: $focusedFieldID,
                 bodyFontSize: bodyFontSize
             )
-        case .image(_, let label):
+        case .image(_, let label, _):
             EditorImageBlock(label: label)
-        case .details(_, let summary, let isCollapsed):
+        case .details(_, let summary, let isCollapsed, _):
             Button {
                 blocks.toggleDetails(blockID: block.id)
             } label: {

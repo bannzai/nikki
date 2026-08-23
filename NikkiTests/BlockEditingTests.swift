@@ -32,7 +32,7 @@ struct BlockEditingTests {
             .heading(level: 2, text: ""),
             .checklist(items: [ChecklistItem(text: "麦茶", done: false), ChecklistItem(text: "", done: false)]),
             .checklist(items: [ChecklistItem(text: "", done: false)]),
-            .image(label: "夕焼けの写真"),
+            .image(label: "夕焼けの写真", rawMarkdown: "<img alt=\"夕焼けの写真\">"),
         ]
         #expect(Block.markdown(blocks: blocks.withoutEmptyText) == """
         朝から蝉が鳴いていた。
@@ -118,6 +118,22 @@ struct BlockEditingTests {
         #expect(Block.markdown(blocks: blocks.withoutEmptyText) == "- [ ] 麦茶のパック")
     }
 
+    @Test("途中の空項目で抜けるとチェックリストが前後に分かれる")
+    func splitsChecklistAtEmptyMiddleItem() {
+        var blocks: [Block] = [
+            .checklist(items: [
+                ChecklistItem(text: "麦茶のパック", done: false),
+                ChecklistItem(text: "", done: false),
+                ChecklistItem(text: "蚊取り線香", done: true),
+            ])
+        ]
+        let itemID = blocks.firstChecklistItems[1].id
+        let fieldID = blocks.updateChecklistItem(itemID: itemID, text: "\n")
+        #expect(blocks.count == 3)
+        #expect(fieldID == blocks[1].id)
+        #expect(Block.markdown(blocks: blocks) == "- [ ] 麦茶のパック\n\n\n\n- [x] 蚊取り線香")
+    }
+
     @Test("項目が1つだけのチェックリストは抜けると段落に入れ替わる")
     func replacesChecklistWithParagraph() {
         var blocks: [Block] = [.checklist(items: [ChecklistItem(text: "", done: false)])]
@@ -142,7 +158,7 @@ struct BlockEditingTests {
         let blocks = Block.blocks(fromMarkdown: "<img alt=\"夕焼けの写真\">\n\n- [ ] 麦茶のパック\n\n本文")
         #expect(blocks.firstEditableFieldID == blocks.firstChecklistItems[0].id)
 
-        let imageOnly: [Block] = [.image(label: "夕焼けの写真")]
+        let imageOnly: [Block] = [.image(label: "夕焼けの写真", rawMarkdown: "<img alt=\"夕焼けの写真\">")]
         #expect(imageOnly.firstEditableFieldID == nil)
     }
 

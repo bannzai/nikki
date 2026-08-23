@@ -27,6 +27,9 @@ struct EditorCheckboxToggleStyle: ToggleStyle {
                 }
                 configuration.label
             }
+            // ラベルが空でチェックボックス(19pt)だけになる使い方でも狙いやすいよう、
+            // 見た目を変えずに当たり判定を最小操作サイズ相当まで広げる。
+            .contentShape(Rectangle().inset(by: -12))
         }
         .buttonStyle(.plain)
     }
