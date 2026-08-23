@@ -94,6 +94,13 @@ struct BlockMarkdownTests {
         #expect(contents(of: blocks) == ["<details-panel>メモ</details-panel>"])
     }
 
+    @Test("img を接頭辞に持つ別タグは画像ブロックにしない")
+    func keepsImagePrefixedTagAsParagraph() {
+        // <img-card> を画像ブロックに誤認すると、編集経路の無いプレースホルダになり元の行へアクセスできなくなる。
+        let blocks = Block.blocks(fromMarkdown: "<img-card>写真</img-card>")
+        #expect(contents(of: blocks) == ["<img-card>写真</img-card>"])
+    }
+
     @Test("空行はチェックリストの区切りになる")
     func blankLineSplitsChecklists() {
         let blocks = Block.blocks(fromMarkdown: "- [ ] 前半\n\n- [ ] 後半")

@@ -135,7 +135,7 @@ nonisolated extension Block {
 
     /// <img> タグの行。表示ラベルは alt 属性、無ければ src 属性から取り、書き戻し用に元の行を保持する。
     private static func image(rawLine: String) -> Block? {
-        if !rawLine.hasPrefix("<img") {
+        if !hasTag(name: "img", line: rawLine) {
             return nil
         }
         return .image(
@@ -146,7 +146,7 @@ nonisolated extension Block {
 
     /// <details> タグの行。<summary> の中身を要約に、open 属性の有無を開閉状態に読み、書き戻し用に元の行を保持する。
     private static func details(rawLine: String) -> Block? {
-        if !hasDetailsTag(line: rawLine) {
+        if !hasTag(name: "details", line: rawLine) {
             return nil
         }
         return .details(
@@ -157,17 +157,38 @@ nonisolated extension Block {
         )
     }
 
-    /// タグ名がちょうど details の開始タグで始まる行かどうか。<details-panel> のような
-    /// details を接頭辞に持つ別タグを details と誤認しないよう、タグ名の直後が空白か > であることまで見る。
-    private static func hasDetailsTag(line: String) -> Bool {
-        if !line.hasPrefix("<details") {
+    /// タグ名がちょうど name の開始タグで始まる行かどうか。<details-panel> や <img-card> のような
+    /// name を接頭辞に持つ別タグを誤認しないよう、タグ名の直後が空白・>・/> であることまで見る。
+    private static func hasTag(name: String, line: String) -> Bool {
+        if !line.hasPrefix("<\(name)") {
             return false
         }
-        let afterTagName = line.index(line.startIndex, offsetBy: "<details".count)
+        let afterTagName = line.index(line.startIndex, offsetBy: "<\(name)".count)
         if afterTagName == line.endIndex {
             return false
         }
-        return line[afterTagName].isWhitespace || line[afterTagName] == ">"
+        return line[afterTagName].isWhitespace || line[afterTagName] == ">" || line[afterTagName] == "/"
+    }
+
+    /// details の開始タグの終端 (引用符の外にある最初の >)。<details title="a > b"> のように
+    /// 引用符付きの値が > を含んでも、値の中を終端と誤認しない。
+    private static func detailsTagEnd(line: String) -> String.Index? {
+        var quote: Character?
+        var index = line.startIndex
+        while index < line.endIndex {
+            let character = line[index]
+            if let currentQuote = quote {
+                if character == currentQuote {
+                    quote = nil
+                }
+            } else if character == "\"" || character == "'" {
+                quote = character
+            } else if character == ">" {
+                return index
+            }
+            index = line.index(after: index)
+        }
+        return nil
     }
 
     /// details の開始タグ (最初の > まで) にある open 属性の範囲 (直前の空白を含む)。無ければ nil。
@@ -175,7 +196,7 @@ nonisolated extension Block {
     /// 「open」には反応しない。値なし (open) と値付き (open="…" / open='…' / open=xxx、= の前後の空白も許す)
     /// の両方を1つの属性として扱う。
     private static func detailsOpenAttributeRange(line: String) -> Range<String.Index>? {
-        guard hasDetailsTag(line: line), let tagEnd = line.firstIndex(of: ">") else {
+        guard hasTag(name: "details", line: line), let tagEnd = detailsTagEnd(line: line) else {
             return nil
         }
         var index = line.index(line.startIndex, offsetBy: "<details".count)
