@@ -1,8 +1,8 @@
 ---
 feature: Editor
 verification: mobile-mcp
-last_verified_commit: 0921aeff51f8f93a4905449ddfad41b38cd374ee
-last_verified_at: 2026-08-22
+last_verified_commit: d9585fcd65790594b7374c16f0461d0b14d48aa7
+last_verified_at: 2026-08-23
 ---
 
 # Editor QA
@@ -14,14 +14,16 @@ last_verified_at: 2026-08-22
 - 関連: ノートが2冊以上のときのエディタからの切り替え導線 https://github.com/bannzai/nikki/issues/58
 - 関連: 設定「文字の大きさ」などの導線の配線 https://github.com/bannzai/nikki/issues/14
 - 関連: 紙色テーマの実画面への適用 https://github.com/bannzai/nikki/issues/73
-- 補足: 執筆中のキャレット・選択ツールバー・ブロックの並び替えは、DEBUG ビルドのデザインカタログでだけ表示できる静的な画面で、製品の導線からは到達しない。エディタで書ける実体は markdown の本文欄のため、装飾表示は QA 項目に含めない
+- 関連: markdown ブロックの装飾表示 (見出し・チェックリスト・画像・details) https://github.com/bannzai/nikki/issues/88
+- 補足: 選択ツールバー(1j)・ブロックの並び替え(1k)は、DEBUG ビルドのデザインカタログでだけ表示できる静的な画面で、製品の導線からは到達しない。エディタ本文のブロック装飾表示は issue #88 で実装済みで、「4. ブロックの装飾表示と操作」で QA する
 - 補足: タイトル欄は廃止した (日記にタイトルは必須ではなく、タイトル欄が本文の書きはじめをわかりにくくしていたため)。過去に入力されたタイトルは、その日記をエディタで開いたときに本文先頭の H1 見出しへ移して残す
 
 ## 1. 執筆と保存
 
-- [x] **開いたらすぐ本文を書ける**: エディタにタイトル欄はなく、開くと本文欄にフォーカスが当たり、本文が空のときはプレースホルダ(「ここに本文を書く…」)が出る。本文は markdown の記法をそのままの文字として書ける
+- [x] **開いたらすぐ本文を書ける**: エディタにタイトル欄はなく、開くと本文末尾の空の段落にフォーカスが当たる(日記の続きを書く位置。macOS の入力欄はフォーカスで本文を全選択するため、文字のあるブロックには当てない)。本文が空のときはプレースホルダ(「ここに本文を書く…」)が出る
   - 自動化: manual（開いた直後のフォーカス・プレースホルダと入力の反映を実操作で確認する）
-  - 2026-08-22 ローカル iOS Simulator で、新規日記(テンプレートなし)を開くとプレースホルダが出てキーボードが上がり、そのまま本文を入力できた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/771e0761-6dfa-4f52-9f55-abf3043875a9.png)
+  - 2026-08-22 (旧 TextEditor 実装) ローカル iOS Simulator で、新規日記(テンプレートなし)を開くとプレースホルダが出てキーボードが上がり、そのまま本文を入力できた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/771e0761-6dfa-4f52-9f55-abf3043875a9.png)
+  - 2026-08-23 ブロック装飾表示 (issue #88) 後、simtunnel リモート iOS Simulator で、新規日記を開くとキーボードが上がり末尾の空の段落にキャレットが出て、そのまま本文を入力できた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/9bcea095-549e-42b7-9c5b-707187e83468.jpg)。本文が空の日記のプレースホルダはブロック実装後は未検証 (新規日記は既定テンプレートの見出しから始まり本文が空にならないため。表示条件は旧実装と同じ「本文が完全に空の時のみ」)
 - [x] **過去のタイトルは本文の見出しへ移る**: タイトル付きの古い日記を開くと、タイトルが本文先頭の「# タイトル」見出しに移って表示され、内容は失われない
   - 自動化: NikkiTests/JournalEntryTests.swift (mergeTitleIntoBodyMarkdown) + manual（開いた直後の本文先頭を目視で確認する）
   - 2026-08-22 macOS (Debug、カタログの entryList) でタイトル「梅雨明け」の日記を開くと、本文先頭が「# 梅雨明け」になった (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/c7fc112d-35c2-49af-aa6b-d6e2406d14f6.png)
@@ -29,6 +31,7 @@ last_verified_at: 2026-08-22
   - 自動化: manual（IME の変換中状態はプログラム入力では作れず、実キーボード入力での確認が必要なため）
   - 2026-08-22 macOS (Debug) で日本語入力ソースからローマ字で「kakikukeko」を 1.2 秒間隔で入力し、変換中の「かきくけこ」が全文字保持された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/d7071786-3b64-41ab-921f-8d0647cb7072.png)。修正前ビルドでは同じ操作で変換中テキストが全て消えることを再現済み (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/86f3c71e-9c30-487d-814b-a4960896f6dc.png)
   - 2026-08-22 ローカル iOS Simulator のかなキーボードで「かたなはま」を 2 秒前後の間隔で入力し、変換中テキストが全文字保持された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/980a7c16-1a28-459f-b7f6-410fc16cb34e.png)。ローカル simulator を使ったのは、修正前後のローカルビルドを `xcrun simctl install` で差し替えて比較し、日本語キーボードの有効化 (`simctl spawn defaults write`) も必要な、ローカルの simctl を伴う手順のため (ios-simulator skill Phase 1 のローカルに倒す条件に該当)
+  - 2026-08-23 ブロック装飾表示 (issue #88) 後、macOS (Debug) で日本語入力ソースから「kakikuke」を入力し、変換中の「かきくけ」が下線付きで保持され、確定した文字が末尾の段落に入った (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/18bc6743-65dc-43ff-8131-c573758baf6b.png)。iOS のかなキーボードでの再確認は未実施 (編集の書き込み先は @State のブロック列のままで、@Model への書き込みは旧実装と同じ編集の切れ目のみ)
 - [x] **日付が上部に出る**: 画面上部に日記の日付が「7月18日 土曜日」の形式 (英語表示では「Saturday, July 18」) で出る
   - 自動化: manual（日付の表記を目視で確認する）
   - 2026-08-22 ローカル iOS Simulator (日本語) で「8月22日 土曜日」
@@ -138,3 +141,31 @@ last_verified_at: 2026-08-22
 </details>
 
 </details>
+
+---
+
+## 4. ブロックの装飾表示と操作
+
+(issue #88 でエディタ本文をブロック単位の装飾表示に変更。エビデンスの日付はすべて 2026-08-23、iOS は simtunnel リモート iOS Simulator、macOS は Debug ビルド + カタログの entryList)
+
+- [x] **markdown ブロックが装飾表示される**: 本文の見出し(#〜###)・チェックリスト(- [ ] / - [x])・画像(&lt;img&gt;)・折りたたみ(&lt;details&gt;)が、生の記法ではなく装飾された見た目(見出しの書体 / チェックボックス / 45°ストライプのプレースホルダ / 枠線カード)で表示される
+  - 自動化: NikkiTests/BlockMarkdownTests.swift (パース) + manual（描画は目視で確認する）
+  - macOS でサンプル日記の全ブロック種が装飾表示された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/5836c8d8-e0bf-47f4-97de-b294d3478467.png)
+  - iOS で入力した記法が再表示時に img プレースホルダ・details カードとして表示された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/1e088d02-1628-4c23-bcd8-2f0aeb5d8bb5.jpg)
+- [x] **チェックのタップで完了が切り替わり保存される**: チェックボックスをタップすると即座に完了(墨地+白チェック、打ち消し線+灰) / 未完了が切り替わり、閉じて開き直しても状態が残る(markdown へ - [x] / - [ ] として書き戻される)
+  - 自動化: NikkiTests/BlockEditingTests.swift (togglesChecklistItemDone) + manual
+  - macOS で切り替えの即時反映 (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/8f338314-392c-438e-aaa1-5332fddbf051.png) と開き直し後の保持 (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/abecee74-a207-47a6-bd05-46d845f44f64.png) を確認
+  - iOS でタップした項目が打ち消し線+灰になり (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/c8ea81ef-7d0f-4f88-92e7-03a6a209bd29.jpg)、開き直しても保持された
+- [x] **details のタップで開閉し保存される**: details カードをタップするとシェブロンが ▶ / ▼ に切り替わり、markdown の open 属性として書き戻される
+  - 自動化: NikkiTests/BlockEditingTests.swift (togglesDetailsOpen) + manual
+  - macOS (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/5a427ab6-64d3-470f-8adc-daa393ade4a5.png) と iOS (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/d5c5ffe1-725c-4eeb-b920-916e7f3b8410.jpg) で開閉を確認
+- [x] **記法を打ち終えるとその場でブロックに変わる**: 段落に「- [ ] 」「- [x] 」「# 」〜「### 」を打ち終えると、その場でチェックリスト・見出しに変わり、続きを入力できる位置へフォーカスが移る
+  - 自動化: NikkiTests/BlockEditingTests.swift (convertsMarkdownPrefix / movesFieldAfterConversion) + manual
+  - iOS で「- [ ] 」がチェックボックスに変わり (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/a3b0bc42-6e45-4e4b-9b7f-79ab1b8573da.jpg)、「# 」が見出しに変わって続きが見出しの書体で入力できた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/15a62765-7011-48d7-b941-362fe5961236.jpg)
+- [x] **Return でブロック・項目が増える**: 段落・見出しで Return すると次の段落へ移り、チェックリスト項目で Return すると次の項目が増え、空の項目で Return するとリストから抜けて段落に戻る
+  - 自動化: NikkiTests/BlockEditingTests.swift (splitsBlockByNewline / insertsChecklistItemAfterItem / exitsChecklistFromEmptyItem) + manual
+  - iOS で段落→チェックリスト2項目→空項目で脱出→見出し、の一連の入力ができた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/15a62765-7011-48d7-b941-362fe5961236.jpg)
+- 補足 (既知の制限):
+  - img・details ブロックはエディタから削除できない (テキストの編集経路が無いため)。削除導線は別途扱う
+  - 完了したチェック項目の文字は編集できない (チェックを外してから編集する)。入力欄 (TextField) は打ち消し線を描画できないため、完了項目は静的な文字で描画している
+  - 貼り付け等で段落の途中に入った記法の行は、その場では変わらず、次に開いたときにブロックとして表示される
