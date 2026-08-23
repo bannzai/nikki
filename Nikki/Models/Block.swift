@@ -55,24 +55,25 @@ nonisolated extension Block {
         }
 
         for rawLine in markdown.components(separatedBy: .newlines) {
-            let line = rawLine.trimmingCharacters(in: .whitespaces)
-            if line.isEmpty {
+            if rawLine.trimmingCharacters(in: .whitespaces).isEmpty {
                 flushChecklist()
                 continue
             }
-            if let item = checklistItem(fromLine: line) {
+            // 記法の判定は行頭 (インデントなし) に限る。インデントされた「- [ ] 」等をブロックに
+            // 変換すると、書き戻しでインデントが失われて元のテキストを壊すため、段落として raw のまま持つ。
+            if let item = checklistItem(fromLine: rawLine) {
                 checklistItems.append(item)
                 continue
             }
             flushChecklist()
-            if let heading = heading(fromLine: line) {
+            if let heading = heading(fromLine: rawLine) {
                 blocks.append(heading)
-            } else if let image = image(line: line, rawLine: rawLine) {
+            } else if let image = image(rawLine: rawLine) {
                 blocks.append(image)
-            } else if let details = details(line: line, rawLine: rawLine) {
+            } else if let details = details(rawLine: rawLine) {
                 blocks.append(details)
             } else {
-                // 書き戻しで行内の空白まで元のまま残るよう、トリムした line ではなく元の行を持つ。
+                // 書き戻しで行内の空白まで元のまま残るよう、トリムせず元の行を持つ。
                 blocks.append(.paragraph(text: rawLine))
             }
         }
@@ -133,26 +134,32 @@ nonisolated extension Block {
     }
 
     /// <img> タグの行。表示ラベルは alt 属性、無ければ src 属性から取り、書き戻し用に元の行を保持する。
-    private static func image(line: String, rawLine: String) -> Block? {
-        if !line.hasPrefix("<img") {
+    private static func image(rawLine: String) -> Block? {
+        if !rawLine.hasPrefix("<img") {
             return nil
         }
         return .image(
-            label: attributeValue(name: "alt", line: line) ?? attributeValue(name: "src", line: line) ?? "",
+            label: attributeValue(name: "alt", line: rawLine) ?? attributeValue(name: "src", line: rawLine) ?? "",
             rawMarkdown: rawLine
         )
     }
 
     /// <details> タグの行。<summary> の中身を要約に、open 属性の有無を開閉状態に読み、書き戻し用に元の行を保持する。
-    private static func details(line: String, rawLine: String) -> Block? {
-        if !line.hasPrefix("<details") {
+    private static func details(rawLine: String) -> Block? {
+        if !rawLine.hasPrefix("<details") {
             return nil
         }
         return .details(
-            summary: firstMatch(pattern: "<summary>(.*?)</summary>", line: line) ?? "",
-            isCollapsed: !detailsIsOpen(line: line),
+            summary: firstMatch(pattern: "<summary>(.*?)</summary>", line: rawLine) ?? "",
+            isCollapsed: !detailsIsOpen(line: rawLine),
             rawMarkdown: rawLine
         )
+    }
+
+    /// details の開始タグ内の open 属性。値なし (open) と値付き (open="…" / open='…' / open=xxx) の両方に
+    /// マッチし、前の空白ごと取り除ける形にしている。Regex は Sendable でなく static に持てないため、都度生成する。
+    private static func detailsOpenAttribute() -> Regex<Substring> {
+        #/\s+open(?:=(?:"[^"]*"|'[^']*'|[^\s>]*))?(?=\s|$)/#
     }
 
     /// details 行の開始タグ (最初の > まで) に open 属性があるかどうか。属性の位置を問わず判定し、
@@ -161,7 +168,7 @@ nonisolated extension Block {
         guard let tagEnd = line.firstIndex(of: ">") else {
             return false
         }
-        return line[..<tagEnd].contains(#/\sopen(?=\s|$)/#)
+        return line[..<tagEnd].contains(detailsOpenAttribute())
     }
 
     /// details 行の開始タグの open 属性を付け外しした行。opens が true なら追加、false なら除去する。
@@ -177,8 +184,8 @@ nonisolated extension Block {
         guard let tagEnd = rawMarkdown.firstIndex(of: ">") else {
             return rawMarkdown
         }
-        // 除去は開始タグの中だけを対象にし、summary の文中の「open」を巻き込まない。
-        return String(rawMarkdown[..<tagEnd]).replacing(#/\s+open(?=\s|$)/#, with: "", maxReplacements: 1) + String(rawMarkdown[tagEnd...])
+        // 除去は開始タグの中だけを対象にし、summary の文中の「open」を巻き込まない。値付きの open 属性も丸ごと外す。
+        return String(rawMarkdown[..<tagEnd]).replacing(detailsOpenAttribute(), with: "", maxReplacements: 1) + String(rawMarkdown[tagEnd...])
     }
 
     /// name="値" 形式の HTML 属性値を取り出す。

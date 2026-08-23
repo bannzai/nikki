@@ -127,4 +127,20 @@ struct BlockMarkdownTests {
         """
         #expect(Block.markdown(blocks: Block.blocks(fromMarkdown: markdown)) == markdown)
     }
+
+    @Test("インデントされた記法はブロックにせず段落として書き戻す")
+    func keepsIndentedSyntaxAsParagraph() {
+        // インデントをチェックリスト等に変換すると書き戻しでインデントが失われるため、記法の判定は行頭に限る。
+        let markdown = """
+        - [ ] 行頭のチェックリスト
+
+            - [ ] インデントされた行
+
+          # インデントされた見出し
+        """
+        let blocks = Block.blocks(fromMarkdown: markdown)
+        #expect(blocks.firstChecklistItems.map(\.text) == ["行頭のチェックリスト"])
+        #expect(blocks.paragraphTexts == ["    - [ ] インデントされた行", "  # インデントされた見出し"])
+        #expect(Block.markdown(blocks: blocks) == markdown)
+    }
 }

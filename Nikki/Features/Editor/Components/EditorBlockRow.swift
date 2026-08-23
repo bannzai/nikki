@@ -36,6 +36,8 @@ struct EditorBlockRow: View {
                 EditorDetailsBlock(summary: summary, isCollapsed: isCollapsed)
             }
             .buttonStyle(.plain)
+            // 開閉はシェブロンの向きだけの表現のため、VoiceOver にも現在の状態とタップの結果が伝わるようにする。
+            .accessibilityValue(isCollapsed ? Text("Collapsed") : Text("Expanded"))
         }
     }
 }

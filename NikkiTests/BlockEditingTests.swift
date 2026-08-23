@@ -50,6 +50,23 @@ struct BlockEditingTests {
         }
     }
 
+    @Test("値付きの open 属性も開いていると読み、たたむと丸ごと外れる")
+    func togglesValuedOpenAttribute() {
+        var blocks = Block.blocks(fromMarkdown: "<details open=\"\"><summary>病院メモ</summary></details>")
+        let blockID = blocks[0].id
+        if case .details(_, _, let isCollapsed, _) = blocks[0] {
+            #expect(isCollapsed == false)
+        } else {
+            Issue.record("details としてパースされていない: \(blocks)")
+        }
+
+        // たたむと open="" が丸ごと外れ、開き直しても open は1つだけになる。
+        blocks.toggleDetails(blockID: blockID)
+        #expect(Block.markdown(blocks: blocks) == "<details><summary>病院メモ</summary></details>")
+        blocks.toggleDetails(blockID: blockID)
+        #expect(Block.markdown(blocks: blocks) == "<details open><summary>病院メモ</summary></details>")
+    }
+
     @Test("本文が空のブロックと項目は書き出しから外れる")
     func dropsEmptyText() {
         let blocks: [Block] = [
