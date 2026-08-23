@@ -21,7 +21,8 @@ enum Block: Identifiable, Hashable {
     case image(id: UUID = UUID(), label: String)
     case details(id: UUID = UUID(), summary: String, isCollapsed: Bool)
 
-    var id: UUID {
+    // 編集ヘルパー(下の「編集」セクション)が nonisolated な純粋関数からブロックを探せるようにする。
+    nonisolated var id: UUID {
         switch self {
         case .heading(let id, _, _): return id
         case .paragraph(let id, _): return id
@@ -97,13 +98,21 @@ nonisolated extension Block {
         .joined(separator: "\n\n")
     }
 
+    /// サポートする見出しの記法。並び順が見出しレベル(先頭が「# 」)にあたる。
+    static let headingPrefixes: [String] = (1...3).map { String(repeating: "#", count: $0) + " " }
+
+    /// 未完了のチェックリスト項目の記法。
+    static let uncheckedPrefix = "- [ ] "
+
+    /// 完了したチェックリスト項目の記法。
+    static let checkedPrefix = "- [x] "
+
     /// 「# 」〜「### 」で始まる見出し行。「#### 」以上はサポート外として nil を返し、段落に落とす。
     private static func heading(fromLine line: String) -> Block? {
-        for level in 1...3 {
-            let prefix = String(repeating: "#", count: level) + " "
+        for (index, prefix) in headingPrefixes.enumerated() {
             if line.hasPrefix(prefix) {
                 return .heading(
-                    level: level,
+                    level: index + 1,
                     text: String(line.dropFirst(prefix.count)).trimmingCharacters(in: .whitespaces)
                 )
             }
@@ -113,11 +122,11 @@ nonisolated extension Block {
 
     /// 「- [ ] 」「- [x] 」で始まるチェックリスト行。
     private static func checklistItem(fromLine line: String) -> ChecklistItem? {
-        if line.hasPrefix("- [ ] ") {
-            return ChecklistItem(text: String(line.dropFirst("- [ ] ".count)), done: false)
+        if line.hasPrefix(uncheckedPrefix) {
+            return ChecklistItem(text: String(line.dropFirst(uncheckedPrefix.count)), done: false)
         }
-        if line.lowercased().hasPrefix("- [x] ") {
-            return ChecklistItem(text: String(line.dropFirst("- [x] ".count)), done: true)
+        if line.lowercased().hasPrefix(checkedPrefix) {
+            return ChecklistItem(text: String(line.dropFirst(checkedPrefix.count)), done: true)
         }
         return nil
     }
@@ -185,5 +194,199 @@ nonisolated extension [Block] {
     /// 最初の details ブロックの要約。
     var firstDetailsSummary: String? {
         compactMap { if case .details(_, let summary, _) = $0 { return summary } else { return nil } }.first
+    }
+}
+
+// MARK: - 編集
+
+// エディタがブロックを直接書き換えるためのヘルパー。View から切り離した純粋関数として置き、
+// 書き換えた結果が markdown と往復することをユニットテストで確かめられるようにする。
+nonisolated extension Block {
+    /// 入力欄で編集できる本文。チェックリスト・img・details は項目や属性が中身にあたるため nil。
+    var editableText: String? {
+        switch self {
+        case .heading(_, _, let text): return text
+        case .paragraph(_, let text): return text
+        case .checklist, .image, .details: return nil
+        }
+    }
+
+    /// このブロックで最初に文字を入力できる欄の id。見出し・段落はブロック自身、チェックリストは先頭の項目。
+    /// 文字を入力できる欄が無ければ nil。
+    var firstEditableFieldID: UUID? {
+        switch self {
+        case .heading(let id, _, _): return id
+        case .paragraph(let id, _): return id
+        case .checklist(_, let items): return items.first?.id
+        case .image, .details: return nil
+        }
+    }
+
+    /// 本文を差し替えたブロック。id は保ち、入力欄の同一性(フォーカスと日本語入力の変換中テキスト)を壊さない。
+    func replacing(editableText: String) -> Block {
+        switch self {
+        case .heading(let id, let level, _): return .heading(id: id, level: level, text: editableText)
+        case .paragraph(let id, _): return .paragraph(id: id, text: editableText)
+        case .checklist, .image, .details: return self
+        }
+    }
+
+    /// 改行で分けたブロック列。Return が入力欄に改行として入るプラットフォームでは、改行をブロックの
+    /// 区切りとして扱い、2つ目以降を段落にする。改行が無ければ nil を返し、分割しないことを示す。
+    var splitByNewlines: [Block]? {
+        if let editableText, editableText.contains("\n") {
+            let texts = editableText.components(separatedBy: "\n")
+            return [replacing(editableText: texts[0])] + texts.dropFirst().map { Block.paragraph(text: $0) }
+        }
+        return nil
+    }
+
+    /// 記法だけを打ち終えた段落が変わる先のブロック。変わらなければ nil。
+    /// 「# 」「- [ ] 」まで入力した時点で見出し・チェックリストへ変え、記法を書いたまま編集を続けさせない。
+    /// 記法に続く本文まで入力された状態では変換しない。日本語入力の変換中にブロックを差し替えると
+    /// 組み立て中の文字が失われるため(issue #86)、変換が始まっていない記法だけの状態に限る。
+    static func converted(paragraphText: String) -> Block? {
+        if let level = headingPrefixes.firstIndex(of: paragraphText) {
+            return .heading(level: level + 1, text: "")
+        }
+        if paragraphText == uncheckedPrefix {
+            return .checklist(items: [ChecklistItem(text: "", done: false)])
+        }
+        if paragraphText.lowercased() == checkedPrefix {
+            return .checklist(items: [ChecklistItem(text: "", done: true)])
+        }
+        return nil
+    }
+}
+
+nonisolated extension [Block] {
+    /// 先頭の入力欄の id。文字を入力できるブロックが無ければ nil。
+    var firstEditableFieldID: UUID? {
+        compactMap(\.firstEditableFieldID).first
+    }
+
+    /// 本文が空の見出し・段落と、本文が空のチェックリスト項目を落としたブロック列。
+    /// 空の本文を markdown にすると記法の断片(「# 」「- [ ] 」)だけが残り、読み直したときに
+    /// 別のブロックとして解釈されてしまうため、日記へ書き戻す前に取り除く。
+    var withoutEmptyText: [Block] {
+        compactMap { block -> Block? in
+            switch block {
+            case .heading(_, _, let text), .paragraph(_, let text):
+                return text.trimmingCharacters(in: .whitespaces).isEmpty ? nil : block
+            case .checklist(let id, let items):
+                let remaining = items.filter { !$0.text.trimmingCharacters(in: .whitespaces).isEmpty }
+                return remaining.isEmpty ? nil : Block.checklist(id: id, items: remaining)
+            case .image, .details:
+                return block
+            }
+        }
+    }
+
+    /// 見出し・段落の本文を書き換える。記法だけを打ち終えたブロックは見出し・チェックリストへ変え、
+    /// 改行が入力されたブロックはそこで分ける。入力欄が変わったときだけ、続けて入力する欄の id を返す。
+    mutating func updateEditableText(blockID: UUID, text: String) -> UUID? {
+        if let index = firstIndex(where: { $0.id == blockID }) {
+            if case .paragraph = self[index], let converted = Block.converted(paragraphText: text) {
+                self[index] = converted
+                return converted.firstEditableFieldID
+            }
+            let updated = self[index].replacing(editableText: text)
+            if let split = updated.splitByNewlines {
+                replaceSubrange(index...index, with: split)
+                return split.last?.id
+            }
+            self[index] = updated
+        }
+        return nil
+    }
+
+    /// 見出し・段落の直後に空の段落を足す。Return が改行ではなく確定として届くプラットフォームで、
+    /// 次のブロックを書きはじめられるようにする。続けて入力する欄の id を返す。
+    mutating func insertParagraph(afterBlockID blockID: UUID) -> UUID? {
+        if let index = firstIndex(where: { $0.id == blockID }) {
+            let paragraph = Block.paragraph(text: "")
+            insert(paragraph, at: index + 1)
+            return paragraph.id
+        }
+        return nil
+    }
+
+    /// チェックリスト項目の本文を書き換える。改行が入力された項目はそこで分けて次の項目にし、
+    /// 本文の無い項目で改行したときはリストから抜けて段落にする。
+    /// 入力欄が変わったときだけ、続けて入力する欄の id を返す。
+    mutating func updateChecklistItem(itemID: UUID, text: String) -> UUID? {
+        if let indexes = checklistIndexes(itemID: itemID), case .checklist(let id, var items) = self[indexes.blockIndex] {
+            if text.contains("\n") {
+                let texts = text.components(separatedBy: "\n")
+                if texts.allSatisfy(\.isEmpty) {
+                    return exitChecklist(blockIndex: indexes.blockIndex, itemIndex: indexes.itemIndex)
+                }
+                items[indexes.itemIndex].text = texts[0]
+                let addedItems = texts.dropFirst().map { ChecklistItem(text: $0, done: false) }
+                items.insert(contentsOf: addedItems, at: indexes.itemIndex + 1)
+                self[indexes.blockIndex] = .checklist(id: id, items: items)
+                return addedItems.last?.id
+            }
+            items[indexes.itemIndex].text = text
+            self[indexes.blockIndex] = .checklist(id: id, items: items)
+        }
+        return nil
+    }
+
+    /// チェックリスト項目の直後に空の項目を足す。本文の無い項目からはリストを抜けて段落にする。
+    /// Return が改行ではなく確定として届くプラットフォーム用。続けて入力する欄の id を返す。
+    mutating func insertChecklistItem(afterItemID itemID: UUID) -> UUID? {
+        if let indexes = checklistIndexes(itemID: itemID), case .checklist(let id, var items) = self[indexes.blockIndex] {
+            if items[indexes.itemIndex].text.isEmpty {
+                return exitChecklist(blockIndex: indexes.blockIndex, itemIndex: indexes.itemIndex)
+            }
+            let addedItem = ChecklistItem(text: "", done: false)
+            items.insert(addedItem, at: indexes.itemIndex + 1)
+            self[indexes.blockIndex] = .checklist(id: id, items: items)
+            return addedItem.id
+        }
+        return nil
+    }
+
+    /// チェックリスト項目の完了を設定する。
+    mutating func setChecklistItemDone(itemID: UUID, done: Bool) {
+        if let indexes = checklistIndexes(itemID: itemID), case .checklist(let id, var items) = self[indexes.blockIndex] {
+            items[indexes.itemIndex].done = done
+            self[indexes.blockIndex] = .checklist(id: id, items: items)
+        }
+    }
+
+    /// details の開閉を反転する。
+    mutating func toggleDetails(blockID: UUID) {
+        if let index = firstIndex(where: { $0.id == blockID }), case .details(let id, let summary, let isCollapsed) = self[index] {
+            self[index] = .details(id: id, summary: summary, isCollapsed: !isCollapsed)
+        }
+    }
+
+    /// 項目を持つチェックリストの位置と、その中の項目の位置。
+    private func checklistIndexes(itemID: UUID) -> (blockIndex: Int, itemIndex: Int)? {
+        for (blockIndex, block) in enumerated() {
+            if case .checklist(_, let items) = block, let itemIndex = items.firstIndex(where: { $0.id == itemID }) {
+                return (blockIndex, itemIndex)
+            }
+        }
+        return nil
+    }
+
+    /// チェックリストから項目を取り除き、リストの直後に空の段落を置く。
+    /// 項目が無くなったチェックリストは段落そのものに置き換える。続けて入力する段落の id を返す。
+    private mutating func exitChecklist(blockIndex: Int, itemIndex: Int) -> UUID? {
+        if case .checklist(let id, var items) = self[blockIndex] {
+            items.remove(at: itemIndex)
+            let paragraph = Block.paragraph(text: "")
+            if items.isEmpty {
+                self[blockIndex] = paragraph
+            } else {
+                self[blockIndex] = .checklist(id: id, items: items)
+                insert(paragraph, at: blockIndex + 1)
+            }
+            return paragraph.id
+        }
+        return nil
     }
 }

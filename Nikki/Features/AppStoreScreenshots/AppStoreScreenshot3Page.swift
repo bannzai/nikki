@@ -72,7 +72,7 @@ struct AppStoreScreenshotEditorScreen: View {
                     .foregroundStyle(Color.ink)
                     .padding(.bottom, 8)
 
-                // EditorPage の TextEditor と同じ書体・行間(標準の文字の大きさ 15pt)。
+                // EditorPage の本文段落と同じ書体・行間(標準の文字の大きさ 15pt)。
                 Text(markdownBody)
                     .font(.ink(15))
                     .lineSpacing(inkLineSpacing(fontSize: 15, multiplier: 2.05))

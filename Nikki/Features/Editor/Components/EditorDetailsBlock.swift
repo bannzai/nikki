@@ -1,12 +1,15 @@
 import SwiftUI
 
-/// details ブロック。枠線カード + ▶ + summary。
+/// details ブロック。枠線カード + ▶ + summary。開いている間はシェブロンを下向きにする。
 struct EditorDetailsBlock: View {
     let summary: String
+    // 見本(1j)の details はたたんだ状態で描かれており、カタログの静的表示もその見た目のため既定にする。
+    /// たたんでいるかどうか。markdown の open 属性の裏返しで、開いている間は下向きのシェブロンにする。
+    var isCollapsed: Bool = true
 
     var body: some View {
         HStack(spacing: 10) {
-            Image(systemName: InkIcons.chevronRight)
+            Image(systemName: isCollapsed ? InkIcons.chevronRight : InkIcons.chevronDown)
                 .font(.system(size: 11, weight: .semibold))
                 .foregroundStyle(Color.inkTextSecondary)
             Text("details — \(summary)")
