@@ -97,6 +97,23 @@ struct BlockEditingTests {
         #expect(Block.markdown(blocks: blocks) == "<details title=\"is open now\"><summary>病院メモ</summary></details>")
     }
 
+    @Test("大文字の OPEN 属性も開いた状態として読み、たたむと除去される")
+    func readsUppercaseOpenAttribute() {
+        var blocks = Block.blocks(fromMarkdown: "<details OPEN><summary>病院メモ</summary></details>")
+        let blockID = blocks[0].id
+        if case .details(_, _, let isCollapsed, _) = blocks[0] {
+            #expect(isCollapsed == false)
+        } else {
+            Issue.record("details としてパースされていない: \(blocks)")
+        }
+
+        // たたんだ時に OPEN が残って「小文字 open の追加と削除だけ」にならないこと。
+        blocks.toggleDetails(blockID: blockID)
+        #expect(Block.markdown(blocks: blocks) == "<details><summary>病院メモ</summary></details>")
+        blocks.toggleDetails(blockID: blockID)
+        #expect(Block.markdown(blocks: blocks) == "<details open><summary>病院メモ</summary></details>")
+    }
+
     @Test("本文が空のブロックと項目は書き出しから外れる")
     func dropsEmptyText() {
         let blocks: [Block] = [

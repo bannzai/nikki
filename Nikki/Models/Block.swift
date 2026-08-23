@@ -146,7 +146,7 @@ nonisolated extension Block {
 
     /// <details> タグの行。<summary> の中身を要約に、open 属性の有無を開閉状態に読み、書き戻し用に元の行を保持する。
     private static func details(rawLine: String) -> Block? {
-        if !rawLine.hasPrefix("<details") {
+        if !hasDetailsTag(line: rawLine) {
             return nil
         }
         return .details(
@@ -157,12 +157,25 @@ nonisolated extension Block {
         )
     }
 
+    /// タグ名がちょうど details の開始タグで始まる行かどうか。<details-panel> のような
+    /// details を接頭辞に持つ別タグを details と誤認しないよう、タグ名の直後が空白か > であることまで見る。
+    private static func hasDetailsTag(line: String) -> Bool {
+        if !line.hasPrefix("<details") {
+            return false
+        }
+        let afterTagName = line.index(line.startIndex, offsetBy: "<details".count)
+        if afterTagName == line.endIndex {
+            return false
+        }
+        return line[afterTagName].isWhitespace || line[afterTagName] == ">"
+    }
+
     /// details の開始タグ (最初の > まで) にある open 属性の範囲 (直前の空白を含む)。無ければ nil。
     /// 属性を先頭から順に読み、引用符付きの値の中は読み飛ばすため、値の文中や summary の文中の
     /// 「open」には反応しない。値なし (open) と値付き (open="…" / open='…' / open=xxx、= の前後の空白も許す)
     /// の両方を1つの属性として扱う。
     private static func detailsOpenAttributeRange(line: String) -> Range<String.Index>? {
-        guard line.hasPrefix("<details"), let tagEnd = line.firstIndex(of: ">") else {
+        guard hasDetailsTag(line: line), let tagEnd = line.firstIndex(of: ">") else {
             return nil
         }
         var index = line.index(line.startIndex, offsetBy: "<details".count)
@@ -206,7 +219,8 @@ nonisolated extension Block {
                 }
                 index = afterValue
             }
-            if name == "open" {
+            // HTML の属性名は ASCII 大文字小文字を区別しないため、<details OPEN> も開いた状態として読む。
+            if name.lowercased() == "open" {
                 return attributeStart..<index
             }
         }

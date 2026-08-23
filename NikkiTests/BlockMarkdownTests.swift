@@ -87,6 +87,13 @@ struct BlockMarkdownTests {
         #expect(contents(of: blocks) == ["#### 深すぎる見出し", "- ただの箇条書き", "天気: 晴れ"])
     }
 
+    @Test("details を接頭辞に持つ別タグは details にしない")
+    func keepsDetailsPrefixedTagAsParagraph() {
+        // <details-panel> のようなカスタム要素を details と誤認すると、開閉のたびに開始タグが壊れる。
+        let blocks = Block.blocks(fromMarkdown: "<details-panel>メモ</details-panel>")
+        #expect(contents(of: blocks) == ["<details-panel>メモ</details-panel>"])
+    }
+
     @Test("空行はチェックリストの区切りになる")
     func blankLineSplitsChecklists() {
         let blocks = Block.blocks(fromMarkdown: "- [ ] 前半\n\n- [ ] 後半")
