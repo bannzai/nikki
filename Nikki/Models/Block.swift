@@ -157,20 +157,65 @@ nonisolated extension Block {
         )
     }
 
-    /// details の開始タグ内の open 属性。値なし (open) と値付き (open="…" / open='…' / open=xxx、
-    /// = の前後の空白も許す) の両方にマッチし、前の空白ごと取り除ける形にしている。
-    /// Regex は Sendable でなく static に持てないため、都度生成する。
-    private static func detailsOpenAttribute() -> Regex<Substring> {
-        #/\s+open(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]*))?(?=\s|$)/#
+    /// details の開始タグ (最初の > まで) にある open 属性の範囲 (直前の空白を含む)。無ければ nil。
+    /// 属性を先頭から順に読み、引用符付きの値の中は読み飛ばすため、値の文中や summary の文中の
+    /// 「open」には反応しない。値なし (open) と値付き (open="…" / open='…' / open=xxx、= の前後の空白も許す)
+    /// の両方を1つの属性として扱う。
+    private static func detailsOpenAttributeRange(line: String) -> Range<String.Index>? {
+        guard line.hasPrefix("<details"), let tagEnd = line.firstIndex(of: ">") else {
+            return nil
+        }
+        var index = line.index(line.startIndex, offsetBy: "<details".count)
+        while index < tagEnd {
+            if !line[index].isWhitespace {
+                // 属性の区切りの空白が無い行 (<detailsx 等) は details のタグとして扱わない。
+                return nil
+            }
+            let attributeStart = index
+            while index < tagEnd && line[index].isWhitespace {
+                index = line.index(after: index)
+            }
+            let nameStart = index
+            while index < tagEnd && !line[index].isWhitespace && line[index] != "=" {
+                index = line.index(after: index)
+            }
+            let name = line[nameStart..<index]
+            // = と値が続けば、引用符の対応を守って値の終わりまで読み進める。
+            var afterValue = index
+            while afterValue < tagEnd && line[afterValue].isWhitespace {
+                afterValue = line.index(after: afterValue)
+            }
+            if afterValue < tagEnd && line[afterValue] == "=" {
+                afterValue = line.index(after: afterValue)
+                while afterValue < tagEnd && line[afterValue].isWhitespace {
+                    afterValue = line.index(after: afterValue)
+                }
+                if afterValue < tagEnd && (line[afterValue] == "\"" || line[afterValue] == "'") {
+                    let quote = line[afterValue]
+                    afterValue = line.index(after: afterValue)
+                    while afterValue < tagEnd && line[afterValue] != quote {
+                        afterValue = line.index(after: afterValue)
+                    }
+                    if afterValue < tagEnd {
+                        afterValue = line.index(after: afterValue)
+                    }
+                } else {
+                    while afterValue < tagEnd && !line[afterValue].isWhitespace {
+                        afterValue = line.index(after: afterValue)
+                    }
+                }
+                index = afterValue
+            }
+            if name == "open" {
+                return attributeStart..<index
+            }
+        }
+        return nil
     }
 
-    /// details 行の開始タグ (最初の > まで) に open 属性があるかどうか。属性の位置を問わず判定し、
-    /// summary の文中に「open」とあっても反応しない。
+    /// details 行の開始タグ (最初の > まで) に open 属性があるかどうか。
     private static func detailsIsOpen(line: String) -> Bool {
-        guard let tagEnd = line.firstIndex(of: ">") else {
-            return false
-        }
-        return line[..<tagEnd].contains(detailsOpenAttribute())
+        detailsOpenAttributeRange(line: line) != nil
     }
 
     /// details 行の開始タグの open 属性を付け外しした行。opens が true なら追加、false なら除去する。
@@ -183,11 +228,12 @@ nonisolated extension Block {
             }
             return rawMarkdown.replacing("<details", with: "<details open", maxReplacements: 1)
         }
-        guard let tagEnd = rawMarkdown.firstIndex(of: ">") else {
-            return rawMarkdown
+        if let range = detailsOpenAttributeRange(line: rawMarkdown) {
+            var closed = rawMarkdown
+            closed.removeSubrange(range)
+            return closed
         }
-        // 除去は開始タグの中だけを対象にし、summary の文中の「open」を巻き込まない。値付きの open 属性も丸ごと外す。
-        return String(rawMarkdown[..<tagEnd]).replacing(detailsOpenAttribute(), with: "", maxReplacements: 1) + String(rawMarkdown[tagEnd...])
+        return rawMarkdown
     }
 
     /// name="値" 形式の HTML 属性値を取り出す。

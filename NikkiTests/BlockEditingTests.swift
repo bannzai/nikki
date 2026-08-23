@@ -79,6 +79,24 @@ struct BlockEditingTests {
         #expect(blocks.firstDetailsSummary == "病院メモ")
     }
 
+    @Test("属性値の文中の open は属性として扱わない")
+    func ignoresOpenInsideAttributeValue() {
+        var blocks = Block.blocks(fromMarkdown: "<details title=\"is open now\"><summary>病院メモ</summary></details>")
+        let blockID = blocks[0].id
+        // 値の文中の open で「開いている」と誤認しない。
+        if case .details(_, _, let isCollapsed, _) = blocks[0] {
+            #expect(isCollapsed == true)
+        } else {
+            Issue.record("details としてパースされていない: \(blocks)")
+        }
+
+        // 開閉しても title の値は書き換わらない。
+        blocks.toggleDetails(blockID: blockID)
+        #expect(Block.markdown(blocks: blocks) == "<details open title=\"is open now\"><summary>病院メモ</summary></details>")
+        blocks.toggleDetails(blockID: blockID)
+        #expect(Block.markdown(blocks: blocks) == "<details title=\"is open now\"><summary>病院メモ</summary></details>")
+    }
+
     @Test("本文が空のブロックと項目は書き出しから外れる")
     func dropsEmptyText() {
         let blocks: [Block] = [
