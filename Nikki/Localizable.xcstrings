@@ -1270,6 +1270,16 @@
         }
       }
     },
+    "Restart Nikki to apply your plan change to iCloud sync.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "プラン変更を iCloud 同期へ反映するには、Nikki を再起動してください"
+          }
+        }
+      }
+    },
     "Restore purchases": {
       "localizations": {
         "ja": {

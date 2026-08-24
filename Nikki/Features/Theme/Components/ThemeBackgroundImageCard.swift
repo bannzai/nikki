@@ -67,12 +67,19 @@ struct ThemeBackgroundImageCard: View {
             }
         }
         .onChange(of: photosPickerItem) { _, newItem in
+            if newItem == nil {
+                return
+            }
             Task {
-                if let data = try? await newItem?.loadTransferable(type: Data.self) {
-                    try? ThemeBackgroundImage.save(data: data)
+                // 縮小・エンコードできないデータは保存されないため、保存に成功した時だけ選択済みの表示にする。
+                if let data = try? await newItem?.loadTransferable(type: Data.self),
+                   (try? ThemeBackgroundImage.save(data: data)) != nil {
                     hasStoredImage = true
                     themeBackgroundImageVersion += 1
                 }
+                // 選択を保持したままだと同じ写真を選び直しても onChange が発火しないため、
+                // 読み込みの成否によらず未選択へ戻す。
+                photosPickerItem = nil
             }
         }
     }
@@ -82,6 +89,8 @@ struct ThemeBackgroundImageCard: View {
         try? ThemeBackgroundImage.remove()
         hasStoredImage = false
         themeBackgroundImageVersion += 1
+        // 削除後に、直前に選んだのと同じ写真を選び直せるようにする。
+        photosPickerItem = nil
     }
 }
 

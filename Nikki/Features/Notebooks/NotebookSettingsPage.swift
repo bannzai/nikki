@@ -95,12 +95,18 @@ struct NotebookSettingsPage: View {
     /// 同じ書き出しのテンプレートが既にあるときは重複させない(冪等)。
     /// 名前はロケールで変わる(String(localized:) の値が永続化される)ため、既存の判定には使わず、
     /// 言語に依存しない書き出し markdown(既定は "# {{date}}" のリテラル)だけで判定する。
+    /// 復元でノートが増える場合は新規作成と同じ無料枠(#94)を適用し、上限に達しているときは
+    /// 追加せずペイウォールを開く。追加が起きない場合(冪等な no-op)はペイウォールを出さない。
     private func restoreSeedNotebooks() {
         let seeds = SampleData.seedNotebooks(sortOrder: (notebooks.last?.sortOrder ?? -1) + 1)
         let restored = seeds.filter { seed in
             !notebooks.contains { $0.template?.markdown == seed.template?.markdown }
         }
         if restored.isEmpty {
+            return
+        }
+        if !canCreateNotebook(existingNotebookCount: notebooks.count, plusActive: plusActive) {
+            paywallSheetIsPresented = true
             return
         }
         modelContext.insert(notebooks: restored)

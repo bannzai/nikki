@@ -211,8 +211,10 @@ struct JournalEntryTests {
                 updatedAt: .now
             ),
         ]
-        let html = entries.exportHTML(paperColorHex: "#F7F4EC")
+        let html = entries.exportHTML(paperColorHex: "#F7F4EC", languageCode: "ja")
         #expect(html.contains("background: #F7F4EC;"))
+        // lang 属性は書き出した時の表示言語に合わせる。
+        #expect(html.contains("<html lang=\"ja\">"))
         #expect(html.contains("<h1>2026-07-16</h1>"))
         #expect(html.contains("<h2>見出し</h2>"))
         // HTML として解釈されないよう、本文中の記号はエスケープする。

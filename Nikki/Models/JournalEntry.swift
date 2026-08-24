@@ -148,7 +148,8 @@ extension [JournalEntry] {
     /// 設定「Export as HTML」用に、全件を1つの装飾付き HTML 文書へ連結したテキスト(#95、Plus 限定)。
     /// テーマの紙色を背景に反映し、見出し・段落・チェックリストは構造化したタグで書き出す。
     /// img / details は編集時の元 markdown 行をそのまま <pre> で書き出し、内容を失わない(装飾は最小限)。
-    func exportHTML(paperColorHex: String) -> String {
+    /// languageCode は html 要素の lang 属性に入れる言語コード("en" / "ja" 等)で、書き出した時の表示言語を渡す。
+    func exportHTML(paperColorHex: String, languageCode: String) -> String {
         let formatter = DateFormatter()
         formatter.timeZone = .autoupdatingCurrent
         formatter.dateFormat = "yyyy-MM-dd"
@@ -166,7 +167,7 @@ extension [JournalEntry] {
         .joined(separator: "\n<hr>\n")
         return """
         <!doctype html>
-        <html lang="ja">
+        <html lang="\(languageCode)">
         <head>
         <meta charset="utf-8">
         <title>Nikki</title>

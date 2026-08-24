@@ -24,14 +24,11 @@ struct SettingsExportBlockLayout: View {
                     .font(.system(size: 13))
                 }
             }
-        // img / details は編集時の元 markdown をそのまま書き出し、内容を失わないことを優先する(装飾は最小限)。
-        case .image(_, let label, _):
-            Text("🖼 \(label)")
-                .font(.system(size: 12, weight: .regular))
-                .foregroundStyle(.secondary)
-        case .details(_, let summary, _, _):
-            Text("▸ \(summary)")
-                .font(.system(size: 12, weight: .regular))
+        // img / details は HTML 書き出し(exportHTMLBody)と同じく編集時の元 markdown をそのまま描き、
+        // ラベル・要約だけでは失われる src 属性や details の本文まで残す(装飾は最小限)。
+        case .image(_, _, let rawMarkdown), .details(_, _, _, let rawMarkdown):
+            Text(rawMarkdown)
+                .font(.system(size: 11, design: .monospaced))
                 .foregroundStyle(.secondary)
         }
     }
