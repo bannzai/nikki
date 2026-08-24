@@ -27,8 +27,9 @@ last_verified_at: 2026-08-22
 
 ## 1. プランの表示と選択
 
-- [ ] **特典が4件表示される**: 特典として「複数端末で同期」「テンプレート無制限」「テーマを増やす (背景画像を含む)」「1秒きざみの自動ロック」の4件が説明つきで表示され、スクロール末尾に暗号化の約束のフッター文言が出る (issue #97 で同期・テンプレート・背景画像のゲート実装 (#93 #94 #96) に合わせて復元)
+- [x] **特典が4件表示される**: 特典として「複数端末で同期」「テンプレート無制限」「テーマを増やす (背景画像を含む)」「1秒きざみの自動ロック」の4件が説明つきで表示され、スクロール末尾に暗号化の約束のフッター文言が出る (issue #97 で同期・テンプレート・背景画像のゲート実装 (#93 #94 #96) に合わせて復元)
   - 自動化: manual（特典の文言を目視で確認する）
+  - 2026-08-24 simtunnel (iOS、英語) とローカル macOS (Debug、日本語) の両方で 4 件の特典と新しいヘッダー見出しを確認。iOS のスクロール末尾に「Your entries stay encrypted while they sync. We still can't read them. That never changes.」のフッターが表示された。この回の simtunnel は App Store に到達でき、US storefront の実価格 ($1.99 / $19.99 / $69.99・1 month free バッジ) が表示された
 - [ ] **3プランの価格と期間の表示**: 設定 > Nikki Plus を開くと、月ごと ¥300 (/月)・年ごと ¥3,000・買い切り ¥12,000 (一度の購入で、ずっと) の3枚のカードが表示される
   - 自動化: auto（NikkiTests/StoreKitConfigurationTests.swift が3商品の価格・期間・種別の解決を検証。iOS 26.5 の simulator では skip されるため 26.2 以下の runtime で実行する。カードの並びと文言はシミュレータで目視確認する）
   - ⏭️ スキップ: simtunnel の runner Simulator は App Store / RevenueCat へ接続できず、ペイウォールが「Couldn't load prices.（価格を読み込めませんでした。）」の読み込み失敗パスになるためカードが表示されない。価格・期間・種別の解決は StoreKit テスト NikkiTests/StoreKitConfigurationTests.swift で機械検証済み (iOS 26.2 で 5 件 pass)。カードの並びと文言は TestFlight 配布後の人間確認に回す
@@ -42,6 +43,18 @@ last_verified_at: 2026-08-22
 #### 動作確認
 <details>
 <summary>動作確認エビデンス</summary>
+
+### **特典が4件表示される**: 4件の特典・新ヘッダー見出し・暗号化フッターの表示 (issue #97)
+
+<details><summary>動作確認スクショ</summary>
+
+**確認日: 2026-08-24** (simtunnel iOS の上部・スクロール末尾、ローカル macOS Debug)
+
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/23c55852-ca50-4f18-95ab-0088d42e7a09.jpg" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/3aa90fc1-fd18-4373-bf66-161ec4b19528.jpg" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/82adbe4a-6e15-4426-9816-9609787154ab.png" width="320">
+
+</details>
 
 ### **3プランの価格と期間の表示**: 設定 > Nikki Plus を開くと、月ごと ¥300 (/月)・年ごと ¥3,000・買い切り ¥12,000 (一度の購入で、ずっと) の3枚のカードが表示される
 

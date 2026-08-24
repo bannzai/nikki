@@ -37,6 +37,9 @@ extension UserDefaults {
     enum IntKey: String, CaseIterable {
         case autoLockSeconds
         case paperColorPresetIndex
+        /// 背景画像ファイル(ThemeBackgroundImage)の変更回数(#96)。画像はファイル保存で SwiftUI の
+        /// 状態にならないため、保存・削除のたびに増やして RootPage の再評価(実画面への即時反映)を起こす。
+        case themeBackgroundImageVersion
 
         var key: String {
             "IntKey_\(rawValue)"

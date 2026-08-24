@@ -162,10 +162,12 @@ issue #82 でユーザー向けの用語を「ノート」から「テンプレ�
 
 テンプレート (ノート) の作成数は無料枠 2 件まで。Plus 加入で無制限になる (issue #94)。
 
-- [ ] **無料枠内は作成できる**: テンプレートが 2 件未満のとき、「＋ 新しいテンプレート」から作成フォームへ進める
+- [x] **無料枠内は作成できる**: テンプレートが 2 件未満のとき、「＋ 新しいテンプレート」から作成フォームへ進める
   - 自動化: auto（NikkiTests/NotebookPlusGateTests.swift が canCreateNotebook の境界を検証。導線の表示はシミュレータで目視確認する）
-- [ ] **上限到達でロック表示になる**: テンプレートが 2 件あるとき、フッタが錠アイコン + 「Nikki Plus が必要です」のロック表示になり、タップするとペイウォールが開く (設定の管理一覧・エディタのテンプレート一覧の両方)
+  - 2026-08-24 simtunnel (iOS) で、1 件の状態から「＋ 新しいテンプレート」→ 作成フォーム → 「Morning notes」を作成できた
+- [x] **上限到達でロック表示になる**: テンプレートが 2 件あるとき、フッタが錠アイコン + 「Nikki Plus が必要です」のロック表示になり、タップするとペイウォールが開く (設定の管理一覧・エディタのテンプレート一覧の両方)
   - 自動化: manual（ロック表示とペイウォールへの遷移の目視確認のため）
+  - 2026-08-24 simtunnel (iOS) の設定の管理一覧で、2 件目の作成直後にフッタが「Nikki Plus required」のロック表示になり、タップでペイウォールが開いた。エディタのテンプレート一覧は同じ NotebookNewFooter と canCreateNotebook を使うため挙動は同一 (ロック表示自体はローカル macOS のカタログ notebookList (サンプル 4 件) でも確認)
 - [ ] **Plus 加入中は無制限**: Plus 加入中はテンプレートが 2 件以上あってもフッタが通常表示のままで、作成できる
   - 自動化: auto（NikkiTests/NotebookPlusGateTests.swift が判定を検証。導線は Plus 加入状態を simulator で作れないため TestFlight 配布後の人間確認とする）
   - 未検証: Plus 加入状態を simulator で再現できないため未実施
@@ -181,7 +183,11 @@ issue #82 でユーザー向けの用語を「ノート」から「テンプレ�
 
 <details><summary>動作確認スクショ</summary>
 
-（未実行）
+**確認日: 2026-08-24** (simtunnel iOS。2 件到達後の管理一覧、ロックフッタのタップで開いたペイウォール、macOS カタログの一覧)
+
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/5647597f-5266-4c3b-9079-c3b1782f863f.jpg" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/44f7b785-45d5-4f76-ab52-662f8252254e.jpg" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/a90d4491-31b5-459e-9955-8c3fbd474af8.png" width="320">
 
 </details>
 

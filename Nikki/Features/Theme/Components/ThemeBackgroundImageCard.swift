@@ -10,6 +10,8 @@ struct ThemeBackgroundImageCard: View {
     // ファイルの実在確認から初期値を導く必要があるため、既定値付きのカスタムプロパティにしている。
     @State var hasStoredImage = ThemeBackgroundImage.load() != nil
     @State var photosPickerItem: PhotosPickerItem? = nil
+    /// 画像の保存・削除のたびに増やし、RootPage に実画面への反映(environment の再解決)を起こさせる。
+    @AppStorage(.themeBackgroundImageVersion) var themeBackgroundImageVersion: Int = 0
 
     var body: some View {
         InkListSection {
@@ -69,6 +71,7 @@ struct ThemeBackgroundImageCard: View {
                 if let data = try? await newItem?.loadTransferable(type: Data.self) {
                     try? ThemeBackgroundImage.save(data: data)
                     hasStoredImage = true
+                    themeBackgroundImageVersion += 1
                 }
             }
         }
@@ -78,6 +81,7 @@ struct ThemeBackgroundImageCard: View {
     private func removeImage() {
         try? ThemeBackgroundImage.remove()
         hasStoredImage = false
+        themeBackgroundImageVersion += 1
     }
 }
 

@@ -30,6 +30,9 @@ struct RootPage: View {
     @AppStorage(.autoLockSeconds) var autoLockSeconds: Int = 5
     // ThemePage と同じ既定(「生成」)。
     @AppStorage(.paperColorPresetIndex) var paperColorPresetIndex: Int = 1
+    // 背景画像はファイル保存で SwiftUI の状態にならないため、テーマ画面が保存・削除のたびに増やす
+    // この値の変化を body の再評価(下の ThemeBackgroundImage.load() のやり直し)の契機にする。
+    @AppStorage(.themeBackgroundImageVersion) var themeBackgroundImageVersion: Int = 0
 
     /// 配下へ environment で配る「今日」。フォアグラウンド復帰と日付変更のタイミングでのみ更新する。
     @State var today: Date = .now
