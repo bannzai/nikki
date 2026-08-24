@@ -90,10 +90,20 @@ struct SettingsPage: View {
                                 title: String(localized: "Archived entries"),
                                 action: { archiveIsPresented = true }
                             )
+                            // fileExporter は同じ View に複数付けると最後の1つしか機能しないため、
+                            // 書き出し行ごとに自分の行へ付けて分離する(PDF / HTML の行も同様)。
                             InkListRow(
                                 title: String(localized: "Export as Markdown"),
                                 action: { markdownExporterIsPresented = true }
                             )
+                            .fileExporter(
+                                isPresented: $markdownExporterIsPresented,
+                                document: SettingsMarkdownDocument(text: entries.exportMarkdown),
+                                contentType: SettingsMarkdownDocument.markdownType,
+                                defaultFilename: "Nikki"
+                            ) { _ in
+                                // 保存先の選択キャンセル・失敗はユーザー操作の範囲なので何もしない。
+                            }
                             // PDF / HTML の装飾付き書き出しは Plus 限定(#95)。Markdown は無料のまま変更しない。
                             InkListRow(
                                 title: String(localized: "Export as PDF"),
@@ -110,6 +120,23 @@ struct SettingsPage: View {
                                     }
                                 }
                             )
+                            .fileExporter(
+                                isPresented: $pdfExporterIsPresented,
+                                document: SettingsPDFDocument(
+                                    // PDF はページごとに ImageRenderer で描画する分 markdown/HTML より重いため、シートを開く
+                                    // 直前まで(pdfExporterIsPresented が true になるまで)計算を遅らせ、body の再評価のたびには作らない。
+                                    data: pdfExporterIsPresented
+                                        ? SettingsExportPDFGenerator.makeData(
+                                            entries: entries,
+                                            paperColor: effectivePaperColor(storedIndex: paperColorPresetIndex, plusActive: plusActive)
+                                        )
+                                        : Data()
+                                ),
+                                contentType: SettingsPDFDocument.pdfType,
+                                defaultFilename: "Nikki"
+                            ) { _ in
+                                // 保存先の選択キャンセル・失敗はユーザー操作の範囲なので何もしない。
+                            }
                             InkListRow(
                                 title: String(localized: "Export as HTML"),
                                 trailing: plusActive ? nil : AnyView(
@@ -125,6 +152,21 @@ struct SettingsPage: View {
                                     }
                                 }
                             )
+                            .fileExporter(
+                                isPresented: $htmlExporterIsPresented,
+                                document: SettingsHTMLDocument(
+                                    text: entries.exportHTML(
+                                        paperColorHex: String(
+                                            format: "#%06X",
+                                            Color.paperColorPresetHex[effectivePaperColorPresetIndex(storedIndex: paperColorPresetIndex, plusActive: plusActive)]
+                                        )
+                                    )
+                                ),
+                                contentType: SettingsHTMLDocument.htmlType,
+                                defaultFilename: "Nikki"
+                            ) { _ in
+                                // 保存先の選択キャンセル・失敗はユーザー操作の範囲なので何もしない。
+                            }
                             // 遷移ではなく確認ダイアログを開くアクション行のため、シェブロンは出さない。
                             InkListRow(
                                 title: String(localized: "Delete all entries"),
@@ -195,46 +237,6 @@ struct SettingsPage: View {
                     textSize = size
                 }
             }
-        }
-        .fileExporter(
-            isPresented: $markdownExporterIsPresented,
-            document: SettingsMarkdownDocument(text: entries.exportMarkdown),
-            contentType: SettingsMarkdownDocument.markdownType,
-            defaultFilename: "Nikki"
-        ) { _ in
-            // 保存先の選択キャンセル・失敗はユーザー操作の範囲なので何もしない。
-        }
-        .fileExporter(
-            isPresented: $pdfExporterIsPresented,
-            document: SettingsPDFDocument(
-                // PDF はページごとに ImageRenderer で描画する分 markdown/HTML より重いため、シートを開く
-                // 直前まで(pdfExporterIsPresented が true になるまで)計算を遅らせ、body の再評価のたびには作らない。
-                data: pdfExporterIsPresented
-                    ? SettingsExportPDFGenerator.makeData(
-                        entries: entries,
-                        paperColor: effectivePaperColor(storedIndex: paperColorPresetIndex, plusActive: plusActive)
-                    )
-                    : Data()
-            ),
-            contentType: SettingsPDFDocument.pdfType,
-            defaultFilename: "Nikki"
-        ) { _ in
-            // 保存先の選択キャンセル・失敗はユーザー操作の範囲なので何もしない。
-        }
-        .fileExporter(
-            isPresented: $htmlExporterIsPresented,
-            document: SettingsHTMLDocument(
-                text: entries.exportHTML(
-                    paperColorHex: String(
-                        format: "#%06X",
-                        Color.paperColorPresetHex[effectivePaperColorPresetIndex(storedIndex: paperColorPresetIndex, plusActive: plusActive)]
-                    )
-                )
-            ),
-            contentType: SettingsHTMLDocument.htmlType,
-            defaultFilename: "Nikki"
-        ) { _ in
-            // 保存先の選択キャンセル・失敗はユーザー操作の範囲なので何もしない。
         }
     }
 

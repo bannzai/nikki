@@ -204,7 +204,7 @@ last_verified_at: 2026-08-22
 - [ ] **PDF / HTML 書き出しのロック表示 (Plus 未加入)**: 「PDF で書き出す」「HTML で書き出す」の行に錠アイコンが付き、タップするとペイウォールが開く。「Markdown で書き出す」は無料のまま保存画面が開く (issue #95)
   - 自動化: manual（ロック表示とペイウォールへの遷移の目視確認のため）
 - [ ] **PDF / HTML の書き出し (Plus 加入中)**: 各行から保存画面が開き、PDF は 1 日記 1 ページの装飾付き文書、HTML はテーマの紙色を背景に反映した装飾付き文書が保存される (issue #95)
-  - 自動化: auto（NikkiTests/JournalEntryTests.swift の exportHTML テストが HTML の構造と紙色の反映を検証。PDF の見た目と保存画面は Plus 加入状態を simulator で作れないため TestFlight 配布後の人間確認とする）
+  - 自動化: auto（NikkiTests/JournalEntryTests.swift の exportHTML テストが HTML の構造と紙色の反映を、NikkiTests/SettingsExportPDFGeneratorTests.swift が PDF のページ数を検証。見た目と保存画面は Plus 加入状態を simulator で作れないため TestFlight 配布後の人間確認とする）
   - 未検証: Plus 加入状態を simulator で再現できないため保存画面からの書き出しは未実施
 
 #### 動作確認
