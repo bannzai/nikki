@@ -199,4 +199,25 @@ struct JournalEntryTests {
         タイトルのない日。
         """)
     }
+
+    @Test("exportHTML は日付見出し・段落・チェックリストをタグ化し、紙色を背景に反映する(#95)")
+    func exportHTMLTagsBlocksAndAppliesPaperColor() {
+        let entries = [
+            JournalEntry(
+                date: SampleData.date(2026, 7, 16),
+                title: "",
+                bodyMarkdown: "# 見出し\n\n段落<script>\n\n- [ ] 未完了\n- [x] 完了",
+                createdAt: .now,
+                updatedAt: .now
+            ),
+        ]
+        let html = entries.exportHTML(paperColorHex: "#F7F4EC")
+        #expect(html.contains("background: #F7F4EC;"))
+        #expect(html.contains("<h1>2026-07-16</h1>"))
+        #expect(html.contains("<h2>見出し</h2>"))
+        // HTML として解釈されないよう、本文中の記号はエスケープする。
+        #expect(html.contains("<p>段落&lt;script&gt;</p>"))
+        #expect(html.contains("<li class=\"\"><input type=\"checkbox\"  disabled> 未完了</li>"))
+        #expect(html.contains("<li class=\"done\"><input type=\"checkbox\" checked disabled> 完了</li>"))
+    }
 }

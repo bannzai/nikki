@@ -45,7 +45,7 @@ struct ThemePage: View {
 
                         ThemeSectionLabel(text: String(localized: "Background image"))
                             .padding(.bottom, 10)
-                        ThemeBackgroundImageCard()
+                        ThemeBackgroundImageCard(plusActive: plusActive, paywallSheetIsPresented: $paywallSheetIsPresented)
                             .padding(.bottom, 24)
 
                         Text("Your theme is saved only on this device.")
@@ -102,4 +102,10 @@ func effectivePaperColorPresetIndex(storedIndex: Int, plusActive: Bool) -> Int {
 /// 実際に紙地へ適用する紙色。effectivePaperColorPresetIndex で正規化した添字のプリセット色。
 func effectivePaperColor(storedIndex: Int, plusActive: Bool) -> Color {
     Color.paperColorPreset[effectivePaperColorPresetIndex(storedIndex: storedIndex, plusActive: plusActive)]
+}
+
+/// 背景画像を実画面に適用するかどうか(#96)。背景画像は Plus 限定で、保存済みの画像自体は消さず、
+/// 失効中は表示にだけ反映しない(再加入すると保存済みの画像がそのまま復活する)。
+func effectiveThemeBackgroundImageIsActive(hasStoredImage: Bool, plusActive: Bool) -> Bool {
+    hasStoredImage && plusActive
 }

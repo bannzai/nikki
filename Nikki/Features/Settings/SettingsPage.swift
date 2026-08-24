@@ -20,6 +20,8 @@ struct SettingsPage: View {
     @State var archiveIsPresented = false
     @State var paywallSheetIsPresented = false
     @State var markdownExporterIsPresented = false
+    @State var pdfExporterIsPresented = false
+    @State var htmlExporterIsPresented = false
     @State var deleteAllEntriesConfirmationDialogIsPresented = false
 
     @Query(sort: \JournalNotebook.sortOrder) var notebooks: [JournalNotebook]
@@ -91,6 +93,37 @@ struct SettingsPage: View {
                             InkListRow(
                                 title: String(localized: "Export as Markdown"),
                                 action: { markdownExporterIsPresented = true }
+                            )
+                            // PDF / HTML の装飾付き書き出しは Plus 限定(#95)。Markdown は無料のまま変更しない。
+                            InkListRow(
+                                title: String(localized: "Export as PDF"),
+                                trailing: plusActive ? nil : AnyView(
+                                    Image(systemName: InkIcons.lock)
+                                        .font(.system(size: 13, weight: .semibold))
+                                        .foregroundStyle(Color.inkTextSecondary)
+                                ),
+                                action: {
+                                    if plusActive {
+                                        pdfExporterIsPresented = true
+                                    } else {
+                                        paywallSheetIsPresented = true
+                                    }
+                                }
+                            )
+                            InkListRow(
+                                title: String(localized: "Export as HTML"),
+                                trailing: plusActive ? nil : AnyView(
+                                    Image(systemName: InkIcons.lock)
+                                        .font(.system(size: 13, weight: .semibold))
+                                        .foregroundStyle(Color.inkTextSecondary)
+                                ),
+                                action: {
+                                    if plusActive {
+                                        htmlExporterIsPresented = true
+                                    } else {
+                                        paywallSheetIsPresented = true
+                                    }
+                                }
                             )
                             // 遷移ではなく確認ダイアログを開くアクション行のため、シェブロンは出さない。
                             InkListRow(
@@ -171,6 +204,38 @@ struct SettingsPage: View {
         ) { _ in
             // 保存先の選択キャンセル・失敗はユーザー操作の範囲なので何もしない。
         }
+        .fileExporter(
+            isPresented: $pdfExporterIsPresented,
+            document: SettingsPDFDocument(
+                // PDF はページごとに ImageRenderer で描画する分 markdown/HTML より重いため、シートを開く
+                // 直前まで(pdfExporterIsPresented が true になるまで)計算を遅らせ、body の再評価のたびには作らない。
+                data: pdfExporterIsPresented
+                    ? SettingsExportPDFGenerator.makeData(
+                        entries: entries,
+                        paperColor: effectivePaperColor(storedIndex: paperColorPresetIndex, plusActive: plusActive)
+                    )
+                    : Data()
+            ),
+            contentType: SettingsPDFDocument.pdfType,
+            defaultFilename: "Nikki"
+        ) { _ in
+            // 保存先の選択キャンセル・失敗はユーザー操作の範囲なので何もしない。
+        }
+        .fileExporter(
+            isPresented: $htmlExporterIsPresented,
+            document: SettingsHTMLDocument(
+                text: entries.exportHTML(
+                    paperColorHex: String(
+                        format: "#%06X",
+                        Color.paperColorPresetHex[effectivePaperColorPresetIndex(storedIndex: paperColorPresetIndex, plusActive: plusActive)]
+                    )
+                )
+            ),
+            contentType: SettingsHTMLDocument.htmlType,
+            defaultFilename: "Nikki"
+        ) { _ in
+            // 保存先の選択キャンセル・失敗はユーザー操作の範囲なので何もしない。
+        }
     }
 
     /// TextSize の表示名。
@@ -188,6 +253,47 @@ struct SettingsMarkdownDocument: FileDocument {
     nonisolated static let readableContentTypes: [UTType] = [markdownType]
     /// .md 拡張子の UTType。環境に markdown の型定義がない場合は plainText に倒す。
     nonisolated static let markdownType = UTType(filenameExtension: "md", conformingTo: .plainText) ?? .plainText
+
+    let text: String
+
+    init(text: String) {
+        self.text = text
+    }
+
+    nonisolated init(configuration: ReadConfiguration) throws {
+        text = String(data: configuration.file.regularFileContents ?? Data(), encoding: .utf8) ?? ""
+    }
+
+    nonisolated func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
+        FileWrapper(regularFileWithContents: Data(text.utf8))
+    }
+}
+
+/// 「PDF で書き出す」(#95、Plus 限定)の fileExporter に渡す書類。
+struct SettingsPDFDocument: FileDocument {
+    nonisolated static let readableContentTypes: [UTType] = [pdfType]
+    nonisolated static let pdfType = UTType.pdf
+
+    let data: Data
+
+    init(data: Data) {
+        self.data = data
+    }
+
+    nonisolated init(configuration: ReadConfiguration) throws {
+        data = configuration.file.regularFileContents ?? Data()
+    }
+
+    nonisolated func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
+        FileWrapper(regularFileWithContents: data)
+    }
+}
+
+/// 「HTML で書き出す」(#95、Plus 限定)の fileExporter に渡す書類。
+struct SettingsHTMLDocument: FileDocument {
+    nonisolated static let readableContentTypes: [UTType] = [htmlType]
+    /// .html 拡張子の UTType。環境に html の型定義がない場合は plainText に倒す。
+    nonisolated static let htmlType = UTType(filenameExtension: "html", conformingTo: .plainText) ?? .plainText
 
     let text: String
 

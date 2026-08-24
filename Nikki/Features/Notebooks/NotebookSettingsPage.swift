@@ -11,10 +11,12 @@ struct NotebookSettingsPage: View {
     /// 作成フォームへの遷移状態。
     @State var notebookCreateIsPresented = false
     @State var deleteAllConfirmationDialogIsPresented = false
+    @State var paywallSheetIsPresented = false
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @Environment(\.paperColor) private var paperColor
+    @Environment(\.plusActive) private var plusActive
 
     var body: some View {
         VStack(spacing: 0) {
@@ -33,7 +35,16 @@ struct NotebookSettingsPage: View {
                         }
                     }
 
-                    NotebookNewFooter(onTap: { notebookCreateIsPresented = true })
+                    NotebookNewFooter(
+                        locked: !canCreateNotebook(existingNotebookCount: notebooks.count, plusActive: plusActive),
+                        onTap: {
+                            if canCreateNotebook(existingNotebookCount: notebooks.count, plusActive: plusActive) {
+                                notebookCreateIsPresented = true
+                            } else {
+                                paywallSheetIsPresented = true
+                            }
+                        }
+                    )
 
                     InkListSection {
                         // 遷移ではなくその場で復元するアクション行のため、シェブロンは出さない。
@@ -66,6 +77,9 @@ struct NotebookSettingsPage: View {
         }
         .navigationDestination(isPresented: $notebookCreateIsPresented) {
             NotebookCreatePage()
+        }
+        .sheet(isPresented: $paywallSheetIsPresented) {
+            PaywallPage()
         }
         .confirmationDialog("Delete all templates", isPresented: $deleteAllConfirmationDialogIsPresented, titleVisibility: .visible) {
             Button("Delete all templates", role: .destructive) {

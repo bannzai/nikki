@@ -42,11 +42,12 @@ struct HomePage: View {
     @Environment(\.resetAutoLockTimer) private var resetAutoLockTimer
     @Environment(\.modelContext) private var modelContext
     @Environment(\.paperColor) private var paperColor
+    @Environment(\.themeBackgroundImage) private var backgroundImage
 
     var body: some View {
         let filteredEntries = searchText.isEmpty ? entries : entries.filter { $0.matches(searchText: searchText) }
         ZStack(alignment: .bottomTrailing) {
-            paperColor.ignoresSafeArea()
+            JournalBackground(paperColor: paperColor, backgroundImage: backgroundImage)
 
             VStack(alignment: .leading, spacing: 0) {
                 VStack(alignment: .leading, spacing: 14) {
