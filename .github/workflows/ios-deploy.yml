@@ -88,9 +88,12 @@ jobs:
           IOS_PROVISIONING_PROFILE_BASE64: ${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}
         run: |
           [ -n "$IOS_PROVISIONING_PROFILE_BASE64" ] || { echo "::error::Secret IOS_PROVISIONING_PROFILE_BASE64 が空です"; exit 1; }
+          # 従来の MobileDevice 配下に加え、Xcode 16 以降の走査先 (Developer/Xcode/UserData) にも置く
           PROFILE_DIR="$HOME/Library/MobileDevice/Provisioning Profiles"
-          mkdir -p "$PROFILE_DIR"
+          XCODE_PROFILE_DIR="$HOME/Library/Developer/Xcode/UserData/Provisioning Profiles"
+          mkdir -p "$PROFILE_DIR" "$XCODE_PROFILE_DIR"
           echo -n "$IOS_PROVISIONING_PROFILE_BASE64" | base64 --decode > "$PROFILE_DIR/Nikki_AppStore.mobileprovision"
+          cp "$PROFILE_DIR/Nikki_AppStore.mobileprovision" "$XCODE_PROFILE_DIR/Nikki_AppStore.mobileprovision"
 
       - name: Resolve build number
         run: |
@@ -174,3 +177,4 @@ jobs:
         run: |
           rm -f ~/.appstoreconnect/private_keys/AuthKey_*.p8 || true
           rm -f ~/Library/MobileDevice/Provisioning\ Profiles/Nikki_AppStore.mobileprovision || true
+          rm -f ~/Library/Developer/Xcode/UserData/Provisioning\ Profiles/Nikki_AppStore.mobileprovision || true
