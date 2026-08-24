@@ -1,8 +1,8 @@
 ---
 feature: Theme
 verification: mobile-mcp
-last_verified_commit: 96337de3d8717a2428e3fa4d4120727fab323a27
-last_verified_at: 2026-08-21
+last_verified_commit: 386cc3aa015dd43afa9a608af57ee55f05cc1074
+last_verified_at: 2026-08-24
 ---
 
 # Theme QA

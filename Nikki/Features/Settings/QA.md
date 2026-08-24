@@ -1,8 +1,8 @@
 ---
 feature: Settings
 verification: mobile-mcp
-last_verified_commit: 2f8b4ab97dc9113a82b5f76671c2de80fc1f55e5
-last_verified_at: 2026-08-22
+last_verified_commit: 386cc3aa015dd43afa9a608af57ee55f05cc1074
+last_verified_at: 2026-08-24
 ---
 
 # Settings QA
@@ -191,7 +191,7 @@ last_verified_at: 2026-08-22
 
 - [x] **Markdown の保存先を選べる**: 「Markdown で書き出す」からファイルの保存画面が開き、保存すると Nikki.md が書き出される
   - 自動化: manual（OS のファイル保存画面の操作を伴うため）
-  - 保存画面で「Save as Nikki」の状態で「On My iPhone」へ保存でき、保存後は設定画面へ戻った。Files アプリで 392 バイトのファイルが確認できた
+  - 2026-08-24 simtunnel (iOS) で再確認。fileExporter 3 連鎖の不具合修正後、「Markdown で書き出す」から保存画面 (On My iPhone + Save) が開き、Save で設定画面へ戻った (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/5d5124dc-2069-418b-badd-335efe2930e0.jpg)
 - [ ] **書き出しをキャンセルしても設定画面が壊れない**: ファイルの保存画面をキャンセルすると設定画面に戻り、表示と操作が壊れない
   - 自動化: manual（OS のファイル保存画面の操作を伴うため）
   - ⏭️ スキップ: 今回の QA セッションでは保存成功側のみ実施。キャンセル経路は次回 QA で確認する
@@ -203,7 +203,7 @@ last_verified_at: 2026-08-22
   - 確認ダイアログ「This deletes every entry, including archived ones. This cannot be undone.」が出て、実行するとホームが空状態になり、アーカイブ一覧も空状態になった。ノートは 2 冊のまま残った
 - [x] **PDF / HTML 書き出しのロック表示 (Plus 未加入)**: 「PDF で書き出す」「HTML で書き出す」の行に錠アイコンが付き、タップするとペイウォールが開く。「Markdown で書き出す」は無料のまま保存画面が開く (issue #95)
   - 自動化: manual（ロック表示とペイウォールへの遷移の目視確認のため）
-  - 2026-08-24 simtunnel (iOS) とローカル macOS (Debug) の両方で両行の錠アイコンを確認し、iOS で「PDF で書き出す」をタップするとペイウォールが開いた。初回 QA で「Markdown で書き出す」の保存画面が開かない不具合を発見 (同じ View への fileExporter 3 連鎖で先頭が無効化) → 行ごとに fileExporter を分離して修正 (再検証の結果は下の「Markdown の保存先を選べる」の記録を参照)
+  - 2026-08-24 simtunnel (iOS) とローカル macOS (Debug) の両方で両行の錠アイコンを確認し、iOS で「PDF で書き出す」をタップするとペイウォールが開いた。初回 QA で「Markdown で書き出す」の保存画面が開かない不具合を発見 (同じ View への fileExporter 3 連鎖で先頭が無効化) → 行ごとに fileExporter を分離して修正 (再検証の結果は同セクションの「Markdown の保存先を選べる」の記録を参照)
 - [ ] **PDF / HTML の書き出し (Plus 加入中)**: 各行から保存画面が開き、PDF は 1 日記 1 ページの装飾付き文書、HTML はテーマの紙色を背景に反映した装飾付き文書が保存される (issue #95)
   - 自動化: auto（NikkiTests/JournalEntryTests.swift の exportHTML テストが HTML の構造と紙色の反映を、NikkiTests/SettingsExportPDFGeneratorTests.swift が PDF のページ数を検証。見た目と保存画面は Plus 加入状態を simulator で作れないため TestFlight 配布後の人間確認とする）
   - 未検証: Plus 加入状態を simulator で再現できないため保存画面からの書き出しは未実施
