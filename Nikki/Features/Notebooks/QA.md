@@ -1,8 +1,8 @@
 ---
 feature: Notebooks
 verification: mobile-mcp
-last_verified_commit: 2f8b4ab97dc9113a82b5f76671c2de80fc1f55e5
-last_verified_at: 2026-08-22
+last_verified_commit: 32c584bd564d5232447e659d5e78cdc87500c0cc
+last_verified_at: 2026-08-24
 ---
 
 # Notebooks QA
@@ -15,12 +15,16 @@ issue #82 でユーザー向けの用語を「ノート」から「テンプレ�
 - 関連: ノートの作成・編集・削除の導線 https://github.com/bannzai/nikki/issues/58
 - 関連: 日記をまとめる単位としてノートを導入した経緯 https://github.com/bannzai/nikki/issues/56
 - 関連: ノートを選んだときに入力内容が消えることの確認アラート https://github.com/bannzai/nikki/issues/50
+- 関連: 初期テンプレートを既定の4つに整理・変数説明の拡充・ホームからのリスト追加導線 https://github.com/bannzai/nikki/issues/92
 
 ## 1. テンプレートの作成
 
 - [x] **設定からテンプレート一覧へ入れる**: 設定の「テンプレート」から一覧が開き、いま持っているテンプレートが並ぶ
   - 自動化: manual（設定からの遷移と一覧の内容を目視で確認する）
   - 設定 > Templates から管理一覧が開き、Blank page と作成した Morning notes が並んだ
+- [x] **初回起動で既定の4テンプレートがシードされる (issue #92)**: 初回起動時に「Journal」「3 lines in the morning」「Daily reflection」「Travel log」の4件が作られ、設定の「Templates」行に「4 templates」と出る
+  - 自動化: NikkiTests/JournalNotebookTests.swift の seedNotebooksSeedsDefaultFour（seedNotebooks(sortOrder:) の返す件数・名前・表示順を機械検証）。実機での見え方は目視で確認する
+  - 2026-08-24 simtunnel (iOS) で、初回起動直後の設定に「4 templates」、一覧に4件がその順で並ぶことを確認した
 - [x] **新しいテンプレートを作れる**: 一覧末尾の「＋ 新しいテンプレート」から名前と書き出しを入力して「作成」すると、テンプレートが一覧の末尾に増える
   - 自動化: manual（作成フォームの入力から一覧への反映までを実操作で確認する）
   - エディタのテンプレート一覧 (設定の管理一覧と同じフォーム) から「Morning notes」を作成し、一覧の末尾に増えた
@@ -30,6 +34,9 @@ issue #82 でユーザー向けの用語を「ノート」から「テンプレ�
 - [ ] **空白だけの名前では作られない**: 名前に空白文字だけを入れて「作成」を押しても、テンプレートは増えず作成フォームのまま留まる
   - 自動化: manual（空白のみの入力での作成操作の結果を目視で確認する）
   - ⏭️ スキップ: 前回 (2026-08-21) から未実施のまま。次回 QA で確認する
+- [x] **変数の説明が {{date}} 以外にも言及する (issue #92)**: 作成・編集フォームの書き出し欄の下に、{{date}} の自動補完に加えて {{weather}} や {{place}} のような他の変数も使える旨の説明が出る
+  - 自動化: manual（説明文の表示は目視でしか確認できない）
+  - 2026-08-24 simtunnel (iOS) で、作成フォーム・編集フォームの両方で拡充後の説明文が表示されることを確認した
 
 #### 動作確認
 <details>
@@ -44,6 +51,15 @@ issue #82 でユーザー向けの用語を「ノート」から「テンプレ�
 
 </details>
 
+### **初回起動で既定の4テンプレートがシードされる (issue #92)**: 初回起動時に「Journal」「3 lines in the morning」「Daily reflection」「Travel log」の4件が作られ、設定の「Templates」行に「4 templates」と出る
+
+<details><summary>動作確認スクショ</summary>
+
+**確認日: 2026-08-24**
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/fd482a77-0208-4c7e-b3d7-8d4960ba1e72.jpg" width="320">
+
+</details>
+
 ### **新しいテンプレートを作れる**: 一覧末尾の「＋ 新しいテンプレート」から名前と書き出しを入力して「作成」すると、テンプレートが一覧の末尾に増える
 
 <details><summary>動作確認スクショ</summary>
@@ -51,6 +67,31 @@ issue #82 でユーザー向けの用語を「ノート」から「テンプレ�
 **確認日: 2026-08-22** (作成フォームと、作成後の一覧)
 <img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/3628b567-4961-4525-8243-aa2f4ae461b8.jpg" width="320">
 <img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/3f50f191-a32c-4663-a0af-7315c69e01ab.jpg" width="320">
+
+</details>
+
+### **変数の説明が {{date}} 以外にも言及する (issue #92)**: 作成・編集フォームの書き出し欄の下に、{{date}} の自動補完に加えて {{weather}} や {{place}} のような他の変数も使える旨の説明が出る
+
+<details><summary>動作確認スクショ</summary>
+
+**確認日: 2026-08-24**
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/08ba724f-eb33-4e5d-9c99-5bec1c05ca7f.jpg" width="320">
+
+</details>
+
+### **名前が空のままでは作られない**: 名前を空にして「作成」を押しても、テンプレートは増えず作成フォームのまま留まる
+
+<details><summary>動作確認スクショ</summary>
+
+（未実行）
+
+</details>
+
+### **空白だけの名前では作られない**: 名前に空白文字だけを入れて「作成」を押しても、テンプレートは増えず作成フォームのまま留まる
+
+<details><summary>動作確認スクショ</summary>
+
+（未実行）
 
 </details>
 
@@ -77,7 +118,7 @@ issue #82 でユーザー向けの用語を「ノート」から「テンプレ�
 <details>
 <summary>動作確認エビデンス</summary>
 
-### **最後の1件まで削除できる**: テンプレートが1件しかないときでも編集画面に「テンプレートを削除」が出て、削除すると一覧が空になる
+### **最後の1件まで削除できる**: テンプレートが1件しかないときでも編集画面に「テンプレートを削除」が出て、削除すると一覧が空になる (既定のテンプレートは一覧の「既定のテンプレートを復元」で戻せる)
 
 <details><summary>動作確認スクショ</summary>
 
@@ -94,6 +135,23 @@ issue #82 でユーザー向けの用語を「ノート」から「テンプレ�
 <img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/6402b330-cfb4-4cf0-a02e-ad1eb4a69688.jpg" width="320">
 <img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/ae4bf882-2f04-4449-9391-5dbfaffb11c2.jpg" width="320">
 <img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/0a18cefd-6ea5-4ec2-885d-8608d9349134.jpg" width="320">
+
+</details>
+
+### **名前と書き出しを編集できる**: 一覧の行から編集画面(「テンプレートの編集」)に入り、名前と書き出しを書き換えて戻ると、一覧の表示と新規日記の書き出しに変更が反映される
+
+<details><summary>動作確認スクショ</summary>
+
+（未実行）
+
+</details>
+
+### **名前は空にできない**: 名前を空にして画面を離れると、元の名前のまま残る
+
+<details><summary>動作確認スクショ</summary>
+
+**確認日: 2026-08-22**
+スクリーンショットではなく NikkiUITests/NotebookEditUITests.swift の実イベント検証（1文字ずつ削除して離脱するイベント列）が pass したことをエビデンスとする(issue #79)。
 
 </details>
 
@@ -118,7 +176,7 @@ issue #82 でユーザー向けの用語を「ノート」から「テンプレ�
 <details>
 <summary>動作確認エビデンス</summary>
 
-### **書きかけの日記は確認してから置き換わる**: すでに入力がある日記でテンプレートを選ぶと、書いた内容が消える旨のアラートが出る
+### **書きかけの日記は確認してから置き換わる**: すでに入力がある日記でテンプレートを選ぶと、書いた内容が消える旨のアラートが出る。「キャンセル」なら内容がそのまま残り、「置き換える」なら書き出しに置き換わる
 
 <details><summary>動作確認スクショ</summary>
 
@@ -138,6 +196,14 @@ issue #82 でユーザー向けの用語を「ノート」から「テンプレ�
 
 </details>
 
+### **白紙の日記はそのまま置き換わる**: まだ何も書いていない日記でテンプレートを選ぶと、確認なしにそのテンプレートの書き出しに置き換わってエディタへ戻る
+
+<details><summary>動作確認スクショ</summary>
+
+（未実行）
+
+</details>
+
 </details>
 
 ---
@@ -149,9 +215,42 @@ issue #82 でユーザー向けの用語を「ノート」から「テンプレ�
 - [x] **すべてのテンプレートを削除できる**: 一覧の「すべてのテンプレートを削除」から確認ダイアログを経て削除すると、一覧が空になり、テンプレートで書いた日記はホームに残る
   - 自動化: manual（削除ダイアログと削除後の一覧を目視で確認する。日記が残ることは NikkiTests/JournalNotebookTests.swift の deleteAllJournalNotebooks テストが検証済み）
   - 2026-08-22 ローカル iOS Simulator と macOS (Debug) の両方で、確認ダイアログ → 一覧が空(復元行のみ)になることを確認 (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/143b69a6-ea56-4663-8293-cf3018d2481f.png, https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/935180ca-ddb1-41a8-b696-a23ffeddeb67.png)
-- [x] **既定のテンプレートを復元できる**: 一覧の「既定のテンプレートを復元」で初回シードと同じ白紙({{date}})が一覧の末尾に入り、もう一度押しても重複しない(冪等)
+- [ ] **既定のテンプレートを復元できる**: 一覧の「既定のテンプレートを復元」で初回シードと同じ既定の4テンプレート(日記・朝の3行・1日の振り返り・旅の記録)が一覧の末尾に入り、もう一度押しても重複しない(冪等)
   - 自動化: manual（復元後の一覧と、再度押したときに増えないことを目視で確認する）
-  - 2026-08-22 ローカル iOS Simulator (復元 + 冪等) と macOS (復元) で確認 (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/ad4bc088-80cf-4543-819a-7692369ba7b7.png)
+  - ⏭️ スキップ (issue #92 で 1 件 → 4 件へ挙動変更): 2026-08-22 時点の確認は白紙1件だけの復元だった旧仕様のもの。新しい4件版の復元・冪等性は次回 QA で確認する
 - [x] **削除した空の状態は再起動で復活しない**: すべて削除したあとアプリを再起動しても、テンプレートは空のまま(初回シードが再実行されない)
   - 自動化: manual（削除 → 再起動 → 一覧を目視で確認する）
   - 2026-08-22 ローカル iOS Simulator で、全削除後にアプリを terminate → 再起動してもテンプレートが空のままだった (UserDefaults の notebooksSeeded で再シードを抑止)
+
+#### 動作確認
+<details>
+<summary>動作確認エビデンス</summary>
+
+### **すべてのテンプレートを削除できる**: 一覧の「すべてのテンプレートを削除」から確認ダイアログを経て削除すると、一覧が空になり、テンプレートで書いた日記はホームに残る
+
+<details><summary>動作確認スクショ</summary>
+
+**確認日: 2026-08-22**
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/143b69a6-ea56-4663-8293-cf3018d2481f.png" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/935180ca-ddb1-41a8-b696-a23ffeddeb67.png" width="320">
+
+</details>
+
+### **既定のテンプレートを復元できる**: 一覧の「既定のテンプレートを復元」で初回シードと同じ既定の4テンプレート(日記・朝の3行・1日の振り返り・旅の記録)が一覧の末尾に入り、もう一度押しても重複しない(冪等)
+
+<details><summary>動作確認スクショ</summary>
+
+（未実行。issue #92 で 1 件 → 4 件へ挙動変更したため次回 QA で再確認する）
+
+</details>
+
+### **削除した空の状態は再起動で復活しない**: すべて削除したあとアプリを再起動しても、テンプレートは空のまま(初回シードが再実行されない)
+
+<details><summary>動作確認スクショ</summary>
+
+**確認日: 2026-08-22**
+UserDefaults の notebooksSeeded フラグで再シードが抑止されることをローカル iOS Simulator の terminate → 再起動操作で確認した(スクリーンショットは未取得)。
+
+</details>
+
+</details>

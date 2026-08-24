@@ -117,6 +117,28 @@ last_verified_at: 2026-08-21
 
 </details>
 
+---
+
+## 2. ナビゲーション (issue #92)
+
+- [ ] **iOS で右エッジスワイプでも戻れる**: システムのナビゲーションバーを隠して独自ヘッダを使う画面 (ホーム以外のほぼ全画面) で、画面左端からのスワイプでも前の画面に戻れる
+  - 自動化: manual（実タッチのジェスチャは目視でしか確認できない）
+  - ⏭️ スキップ: simtunnel の WDA 経由の合成タッチ (`swipe` アクション) で検証を試みたが、対照実験として同じ操作を素の iOS 標準 Settings アプリ (General 画面) に対して行っても戻らず、この検証手段自体が iOS のエッジスワイプ (interactivePopGestureRecognizer) を再現できないことを確認した。修正自体は UINavigationController の interactivePopGestureRecognizer を明示的に有効化する標準的な対処 (Nikki/DesignSystem/View+.swift) で、実機 / 手動操作での確認が必要
+
+#### 動作確認
+<details>
+<summary>動作確認エビデンス</summary>
+
+### **iOS で右エッジスワイプでも戻れる**: システムのナビゲーションバーを隠して独自ヘッダを使う画面で、画面左端からのスワイプでも前の画面に戻れる
+
+<details><summary>動作確認スクショ</summary>
+
+（未実行。上記の理由により simtunnel の自動操作では検証不可。実機での確認が必要）
+
+</details>
+
+</details>
+
 ## 機能別 QA.md
 
 - [Home](Nikki/Features/Home/QA.md)
