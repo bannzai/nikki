@@ -37,14 +37,19 @@ struct JournalNotebookTests {
         }
     }
 
-    @Test("初回シードはノートを意識させないよう、{{date}} テンプレートを持つ白紙1冊だけ")
-    func seedNotebooksHideNotebookConcept() {
+    @Test("初回シードは既定の4テンプレート(日記・朝の3行・1日の振り返り・旅の記録)を指定した表示順から並べる")
+    func seedNotebooksSeedsDefaultFour() {
         let notebooks = SampleData.seedNotebooks(sortOrder: 3)
-        #expect(notebooks.count == 1)
-        #expect(notebooks[0].name == String(localized: "Blank page"))
+        #expect(notebooks.count == 4)
+        #expect(notebooks.map(\.name) == [
+            String(localized: "Journal"),
+            String(localized: "3 lines in the morning"),
+            String(localized: "Daily reflection"),
+            String(localized: "Travel log"),
+        ])
         #expect(notebooks[0].template?.markdown == "# {{date}}")
         #expect(notebooks[0].reminderFrequency == .none)
-        #expect(notebooks[0].sortOrder == 3)
+        #expect(notebooks.map(\.sortOrder) == [3, 4, 5, 6])
     }
 
     @Test("プレビュー用ノートはノートごとにテンプレートを1件持つ")
