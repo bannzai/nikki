@@ -3,7 +3,8 @@ import SwiftUI
 /// エディタ各状態の共通外枠(紙地 + ナビ + 本文スロット)。
 struct EditorScreenScaffold<Content: View>: View {
     let caption: String
-    /// ナビ左端の閉じるボタンのアクション。カタログの静的表示では空 closure を渡す。
+    /// ナビ左端の戻るボタンのアクション。エディタは NavigationStack の push 遷移(閉じるのではなく戻る)のため
+    /// 左向きシェブロンの戻るボタンにする(issue #92)。カタログの静的表示では空 closure を渡す。
     let onDismiss: () -> Void
     // ナビ右端の操作を持つのはエディタ本体だけのため、カタログの静的表示が既定のまま使えるようボタンなしを既定にする。
     /// ナビ右端のボタンとそのアクション。エディタのテンプレート選択のような画面ごとの操作を置く。
@@ -17,7 +18,7 @@ struct EditorScreenScaffold<Content: View>: View {
         ZStack {
             paperColor.ignoresSafeArea()
             VStack(spacing: 0) {
-                InkNavBar(leading: .dismiss, center: .caption(caption), trailing: trailing, onLeading: onDismiss, onTrailing: onTrailing)
+                InkNavBar(leading: .back, center: .caption(caption), trailing: trailing, onLeading: onDismiss, onTrailing: onTrailing)
                 content
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             }
