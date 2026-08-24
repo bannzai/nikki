@@ -305,16 +305,6 @@
         }
       }
     },
-    "Blank page": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "白紙"
-          }
-        }
-      }
-    },
     "Body": {
       "localizations": {
         "ja": {
@@ -708,6 +698,16 @@
         }
       }
     },
+    "Journal": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "日記"
+          }
+        }
+      }
+    },
     "Kamakura": {
       "localizations": {
         "ja": {
@@ -900,12 +900,12 @@
         }
       }
     },
-    "New entries using this template start with this content. {{date}} is replaced with the entry's date.": {
+    "New entries using this template start with this content. {{date}} fills in automatically with the entry's date. Add other variables too, like {{weather}} or {{place}} — they'll show as blanks to fill in when you start a new entry.": {
       "localizations": {
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "このテンプレートの新しい日記は、この内容から書きはじめます。{{date}} は日記の日付に置き換わります。"
+            "value": "このテンプレートの新しい日記は、この内容から書きはじめます。{{date}} には日記の日付が自動で入ります。{{weather}} や {{place}} のような変数も追加でき、新しい日記を書きはじめるときに空欄として入力できます。"
           }
         }
       }
@@ -1260,7 +1260,7 @@
         }
       }
     },
-    "Restore the default template": {
+    "Restore the default templates": {
       "localizations": {
         "ja": {
           "stringUnit": {
