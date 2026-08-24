@@ -2,7 +2,8 @@ import SwiftUI
 import SwiftData
 
 /// 設定 > テンプレート のテンプレート管理一覧。行のタップで編集へ、末尾の「＋ 新しいテンプレート」で作成へ進む。
-/// 一覧の下の操作で、初回シードと同じ既定のテンプレート(白紙)の復元と、すべてのテンプレートの削除ができる。
+/// 一覧の下の操作で、初回シードと同じ既定の4テンプレート(日記・朝の3行・1日の振り返り・旅の記録)の復元と、
+/// すべてのテンプレートの削除ができる。
 struct NotebookSettingsPage: View {
     @Query(sort: \JournalNotebook.sortOrder) var notebooks: [JournalNotebook]
 
@@ -38,7 +39,7 @@ struct NotebookSettingsPage: View {
                     InkListSection {
                         // 遷移ではなくその場で復元するアクション行のため、シェブロンは出さない。
                         InkListRow(
-                            title: String(localized: "Restore the default template"),
+                            title: String(localized: "Restore the default templates"),
                             showsChevron: false,
                             showsSeparator: !notebooks.isEmpty,
                             action: { restoreSeedNotebooks() }
@@ -77,8 +78,8 @@ struct NotebookSettingsPage: View {
         }
     }
 
-    /// 初回シードと同じ既定のテンプレート(白紙)を一覧の末尾へ入れ直す。
-    /// 同じ書き出しのテンプレートが既にあるときは重複させない(冪等)。
+    /// 初回シードと同じ既定の4テンプレートを一覧の末尾へ入れ直す。
+    /// テンプレートごとに、同じ書き出しのものが既にあるときは重複させない(冪等)。
     /// 名前はロケールで変わる(String(localized:) の値が永続化される)ため、既存の判定には使わず、
     /// 言語に依存しない書き出し markdown(既定は "# {{date}}" のリテラル)だけで判定する。
     private func restoreSeedNotebooks() {

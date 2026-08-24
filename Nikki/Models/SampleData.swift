@@ -101,7 +101,7 @@ enum SampleData {
     private static var notebookSeeds: [(name: String, reminderFrequency: JournalReminderFrequency, markdown: String)] {
         [
             (
-                name: String(localized: "Blank page"),
+                name: String(localized: "Journal"),
                 reminderFrequency: .none,
                 markdown: "# {{date}}"
             ),
@@ -147,14 +147,15 @@ enum SampleData {
         }
     }
 
-    /// 初回起動のシードと「既定のテンプレートを復元」で使う既定ノート。ノートを意識させない方針のため、
-    /// {{date}} だけのテンプレートを持つ白紙の1冊だけを用意し、新規日記は自動でこのノートに入る。
-    /// 復元では既存テンプレートの末尾に並べるため、表示順を引数から受け取る(初回シードは 0)。
+    /// 初回起動のシードと「既定のテンプレートを復元」で使う既定ノート群(日記・朝の3行・1日の振り返り・旅の記録)。
+    /// 先頭(日記)が新規日記の既定の所属先になる(issue #92)。
+    /// 復元では既存テンプレートの末尾に並べるため、表示順の起点を引数から受け取る(初回シードは 0)。
     static func seedNotebooks(sortOrder: Int) -> [JournalNotebook] {
-        let seed = notebookSeeds[0]
-        let notebook = JournalNotebook(name: seed.name, reminderFrequency: seed.reminderFrequency, sortOrder: sortOrder)
-        notebook.add(template: JournalTemplate(name: seed.name, markdown: seed.markdown, sortOrder: 0))
-        return [notebook]
+        notebookSeeds.enumerated().map { index, seed in
+            let notebook = JournalNotebook(name: seed.name, reminderFrequency: seed.reminderFrequency, sortOrder: sortOrder + index)
+            notebook.add(template: JournalTemplate(name: seed.name, markdown: seed.markdown, sortOrder: 0))
+            return notebook
+        }
     }
 
     /// 変数入力シート(1m)が既定で開くテンプレート(「一日の振り返り」ノートのもの)。

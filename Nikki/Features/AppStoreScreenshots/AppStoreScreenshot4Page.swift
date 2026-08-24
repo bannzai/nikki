@@ -51,7 +51,7 @@ struct AppStoreScreenshotNotebookScreen: View {
                             name: card.name,
                             reminder: card.remindsDaily ? reminderDaily : "",
                             markdown: card.markdown,
-                            // 実画面と同じく、既定 (先頭の白紙) が選ばれている状態を見せる。
+                            // 実画面と同じく、既定 (先頭の日記) が選ばれている状態を見せる。
                             isSelected: index == 0
                         )
                     }
@@ -112,14 +112,14 @@ extension AppStoreScreenshotDiary {
         switch language {
         case .ja:
             return [
-                NotebookCardContent(name: "白紙", remindsDaily: false, markdown: "# {{date}}"),
+                NotebookCardContent(name: "日記", remindsDaily: false, markdown: "# {{date}}"),
                 NotebookCardContent(name: "朝の3行", remindsDaily: true, markdown: "# {{date}} の朝\n- 今日たのしみなこと\n- 今日やめておくこと\n- ひとこと"),
                 NotebookCardContent(name: "一日の振り返り", remindsDaily: true, markdown: "# {{date}}\n天気: {{weather}}\n## よかったこと\n## 明日のじぶんへ"),
                 NotebookCardContent(name: "旅の記録", remindsDaily: false, markdown: "# {{place}} 1日目\n## 歩いたところ\n## たべたもの"),
             ]
         case .en:
             return [
-                NotebookCardContent(name: "Blank page", remindsDaily: false, markdown: "# {{date}}"),
+                NotebookCardContent(name: "Journal", remindsDaily: false, markdown: "# {{date}}"),
                 NotebookCardContent(name: "3 lines in the morning", remindsDaily: true, markdown: "# Morning of {{date}}\n- Looking forward to\n- Skipping today\n- One line"),
                 NotebookCardContent(name: "Daily reflection", remindsDaily: true, markdown: "# {{date}}\nWeather: {{weather}}\n## What went well\n## Note to tomorrow's me"),
                 NotebookCardContent(name: "Travel log", remindsDaily: false, markdown: "# {{place}} day 1\n## Where I walked\n## What I ate"),
