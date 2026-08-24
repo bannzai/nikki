@@ -48,7 +48,8 @@ struct JournalNotebookTests {
             String(localized: "Travel log"),
         ])
         #expect(notebooks[0].template?.markdown == "# {{date}}")
-        #expect(notebooks[0].reminderFrequency == .none)
+        // 通知のスケジューリングが未実装のうちは、シードが通知されないリマインドを約束しない。
+        #expect(notebooks.allSatisfy { $0.reminderFrequency == .none })
         #expect(notebooks.map(\.sortOrder) == [3, 4, 5, 6])
     }
 

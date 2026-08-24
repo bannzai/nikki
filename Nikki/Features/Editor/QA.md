@@ -1,7 +1,7 @@
 ---
 feature: Editor
 verification: mobile-mcp
-last_verified_commit: 9dbb3c0f2ad04a8998544249ee32109e0c0a893e
+last_verified_commit: 32c584bd564d5232447e659d5e78cdc87500c0cc
 last_verified_at: 2026-08-24
 ---
 

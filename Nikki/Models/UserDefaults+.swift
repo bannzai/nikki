@@ -11,6 +11,9 @@ extension UserDefaults {
         /// 既定のテンプレートのシード(または既存データの確認)をこの端末で終えたかどうか。
         /// 「すべてのテンプレートを削除」した空の状態を、次回起動のシードが勝手に復活させないための目印。
         case notebooksSeeded
+        /// 旧既定テンプレート「白紙」から「日記」への名前の移行(issue #92)をこの端末で終えたかどうか。
+        /// 対象が無くなったあとの起動が毎回全件を調べ直さないための目印。
+        case blankPageRenamedToJournal
 
         var key: String {
             "BoolKey_\(rawValue)"

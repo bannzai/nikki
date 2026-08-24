@@ -900,12 +900,12 @@
         }
       }
     },
-    "New entries using this template start with this content. {{date}} fills in automatically with the entry's date. Add other variables too, like {{weather}} or {{place}} — they'll show as blanks to fill in when you start a new entry.": {
+    "New entries using this template start with this content. {{date}} fills in automatically with the entry's date. You can add other variables too, like {{weather}} or {{place}} — they stay in the text as placeholders to replace while you write.": {
       "localizations": {
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "このテンプレートの新しい日記は、この内容から書きはじめます。{{date}} には日記の日付が自動で入ります。{{weather}} や {{place}} のような変数も追加でき、新しい日記を書きはじめるときに空欄として入力できます。"
+            "value": "このテンプレートの新しい日記は、この内容から書きはじめます。{{date}} には日記の日付が自動で入ります。{{weather}} や {{place}} のような変数も追加でき、本文にそのまま残るので書きながら置き換えられます。"
           }
         }
       }

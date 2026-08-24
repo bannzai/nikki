@@ -40,7 +40,7 @@ private struct InkSwipeBackGestureEnabler: UIViewControllerRepresentable {
     func updateUIViewController(_ uiViewController: InkSwipeBackGestureEnablerViewController, context: Context) {}
 }
 
-private final class InkSwipeBackGestureEnablerViewController: UIViewController {
+private final class InkSwipeBackGestureEnablerViewController: UIViewController, UIGestureRecognizerDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         guard let navigationController else {
@@ -48,8 +48,14 @@ private final class InkSwipeBackGestureEnablerViewController: UIViewController {
         }
         navigationController.interactivePopGestureRecognizer?.isEnabled = true
         // 既定の delegate はナビゲーションバーの表示状態(戻るボタンの有無)を見てジェスチャを拒否するため、
-        // delegate を外し、スタックの深さ(戻り先があるか)だけで判定される既定動作に委ねる。
-        navigationController.interactivePopGestureRecognizer?.delegate = nil
+        // 自前の delegate に差し替え、戻り先があるか(スタックの深さ)だけで判定する。
+        navigationController.interactivePopGestureRecognizer?.delegate = self
+    }
+
+    /// 戻り先のないルート画面でジェスチャが始まると、完了先のない遷移でナビゲーションが操作不能になり得るため、
+    /// スタックに戻り先がある時だけ開始を許可する。
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        (navigationController?.viewControllers.count ?? 0) > 1
     }
 }
 #endif

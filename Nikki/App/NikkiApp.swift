@@ -83,9 +83,34 @@ struct NikkiApp: App {
                 configurations: configuration
             )
             seedNotebooks(context: container.mainContext)
+            renameLegacyBlankPageNotebooks(context: container.mainContext)
             return container
         } catch {
             fatalError("ModelContainer の生成に失敗: \(error)")
+        }
+    }
+
+    /// 旧バージョンがシードした既定テンプレート「白紙」を、issue #92 の改名に合わせて「日記」へ移行する(冪等)。
+    /// 一度シードを終えた端末では起動時シードが走らず改名が届かないため、シードとは別の移行として行う。
+    /// 対象は、旧既定名のままで書き出しも既定の "# {{date}}" のままのノートに限り、
+    /// ユーザーが名前や書き出しを変えたノートには触らない。
+    /// 移行後に別端末から旧名のノートが同期されてくると取りこぼすが、シードの重複と同じ既知の割り切りとする。
+    /// 完了の目印は、移行(または対象が無いことの確認)に成功したときだけ残し、取得・保存の一時失敗は次回起動で再試行する。
+    private static func renameLegacyBlankPageNotebooks(context: ModelContext) {
+        if UserDefaults.appGroups.bool(forKey: UserDefaults.BoolKey.blankPageRenamedToJournal.key) {
+            return
+        }
+        guard let notebooks = try? context.fetch(FetchDescriptor<JournalNotebook>()) else {
+            return
+        }
+        // 旧既定名は改名前のバージョンが永続化した値で、現在の String Catalog にはもう存在しない歴史的定数のため直書きする。
+        let legacyNames: Set<String> = ["Blank page", "白紙"]
+        let renamed = notebooks.filter { legacyNames.contains($0.name) && $0.template?.markdown == "# {{date}}" }
+        for notebook in renamed {
+            notebook.setName(name: String(localized: "Journal"))
+        }
+        if renamed.isEmpty || (try? context.save()) != nil {
+            UserDefaults.appGroups.set(true, forKey: UserDefaults.BoolKey.blankPageRenamedToJournal.key)
         }
     }
 
