@@ -55,7 +55,7 @@ struct NotebookFormFields: View {
                     )
                     .padding(.bottom, 8)
 
-                Text("New entries using this template start with this content. {{date}} is replaced with the entry's date.")
+                Text("New entries using this template start with this content. {{date}} fills in automatically with the entry's date. Add other variables too, like {{weather}} or {{place}} — they'll show as blanks to fill in when you start a new entry.")
                     .font(.ink(11.5, .regular))
                     .foregroundStyle(Color.inkTextTertiary)
                     .lineSpacing(inkLineSpacing(fontSize: 11.5, multiplier: 1.9))
