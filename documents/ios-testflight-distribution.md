@@ -1,6 +1,7 @@
 # iOS の TestFlight 配布手順
 
-`.github/workflows/ios-deploy.yml` を手動起動すると、Nikki (bundle `com.bannzai.Nikki`) の Release ビルドが
+`.github/workflows/ios-deploy.yml` は main へのマージ (push) で自動起動し (配布し直す時は workflow_dispatch で
+手動起動する)、Nikki (bundle `com.bannzai.Nikki`) の Release ビルドが
 arm64 実機向けにアーカイブされ、TestFlight (App Store Connect、appId 6799104638) へアップロードされる。
 署名は手動署名 (Secrets の証明書 + profile を CI で復元)。cloud signing (自動署名) は API Key に Admin ロールが
 必須になるため採用していない。方式の決定理由は castle の ios-deploy-actions skill の
@@ -39,15 +40,16 @@ macOS 版のビルド・配布はこの workflow の対象外 (Archive は `gene
 
 ## 配布する
 
+main へのマージで自動起動する。起動した run の確認と、配布し直す時の手動起動:
+
 ```sh
-gh workflow run ios-deploy.yml --ref main
 gh run list --workflow ios-deploy.yml --limit 3
-RUN_ID=123456789   # 直前の gh run list で確認した、今起動した run の ID
+RUN_ID="$(gh run list --workflow ios-deploy.yml --limit 1 --json databaseId --jq '.[0].databaseId')"
 gh run watch "$RUN_ID"
+# 配布し直す場合の手動起動
+gh workflow run ios-deploy.yml --ref main
 ```
 
-- workflow_dispatch はデフォルトブランチに workflow がある状態でないと起動できない。新規追加・改名した時は
-  main へマージしてから初回を起動する
 - ビルド番号は `github.run_number + BUILD_NUMBER_OFFSET`。**現在の offset は 1** (TestFlight にビルドが 1 件も
   無い状態から始めたため)。run_number が巻き戻る事態では offset を既存の最大ビルド番号を超える値に上げる
 - ビルド番号の実体は `Nikki/Info.plist` の `CFBundleVersion` = `$(CURRENT_PROJECT_VERSION)`。workflow が
