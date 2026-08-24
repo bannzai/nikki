@@ -1,4 +1,7 @@
 import SwiftUI
+#if os(iOS)
+import UIKit
+#endif
 
 extension View {
     /// システム標準のナビゲーション UI を隠し、InkNavBar による独自ヘッダに一本化する。
@@ -9,7 +12,44 @@ extension View {
         #if os(macOS)
         navigationBarBackButtonHidden(true)
         #else
+        // toolbar(.hidden, for: .navigationBar) は UIKit の interactivePopGestureRecognizer も
+        // 道連れに無効化する(ナビゲーションバー非表示に連動する既知の挙動)ため、
+        // 右エッジスワイプでの「戻る」が効かなくなる(issue #92)。inkSwipeBackEnabled() で戻す。
         toolbar(.hidden, for: .navigationBar)
+            .inkSwipeBackEnabled()
         #endif
     }
 }
+
+#if os(iOS)
+extension View {
+    /// システムのナビゲーションバーを隠していても、右エッジスワイプでの「戻る」ジェスチャを有効にする。
+    /// inkNavigationBarHidden() の一部として適用するため、通常はこちらを直接使わない。
+    fileprivate func inkSwipeBackEnabled() -> some View {
+        background(InkSwipeBackGestureEnabler())
+    }
+}
+
+/// 親の UINavigationController を見つけ、隠れたナビゲーションバーに連動して無効化された
+/// interactivePopGestureRecognizer を有効化し直すための橋渡し View。
+private struct InkSwipeBackGestureEnabler: UIViewControllerRepresentable {
+    func makeUIViewController(context: Context) -> InkSwipeBackGestureEnablerViewController {
+        InkSwipeBackGestureEnablerViewController()
+    }
+
+    func updateUIViewController(_ uiViewController: InkSwipeBackGestureEnablerViewController, context: Context) {}
+}
+
+private final class InkSwipeBackGestureEnablerViewController: UIViewController {
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        guard let navigationController else {
+            return
+        }
+        navigationController.interactivePopGestureRecognizer?.isEnabled = true
+        // 既定の delegate はナビゲーションバーの表示状態(戻るボタンの有無)を見てジェスチャを拒否するため、
+        // delegate を外し、スタックの深さ(戻り先があるか)だけで判定される既定動作に委ねる。
+        navigationController.interactivePopGestureRecognizer?.delegate = nil
+    }
+}
+#endif
