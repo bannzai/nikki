@@ -32,13 +32,19 @@ ios:
 		build
 
 # iOS 実機ビルド + インストール。DEVICE 未指定時は接続中 (connected) の実機を自動選択する。
-# Debug ビルドは開発用ストア (CloudKit 同期なし) を使うため、普段使いする実機には Release を入れる
+# Debug ビルドは開発用ストア (CloudKit 同期なし) を使うため、普段使いする実機には Release を入れる。
+# pbxproj の Release[sdk=iphoneos*] は TestFlight 配布 (ios-deploy.yml) 用に Manual + Apple Distribution に
+# なっているが、App Store 用 profile では実機へ直接インストールできないため、ローカルの実機向けは
+# コマンドラインで Automatic (開発署名) に戻す
 ios-device:
 	xcodebuild -project $(PROJECT) -scheme $(SCHEME) \
 		-configuration Release \
 		-destination 'generic/platform=iOS' \
 		-derivedDataPath $(DERIVED_DATA) \
 		-allowProvisioningUpdates -allowProvisioningDeviceRegistration \
+		"CODE_SIGN_STYLE[sdk=iphoneos*]=Automatic" \
+		"CODE_SIGN_IDENTITY[sdk=iphoneos*]=Apple Development" \
+		"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]=" \
 		$(SKIP_PLUGIN_VALIDATION) \
 		build
 	@set -e; \
