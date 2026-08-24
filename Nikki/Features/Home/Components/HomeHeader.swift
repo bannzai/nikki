@@ -1,7 +1,7 @@
 import SwiftUI
 
-/// ホーム上部のヘッダ。左に「Nikki」ロゴ、右に人物アイコンボタンを置く。
-/// アカウント画面は未実装のため、人物アイコンは設定画面(1r)への入り口にしている。
+/// ホーム上部のヘッダ。左に「Nikki」ロゴ、右に歯車アイコンボタンを置く。
+/// 歯車アイコンは設定画面(1r)への入り口にしている(issue #92)。
 struct HomeHeader: View {
     /// 設定画面(1r)への遷移状態。
     @State var settingsIsPresented = false
@@ -16,7 +16,7 @@ struct HomeHeader: View {
             Button {
                 settingsIsPresented = true
             } label: {
-                Image(systemName: "person")
+                Image(systemName: InkIcons.settings)
                     .font(.system(size: 19, weight: .regular))
                     .foregroundStyle(Color(hex: 0x52514E))
                     .frame(width: 38, height: 38)
