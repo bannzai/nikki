@@ -266,9 +266,9 @@ Files アプリのプレビューで開いた書き出し結果。
 
 **確認日: 2026-08-24** (simtunnel iOS の設定、ロック行タップで開いたペイウォール、ローカル macOS Debug の設定)
 
-<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/3ad31ec8-239f-4ab3-b5cd-a386a75e26be.jpg" width="320">
-<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/23c55852-ca50-4f18-95ab-0088d42e7a09.jpg" width="320">
-<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/4d99a921-c6d4-47c6-935e-ca38dd3df112.png" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/3ad31ec8-239f-4ab3-b5cd-a386a75e26be.jpg" alt="iOS の設定。PDF / HTML の書き出し行に錠アイコンが付いている" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/23c55852-ca50-4f18-95ab-0088d42e7a09.jpg" alt="ロック行のタップで開いた iOS のペイウォール" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/4d99a921-c6d4-47c6-935e-ca38dd3df112.png" alt="macOS の設定。PDF / HTML の書き出し行に錠アイコンが付いている" width="320">
 
 </details>
 

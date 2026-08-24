@@ -50,9 +50,9 @@ last_verified_at: 2026-08-24
 
 **確認日: 2026-08-24** (simtunnel iOS の上部・スクロール末尾、ローカル macOS Debug)
 
-<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/23c55852-ca50-4f18-95ab-0088d42e7a09.jpg" width="320">
-<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/3aa90fc1-fd18-4373-bf66-161ec4b19528.jpg" width="320">
-<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/82adbe4a-6e15-4426-9816-9609787154ab.png" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/23c55852-ca50-4f18-95ab-0088d42e7a09.jpg" alt="iOS のペイウォール上部。4 件の特典と同期の見出しが表示されている" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/3aa90fc1-fd18-4373-bf66-161ec4b19528.jpg" alt="iOS のペイウォールのスクロール末尾。暗号化のフッター文言が表示されている" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/82adbe4a-6e15-4426-9816-9609787154ab.png" alt="macOS のペイウォール。4 件の特典が日本語で表示されている" width="320">
 
 </details>
 

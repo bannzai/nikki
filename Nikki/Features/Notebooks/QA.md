@@ -185,9 +185,9 @@ issue #82 でユーザー向けの用語を「ノート」から「テンプレ�
 
 **確認日: 2026-08-24** (simtunnel iOS。2 件到達後の管理一覧、ロックフッタのタップで開いたペイウォール、macOS カタログの一覧)
 
-<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/5647597f-5266-4c3b-9079-c3b1782f863f.jpg" width="320">
-<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/44f7b785-45d5-4f76-ab52-662f8252254e.jpg" width="320">
-<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/a90d4491-31b5-459e-9955-8c3fbd474af8.png" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/5647597f-5266-4c3b-9079-c3b1782f863f.jpg" alt="iOS のテンプレート管理一覧。2 件到達でフッタが「Nikki Plus required」のロック表示になっている" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/44f7b785-45d5-4f76-ab52-662f8252254e.jpg" alt="ロックフッタのタップで開いた iOS のペイウォール" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/a90d4491-31b5-459e-9955-8c3fbd474af8.png" alt="macOS カタログのテンプレート一覧。ロックフッタが表示されている" width="320">
 
 </details>
 

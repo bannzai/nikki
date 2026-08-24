@@ -82,8 +82,8 @@ last_verified_at: 2026-08-24
 
 **確認日: 2026-08-24** (iOS = simtunnel、macOS = ローカル Debug)
 
-<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/9b7ec62c-0189-40e4-975c-9050e8fa35d3.jpg" width="320">
-<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/bda9a868-32a6-4de5-8217-64aeb87cef52.png" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/9b7ec62c-0189-40e4-975c-9050e8fa35d3.jpg" alt="iOS のテーマ画面。背景画像の「写真から選ぶ」行に錠アイコンが付いている" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/bda9a868-32a6-4de5-8217-64aeb87cef52.png" alt="macOS のテーマ画面。背景画像の「写真から選ぶ」行に錠アイコンが付いている" width="320">
 
 </details>
 

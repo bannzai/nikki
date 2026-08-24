@@ -51,7 +51,9 @@ struct PaywallPage: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.bottom, 26)
 
-                        PaywallBenefitRow(title: String(localized: "Sync across devices"), description: String(localized: "iPhone and Mac. Always encrypted end to end — we still can't read your entries."))
+                        // 「end to end」の断定は Advanced Data Protection の設定に依存するため使わず、
+                        // アプリとして保証できる範囲(CloudKit の暗号化フィールドで、開発者が読めない)だけを謳う。
+                        PaywallBenefitRow(title: String(localized: "Sync across devices"), description: String(localized: "iPhone and Mac. Entries stay encrypted in sync — we still can't read them."))
                             .padding(.bottom, 16)
 
                         PaywallBenefitRow(title: String(localized: "Unlimited templates"), description: String(localized: "Write your way, in as many templates as you like."))

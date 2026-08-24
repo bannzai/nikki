@@ -1920,12 +1920,12 @@
         }
       }
     },
-    "iPhone and Mac. Always encrypted end to end — we still can't read your entries.": {
+    "iPhone and Mac. Entries stay encrypted in sync — we still can't read them.": {
       "localizations": {
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "iPhone と Mac で。端から端まで暗号化されたまま、わたしたちには読めません。"
+            "value": "iPhone と Mac で。同期中も暗号化されたまま、わたしたちには読めません。"
           }
         }
       }
