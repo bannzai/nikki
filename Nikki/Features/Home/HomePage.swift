@@ -13,6 +13,9 @@ enum HomePageMode: Int, CaseIterable {
 /// 行のタップでエディタへ進む。FAB は日記を先に作成してからエディタへ進み、
 /// 既定のテンプレート(未設定なら先頭のテンプレート)の内容を自動挿入する。
 /// 書きはじめを妨げないため、作成時にテンプレート選択は挟まない(issue #82)。
+/// リスト(ノート)の追加は、リストモードではセグメントコントロール横の「+」、カレンダーモードでは
+/// ヘッダ右上の「+」から、それぞれ既存のリスト作成画面(NotebookCreatePage)を開く形で行う。
+/// 日記一覧の表示は所属リストで絞り込まず、これまで通り全リストの日記を混在させたまま出す(issue #92)。
 struct HomePage: View {
     /// 表示モードの選択状態。リスト派/カレンダー派の常用に合わせて起動をまたいで保持する。
     @AppStorage(.homePageMode) var homePageMode: HomePageMode = .list
@@ -25,6 +28,10 @@ struct HomePage: View {
 
     /// FAB が作成した日記。エディタへの遷移に使う。
     @State var entry: JournalEntry?
+
+    /// 新しいリスト作成画面(NotebookCreatePage)への遷移状態。
+    /// リストモードのセグメントコントロールの横のリスト追加ボタンから開く(issue #92)。
+    @State var notebookCreateIsPresented = false
 
     /// 検索バーのフォーカス。⌘F ショートカットからも当てられるようにここで持つ。
     @FocusState var searchFieldIsFocused: Bool
@@ -50,16 +57,34 @@ struct HomePage: View {
 
             VStack(alignment: .leading, spacing: 0) {
                 VStack(alignment: .leading, spacing: 14) {
-                    HomeHeader()
+                    HomeHeader(homePageMode: homePageMode)
                     InkSearchBar(text: $searchText, isFocused: $searchFieldIsFocused)
-                    InkSegmentedControl(
-                        options: HomePageMode.allCases.map { segmentLabel(for: $0) },
-                        selectedIndex: Binding(
-                            get: { homePageMode.rawValue },
-                            // セグメントの index が enum の範囲外になることはないが、rawValue init が failable のため list に倒す。
-                            set: { homePageMode = HomePageMode(rawValue: $0) ?? .list }
+                    HStack(spacing: 8) {
+                        InkSegmentedControl(
+                            options: HomePageMode.allCases.map { segmentLabel(for: $0) },
+                            selectedIndex: Binding(
+                                get: { homePageMode.rawValue },
+                                // セグメントの index が enum の範囲外になることはないが、rawValue init が failable のため list に倒す。
+                                set: { homePageMode = HomePageMode(rawValue: $0) ?? .list }
+                            )
                         )
-                    )
+                        // カレンダーモードのリスト追加ボタンは HomeHeader 側に置くため、ここでは出さない(issue #92)。
+                        if homePageMode == .list {
+                            Button {
+                                notebookCreateIsPresented = true
+                            } label: {
+                                Image(systemName: InkIcons.add)
+                                    .font(.system(size: 14, weight: .semibold))
+                                    .foregroundStyle(Color.inkTextSecondary)
+                                    .frame(width: 34, height: 34)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 11, style: .continuous)
+                                            .fill(Color.inkSegmentBackground)
+                                    )
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
                 }
                 .padding(.horizontal, 24)
                 .padding(.top, 8)
@@ -109,6 +134,9 @@ struct HomePage: View {
         }
         .navigationDestination(for: JournalEntry.self) { entry in
             EditorPage(entry: entry)
+        }
+        .navigationDestination(isPresented: $notebookCreateIsPresented) {
+            NotebookCreatePage()
         }
     }
 
