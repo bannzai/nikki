@@ -7,6 +7,8 @@ struct NikkiApp: App {
     /// カタログモードはサンプルデータ入りの in-memory ストア、DEBUG の通常起動は開発用の永続ストア、
     /// Release は CloudKit 同期つきの普段使い用ストアを使う。
     let modelContainer: ModelContainer
+    /// 現在の modelContainer が実際に CloudKit と同期しているかどうか(#93)。environment で配下へ配る。
+    let cloudSyncActive: Bool
 
     init() {
         #if DEBUG
@@ -18,12 +20,16 @@ struct NikkiApp: App {
             || environment["XCTestSessionIdentifier"] != nil
             || environment["XCTestConfigurationFilePath"] != nil {
             modelContainer = SampleData.inMemoryContainer()
+            cloudSyncActive = false
         } else {
             modelContainer = Self.developmentContainer()
+            cloudSyncActive = false
             Purchases.configure(withAPIKey: Const.revenueCatAPIKey)
         }
         #else
-        modelContainer = Self.defaultContainer()
+        // 直近キャッシュされた Plus 加入状態で同期の有無を決める(effectiveCloudKitDatabase 参照)。
+        cloudSyncActive = UserDefaults.appGroups.bool(forKey: UserDefaults.BoolKey.cloudSyncPlusActiveCache.key)
+        modelContainer = Self.defaultContainer(plusActive: cloudSyncActive)
         Purchases.configure(withAPIKey: Const.revenueCatAPIKey)
         #endif
     }
@@ -39,6 +45,7 @@ struct NikkiApp: App {
                 .frame(minWidth: 375, minHeight: 600)
         }
         .modelContainer(modelContainer)
+        .environment(\.cloudSyncActive, cloudSyncActive)
         // 書き物アプリとして一覧・本文が読みやすい縦長の初期サイズ。
         .defaultSize(width: 520, height: 800)
         #else
@@ -47,12 +54,15 @@ struct NikkiApp: App {
                 .defaultAppStorage(.appGroups)
         }
         .modelContainer(modelContainer)
+        .environment(\.cloudSyncActive, cloudSyncActive)
         #endif
     }
 
     /// CloudKit private database と同期する、普段使い用の永続ストアを作る。
-    private static func defaultContainer() -> ModelContainer {
-        persistentContainer(configuration: ModelConfiguration(cloudKitDatabase: .private("iCloud.com.bannzai.Nikki")))
+    /// 同期は Nikki Plus 限定(#93)。plusActive は起動時にキャッシュされた値で、実行中の加入状態変化は
+    /// 反映されない(ModelContainer は起動時に一度だけ構成されるため。次回起動で新しいキャッシュ値が使われる)。
+    private static func defaultContainer(plusActive: Bool) -> ModelContainer {
+        persistentContainer(configuration: ModelConfiguration(cloudKitDatabase: effectiveCloudKitDatabase(plusActive: plusActive)))
     }
 
     #if DEBUG
@@ -153,6 +163,12 @@ struct NikkiApp: App {
             UserDefaults.appGroups.set(true, forKey: UserDefaults.BoolKey.notebooksSeeded.key)
         }
     }
+}
+
+/// 普段使い用ストアが同期する CloudKit private database。Plus 未加入(またはキャッシュ未取得)では同期しない(#93)。
+/// plusActive は NikkiApp.init が UserDefaults から読む、直近の customerInfo 由来のキャッシュ値。
+func effectiveCloudKitDatabase(plusActive: Bool) -> ModelConfiguration.CloudKitDatabase {
+    plusActive ? .private("iCloud.com.bannzai.Nikki") : .none
 }
 
 /// 起動画面の振り分け。環境変数 NIKKI_SCREEN が "root" なら通常フロー、画面名ならその画面、

@@ -14,6 +14,10 @@ extension UserDefaults {
         /// 旧既定テンプレート「白紙」から「日記」への名前の移行(issue #92)をこの端末で終えたかどうか。
         /// 対象が無くなったあとの起動が毎回全件を調べ直さないための目印。
         case blankPageRenamedToJournal
+        /// 直近の customerInfo から得た Nikki Plus 加入状態のキャッシュ(#93)。
+        /// ModelContainer は起動時に一度だけ構成され、CloudKit 同期の有効/無効を実行中に切り替えられないため、
+        /// 次回起動時にこのキャッシュ値で判定する。RootPage が customerInfoStream の更新のたびに書き込む。
+        case cloudSyncPlusActiveCache
 
         var key: String {
             "BoolKey_\(rawValue)"
@@ -36,6 +40,9 @@ extension UserDefaults {
     enum IntKey: String, CaseIterable {
         case autoLockSeconds
         case paperColorPresetIndex
+        /// 背景画像ファイル(ThemeBackgroundImage)の変更回数(#96)。画像はファイル保存で SwiftUI の
+        /// 状態にならないため、保存・削除のたびに増やして RootPage の再評価(実画面への即時反映)を起こす。
+        case themeBackgroundImageVersion
 
         var key: String {
             "IntKey_\(rawValue)"

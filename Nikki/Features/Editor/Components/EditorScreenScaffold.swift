@@ -11,10 +11,11 @@ struct EditorScreenScaffold<Content: View>: View {
     @ViewBuilder var content: Content
 
     @Environment(\.paperColor) private var paperColor
+    @Environment(\.themeBackgroundImage) private var backgroundImage
 
     var body: some View {
         ZStack {
-            paperColor.ignoresSafeArea()
+            JournalBackground(paperColor: paperColor, backgroundImage: backgroundImage)
             content
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }

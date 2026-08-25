@@ -254,3 +254,43 @@ UserDefaults の notebooksSeeded フラグで再シードが抑止されるこ�
 </details>
 
 </details>
+
+---
+
+## 5. 無料枠の上限 (Nikki Plus)
+
+テンプレート (ノート) の作成数は無料枠 2 件まで。Plus 加入で無制限になる (issue #94)。
+
+- [x] **無料枠内は作成できる**: テンプレートが 2 件未満のとき、「＋ 新しいテンプレート」から作成フォームへ進める
+  - 自動化: auto（NikkiTests/NotebookPlusGateTests.swift が canCreateNotebook の境界を検証。導線の表示はシミュレータで目視確認する）
+  - 2026-08-24 simtunnel (iOS) で、1 件の状態から「＋ 新しいテンプレート」→ 作成フォーム → 「Morning notes」を作成できた
+- [x] **上限到達でロック表示になる**: テンプレートが 2 件あるとき、フッタが錠アイコン + 「Nikki Plus が必要です」のロック表示になり、タップするとペイウォールが開く (設定の管理一覧・エディタのテンプレート一覧の両方)
+  - 自動化: manual（ロック表示とペイウォールへの遷移の目視確認のため）
+  - 2026-08-24 simtunnel (iOS) の設定の管理一覧で、2 件目の作成直後にフッタが「Nikki Plus required」のロック表示になり、タップでペイウォールが開いた。エディタのテンプレート一覧は同じ NotebookNewFooter と canCreateNotebook を使うため挙動は同一 (ロック表示自体はローカル macOS のカタログ notebookList (サンプル 4 件) でも確認)
+- [x] **ホームのリスト追加「+」も上限でペイウォールを開く**: 上限に達しているとき、ホームの「+」(リストモードのセグメント横・カレンダーモードのヘッダ右上) はフォームの代わりにペイウォールを開く (issue #92 と #94 のマージで導線に判定を追加)
+  - 自動化: manual（遷移先の切り替わりを目視で確認する。判定関数自体は NikkiTests/NotebookPlusGateTests.swift が検証済み）
+  - 2026-08-25 ローカル iOS Simulator (カタログ entryList、サンプル 4 件 > 無料枠 2 件) で、リストモードの「+」タップでフォームではなくペイウォールが開いた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/9fd2e63d-8bd2-4142-86b7-048c5fb77659.png)。カレンダーモード側は同じ canCreateNotebook 分岐のため挙動は同一
+- [ ] **Plus 加入中は無制限**: Plus 加入中はテンプレートが 2 件以上あってもフッタが通常表示のままで、作成できる
+  - 自動化: auto（NikkiTests/NotebookPlusGateTests.swift が判定を検証。導線は Plus 加入状態を simulator で作れないため TestFlight 配布後の人間確認とする）
+  - 未検証: Plus 加入状態を simulator で再現できないため未実施
+- [ ] **失効時は既存を消さない**: 無料枠を超えた数のテンプレートを持ったまま失効しても、既存のテンプレートは消えず使い続けられる。新規作成だけがロックされる
+  - 自動化: manual（Plus 失効状態は simulator で作れないため TestFlight 配布後の人間確認とする）
+  - 未検証: Plus 失効状態を simulator で再現できないため未実施
+
+#### 動作確認
+<details>
+<summary>動作確認エビデンス</summary>
+
+### **上限到達でロック表示になる**: テンプレートが 2 件あるとき、フッタがロック表示になりタップでペイウォールが開く
+
+<details><summary>動作確認スクショ</summary>
+
+**確認日: 2026-08-24** (simtunnel iOS。2 件到達後の管理一覧、ロックフッタのタップで開いたペイウォール、macOS カタログの一覧)
+
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/5647597f-5266-4c3b-9079-c3b1782f863f.jpg" alt="iOS のテンプレート管理一覧。2 件到達でフッタが「Nikki Plus required」のロック表示になっている" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/44f7b785-45d5-4f76-ab52-662f8252254e.jpg" alt="ロックフッタのタップで開いた iOS のペイウォール" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/a90d4491-31b5-459e-9955-8c3fbd474af8.png" alt="macOS カタログのテンプレート一覧。ロックフッタが表示されている" width="320">
+
+</details>
+
+</details>

@@ -26,8 +26,7 @@ struct AppStoreScreenshot6Page: View {
 /// テーマ設定のモック画面。スウォッチは本番の ThemeColorSwatch・セクション見出しは ThemeSectionLabel を
 /// 再利用し、ナビタイトル・プレビューカード・スウォッチのラベルを言語別に渡す
 /// (ThemePreviewCard はサンプル文言が日本語固定のため静的表現にする)。
-/// 背景画像セクションは実画面に存在するが選択機能が未実装 (issue #54) のため、
-/// 「実装済みの機能のみを見せる」方針でストア画像には載せない。
+/// 背景画像セクション (issue #96 で実装済み) は、写真選択の状態がストア画像の見本として再現しづらいため載せない。
 struct AppStoreScreenshotThemeScreen: View {
     let language: AppStoreScreenshotLanguage
     let canvas: AppStoreScreenshotCanvas

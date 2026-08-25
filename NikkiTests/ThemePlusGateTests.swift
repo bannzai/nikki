@@ -36,3 +36,13 @@ extension ThemePlusGateTests {
         #expect(effectivePaperColor(storedIndex: 99, plusActive: true) == Color.paperColorPreset[1])
     }
 }
+
+extension ThemePlusGateTests {
+    @Test("背景画像は Plus 加入中かつ保存済みの画像があるときだけ実画面に反映する")
+    func backgroundImageRequiresPlus() {
+        #expect(effectiveThemeBackgroundImageIsActive(hasStoredImage: true, plusActive: true) == true)
+        #expect(effectiveThemeBackgroundImageIsActive(hasStoredImage: true, plusActive: false) == false)
+        #expect(effectiveThemeBackgroundImageIsActive(hasStoredImage: false, plusActive: true) == false)
+        #expect(effectiveThemeBackgroundImageIsActive(hasStoredImage: false, plusActive: false) == false)
+    }
+}

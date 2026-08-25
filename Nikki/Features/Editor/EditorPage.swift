@@ -68,6 +68,7 @@ struct EditorPage: View {
                 .padding(.horizontal, 28)
                 .padding(.top, 10)
             }
+            .editorCopyAllContextMenu(blocks: draftBlocks)
         }
         .onAppear {
             // タイトル入力の廃止前に書かれた日記のタイトルを、本文先頭の見出しとして見えるまま残す。

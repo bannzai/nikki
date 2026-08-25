@@ -12,9 +12,11 @@ struct NotebookSettingsPage: View {
     /// 作成フォームへの遷移状態。
     @State var notebookCreateIsPresented = false
     @State var deleteAllConfirmationDialogIsPresented = false
+    @State var paywallSheetIsPresented = false
 
     @Environment(\.modelContext) private var modelContext
     @Environment(\.paperColor) private var paperColor
+    @Environment(\.plusActive) private var plusActive
 
     var body: some View {
         VStack(spacing: 0) {
@@ -32,7 +34,16 @@ struct NotebookSettingsPage: View {
                         }
                     }
 
-                    NotebookNewFooter(onTap: { notebookCreateIsPresented = true })
+                    NotebookNewFooter(
+                        locked: !canCreateNotebook(existingNotebookCount: notebooks.count, plusActive: plusActive),
+                        onTap: {
+                            if canCreateNotebook(existingNotebookCount: notebooks.count, plusActive: plusActive) {
+                                notebookCreateIsPresented = true
+                            } else {
+                                paywallSheetIsPresented = true
+                            }
+                        }
+                    )
 
                     InkListSection {
                         // 遷移ではなくその場で復元するアクション行のため、シェブロンは出さない。
@@ -66,6 +77,9 @@ struct NotebookSettingsPage: View {
         .navigationDestination(isPresented: $notebookCreateIsPresented) {
             NotebookCreatePage()
         }
+        .sheet(isPresented: $paywallSheetIsPresented) {
+            PaywallPage()
+        }
         .confirmationDialog("Delete all templates", isPresented: $deleteAllConfirmationDialogIsPresented, titleVisibility: .visible) {
             Button("Delete all templates", role: .destructive) {
                 // 直後にアプリが kill されても削除の結果が残るよう save まで行う。失敗しても @Query の再評価でストアの実態に追従するため、ここではエラーを扱わない。
@@ -81,6 +95,8 @@ struct NotebookSettingsPage: View {
     /// 名前も書き出しもロケールで変わる(String(localized:) の値が永続化される)ため、既存の判定は
     /// 単一言語の完全一致ではなく、全対応言語の書き出し集合(SampleData.seedMarkdownVariants)との一致で行う
     /// (シード時と復元時で表示言語が違っても重複させない)。
+    /// 復元でノートが増える場合は新規作成と同じ無料枠(#94)を適用し、上限に達しているときは
+    /// 追加せずペイウォールを開く。追加が起きない場合(冪等な no-op)はペイウォールを出さない。
     private func restoreSeedNotebooks() {
         let restored = zip(
             SampleData.seedNotebooks(sortOrder: (notebooks.last?.sortOrder ?? -1) + 1),
@@ -91,6 +107,10 @@ struct NotebookSettingsPage: View {
         }
         .map { seed, _ in seed }
         if restored.isEmpty {
+            return
+        }
+        if !canCreateNotebook(existingNotebookCount: notebooks.count, plusActive: plusActive) {
+            paywallSheetIsPresented = true
             return
         }
         modelContext.insert(notebooks: restored)
