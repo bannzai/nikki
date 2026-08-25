@@ -1,7 +1,7 @@
 ---
 feature: Editor
 verification: mobile-mcp
-last_verified_commit: e1b626202ab6f42064987c8d9f3454d105a9a40b
+last_verified_commit: 855091612c23cb04624a1c144f5b6c6ea50097e9
 last_verified_at: 2026-08-25
 ---
 
@@ -15,8 +15,7 @@ last_verified_at: 2026-08-25
 - 関連: 設定「文字の大きさ」などの導線の配線 https://github.com/bannzai/nikki/issues/14
 - 関連: 紙色テーマの実画面への適用 https://github.com/bannzai/nikki/issues/73
 - 関連: markdown ブロックの装飾表示 (見出し・チェックリスト・画像・details) https://github.com/bannzai/nikki/issues/88
-- 関連: ブロックの D&D 並び替え (Notion ライク) https://github.com/bannzai/nikki/issues/101
-- 補足: 選択ツールバー(1j)は、DEBUG ビルドのデザインカタログでだけ表示できる静的な画面で、製品の導線からは到達しない。エディタ本文のブロック装飾表示は issue #88 で実装済みで「4. ブロックの装飾表示と操作」、ブロックの並び替えは issue #101 で実装済みで「5. ブロックの並び替え」で QA する (並び替え(1k)のカタログ画面はビジュアル見本として残っている)
+- 補足: 選択ツールバー(1j)・ブロックの並び替え(1k)は、DEBUG ビルドのデザインカタログでだけ表示できる静的な画面で、製品の導線からは到達しない。エディタ本文のブロック装飾表示は issue #88 で実装済みで、「4. ブロックの装飾表示と操作」で QA する
 - 補足: タイトル欄は廃止した (日記にタイトルは必須ではなく、タイトル欄が本文の書きはじめをわかりにくくしていたため)。過去に入力されたタイトルは、その日記をエディタで開いたときに本文先頭の H1 見出しへ移して残す
 
 ## 1. 執筆と保存
@@ -153,6 +152,11 @@ last_verified_at: 2026-08-25
   - 自動化: NikkiTests/BlockMarkdownTests.swift (パース) + manual（描画は目視で確認する）
   - macOS でサンプル日記の全ブロック種が装飾表示された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/5836c8d8-e0bf-47f4-97de-b294d3478467.png)
   - iOS で入力した記法が再表示時に img プレースホルダ・details カードとして表示された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/1e088d02-1628-4c23-bcd8-2f0aeb5d8bb5.jpg)
+  - 2026-08-25 D&D 並び替えの revert (issue #105、コミット 8550916) 後に再確認。macOS (署名なし Debug + カタログ entryList) で全ブロック種がハンドル無しで導入前の書き出し位置に表示された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/d58d19f8-29d4-4ee1-b14e-deee992d71fc.png)。iOS (simtunnel リモート iOS Simulator) でも見出し・段落・チェックリストがハンドル無しで表示された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/c9e7dddd-6809-4f75-807b-d3fb53749289.jpg)
+- [x] **↑↓ でキャレットが行の間を移動できる**: 折り返しのある段落で、↑↓ キーがキャレットを表示行の間で移動させる (issue #105 の revert で回復した挙動。D&D 導入中は移動できなかった)
+  - 自動化: manual（ハードウェアキーボードの矢印キー入力とキャレット位置の目視確認が必要なため）
+  - 2026-08-25 macOS (署名なし Debug) で、2行に折り返した段落の1行目にキャレットを置き (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/e57358db-9593-4dbe-8749-170961569383.png)、↓ で2行目末尾へ移動してそこに「ok」が入力され (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/4c8505a4-6038-48f9-9c09-9ead541bb78e.png)、↑ で1行目中央へ戻ってそこに「up」が入力された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/9161ac54-972b-4414-a92b-d855b02106df.png)
+  - iOS はハードウェアキーボード接続時のみ該当する操作のため未検証 (ソフトウェアキーボードに矢印キーが無い)
 - [x] **チェックのタップで完了が切り替わり保存される**: チェックボックスをタップすると即座に完了(墨地+白チェック、打ち消し線+灰) / 未完了が切り替わり、閉じて開き直しても状態が残る(markdown へ - [x] / - [ ] として書き戻される)
   - 自動化: NikkiTests/BlockEditingTests.swift (togglesChecklistItemDone) + manual
   - macOS で切り替えの即時反映 (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/8f338314-392c-438e-aaa1-5332fddbf051.png) と開き直し後の保持 (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/abecee74-a207-47a6-bd05-46d845f44f64.png) を確認
@@ -181,49 +185,23 @@ last_verified_at: 2026-08-25
 - 補足 (既知の制限):
   - img・details ブロックはエディタから削除できない (テキストの編集経路が無いため)。削除導線は別途扱う
   - 完了したチェック項目の文字は編集できない (チェックを外してから編集する)。入力欄 (TextField) は打ち消し線を描画できないため、完了項目は静的な文字で描画している
-  - 改行を含まない貼り付け (1行だけの記法) は、その場では変わらず、次に開いたときにブロックとして表示される (複数行の貼り付けは issue #100 でその場でブロックに変わる。「6. コピーと貼り付け」参照)
+  - 改行を含まない貼り付け (1行だけの記法) は、その場では変わらず、次に開いたときにブロックとして表示される (複数行の貼り付けは issue #100 でその場でブロックに変わる。「5. コピーと貼り付け」参照)
   - macOS で行の途中で Return しても、カーソル以降は次のブロックへ移らない (Return が onSubmit として届き、SwiftUI の TextField からキャレット位置を取得できないため末尾扱いになる)。iOS は改行がキャレット位置に入るため、その位置でブロックが分かれる
   - インデントされた記法の行 (「    - [ ] 」等) はブロックにせず段落のまま表示・保存する (ブロックに変換すると書き戻しでインデントが失われるため)
   - details カードの VoiceOver は開閉状態を accessibilityValue で読み上げる実装を入れたが、実機の読み上げは未検証
 
 ---
 
-## 5. ブロックの並び替え (D&D)
-
-(issue #101 でエディタ本文のブロックを 6点ハンドルのドラッグ&ドロップで並び替えられるようにした。エビデンスの日付はすべて 2026-08-25、iOS は simtunnel リモート iOS Simulator、macOS は entitlements を外した Debug ビルド + カタログの entryList。macOS で署名なしビルドを使ったのは、ローカルに Nikki の macOS 用 provisioning profile が無く Apple ID セッションも失効していて署名ビルドを作れなかったため)
-
-- [x] **各ブロックの左に6点ハンドルが出る**: 見出し・段落・チェックリスト・画像・details の各ブロック左にハンドルが出て、本文の書き出し位置はハンドル導入前と変わらない。末尾に自動で足される空の段落にはハンドルが出ない
-  - 自動化: manual（ハンドルの表示と本文位置を目視で確認する）
-  - macOS でサンプル日記の全ブロック種の左にハンドルが出た (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/a85b7d92-6dc1-47f3-9e6e-bb26afc3fbb2.png)
-  - iOS でも各段落の左にハンドルが出て、末尾のキャレットだけの空段落には出なかった (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/e9c48f5a-eb68-4ea8-a2ea-ce59876d7797.jpg)
-- [x] **ドラッグで浮き上がりカードと挿入インジケータが出る**: ハンドルを掴んでドラッグすると (iOS は長押し0.2秒後、macOS は即時)、掴んだ行が見本(1k)と同じ白カード+影+傾きで浮き上がり、挿入予定位置に墨のインジケータラインが出る。ドラッグ中はスクロールが止まる
-  - 自動化: manual（ドラッグ中の描画は目視で確認する）
-  - macOS で段落のドラッグ中にカードとインジケータが出た (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/79cc7f1e-f2a3-4cdb-91b8-e3b193507c93.png)
-  - iOS で長押し後のドラッグ中にカードとインジケータが出た (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/ec20b375-3c26-4852-876f-4988774ad46a.jpg)
-- [x] **ドロップで並び替わり、開き直しても順序が保たれる**: ドロップするとブロックがインジケータの位置へ移る。エディタを閉じるとホームの抜粋が新しい順序になり、開き直しても順序が保たれている (bodyMarkdown への書き戻し)
-  - 自動化: NikkiTests/BlockEditingTests.swift (movesBlock / movesBlockClampingAndIgnoringUnknownID) + manual
-  - macOS でドロップ直後に段落が移り (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/d4622d39-c4be-4f79-abd7-f6b62a39b293.png)、閉じた後のホームの抜粋も新順序になり (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/ddd3162b-b4d9-4855-97a7-cbd508d7f081.png)、開き直しても保たれた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/1a8816bf-3363-46a2-a29e-2387f08a1555.png)
-  - iOS でドロップ直後に段落が見出しの直後へ移り (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/adfcff9d-dc7b-4b38-a453-3da6ec683957.jpg)、開き直しても保たれた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/e9c48f5a-eb68-4ea8-a2ea-ce59876d7797.jpg)。ドラッグ前の状態は https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/6a598108-1970-41fb-be1f-8eec473b108f.jpg
-- 補足 (既知の制限):
-  - ドラッグ中の自動スクロールは未実装。画面外の位置へ動かす場合は、途中で一度ドロップしてスクロールしてから続ける
-  - 並び替えの単位はブロック全体のみ (チェックリストの項目単位の並び替えは対象外。issue #101 の最小構成)
-  - iOS のドラッグ開始は長押し0.2秒 (ScrollView がスクロールとしてタッチを奪うのを避けるため)。macOS は即時
-
----
-
-## 6. コピーと貼り付け
+## 5. コピーと貼り付け
 
 (issue #100 でブロックのコピーと markdown 貼り付けの復元を追加。エビデンスは 2026-08-25、macOS は署名なし Debug ビルドを直接起動、iOS は simtunnel リモート iOS Simulator で確認)
 
 - [x] **ブロックのメニューからコピーできる**: ブロックの長押し (iOS) / 右クリック (macOS) で「コピー」「すべてコピー」のメニューが出て、コピーでそのブロック、すべてコピーで本文全体 (空のブロックを除く) がペーストボードに入る
   - 自動化: manual（メニュー表示とコピー実行を実操作で確認する）
   - macOS でチェックボックス上の右クリックでメニューが出て (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/90b89be5-eda6-4fc8-9643-57072dc03ed2.png)、コピーで `- [ ] 麦茶のパック\n- [x] 蚊取り線香`、すべてコピーで本文全体の markdown が pbpaste で取れた
+  - 2026-08-25 D&D 並び替えの revert (issue #105、コミット 8550916) 後に iOS (simtunnel) で再確認。チェックリスト項目の長押しで Copy All を含むメニューが表示された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/3f25882b-edd7-4d98-9edf-b7041415399a.jpg)
   - iOS でチェックリストの長押しで Copy / Copy All のメニューが出て (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/48c97ba3-4a19-4c9e-80fc-7ef5e0f6b37f.jpg)、Copy で `- [ ] Barley tea\n- [x] Mosquito coil`、Copy All で本文全体の markdown が WDA getPasteboard で取れた。iOS は見出し・段落・空の段落の行でも長押しでメニューが出る (macOS と違い OS のテキストメニューに取られない)。テキスト編集の吹き出し (Paste 等) はタップで別途出て共存する (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/924e6e39-95d2-4e32-927f-37ffa7db5c08.jpg)。長押しメニュー表示後もチェックボックスのタップ切り替えは正常 (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/15c3ae9f-893a-4cea-96a5-863e80858583.jpg)
-  - 補足: macOS の見出し・段落は入力欄が行の全幅を占め、その上の右クリックは OS のテキスト編集メニューになる (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/86c9276d-29e3-4661-9b5a-853cff0b6fdf.png)。そのため macOS では、テキストではないドラッグハンドルにも同じコピーメニューを付けて、見出し・段落の単体コピーへ到達できるようにしている
-- [x] **macOS はドラッグハンドルの右クリックからもコピーできる**: 見出し・段落を含む各ブロックのハンドルを右クリックすると「コピー」「すべてコピー」が出て、そのブロック単体をコピーできる。ハンドルのドラッグ (並び替え) は従来どおり動く
-  - 自動化: manual（メニュー表示・コピー内容・ドラッグ並び替えの回帰を実操作で確認する）
-  - macOS で見出しのハンドルを右クリックしてメニューが出て (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/1108e4c8-9e86-436c-b82b-defaf8f51224.png)、「コピー」で `# 2026年8月25日` が pbpaste で取れた。同じハンドルのドラッグで段落の並び替えも動いた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/127470c1-93d9-411b-833e-3ce29183207a.png)
-  - iOS はブロックの行自体の長押しでメニューへ届き、ハンドルの長押しはドラッグ開始と競合するため、ハンドルにはメニューを付けていない
+  - 補足: macOS の見出し・段落は入力欄が行の全幅を占め、その上の右クリックは OS のテキスト編集メニューになる (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/86c9276d-29e3-4661-9b5a-853cff0b6fdf.png)。ドラッグハンドル経由の単体コピー導線は issue #105 の D&D revert でハンドルごと無くなったため、macOS の見出し・段落は単体コピーに到達できない (本文全体は余白の「すべてコピー」で到達できる。下の既知の制限を参照)
 - [x] **本文の余白のメニューからすべてコピーできる**: ブロックの外 (本文の下の余白) の長押し / 右クリックで「すべてコピー」が出る。テキストのブロックしか無い日記でも macOS でコピーに到達できる
   - 自動化: manual
   - macOS で余白の右クリックにメニューが出て (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/932ffb6c-3e71-49d6-a818-fe25adb00178.png)、見出しだけの日記の markdown (`# 2026年8月25日`) が pbpaste で取れた
@@ -248,3 +226,4 @@ last_verified_at: 2026-08-25
   - リッチテキストの書体はアプリ同梱の Zen Kaku Gothic ではなくシステムフォント (ペースト先の端末に同梱フォントが無いため)
   - 貼り付けた markdown の空行 (ブロック区切り) は編集中は空の段落として見え、閉じるときに落ちる
   - macOS の余白メニューはカーソル位置ではなく本文エリアの下寄りに表示されることがある (SwiftUI の contextMenu の表示位置仕様)
+  - macOS の見出し・段落はブロック単体のコピーに到達できない (入力欄上の右クリックが OS のテキスト編集メニューになるため。ハンドル右クリックの導線は issue #105 の D&D revert で無くなった)。本文全体は余白の「すべてコピー」で取れる

@@ -275,31 +275,6 @@ struct BlockEditingTests {
         #expect(imageOnly.firstEditableFieldID == nil)
     }
 
-    @Test("ブロックを前後へ動かすと並び順が markdown に書き出される")
-    func movesBlock() {
-        var blocks = Block.blocks(fromMarkdown: "# 8月25日\n\n本文\n\n- [ ] 麦茶のパック")
-        // 先頭の見出しを、残り(本文・チェックリスト)の末尾へ動かす。
-        blocks.moveBlock(blockID: blocks[0].id, insertionIndex: 2)
-        #expect(Block.markdown(blocks: blocks) == "本文\n\n- [ ] 麦茶のパック\n\n# 8月25日")
-
-        // 末尾の見出しを、残りの先頭へ戻す。
-        blocks.moveBlock(blockID: blocks[2].id, insertionIndex: 0)
-        #expect(Block.markdown(blocks: blocks) == "# 8月25日\n\n本文\n\n- [ ] 麦茶のパック")
-    }
-
-    @Test("範囲外の挿入位置は端へ丸め、見つからないブロックは動かさない")
-    func movesBlockClampingAndIgnoringUnknownID() {
-        var blocks = Block.blocks(fromMarkdown: "# 8月25日\n\n本文")
-        blocks.moveBlock(blockID: blocks[0].id, insertionIndex: 99)
-        #expect(Block.markdown(blocks: blocks) == "本文\n\n# 8月25日")
-
-        blocks.moveBlock(blockID: blocks[1].id, insertionIndex: -1)
-        #expect(Block.markdown(blocks: blocks) == "# 8月25日\n\n本文")
-
-        blocks.moveBlock(blockID: UUID(), insertionIndex: 0)
-        #expect(Block.markdown(blocks: blocks) == "# 8月25日\n\n本文")
-    }
-
     @Test("編集したブロック列は markdown と往復できる")
     func roundTripsAfterEditing() {
         var blocks = Block.blocks(fromMarkdown: "## 買ったもの\n\n- [ ] 麦茶のパック\n\n<details><summary>病院メモ</summary></details>")
