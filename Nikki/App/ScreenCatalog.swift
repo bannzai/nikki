@@ -60,21 +60,20 @@ struct ScreenContent: View {
             .environment(\.today, SampleData.referenceToday)
             .defaultAppStorage(homePageModeDefaults(mode: .calendar))
         case .editorWriting:
-            // エディタの日付キャプションはナビゲーションバーに載るため、NavigationStack に載せないと出ない。
-            NavigationStack {
+            ScreenCatalogPushedStack {
                 EditorWritingPage(entry: SampleData.sampleEntry)
             }
         case .editorSelection:
-            NavigationStack {
+            ScreenCatalogPushedStack {
                 EditorSelectionPage(entry: SampleData.sampleEntry)
             }
         case .editorReorder:
-            NavigationStack {
+            ScreenCatalogPushedStack {
                 EditorReorderPage(entry: SampleData.sampleEntry)
             }
         case .notebookList:
-            // NotebookListPage は @Query でノートを読むため、in-memory コンテナ(SampleData 投入済み)の下で NavigationStack に載せる。
-            NavigationStack {
+            // NotebookListPage は @Query でノートを読むため、in-memory コンテナ(SampleData 投入済み)の下に置く。
+            ScreenCatalogPushedStack {
                 NotebookListPage(entry: SampleData.sampleEntry)
             }
         case .templateVariable:
@@ -85,20 +84,18 @@ struct ScreenContent: View {
                 fields: TemplateVariableField.fields(template: template, today: SampleData.referenceToday, includesDemoValues: true)
             )
         case .theme:
-            // 画面タイトルはナビゲーションバーに載るため、NavigationStack に載せないと出ない。
-            NavigationStack {
+            ScreenCatalogPushedStack {
                 ThemePage()
             }
         case .paywall:
             PaywallPage()
         case .settings:
-            // SettingsPage はノート管理・テーマ等へ navigationDestination で遷移するため、NavigationStack に載せる。
-            NavigationStack {
+            ScreenCatalogPushedStack {
                 SettingsPage()
             }
         case .archive:
-            // ArchivePage は @Query でアーカイブ済みの日記を読むため、NavigationStack に載せる。
-            NavigationStack {
+            // ArchivePage は @Query でアーカイブ済みの日記を読む。
+            ScreenCatalogPushedStack {
                 ArchivePage()
             }
         case .appstore1:
@@ -117,11 +114,43 @@ struct ScreenContent: View {
     }
 }
 
+/// 製品では push 先として開く画面を、カタログでも push された状態で表示するスタック。
+/// システムの戻るボタンはスタックに戻り先があるときだけ出るため、遷移元の紙地を1枚挟んで
+/// 製品と同じ「戻るボタンのあるナビゲーションバー」を再現する。
+private struct ScreenCatalogPushedStack<Content: View>: View {
+    @ViewBuilder let content: Content
+
+    /// 対象の画面を出しているかどうか。戻るボタンで pop すると遷移元の紙地に戻る。
+    @State var contentIsPresented = true
+
+    var body: some View {
+        NavigationStack {
+            Color.inkPaper
+                .ignoresSafeArea()
+                // 遷移元に題があると戻るボタンがその題のラベル付きで出る。製品の遷移元(ホーム)は
+                // 題を持たずシェブロンだけの戻るボタンになるため、空の題で見た目を揃える。
+                .navigationTitle("")
+                .navigationDestination(isPresented: $contentIsPresented) {
+                    content
+                }
+        }
+    }
+}
+
 /// カタログの list / calendar 画面用に、ホームの表示モードを固定した UserDefaults suite を返す。
 /// 実利用(.appGroups)の保存値を汚さないよう専用 suite に毎回書き込む(冪等)。
 private func homePageModeDefaults(mode: HomePageMode) -> UserDefaults {
     let defaults = UserDefaults(suiteName: "screen-catalog-home-\(mode.rawValue)")!
     defaults.set(mode.rawValue, forKey: UserDefaults.IntEnumKey.homePageMode.key)
+    return defaults
+}
+
+/// 通常フロー(RootPage)を検証用に起動するときの UserDefaults suite を返す。
+/// オンボーディングを完了済みにしてホームから始め、実利用(.appGroups)の設定を汚さないよう
+/// 専用 suite に毎回書き込む(冪等)。
+func rootFlowDefaults() -> UserDefaults {
+    let defaults = UserDefaults(suiteName: "screen-catalog-root-flow")!
+    defaults.set(true, forKey: UserDefaults.BoolKey.onboardingCompleted.key)
     return defaults
 }
 
