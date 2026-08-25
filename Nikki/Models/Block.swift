@@ -622,6 +622,17 @@ nonisolated extension [Block] {
         return nil
     }
 
+    /// 本文の無いチェックリスト項目からリストを抜けて段落にする。空の項目でのバックスペースで
+    /// チェックボックスを外す経路用(issue #108)。本文のある項目では何もせず、バックスペースを
+    /// 通常の文字削除のままにする。リストから抜けたときだけ、続けて入力する段落の id を返す。
+    mutating func exitChecklist(emptyItemID itemID: UUID) -> UUID? {
+        if let indexes = checklistIndexes(itemID: itemID), case .checklist(_, let items) = self[indexes.blockIndex],
+           items[indexes.itemIndex].text.isEmpty {
+            return exitChecklist(blockIndex: indexes.blockIndex, itemIndex: indexes.itemIndex)
+        }
+        return nil
+    }
+
     /// チェックリスト項目の完了を設定する。
     mutating func setChecklistItemDone(itemID: UUID, done: Bool) {
         if let indexes = checklistIndexes(itemID: itemID), case .checklist(let id, var items) = self[indexes.blockIndex] {

@@ -37,6 +37,13 @@ struct EditorPage: View {
 
     @AppStorage(.textSize) var textSize: TextSize = .standard
 
+    #if os(macOS)
+    /// 空のチェックリスト項目でのバックスペースを拾うキー入力監視の解除用トークン。
+    /// SwiftUI の onKeyPress は macOS では編集中の入力欄(field editor)にイベントを消費されて
+    /// 発火しないため(issue #108)、エディタ表示中だけ NSEvent のローカル監視で拾う。
+    @State var checklistBackspaceMonitor: Any?
+    #endif
+
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @Environment(\.resetAutoLockTimer) private var resetAutoLockTimer
@@ -77,6 +84,9 @@ struct EditorPage: View {
             // タイトル入力の廃止前に書かれた日記のタイトルを、本文先頭の見出しとして見えるまま残す。
             entry.mergeTitleIntoBodyMarkdown()
             loadDraftBlocks()
+            #if os(macOS)
+            installChecklistBackspaceMonitor()
+            #endif
         }
         // キーボード入力はタッチとして拾えないため、編集中の本文の変化を無操作タイマーのリセットにする。
         .onChange(of: draftBlocks) {
@@ -93,6 +103,9 @@ struct EditorPage: View {
             }
         }
         .onDisappear {
+            #if os(macOS)
+            removeChecklistBackspaceMonitor()
+            #endif
             commitDraft()
         }
         // アプリがバックグラウンドへ移った直後に kill されても書きかけが残るよう、非アクティブ化で書き戻して保存する。
@@ -145,4 +158,39 @@ struct EditorPage: View {
         }
         try? modelContext.save()
     }
+
+    #if os(macOS)
+    /// 空のチェックリスト項目でのバックスペースでチェックボックスを外すためのキー入力監視を始める。
+    /// onAppear はテンプレート一覧から戻るときにも呼ばれるため、監視中なら何もしない(冪等)。
+    private func installChecklistBackspaceMonitor() {
+        if checklistBackspaceMonitor != nil {
+            return
+        }
+        checklistBackspaceMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
+            // 51 は delete (バックスペース) のキーコード (Carbon の kVK_Delete)。
+            // 修飾キー付き (⌘⌫・⌥⌫ 等) は別の削除操作のため拾わずに通す。
+            // 入力中の欄が空のチェックリスト項目のときだけ拾う判定は exitChecklist(emptyItemID:) が行い、
+            // 見出し・段落や本文のある項目、日本語入力の変換中 (変換中テキストが項目の本文に入り
+            // 空でなくなる) では nil が返ってイベントをそのまま通す。
+            if event.keyCode == 51, event.modifierFlags.intersection([.command, .option, .control]).isEmpty,
+               let fieldID = focusedFieldID, let paragraphFieldID = draftBlocks.exitChecklist(emptyItemID: fieldID) {
+                // リスト脱出の直後は移動先の入力欄がまだ描画されていないため、即時に代入すると
+                // first responder が失われて続きの入力が消える。次の runloop で移す。
+                DispatchQueue.main.async {
+                    focusedFieldID = paragraphFieldID
+                }
+                return nil
+            }
+            return event
+        }
+    }
+
+    /// チェックリスト用のキー入力監視を止める。監視していなければ何もしない(冪等)。
+    private func removeChecklistBackspaceMonitor() {
+        if let checklistBackspaceMonitor {
+            NSEvent.removeMonitor(checklistBackspaceMonitor)
+        }
+        checklistBackspaceMonitor = nil
+    }
+    #endif
 }
