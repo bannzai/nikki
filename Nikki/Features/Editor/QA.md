@@ -219,7 +219,11 @@ last_verified_at: 2026-08-25
   - 自動化: manual（メニュー表示とコピー実行を実操作で確認する）
   - macOS でチェックボックス上の右クリックでメニューが出て (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/90b89be5-eda6-4fc8-9643-57072dc03ed2.png)、コピーで `- [ ] 麦茶のパック\n- [x] 蚊取り線香`、すべてコピーで本文全体の markdown が pbpaste で取れた
   - iOS でチェックリストの長押しで Copy / Copy All のメニューが出て (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/48c97ba3-4a19-4c9e-80fc-7ef5e0f6b37f.jpg)、Copy で `- [ ] Barley tea\n- [x] Mosquito coil`、Copy All で本文全体の markdown が WDA getPasteboard で取れた。iOS は見出し・段落・空の段落の行でも長押しでメニューが出る (macOS と違い OS のテキストメニューに取られない)。テキスト編集の吹き出し (Paste 等) はタップで別途出て共存する (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/924e6e39-95d2-4e32-927f-37ffa7db5c08.jpg)。長押しメニュー表示後もチェックボックスのタップ切り替えは正常 (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/15c3ae9f-893a-4cea-96a5-863e80858583.jpg)
-  - 補足: macOS の見出し・段落は入力欄が行の全幅を占め、その上の右クリックは OS のテキスト編集メニューになる (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/86c9276d-29e3-4661-9b5a-853cff0b6fdf.png)。macOS で見出し・段落を含めてコピーする経路は「すべてコピー」(チェックボックス・img・details・本文の余白のメニューから)
+  - 補足: macOS の見出し・段落は入力欄が行の全幅を占め、その上の右クリックは OS のテキスト編集メニューになる (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/86c9276d-29e3-4661-9b5a-853cff0b6fdf.png)。そのため macOS では、テキストではないドラッグハンドルにも同じコピーメニューを付けて、見出し・段落の単体コピーへ到達できるようにしている
+- [x] **macOS はドラッグハンドルの右クリックからもコピーできる**: 見出し・段落を含む各ブロックのハンドルを右クリックすると「コピー」「すべてコピー」が出て、そのブロック単体をコピーできる。ハンドルのドラッグ (並び替え) は従来どおり動く
+  - 自動化: manual（メニュー表示・コピー内容・ドラッグ並び替えの回帰を実操作で確認する）
+  - macOS で見出しのハンドルを右クリックしてメニューが出て (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/1108e4c8-9e86-436c-b82b-defaf8f51224.png)、「コピー」で `# 2026年8月25日` が pbpaste で取れた。同じハンドルのドラッグで段落の並び替えも動いた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/127470c1-93d9-411b-833e-3ce29183207a.png)
+  - iOS はブロックの行自体の長押しでメニューへ届き、ハンドルの長押しはドラッグ開始と競合するため、ハンドルにはメニューを付けていない
 - [x] **本文の余白のメニューからすべてコピーできる**: ブロックの外 (本文の下の余白) の長押し / 右クリックで「すべてコピー」が出る。テキストのブロックしか無い日記でも macOS でコピーに到達できる
   - 自動化: manual
   - macOS で余白の右クリックにメニューが出て (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/932ffb6c-3e71-49d6-a818-fe25adb00178.png)、見出しだけの日記の markdown (`# 2026年8月25日`) が pbpaste で取れた

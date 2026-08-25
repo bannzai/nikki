@@ -94,6 +94,8 @@ struct EditorPage: View {
                                     .frame(width: 16, height: 20)
                                     .contentShape(Rectangle())
                                     .gesture(reorderGesture(block: block))
+                                    // 右クリックはドラッグ(主ボタン)と競合しない。理由は modifier の定義コメント参照。
+                                    .editorBlockCopyContextMenuOnMac(block: block, blocks: draftBlocks)
                             }
                             EditorBlockRow(
                                 block: block,

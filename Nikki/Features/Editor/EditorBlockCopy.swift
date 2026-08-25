@@ -123,4 +123,17 @@ extension View {
             EditorCopyAllButton(blocks: blocks)
         }
     }
+
+    /// macOS だけ、ブロックのコピーメニューを付ける。ドラッグハンドル用。
+    /// macOS の見出し・段落は入力欄の上の右クリックが OS のテキスト編集メニューになるため、
+    /// どの種類のブロックでも単体コピーへ到達できる場所として、テキストではないハンドルにメニューを置く。
+    /// iOS には付けない。ブロックの行自体の長押しでメニューへ届くのに加え、ハンドルの長押しは
+    /// ドラッグ開始 (EditorPage の reorderGesture) と競合するため。
+    func editorBlockCopyContextMenuOnMac(block: Block, blocks: [Block]) -> some View {
+        #if os(macOS)
+        return editorBlockCopyContextMenu(block: block, blocks: blocks)
+        #else
+        return self
+        #endif
+    }
 }

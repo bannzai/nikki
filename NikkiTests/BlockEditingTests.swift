@@ -355,4 +355,38 @@ struct BlockEditingTests {
         #expect(Block.markdown(blocks: blocks) == "- [x] 麦茶のパック\n- [ ] 蚊取り線香")
         #expect(fieldID == blocks.firstChecklistItems.last?.id)
     }
+
+    @Test("CRLF の貼り付けでも行末に \\r が残らない")
+    func normalizesCRLFOnPaste() {
+        var blocks: [Block] = [.paragraph(text: "")]
+        let blockID = blocks[0].id
+        _ = blocks.updateEditableText(blockID: blockID, text: "## 買ったもの\r\n- [x] 蚊取り線香")
+        #expect(Block.markdown(blocks: blocks) == "## 買ったもの\n\n- [x] 蚊取り線香")
+    }
+
+    @Test("記法で始まる本文を持つ見出しは Return で別のブロックに変わらない")
+    func keepsHeadingWithMarkdownLikeTextOnReturn() {
+        var blocks: [Block] = [.heading(level: 2, text: "# Topic")]
+        let blockID = blocks[0].id
+        _ = blocks.updateEditableText(blockID: blockID, text: "# Topic\n")
+        #expect(Block.markdown(blocks: blocks) == "## # Topic\n\n")
+        #expect(blocks[0].id == blockID)
+    }
+
+    @Test("本文のある段落の先頭行は貼り付けでも段落のまま保たれる")
+    func keepsNonEmptyParagraphFirstLineOnPaste() {
+        var blocks: [Block] = [.paragraph(text: "## メモ")]
+        let blockID = blocks[0].id
+        _ = blocks.updateEditableText(blockID: blockID, text: "## メモ\n- [ ] 麦茶のパック")
+        #expect(Block.markdown(blocks: blocks) == "## メモ\n\n- [ ] 麦茶のパック")
+        #expect(blocks[0].id == blockID)
+    }
+
+    @Test("記法で始まる本文を持つチェック項目は Return で短縮・完了化されない")
+    func keepsChecklistItemWithMarkdownLikeTextOnReturn() {
+        var blocks: [Block] = [.checklist(items: [ChecklistItem(text: "- [x] subtask", done: false)])]
+        let itemID = blocks.firstChecklistItems[0].id
+        _ = blocks.updateChecklistItem(itemID: itemID, text: "- [x] subtask\n")
+        #expect(Block.markdown(blocks: blocks) == "- [ ] - [x] subtask\n- [ ] ")
+    }
 }

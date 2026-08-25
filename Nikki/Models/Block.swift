@@ -96,7 +96,7 @@ nonisolated extension Block {
             }
         }
 
-        for rawLine in text.components(separatedBy: "\n") {
+        for rawLine in normalizingNewlines(text: text).components(separatedBy: "\n") {
             if rawLine.trimmingCharacters(in: .whitespaces).isEmpty {
                 flushChecklist()
                 blocks.append(.paragraph(text: rawLine))
@@ -119,6 +119,15 @@ nonisolated extension Block {
         }
         flushChecklist()
         return blocks
+    }
+
+    /// Windows 由来のクリップボード等の CRLF・CR を LF に揃えたテキスト。
+    /// Swift の Character は CRLF を1文字として扱うため、揃えないと contains("\n") や
+    /// components(separatedBy: "\n") が改行を見つけられず、行末にも \r が残る。
+    static func normalizingNewlines(text: String) -> String {
+        text
+            .replacingOccurrences(of: "\r\n", with: "\n")
+            .replacingOccurrences(of: "\r", with: "\n")
     }
 
     /// ブロック列を markdown 文字列にする。ブロック間は空行で区切り、blocks(fromMarkdown:) と往復できる形にする。
@@ -414,17 +423,29 @@ nonisolated extension Block {
     }
 
     /// 改行で分けたブロック列。Return が入力欄に改行として入るプラットフォームでは、改行をブロックの
-    /// 区切りとして扱う。貼り付けで複数行が一度に入る経路も兼ねるため、各行は markdown の記法を
+    /// 区切りとして扱う。貼り付けで複数行が一度に入る経路も兼ねるため、2行目以降は markdown の記法を
     /// 解釈してブロックにし、コピーしたチェックリスト・見出しの構造を保って貼り付けられるようにする(issue #100)。
-    /// 先頭行は記法が無ければ元のブロックの種類と id を保ち、入力欄の同一性(フォーカスと
-    /// 日本語入力の変換中テキスト)を壊さない(issue #86)。改行が無ければ nil を返し、分割しないことを示す。
-    var splitByNewlines: [Block]? {
-        if let editableText, editableText.contains("\n") {
-            var parsed = Block.blocks(fromPastedText: editableText)
-            if case .paragraph(_, let text) = parsed[0] {
-                parsed[0] = replacing(editableText: text)
+    /// 先頭行は、既存の本文が markdown 記法で始まるとき(H2 の本文「# Topic」等)に Return で
+    /// 別のブロックへ変わって本文を失わないよう、元のブロックの種類と id・本文を保つ。
+    /// 全体が貼り付けた内容だとわかっている場合(interpretsFirstLine = true。空の欄への入力)だけ、
+    /// 先頭行も記法として解釈する。id の維持は入力欄の同一性(フォーカスと日本語入力の
+    /// 変換中テキスト)を壊さないため(issue #86)。改行が無ければ nil を返し、分割しないことを示す。
+    func splitByNewlines(interpretsFirstLine: Bool) -> [Block]? {
+        if let editableText {
+            let normalizedText = Block.normalizingNewlines(text: editableText)
+            if normalizedText.contains("\n") {
+                if interpretsFirstLine {
+                    var parsed = Block.blocks(fromPastedText: normalizedText)
+                    // 先頭行に記法が無ければ元のブロックの種類と id を保つ。
+                    if case .paragraph(_, let text) = parsed[0] {
+                        parsed[0] = replacing(editableText: text)
+                    }
+                    return parsed
+                }
+                let texts = normalizedText.split(separator: "\n", maxSplits: 1, omittingEmptySubsequences: false)
+                return [replacing(editableText: String(texts[0]))]
+                    + Block.blocks(fromPastedText: texts.count > 1 ? String(texts[1]) : "")
             }
-            return parsed
         }
         return nil
     }
@@ -478,8 +499,15 @@ nonisolated extension [Block] {
                 self[index] = converted
                 return converted.firstEditableFieldID
             }
+            // 元が空の段落なら、入った複数行は全て貼り付けた内容のため先頭行も記法として解釈する。
+            // 既存の本文がある欄では、Return の分割で先頭行のブロック種別・本文を変えない。
+            let originalIsEmptyParagraph = if case .paragraph(_, let originalText) = self[index] {
+                originalText.isEmpty
+            } else {
+                false
+            }
             let updated = self[index].replacing(editableText: text)
-            if let split = updated.splitByNewlines {
+            if let split = updated.splitByNewlines(interpretsFirstLine: originalIsEmptyParagraph) {
                 replaceSubrange(index...index, with: split)
                 // 貼り付けで末尾が img・details になることもあるため、後ろから最初に見つかる入力欄へ移る。
                 return split.reversed().compactMap(\.lastEditableFieldID).first
@@ -505,15 +533,17 @@ nonisolated extension [Block] {
     /// 入力欄が変わったときだけ、続けて入力する欄の id を返す。
     mutating func updateChecklistItem(itemID: UUID, text: String) -> UUID? {
         if let indexes = checklistIndexes(itemID: itemID), case .checklist(let id, var items) = self[indexes.blockIndex] {
-            if text.contains("\n") {
-                let texts = text.components(separatedBy: "\n")
+            let normalizedText = Block.normalizingNewlines(text: text)
+            if normalizedText.contains("\n") {
+                let texts = normalizedText.components(separatedBy: "\n")
                 if texts.allSatisfy(\.isEmpty) {
                     return exitChecklist(blockIndex: indexes.blockIndex, itemIndex: indexes.itemIndex)
                 }
                 // 貼り付けで入った「- [ ] 」「- [x] 」の行は記法を剥がして完了状態ごと項目にし、
                 // コピーしたチェックリストの構造を保って貼り付けられるようにする(issue #100)。
-                // 記法の無い行は、Return で項目を分けたときの挙動のまま(完了状態を変えない)。
-                if let firstItem = Block.checklistItem(fromLine: texts[0]) {
+                // 先頭行の記法を剥がすのは、元の項目に本文が無い(=行全体が貼り付けた内容の)ときだけ。
+                // 本文が記法で始まる既存の項目(「- [x] subtask」等)を Return で短縮・完了化しない。
+                if items[indexes.itemIndex].text.isEmpty, let firstItem = Block.checklistItem(fromLine: texts[0]) {
                     items[indexes.itemIndex].text = firstItem.text
                     items[indexes.itemIndex].done = firstItem.done
                 } else {
