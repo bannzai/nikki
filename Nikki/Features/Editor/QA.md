@@ -239,7 +239,11 @@ last_verified_at: 2026-08-25
   - macOS で新規日記へ markdown を貼り、h2・チェックリスト (未完了/完了+打ち消し線)・段落に即時復元された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/fd93f6d1-7138-4122-991f-ab716ec69fa1.png)
   - macOS で「すべてコピー」した内容を別の日記へ貼り、h1/h2・チェック状態・段落が復元された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/7d7320aa-d81d-4822-bc87-3ba4180014f7.png)
   - iOS で空の段落へ OS のペースト (タップ → Paste) で markdown を貼り、h2・チェックリスト (チェック状態・打ち消し線付き)・段落に即時復元された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/d533ae7f-5b6a-4e47-9d19-e3ffc0047e96.jpg)
-  - レビュー対応で先頭行の解釈判定を「新しく入った行だけを解釈する」方式へ作り直した後 (e1b6262)、macOS で同じ貼り付けを再確認し、h2・未完了/完了のチェックリストに復元された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/5f36124d-83b3-46b9-988d-25388bd78855.png)。既存の本文への Return・部分的な貼り付けで元の行が解釈されないことは NikkiTests/BlockEditingTests.swift (keepsTextAfterCaretOnReturn / keepsExistingFirstLineOnAppendPaste / keepsExistingChecklistItemTextOnAppendPaste) で担保する
+  - レビュー対応で先頭行の解釈判定を「新しく入った行だけを解釈する」方式へ作り直した後 (e1b6262)、macOS で同じ貼り付けを再確認し、h2・未完了/完了のチェックリストに復元された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/5f36124d-83b3-46b9-988d-25388bd78855.png)
+- [x] **元からあった行は Return・部分的な貼り付けで markdown として解釈されない**: 記法を含む本文の途中で Return しても、カーソル前後の既存の行は段落のまま分かれる。既存の行の末尾へ複数行を貼り付けたときも、先頭行 (既存の文字が残る行) は段落のままで、新しく入った行だけが見出し・チェックリストになる
+  - 自動化: NikkiTests/BlockEditingTests.swift (keepsTextAfterCaretOnReturn / keepsExistingFirstLineOnAppendPaste / keepsExistingChecklistItemTextOnAppendPaste) + manual（iOS は Return が Binding に改行として入り macOS の onSubmit と経路が違うため、実機での確認が必要）
+  - iOS (simtunnel、e1b6262 以降のビルド) で段落「x# Topic」の途中で Return すると「x#」「Topic」の段落に分かれ、どちらも見出しにならなかった (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/5c83ab4b-2997-4c4c-bd35-ad8d5f7b4c4f.jpg)
+  - iOS で段落「Topic」の末尾へ `# tail\n# inserted` を貼り付けると、先頭行は段落「Topic # tail」のまま、新しく入った行だけが H1「inserted」になった (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/afd98b1e-347b-4ae1-af2f-6cdc1b459e40.jpg)
 - 補足 (既知の制限):
   - リッチテキストの書体はアプリ同梱の Zen Kaku Gothic ではなくシステムフォント (ペースト先の端末に同梱フォントが無いため)
   - 貼り付けた markdown の空行 (ブロック区切り) は編集中は空の段落として見え、閉じるときに落ちる
