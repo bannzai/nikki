@@ -1,8 +1,8 @@
 ---
 feature: Editor
 verification: mobile-mcp
-last_verified_commit: 9dbb3c0f2ad04a8998544249ee32109e0c0a893e
-last_verified_at: 2026-08-24
+last_verified_commit: 6b76077ec119405017bba7b60f7530c35883837a
+last_verified_at: 2026-08-25
 ---
 
 # Editor QA
@@ -15,7 +15,8 @@ last_verified_at: 2026-08-24
 - 関連: 設定「文字の大きさ」などの導線の配線 https://github.com/bannzai/nikki/issues/14
 - 関連: 紙色テーマの実画面への適用 https://github.com/bannzai/nikki/issues/73
 - 関連: markdown ブロックの装飾表示 (見出し・チェックリスト・画像・details) https://github.com/bannzai/nikki/issues/88
-- 補足: 選択ツールバー(1j)・ブロックの並び替え(1k)は、DEBUG ビルドのデザインカタログでだけ表示できる静的な画面で、製品の導線からは到達しない。エディタ本文のブロック装飾表示は issue #88 で実装済みで、「4. ブロックの装飾表示と操作」で QA する
+- 関連: ブロックの D&D 並び替え (Notion ライク) https://github.com/bannzai/nikki/issues/101
+- 補足: 選択ツールバー(1j)は、DEBUG ビルドのデザインカタログでだけ表示できる静的な画面で、製品の導線からは到達しない。エディタ本文のブロック装飾表示は issue #88 で実装済みで「4. ブロックの装飾表示と操作」、ブロックの並び替えは issue #101 で実装済みで「5. ブロックの並び替え」で QA する (並び替え(1k)のカタログ画面はビジュアル見本として残っている)
 - 補足: タイトル欄は廃止した (日記にタイトルは必須ではなく、タイトル欄が本文の書きはじめをわかりにくくしていたため)。過去に入力されたタイトルは、その日記をエディタで開いたときに本文先頭の H1 見出しへ移して残す
 
 ## 1. 執筆と保存
@@ -184,3 +185,26 @@ last_verified_at: 2026-08-24
   - macOS で行の途中で Return しても、カーソル以降は次のブロックへ移らない (Return が onSubmit として届き、SwiftUI の TextField からキャレット位置を取得できないため末尾扱いになる)。iOS は改行がキャレット位置に入るため、その位置でブロックが分かれる
   - インデントされた記法の行 (「    - [ ] 」等) はブロックにせず段落のまま表示・保存する (ブロックに変換すると書き戻しでインデントが失われるため)
   - details カードの VoiceOver は開閉状態を accessibilityValue で読み上げる実装を入れたが、実機の読み上げは未検証
+
+---
+
+## 5. ブロックの並び替え (D&D)
+
+(issue #101 でエディタ本文のブロックを 6点ハンドルのドラッグ&ドロップで並び替えられるようにした。エビデンスの日付はすべて 2026-08-25、iOS は simtunnel リモート iOS Simulator、macOS は entitlements を外した Debug ビルド + カタログの entryList。macOS で署名なしビルドを使ったのは、ローカルに Nikki の macOS 用 provisioning profile が無く Apple ID セッションも失効していて署名ビルドを作れなかったため)
+
+- [x] **各ブロックの左に6点ハンドルが出る**: 見出し・段落・チェックリスト・画像・details の各ブロック左にハンドルが出て、本文の書き出し位置はハンドル導入前と変わらない。末尾に自動で足される空の段落にはハンドルが出ない
+  - 自動化: manual（ハンドルの表示と本文位置を目視で確認する）
+  - macOS でサンプル日記の全ブロック種の左にハンドルが出た (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/a85b7d92-6dc1-47f3-9e6e-bb26afc3fbb2.png)
+  - iOS でも各段落の左にハンドルが出て、末尾のキャレットだけの空段落には出なかった (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/e9c48f5a-eb68-4ea8-a2ea-ce59876d7797.jpg)
+- [x] **ドラッグで浮き上がりカードと挿入インジケータが出る**: ハンドルを掴んでドラッグすると (iOS は長押し0.2秒後、macOS は即時)、掴んだ行が見本(1k)と同じ白カード+影+傾きで浮き上がり、挿入予定位置に墨のインジケータラインが出る。ドラッグ中はスクロールが止まる
+  - 自動化: manual（ドラッグ中の描画は目視で確認する）
+  - macOS で段落のドラッグ中にカードとインジケータが出た (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/79cc7f1e-f2a3-4cdb-91b8-e3b193507c93.png)
+  - iOS で長押し後のドラッグ中にカードとインジケータが出た (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/ec20b375-3c26-4852-876f-4988774ad46a.jpg)
+- [x] **ドロップで並び替わり、開き直しても順序が保たれる**: ドロップするとブロックがインジケータの位置へ移る。エディタを閉じるとホームの抜粋が新しい順序になり、開き直しても順序が保たれている (bodyMarkdown への書き戻し)
+  - 自動化: NikkiTests/BlockEditingTests.swift (movesBlock / movesBlockClampingAndIgnoringUnknownID) + manual
+  - macOS でドロップ直後に段落が移り (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/d4622d39-c4be-4f79-abd7-f6b62a39b293.png)、閉じた後のホームの抜粋も新順序になり (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/ddd3162b-b4d9-4855-97a7-cbd508d7f081.png)、開き直しても保たれた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/1a8816bf-3363-46a2-a29e-2387f08a1555.png)
+  - iOS でドロップ直後に段落が見出しの直後へ移り (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/adfcff9d-dc7b-4b38-a453-3da6ec683957.jpg)、開き直しても保たれた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/e9c48f5a-eb68-4ea8-a2ea-ce59876d7797.jpg)。ドラッグ前の状態は https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/6a598108-1970-41fb-be1f-8eec473b108f.jpg
+- 補足 (既知の制限):
+  - ドラッグ中の自動スクロールは未実装。画面外の位置へ動かす場合は、途中で一度ドロップしてスクロールしてから続ける
+  - 並び替えの単位はブロック全体のみ (チェックリストの項目単位の並び替えは対象外。issue #101 の最小構成)
+  - iOS のドラッグ開始は長押し0.2秒 (ScrollView がスクロールとしてタッチを奪うのを避けるため)。macOS は即時
