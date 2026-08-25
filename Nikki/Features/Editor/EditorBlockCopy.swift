@@ -83,6 +83,22 @@ func editorCopyAttributedString(blocks: [Block]) -> NSAttributedString {
     return result
 }
 
+/// 本文全体をコピーするメニュー項目。ブロックのメニューと、本文の余白のメニュー
+/// (editorCopyAllContextMenu)の両方に置く。
+struct EditorCopyAllButton: View {
+    /// 編集中の本文ブロック列。
+    let blocks: [Block]
+
+    var body: some View {
+        Button {
+            // 書き終えていない空のブロックは、日記への書き戻し(withoutEmptyText)と同様にコピーへ含めない。
+            editorCopyBlocksToPasteboard(blocks: blocks.withoutEmptyText)
+        } label: {
+            Label("Copy All", systemImage: InkIcons.copyAll)
+        }
+    }
+}
+
 extension View {
     /// 長押し(iOS)・右クリック(macOS)のメニューから、このブロックまたは本文全体をコピーできるようにする。
     /// メニューの動作はブロックの種類によらず同じため、種類ごとのコンポーネントではなく共通のモディファイアにする。
@@ -95,12 +111,16 @@ extension View {
                 } label: {
                     Label("Copy", systemImage: InkIcons.copy)
                 }
-                Button {
-                    // 書き終えていない空のブロックは、日記への書き戻し(withoutEmptyText)と同様にコピーへ含めない。
-                    editorCopyBlocksToPasteboard(blocks: blocks.withoutEmptyText)
-                } label: {
-                    Label("Copy All", systemImage: InkIcons.copyAll)
-                }
+                EditorCopyAllButton(blocks: blocks)
             }
+    }
+
+    /// 本文の余白(ブロックの外)のメニューから本文全体をコピーできるようにする。
+    /// macOS の見出し・段落は入力欄が行の全幅を占め、入力欄の上の右クリックは OS のテキスト編集
+    /// メニューになるため、テキストのブロックしか無い日記でもコピーへ到達できる場所として用意する。
+    func editorCopyAllContextMenu(blocks: [Block]) -> some View {
+        contextMenu {
+            EditorCopyAllButton(blocks: blocks)
+        }
     }
 }

@@ -1,8 +1,8 @@
 ---
 feature: Editor
 verification: mobile-mcp
-last_verified_commit: 9dbb3c0f2ad04a8998544249ee32109e0c0a893e
-last_verified_at: 2026-08-24
+last_verified_commit: ed4271234a54e88d334de210c25675ca53035ced
+last_verified_at: 2026-08-25
 ---
 
 # Editor QA
@@ -180,7 +180,33 @@ last_verified_at: 2026-08-24
 - 補足 (既知の制限):
   - img・details ブロックはエディタから削除できない (テキストの編集経路が無いため)。削除導線は別途扱う
   - 完了したチェック項目の文字は編集できない (チェックを外してから編集する)。入力欄 (TextField) は打ち消し線を描画できないため、完了項目は静的な文字で描画している
-  - 貼り付け等で段落の途中に入った記法の行は、その場では変わらず、次に開いたときにブロックとして表示される
+  - 改行を含まない貼り付け (1行だけの記法) は、その場では変わらず、次に開いたときにブロックとして表示される (複数行の貼り付けは issue #100 でその場でブロックに変わる。「5. コピーと貼り付け」参照)
   - macOS で行の途中で Return しても、カーソル以降は次のブロックへ移らない (Return が onSubmit として届き、SwiftUI の TextField からキャレット位置を取得できないため末尾扱いになる)。iOS は改行がキャレット位置に入るため、その位置でブロックが分かれる
   - インデントされた記法の行 (「    - [ ] 」等) はブロックにせず段落のまま表示・保存する (ブロックに変換すると書き戻しでインデントが失われるため)
   - details カードの VoiceOver は開閉状態を accessibilityValue で読み上げる実装を入れたが、実機の読み上げは未検証
+
+## 5. コピーと貼り付け
+
+(issue #100 でブロックのコピーと markdown 貼り付けの復元を追加。macOS のエビデンスは 2026-08-25、署名なし Debug ビルドを直接起動して確認)
+
+- [x] **ブロックのメニューからコピーできる**: ブロックの長押し (iOS) / 右クリック (macOS) で「コピー」「すべてコピー」のメニューが出て、コピーでそのブロック、すべてコピーで本文全体 (空のブロックを除く) がペーストボードに入る
+  - 自動化: manual（メニュー表示とコピー実行を実操作で確認する）
+  - macOS でチェックボックス上の右クリックでメニューが出て (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/90b89be5-eda6-4fc8-9643-57072dc03ed2.png)、コピーで `- [ ] 麦茶のパック\n- [x] 蚊取り線香`、すべてコピーで本文全体の markdown が pbpaste で取れた
+  - 補足: macOS の見出し・段落は入力欄が行の全幅を占め、その上の右クリックは OS のテキスト編集メニューになる (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/86c9276d-29e3-4661-9b5a-853cff0b6fdf.png)。macOS で見出し・段落を含めてコピーする経路は「すべてコピー」(チェックボックス・img・details・本文の余白のメニューから)
+- [x] **本文の余白のメニューからすべてコピーできる**: ブロックの外 (本文の下の余白) の長押し / 右クリックで「すべてコピー」が出る。テキストのブロックしか無い日記でも macOS でコピーに到達できる
+  - 自動化: manual
+  - macOS で余白の右クリックにメニューが出て (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/932ffb6c-3e71-49d6-a818-fe25adb00178.png)、見出しだけの日記の markdown (`# 2026年8月25日`) が pbpaste で取れた
+- [x] **コピーは markdown とリッチテキストの2表現で入る**: プレーンテキストは `## ` / `- [ ] ` の記法付き markdown、リッチテキスト (RTF) は見出しサイズ (h1 22pt / h2 18pt / h3 16pt)・チェックボックス記号 (☐/☑)・完了項目の打ち消し線が付く
+  - 自動化: NikkiTests/EditorBlockCopyTests.swift (リッチテキスト表現) + manual（ペーストボードの中身を機械検証する）
+  - macOS で `clipboard info` に RTF と plain text の両方が載り、RTF ダンプに ☐/☑ と \strike、fs30/fs36/fs44 (15/18/22pt) を確認した
+- [x] **リッチテキスト対応アプリへスタイル付きで貼れる**: TextEdit 等へ貼ると見出しが大きく太く、チェックリストが ☐/☑ と打ち消し線付きで貼られる
+  - 自動化: manual
+  - macOS の TextEdit へ「すべてコピー」を貼り、h1/h2 のサイズ・☐ 麦茶のパック・☑ 蚊取り線香 (打ち消し線) が反映された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/2dad7476-8a1e-44f2-bced-0ddba12ea92b.png)
+- [x] **markdown の複数行を貼り付けるとブロックに復元される**: 見出し・チェックリストの記法を含む複数行を段落へ貼ると、その場で見出し・チェックリスト (チェック状態付き) のブロックに変わる。チェックリスト項目への貼り付けも記法を剥がして完了状態ごと項目になる
+  - 自動化: NikkiTests/BlockEditingTests.swift (pastesMarkdownIntoParagraph / keepsFirstBlockOnPasteWithoutSyntax / keepsPastedEmptyLinesAsEmptyParagraphs / pastesChecklistMarkdownIntoChecklistItem) + manual
+  - macOS で新規日記へ markdown を貼り、h2・チェックリスト (未完了/完了+打ち消し線)・段落に即時復元された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/fd93f6d1-7138-4122-991f-ab716ec69fa1.png)
+  - macOS で「すべてコピー」した内容を別の日記へ貼り、h1/h2・チェック状態・段落が復元された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/7d7320aa-d81d-4822-bc87-3ba4180014f7.png)
+- 補足 (既知の制限):
+  - リッチテキストの書体はアプリ同梱の Zen Kaku Gothic ではなくシステムフォント (ペースト先の端末に同梱フォントが無いため)
+  - 貼り付けた markdown の空行 (ブロック区切り) は編集中は空の段落として見え、閉じるときに落ちる
+  - macOS の余白メニューはカーソル位置ではなく本文エリアの下寄りに表示されることがある (SwiftUI の contextMenu の表示位置仕様)
