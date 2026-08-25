@@ -257,6 +257,50 @@ struct BlockEditingTests {
         #expect(blocks[0].editableText == "")
     }
 
+    @Test("空の項目のバックスペースではチェックボックスが外れて段落になる")
+    func exitsChecklistOnBackspaceAtEmptyItem() {
+        var blocks: [Block] = [.checklist(items: [ChecklistItem(text: "", done: false)])]
+        let itemID = blocks.firstChecklistItems[0].id
+        let fieldID = blocks.exitChecklist(emptyItemID: itemID)
+        #expect(blocks.count == 1)
+        #expect(fieldID == blocks[0].id)
+        #expect(blocks[0].editableText == "")
+    }
+
+    @Test("「- [x] 」の変換直後の空の完了項目もバックスペースで段落になる")
+    func exitsChecklistOnBackspaceAtEmptyDoneItem() {
+        var blocks: [Block] = [.checklist(items: [ChecklistItem(text: "", done: true)])]
+        let itemID = blocks.firstChecklistItems[0].id
+        let fieldID = blocks.exitChecklist(emptyItemID: itemID)
+        #expect(blocks.count == 1)
+        #expect(fieldID == blocks[0].id)
+        #expect(blocks[0].editableText == "")
+    }
+
+    @Test("途中の空の項目のバックスペースではチェックリストが前後に分かれる")
+    func splitsChecklistOnBackspaceAtEmptyMiddleItem() {
+        var blocks: [Block] = [
+            .checklist(items: [
+                ChecklistItem(text: "麦茶のパック", done: false),
+                ChecklistItem(text: "", done: false),
+                ChecklistItem(text: "蚊取り線香", done: true),
+            ])
+        ]
+        let itemID = blocks.firstChecklistItems[1].id
+        let fieldID = blocks.exitChecklist(emptyItemID: itemID)
+        #expect(blocks.count == 3)
+        #expect(fieldID == blocks[1].id)
+        #expect(Block.markdown(blocks: blocks.withoutEmptyText) == "- [ ] 麦茶のパック\n\n- [x] 蚊取り線香")
+    }
+
+    @Test("本文のある項目のバックスペースではリストから抜けない")
+    func keepsChecklistOnBackspaceAtNonEmptyItem() {
+        var blocks = Block.blocks(fromMarkdown: "- [ ] 麦茶のパック")
+        let itemID = blocks.firstChecklistItems[0].id
+        #expect(blocks.exitChecklist(emptyItemID: itemID) == nil)
+        #expect(Block.markdown(blocks: blocks) == "- [ ] 麦茶のパック")
+    }
+
     @Test("本文のある項目の直後には空の項目が入る")
     func insertsChecklistItemAfterItem() {
         var blocks = Block.blocks(fromMarkdown: "- [x] 麦茶のパック")
