@@ -16,4 +16,13 @@ extension EnvironmentValues {
     /// 実画面の紙地に使う色。テーマ(1n)の紙色プリセットを Plus の加入状態で倒した結果。
     /// RootPage が AppStorage と plusActive から解決して配る。未注入(プレビュー・テスト)では既定の紙地。
     @Entry var paperColor: Color = .inkPaper
+
+    /// 背景画像。テーマ(1n)で選択した画像を Plus の加入状態で倒した結果(#96)。
+    /// RootPage が ThemeBackgroundImage と plusActive から解決して配る。未加入・未選択・未注入では nil(紙色のみ表示)。
+    @Entry var themeBackgroundImage: Image? = nil
+
+    /// 現在の ModelContainer が CloudKit private database と同期しているかどうか(#93)。
+    /// ModelContainer は起動時に一度だけ構成されるため、この値は加入状態が変わっても次回起動まで変化しない。
+    /// plusActive との不一致は「変更の反映に再起動が必要」を示す。NikkiApp が起動時に一度だけ配る。
+    @Entry var cloudSyncActive: Bool = false
 }

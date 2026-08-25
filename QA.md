@@ -12,6 +12,7 @@ last_verified_at: 2026-08-21
 - ローカル環境の Debug ビルド (開発用 in-memory / ローカルストア。CloudKit 同期は行われない)
 - リリース前 QA は simtunnel (GitHub Actions macOS Runner 上の iOS Simulator) を優先する。経路の詳細は docs/simtunnel.md
 - CloudKit 同期・課金の Sandbox 実購入は simulator では検証できない。TestFlight 配布後の人間確認項目とする
+- CloudKit 同期は Nikki Plus 限定 (issue #93、Release ビルドのみ)。同期の有無は起動時にキャッシュ済みの加入状態で決まり、加入・失効の反映には再起動が必要。判定は NikkiTests/CloudSyncPlusGateTests.swift で機械検証済みで、実同期 (加入端末間で同期される・未加入では同期されない・失効しても iCloud 上のデータが消えない) は TestFlight 配布後の人間確認項目とする
 
 ## 起動方法
 

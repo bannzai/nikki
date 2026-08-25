@@ -3,7 +3,8 @@ import RevenueCat
 
 /// サブスク訴求 / ペイウォール画面(1q「Nikki Plus」)。
 /// 料金プランは offering `default` の packages から表示し、購入・復元は RevenueCat 経由で行う。
-/// 特典の記載は実際に解放される機能(プレミアムテーマ・自動ロックのカスタム秒数)のみに絞る(同期等は各ゲートの実装時に追加する)。
+/// 特典の記載は実際に解放される機能(プレミアムテーマ・背景画像・自動ロックのカスタム秒数・
+/// iCloud 同期・テンプレート無制限)のみに絞る(#97、分割元 #54 の各ゲート実装が揃ったため復元)。
 struct PaywallPage: View {
     /// 見本(1q)では年プランを選択済みとして墨枠強調しているため、初期選択は年プラン。
     /// offering に年プランが無い場合は loadOffering() で購入可能なプランへ倒す。
@@ -43,14 +44,22 @@ struct PaywallPage: View {
                             .padding(.top, 10)
                             .padding(.bottom, 16)
 
-                        Text("Make your journal look more like you.")
+                        Text("Sync it, style it, and keep it yours")
                             .font(.ink(15, .regular))
                             .foregroundStyle(PaywallPage.headlineColor)
                             .lineSpacing(inkLineSpacing(fontSize: 15, multiplier: 2.0))
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.bottom, 26)
 
-                        PaywallBenefitRow(title: String(localized: "More themes"), description: String(localized: "Ash, Celadon, and Sakura. Unlock every paper color."))
+                        // 「end to end」の断定は Advanced Data Protection の設定に依存するため使わず、
+                        // アプリとして保証できる範囲(CloudKit の暗号化フィールドで、開発者が読めない)だけを謳う。
+                        PaywallBenefitRow(title: String(localized: "Sync across devices"), description: String(localized: "iPhone and Mac. Entries stay encrypted in sync — we still can't read them."))
+                            .padding(.bottom, 16)
+
+                        PaywallBenefitRow(title: String(localized: "Unlimited templates"), description: String(localized: "Write your way, in as many templates as you like."))
+                            .padding(.bottom, 16)
+
+                        PaywallBenefitRow(title: String(localized: "More themes"), description: String(localized: "Ash, Celadon, Sakura, and background images. Make your paper truly yours."))
                             .padding(.bottom, 16)
 
                         PaywallBenefitRow(title: String(localized: "Auto-lock by the second"), description: String(localized: "Set the seconds until auto-lock exactly how you like, down to the second."))
@@ -135,6 +144,15 @@ struct PaywallPage: View {
                             .font(.ink(11.5, .regular))
                             .padding(.top, 12)
                         }
+
+                        // 同期の有料ゲート実装 (#93) に合わせて復元した暗号化の約束 (#97)。
+                        Text("Your entries stay encrypted while they sync.\nWe still can't read them. That never changes.")
+                            .font(.ink(11.5, .regular))
+                            .foregroundStyle(Color.inkTextTertiary)
+                            .multilineTextAlignment(.center)
+                            .lineSpacing(inkLineSpacing(fontSize: 11.5, multiplier: 1.9))
+                            .frame(maxWidth: .infinity)
+                            .padding(.top, 20)
                     }
                 }
 
