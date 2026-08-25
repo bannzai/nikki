@@ -373,13 +373,35 @@ struct BlockEditingTests {
         #expect(blocks[0].id == blockID)
     }
 
-    @Test("本文のある段落の先頭行は貼り付けでも段落のまま保たれる")
-    func keepsNonEmptyParagraphFirstLineOnPaste() {
-        var blocks: [Block] = [.paragraph(text: "## メモ")]
+    @Test("本文のある段落の途中で Return しても先頭行は段落のまま保たれる")
+    func keepsNonEmptyParagraphFirstLineOnReturn() {
+        var blocks: [Block] = [.paragraph(text: "## メモ買ったもの")]
         let blockID = blocks[0].id
-        _ = blocks.updateEditableText(blockID: blockID, text: "## メモ\n- [ ] 麦茶のパック")
-        #expect(Block.markdown(blocks: blocks) == "## メモ\n\n- [ ] 麦茶のパック")
+        // 「## メモ」と「買ったもの」の間で Return した状態。改行以外の文字は元の本文のまま。
+        _ = blocks.updateEditableText(blockID: blockID, text: "## メモ\n買ったもの")
+        #expect(Block.markdown(blocks: blocks) == "## メモ\n\n買ったもの")
         #expect(blocks[0].id == blockID)
+    }
+
+    @Test("本文を全置換する貼り付けは見出しの欄でも先頭行を記法として解釈する")
+    func interpretsFirstLineWhenPasteReplacesHeadingText() {
+        var blocks: [Block] = [.heading(level: 2, text: "")]
+        let blockID = blocks[0].id
+        _ = blocks.updateEditableText(blockID: blockID, text: "# 見出し\n本文")
+        #expect(Block.markdown(blocks: blocks) == "# 見出し\n\n本文")
+    }
+
+    @Test("貼り付けの末尾が img・details なら続きを書く空の段落が足される")
+    func appendsParagraphAfterUneditableBlocksOnPaste() {
+        var blocks: [Block] = [.paragraph(text: "")]
+        let blockID = blocks[0].id
+        let fieldID = blocks.updateEditableText(
+            blockID: blockID,
+            text: "<img alt=\"夕焼けの写真\">\n<details><summary>病院メモ</summary></details>"
+        )
+        #expect(blocks.count == 3)
+        #expect(fieldID == blocks[2].id)
+        #expect(blocks[2].editableText == "")
     }
 
     @Test("記法で始まる本文を持つチェック項目は Return で短縮・完了化されない")

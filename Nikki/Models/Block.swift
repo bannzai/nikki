@@ -121,6 +121,13 @@ nonisolated extension Block {
         return blocks
     }
 
+    /// 入力欄の新しいテキストが、元の本文の書き換え(貼り付け・全置換)かどうか。
+    /// Return による分割では元の本文がそのまま残り改行だけが増えるため、改行を除くと元の本文に一致する。
+    /// 一致しない入力は貼り付けなどの置換とみなし、先頭行も markdown の記法として解釈してよい。
+    static func replacesWholeText(originalText: String, newText: String) -> Bool {
+        normalizingNewlines(text: newText).replacingOccurrences(of: "\n", with: "") != originalText
+    }
+
     /// Windows 由来のクリップボード等の CRLF・CR を LF に揃えたテキスト。
     /// Swift の Character は CRLF を1文字として扱うため、揃えないと contains("\n") や
     /// components(separatedBy: "\n") が改行を見つけられず、行末にも \r が残る。
@@ -499,18 +506,14 @@ nonisolated extension [Block] {
                 self[index] = converted
                 return converted.firstEditableFieldID
             }
-            // 元が空の段落なら、入った複数行は全て貼り付けた内容のため先頭行も記法として解釈する。
-            // 既存の本文がある欄では、Return の分割で先頭行のブロック種別・本文を変えない。
-            let originalIsEmptyParagraph = if case .paragraph(_, let originalText) = self[index] {
-                originalText.isEmpty
-            } else {
-                false
-            }
             let updated = self[index].replacing(editableText: text)
-            if let split = updated.splitByNewlines(interpretsFirstLine: originalIsEmptyParagraph) {
-                replaceSubrange(index...index, with: split)
-                // 貼り付けで末尾が img・details になることもあるため、後ろから最初に見つかる入力欄へ移る。
-                return split.reversed().compactMap(\.lastEditableFieldID).first
+            if let split = updated.splitByNewlines(
+                interpretsFirstLine: Block.replacesWholeText(originalText: self[index].editableText ?? "", newText: text)
+            ) {
+                // 貼り付けの末尾が img・details だと、続きを書く入力欄が無くなる。空の段落を足して書き続けられるようにする。
+                let blocks = split.last?.lastEditableFieldID == nil ? split + [Block.paragraph(text: "")] : split
+                replaceSubrange(index...index, with: blocks)
+                return blocks.last?.lastEditableFieldID
             }
             self[index] = updated
         }
@@ -541,9 +544,10 @@ nonisolated extension [Block] {
                 }
                 // 貼り付けで入った「- [ ] 」「- [x] 」の行は記法を剥がして完了状態ごと項目にし、
                 // コピーしたチェックリストの構造を保って貼り付けられるようにする(issue #100)。
-                // 先頭行の記法を剥がすのは、元の項目に本文が無い(=行全体が貼り付けた内容の)ときだけ。
+                // 先頭行の記法を剥がすのは、その行も貼り付けで入れ替わったときだけ。
                 // 本文が記法で始まる既存の項目(「- [x] subtask」等)を Return で短縮・完了化しない。
-                if items[indexes.itemIndex].text.isEmpty, let firstItem = Block.checklistItem(fromLine: texts[0]) {
+                let replacesWholeText = Block.replacesWholeText(originalText: items[indexes.itemIndex].text, newText: text)
+                if replacesWholeText, let firstItem = Block.checklistItem(fromLine: texts[0]) {
                     items[indexes.itemIndex].text = firstItem.text
                     items[indexes.itemIndex].done = firstItem.done
                 } else {
