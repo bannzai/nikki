@@ -391,6 +391,34 @@ struct BlockEditingTests {
         #expect(Block.markdown(blocks: blocks) == "# 見出し\n\n本文")
     }
 
+    @Test("既存の本文の末尾への貼り付けでは、元からあった先頭行を解釈しない")
+    func keepsExistingFirstLineOnAppendPaste() {
+        var blocks: [Block] = [.heading(level: 2, text: "# Topic")]
+        let blockID = blocks[0].id
+        // 「# Topic」の末尾に「 extra\nbody」を貼り付けた状態。
+        _ = blocks.updateEditableText(blockID: blockID, text: "# Topic extra\nbody")
+        #expect(Block.markdown(blocks: blocks) == "## # Topic extra\n\nbody")
+        #expect(blocks[0].id == blockID)
+    }
+
+    @Test("Return でカーソル以降に回った既存の文字を記法として解釈しない")
+    func keepsTextAfterCaretOnReturn() {
+        var blocks: [Block] = [.paragraph(text: "冒頭# Topic")]
+        let blockID = blocks[0].id
+        // 「冒頭」と「# Topic」の間で Return した状態。
+        _ = blocks.updateEditableText(blockID: blockID, text: "冒頭\n# Topic")
+        #expect(Block.markdown(blocks: blocks) == "冒頭\n\n# Topic")
+        #expect(blocks[0].id == blockID)
+    }
+
+    @Test("既存のチェック項目の末尾への貼り付けでも、元からあった先頭行を解釈しない")
+    func keepsExistingChecklistItemTextOnAppendPaste() {
+        var blocks: [Block] = [.checklist(items: [ChecklistItem(text: "- [x] subtask", done: false)])]
+        let itemID = blocks.firstChecklistItems[0].id
+        _ = blocks.updateChecklistItem(itemID: itemID, text: "- [x] subtask extra\n- [x] 追加項目")
+        #expect(Block.markdown(blocks: blocks) == "- [ ] - [x] subtask extra\n- [x] 追加項目")
+    }
+
     @Test("貼り付けの末尾が img・details なら続きを書く空の段落が足される")
     func appendsParagraphAfterUneditableBlocksOnPaste() {
         var blocks: [Block] = [.paragraph(text: "")]
