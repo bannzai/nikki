@@ -30,6 +30,9 @@ struct RootPage: View {
     @AppStorage(.autoLockSeconds) var autoLockSeconds: Int = 5
     // ThemePage と同じ既定(「生成」)。
     @AppStorage(.paperColorPresetIndex) var paperColorPresetIndex: Int = 1
+    // 背景画像はファイル保存で SwiftUI の状態にならないため、テーマ画面が保存・削除のたびに増やす
+    // この値の変化を body の再評価(下の ThemeBackgroundImage.load() のやり直し)の契機にする。
+    @AppStorage(.themeBackgroundImageVersion) var themeBackgroundImageVersion: Int = 0
 
     /// 配下へ environment で配る「今日」。フォアグラウンド復帰と日付変更のタイミングでのみ更新する。
     @State var today: Date = .now
@@ -49,6 +52,9 @@ struct RootPage: View {
 
     var body: some View {
         if onboardingCompleted {
+            // 背景画像は今の紙色・plusActive の両方に評価が絡むため、body 内で一度だけ読み込んで
+            // 下の environment(\.themeBackgroundImage) と二重にファイルを読まないようにする。
+            let backgroundImageData = ThemeBackgroundImage.load()
             ZStack {
                 NavigationStack {
                     HomePage()
@@ -70,6 +76,13 @@ struct RootPage: View {
             .environment(\.plusActive, plusActive)
             // テーマで選んだ紙色を実画面の紙地に配る。Plus 失効中は無料範囲へ倒した色になる。
             .environment(\.paperColor, effectivePaperColor(storedIndex: paperColorPresetIndex, plusActive: plusActive))
+            // テーマで選んだ背景画像を実画面に配る。Plus 失効中・未選択では nil(紙色のみ表示)。
+            .environment(
+                \.themeBackgroundImage,
+                effectiveThemeBackgroundImageIsActive(hasStoredImage: backgroundImageData != nil, plusActive: plusActive)
+                    ? backgroundImageData.flatMap(Image.init(data:))
+                    : nil
+            )
             // 起動時キャッシュ→購入・復元・更新の順で customerInfo が流れてくるため、加入状態はこの1本で追従できる。
             .task {
                 if !Purchases.isConfigured {
@@ -77,6 +90,9 @@ struct RootPage: View {
                 }
                 for await customerInfo in Purchases.shared.customerInfoStream {
                     plusActive = customerInfo.entitlements[Const.revenueCatPlusEntitlementID]?.isActive == true
+                    // 次回起動時に CloudKit 同期の有無を決めるキャッシュ(#93)。ModelContainer は起動時にしか
+                    // 構成し直せないため、加入状態の変化は次回起動まで同期に反映されない。
+                    UserDefaults.appGroups.set(plusActive, forKey: UserDefaults.BoolKey.cloudSyncPlusActiveCache.key)
                 }
             }
             .onChange(of: scenePhase) {

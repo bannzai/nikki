@@ -1,8 +1,8 @@
 ---
 feature: Editor
 verification: mobile-mcp
-last_verified_commit: 32c584bd564d5232447e659d5e78cdc87500c0cc
-last_verified_at: 2026-08-24
+last_verified_commit: 855091612c23cb04624a1c144f5b6c6ea50097e9
+last_verified_at: 2026-08-25
 ---
 
 # Editor QA
@@ -155,6 +155,11 @@ last_verified_at: 2026-08-24
   - 自動化: NikkiTests/BlockMarkdownTests.swift (パース) + manual（描画は目視で確認する）
   - macOS でサンプル日記の全ブロック種が装飾表示された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/5836c8d8-e0bf-47f4-97de-b294d3478467.png)
   - iOS で入力した記法が再表示時に img プレースホルダ・details カードとして表示された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/1e088d02-1628-4c23-bcd8-2f0aeb5d8bb5.jpg)
+  - 2026-08-25 D&D 並び替えの revert (issue #105、コミット 8550916) 後に再確認。macOS (署名なし Debug + カタログ entryList) で全ブロック種がハンドル無しで導入前の書き出し位置に表示された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/d58d19f8-29d4-4ee1-b14e-deee992d71fc.png)。iOS (simtunnel リモート iOS Simulator) でも見出し・段落・チェックリストがハンドル無しで表示された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/c9e7dddd-6809-4f75-807b-d3fb53749289.jpg)
+- [x] **↑↓ でキャレットが行の間を移動できる**: 折り返しのある段落で、↑↓ キーがキャレットを表示行の間で移動させる (issue #105 の revert で回復した挙動。D&D 導入中は移動できなかった)
+  - 自動化: manual（ハードウェアキーボードの矢印キー入力とキャレット位置の目視確認が必要なため）
+  - 2026-08-25 macOS (署名なし Debug) で、2行に折り返した段落の1行目にキャレットを置き (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/e57358db-9593-4dbe-8749-170961569383.png)、↓ で2行目末尾へ移動してそこに「ok」が入力され (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/4c8505a4-6038-48f9-9c09-9ead541bb78e.png)、↑ で1行目中央へ戻ってそこに「up」が入力された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/9161ac54-972b-4414-a92b-d855b02106df.png)
+  - iOS はハードウェアキーボード接続時のみ該当する操作のため未検証 (ソフトウェアキーボードに矢印キーが無い)
 - [x] **チェックのタップで完了が切り替わり保存される**: チェックボックスをタップすると即座に完了(墨地+白チェック、打ち消し線+灰) / 未完了が切り替わり、閉じて開き直しても状態が残る(markdown へ - [x] / - [ ] として書き戻される)
   - 自動化: NikkiTests/BlockEditingTests.swift (togglesChecklistItemDone) + manual
   - macOS で切り替えの即時反映 (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/8f338314-392c-438e-aaa1-5332fddbf051.png) と開き直し後の保持 (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/abecee74-a207-47a6-bd05-46d845f44f64.png) を確認
@@ -183,7 +188,45 @@ last_verified_at: 2026-08-24
 - 補足 (既知の制限):
   - img・details ブロックはエディタから削除できない (テキストの編集経路が無いため)。削除導線は別途扱う
   - 完了したチェック項目の文字は編集できない (チェックを外してから編集する)。入力欄 (TextField) は打ち消し線を描画できないため、完了項目は静的な文字で描画している
-  - 貼り付け等で段落の途中に入った記法の行は、その場では変わらず、次に開いたときにブロックとして表示される
+  - 改行を含まない貼り付け (1行だけの記法) は、その場では変わらず、次に開いたときにブロックとして表示される (複数行の貼り付けは issue #100 でその場でブロックに変わる。「5. コピーと貼り付け」参照)
   - macOS で行の途中で Return しても、カーソル以降は次のブロックへ移らない (Return が onSubmit として届き、SwiftUI の TextField からキャレット位置を取得できないため末尾扱いになる)。iOS は改行がキャレット位置に入るため、その位置でブロックが分かれる
   - インデントされた記法の行 (「    - [ ] 」等) はブロックにせず段落のまま表示・保存する (ブロックに変換すると書き戻しでインデントが失われるため)
   - details カードの VoiceOver は開閉状態を accessibilityValue で読み上げる実装を入れたが、実機の読み上げは未検証
+
+---
+
+## 5. コピーと貼り付け
+
+(issue #100 でブロックのコピーと markdown 貼り付けの復元を追加。エビデンスは 2026-08-25、macOS は署名なし Debug ビルドを直接起動、iOS は simtunnel リモート iOS Simulator で確認)
+
+- [x] **ブロックのメニューからコピーできる**: ブロックの長押し (iOS) / 右クリック (macOS) で「コピー」「すべてコピー」のメニューが出て、コピーでそのブロック、すべてコピーで本文全体 (空のブロックを除く) がペーストボードに入る
+  - 自動化: manual（メニュー表示とコピー実行を実操作で確認する）
+  - macOS でチェックボックス上の右クリックでメニューが出て (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/90b89be5-eda6-4fc8-9643-57072dc03ed2.png)、コピーで `- [ ] 麦茶のパック\n- [x] 蚊取り線香`、すべてコピーで本文全体の markdown が pbpaste で取れた
+  - 2026-08-25 D&D 並び替えの revert (issue #105、コミット 8550916) 後に iOS (simtunnel) で再確認。チェックリスト項目の長押しで Copy All を含むメニューが表示された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/3f25882b-edd7-4d98-9edf-b7041415399a.jpg)
+  - iOS でチェックリストの長押しで Copy / Copy All のメニューが出て (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/48c97ba3-4a19-4c9e-80fc-7ef5e0f6b37f.jpg)、Copy で `- [ ] Barley tea\n- [x] Mosquito coil`、Copy All で本文全体の markdown が WDA getPasteboard で取れた。iOS は見出し・段落・空の段落の行でも長押しでメニューが出る (macOS と違い OS のテキストメニューに取られない)。テキスト編集の吹き出し (Paste 等) はタップで別途出て共存する (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/924e6e39-95d2-4e32-927f-37ffa7db5c08.jpg)。長押しメニュー表示後もチェックボックスのタップ切り替えは正常 (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/15c3ae9f-893a-4cea-96a5-863e80858583.jpg)
+  - 補足: macOS の見出し・段落は入力欄が行の全幅を占め、その上の右クリックは OS のテキスト編集メニューになる (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/86c9276d-29e3-4661-9b5a-853cff0b6fdf.png)。ドラッグハンドル経由の単体コピー導線は issue #105 の D&D revert でハンドルごと無くなったため、macOS の見出し・段落は単体コピーに到達できない (本文全体は余白の「すべてコピー」で到達できる。下の既知の制限を参照)
+- [x] **本文の余白のメニューからすべてコピーできる**: ブロックの外 (本文の下の余白) の長押し / 右クリックで「すべてコピー」が出る。テキストのブロックしか無い日記でも macOS でコピーに到達できる
+  - 自動化: manual
+  - macOS で余白の右クリックにメニューが出て (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/932ffb6c-3e71-49d6-a818-fe25adb00178.png)、見出しだけの日記の markdown (`# 2026年8月25日`) が pbpaste で取れた
+- [x] **コピーは markdown とリッチテキストの2表現で入る**: プレーンテキストは `## ` / `- [ ] ` の記法付き markdown、リッチテキスト (RTF) は見出しサイズ (h1 22pt / h2 18pt / h3 16pt)・チェックボックス記号 (☐/☑)・完了項目の打ち消し線が付く
+  - 自動化: NikkiTests/EditorBlockCopyTests.swift (リッチテキスト表現) + manual（ペーストボードの中身を機械検証する）
+  - macOS で `clipboard info` に RTF と plain text の両方が載り、RTF ダンプに ☐/☑ と \strike、fs30/fs36/fs44 (15/18/22pt) を確認した
+- [x] **リッチテキスト対応アプリへスタイル付きで貼れる**: TextEdit 等へ貼ると見出しが大きく太く、チェックリストが ☐/☑ と打ち消し線付きで貼られる
+  - 自動化: manual
+  - macOS の TextEdit へ「すべてコピー」を貼り、h1/h2 のサイズ・☐ 麦茶のパック・☑ 蚊取り線香 (打ち消し線) が反映された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/2dad7476-8a1e-44f2-bced-0ddba12ea92b.png)
+  - iOS のリッチテキスト対応アプリへの貼り付けは未検証 (simtunnel の Simulator にリッチテキスト対応のペースト先アプリが無いため)。RTF の生成は iOS / macOS 共通コード (EditorBlockCopy) で、内容は NikkiTests/EditorBlockCopyTests.swift と macOS の実ペーストで担保
+- [x] **markdown の複数行を貼り付けるとブロックに復元される**: 見出し・チェックリストの記法を含む複数行を段落へ貼ると、その場で見出し・チェックリスト (チェック状態付き) のブロックに変わる。チェックリスト項目への貼り付けも記法を剥がして完了状態ごと項目になる
+  - 自動化: NikkiTests/BlockEditingTests.swift (pastesMarkdownIntoParagraph / keepsFirstBlockOnPasteWithoutSyntax / keepsPastedEmptyLinesAsEmptyParagraphs / pastesChecklistMarkdownIntoChecklistItem) + manual
+  - macOS で新規日記へ markdown を貼り、h2・チェックリスト (未完了/完了+打ち消し線)・段落に即時復元された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/fd93f6d1-7138-4122-991f-ab716ec69fa1.png)
+  - macOS で「すべてコピー」した内容を別の日記へ貼り、h1/h2・チェック状態・段落が復元された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/7d7320aa-d81d-4822-bc87-3ba4180014f7.png)
+  - iOS で空の段落へ OS のペースト (タップ → Paste) で markdown を貼り、h2・チェックリスト (チェック状態・打ち消し線付き)・段落に即時復元された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/d533ae7f-5b6a-4e47-9d19-e3ffc0047e96.jpg)
+  - レビュー対応で先頭行の解釈判定を「新しく入った行だけを解釈する」方式へ作り直した後 (e1b6262)、macOS で同じ貼り付けを再確認し、h2・未完了/完了のチェックリストに復元された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/5f36124d-83b3-46b9-988d-25388bd78855.png)
+- [x] **元からあった行は Return・部分的な貼り付けで markdown として解釈されない**: 記法を含む本文の途中で Return しても、カーソル前後の既存の行は段落のまま分かれる。既存の行の末尾へ複数行を貼り付けたときも、先頭行 (既存の文字が残る行) は段落のままで、新しく入った行だけが見出し・チェックリストになる
+  - 自動化: NikkiTests/BlockEditingTests.swift (keepsTextAfterCaretOnReturn / keepsExistingFirstLineOnAppendPaste / keepsExistingChecklistItemTextOnAppendPaste) + manual（iOS は Return が Binding に改行として入り macOS の onSubmit と経路が違うため、実機での確認が必要）
+  - iOS (simtunnel、e1b6262 以降のビルド) で段落「x# Topic」の途中で Return すると「x#」「Topic」の段落に分かれ、どちらも見出しにならなかった (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/5c83ab4b-2997-4c4c-bd35-ad8d5f7b4c4f.jpg)
+  - iOS で段落「Topic」の末尾へ `# tail\n# inserted` を貼り付けると、先頭行は段落「Topic # tail」のまま、新しく入った行だけが H1「inserted」になった (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/afd98b1e-347b-4ae1-af2f-6cdc1b459e40.jpg)
+- 補足 (既知の制限):
+  - リッチテキストの書体はアプリ同梱の Zen Kaku Gothic ではなくシステムフォント (ペースト先の端末に同梱フォントが無いため)
+  - 貼り付けた markdown の空行 (ブロック区切り) は編集中は空の段落として見え、閉じるときに落ちる
+  - macOS の余白メニューはカーソル位置ではなく本文エリアの下寄りに表示されることがある (SwiftUI の contextMenu の表示位置仕様)
+  - macOS の見出し・段落はブロック単体のコピーに到達できない (入力欄上の右クリックが OS のテキスト編集メニューになるため。ハンドル右クリックの導線は issue #105 の D&D revert で無くなった)。本文全体は余白の「すべてコピー」で取れる

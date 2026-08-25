@@ -1,8 +1,8 @@
 ---
 feature: Theme
 verification: mobile-mcp
-last_verified_commit: 96337de3d8717a2428e3fa4d4120727fab323a27
-last_verified_at: 2026-08-21
+last_verified_commit: 386cc3aa015dd43afa9a608af57ee55f05cc1074
+last_verified_at: 2026-08-24
 ---
 
 # Theme QA
@@ -31,8 +31,14 @@ last_verified_at: 2026-08-21
   - 自動化: manual（タップ操作と即時反映の目視確認のため）
 - [x] **実画面への反映と再起動後の維持**: テーマを変更してホーム・エディタへ戻ると紙地が選んだ色になり、アプリを再起動しても同じ色が維持される
   - 自動化: manual（アプリの再起動をまたぐ永続化の確認のため）
-- [x] **背景画像セクションの表示**: 「背景画像」は「なし」がチェック付きで選択されており、「写真から選ぶ」はまだ何も起きない (画像選択は issue #54 で実装予定)
-  - 自動化: manual（未実装の導線が行き止まりにならないことの目視確認のため）
+- [x] **背景画像のロック表示 (Plus 未加入)**: 「背景画像」セクションの「写真から選ぶ」に錠アイコンが付き、タップするとペイウォールが開く (issue #96)
+  - 自動化: manual（ロック表示とペイウォールへの遷移の目視確認のため）
+  - 2026-08-24 simtunnel (iOS) とローカル macOS (Debug) の両方で錠アイコンを確認し、iOS でタップするとペイウォール (Nikki Plus) が開いた
+- [ ] **背景画像の選択と実画面への反映 (Plus 加入中)**: 「写真から選ぶ」からフォトライブラリの画像を選ぶと保存され、ホーム・エディタの紙地に紙色を重ねた背景画像が表示される。「なし」をタップすると画像が消え紙色だけに戻る (issue #96)
+  - 自動化: manual（Plus 加入状態は simulator で作れないため TestFlight 配布後の人間確認とする）
+  - 未検証: Plus 加入状態を simulator で再現できないため未実施
+- [ ] **背景画像の失効時フォールバック**: Plus 失効中は保存済みの画像を消さず表示だけ紙色に戻り、再加入すると画像が復帰する (issue #96)
+  - 自動化: auto（NikkiTests/ThemePlusGateTests.swift の effectiveThemeBackgroundImageIsActive テストが判定を検証。実画面の見た目は TestFlight 配布後の人間確認とする）
 
 #### 動作確認
 <details>
@@ -70,16 +76,14 @@ last_verified_at: 2026-08-21
 
 </details>
 
-### **背景画像セクションの表示**: 「背景画像」は「なし」がチェック付きで選択されており、「写真から選ぶ」はまだ何も起きない (画像選択は issue #54 で実装予定)
+### **背景画像のロック表示 (Plus 未加入)**: 「背景画像」セクションの「写真から選ぶ」に錠アイコンが付き、タップするとペイウォールが開く (issue #96)
 
 <details><summary>動作確認スクショ</summary>
 
-**確認日: 2026-08-21**
+**確認日: 2026-08-24** (iOS = simtunnel、macOS = ローカル Debug)
 
-「なし」(None) にチェックが付いた状態。「写真から選ぶ」(Choose from Photos) をタップしても画面は変わらず、行き止まりのクラッシュや空のシートも出ない (2 枚目はタップ後)。
-
-<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260821/7f937d41-6344-42f5-be63-c50d9f59c834.jpg" width="320">
-<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260821/0362d3ed-8d66-4ff7-b542-03ea84d62098.jpg" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/9b7ec62c-0189-40e4-975c-9050e8fa35d3.jpg" alt="iOS のテーマ画面。背景画像の「写真から選ぶ」行に錠アイコンが付いている" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/bda9a868-32a6-4de5-8217-64aeb87cef52.png" alt="macOS のテーマ画面。背景画像の「写真から選ぶ」行に錠アイコンが付いている" width="320">
 
 </details>
 

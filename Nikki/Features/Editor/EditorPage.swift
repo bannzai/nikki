@@ -70,6 +70,7 @@ struct EditorPage: View {
                 .padding(.horizontal, 28)
                 .padding(.top, 10)
             }
+            .editorCopyAllContextMenu(blocks: draftBlocks)
         }
         .inkNavigationBarHidden()
         .onAppear {
