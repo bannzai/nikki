@@ -57,7 +57,12 @@ struct EditorChecklistField: View {
                             // 消費して onKeyPress が発火しないため、EditorPage 側の NSEvent 監視で拾う。
                             // ソフトウェアキーボードのバックスペースはキー入力として届かないため拾えない
                             // (空の項目の Return でリストから抜ける経路が textBinding / onSubmit 側にある)。
-                            .onKeyPress(.delete) {
+                            .onKeyPress(phases: .down) { press in
+                                // 修飾キー付き (⌘⌫・⌥⌫ 等) は別の削除操作のため拾わずに通す
+                                // (EditorPage 側の NSEvent 監視と同じ判定)。
+                                if press.key != .delete || !press.modifiers.isDisjoint(with: [.command, .option, .control]) {
+                                    return .ignored
+                                }
                                 if let fieldID = blocks.exitChecklist(emptyItemID: item.id) {
                                     // リスト脱出の直後は移動先の入力欄がまだ描画されていないため、即時に代入すると
                                     // macOS で first responder が失われて続きの入力が消える。次の runloop で移す。

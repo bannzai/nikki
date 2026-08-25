@@ -48,6 +48,11 @@ struct EditorPage: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.resetAutoLockTimer) private var resetAutoLockTimer
     @Environment(\.scenePhase) private var scenePhase
+    #if os(macOS)
+    /// 自動ロック中は RootPage が配下を .disabled で無効化し、この値が false になる。
+    /// キー入力監視の有効条件にし、ロック画面の裏の本文がバックスペースで変わらないようにする。
+    @Environment(\.isEnabled) private var isEnabled
+    #endif
 
     var body: some View {
         // 設定「文字の大きさ」は書く時間が長い本文にだけ反映する。標準は見本の 15pt、前後は読みやすさを保つ 2pt 刻み。
@@ -85,9 +90,22 @@ struct EditorPage: View {
             entry.mergeTitleIntoBodyMarkdown()
             loadDraftBlocks()
             #if os(macOS)
-            installChecklistBackspaceMonitor()
+            if isEnabled {
+                installChecklistBackspaceMonitor()
+            }
             #endif
         }
+        #if os(macOS)
+        // 自動ロック(.disabled)の間は監視を止め、ロック画面の裏の本文がバックスペースで
+        // 変わらないようにする。解除されたら監視を張り直す。
+        .onChange(of: isEnabled) {
+            if isEnabled {
+                installChecklistBackspaceMonitor()
+            } else {
+                removeChecklistBackspaceMonitor()
+            }
+        }
+        #endif
         // キーボード入力はタッチとして拾えないため、編集中の本文の変化を無操作タイマーのリセットにする。
         .onChange(of: draftBlocks) {
             resetAutoLockTimer()
