@@ -74,5 +74,7 @@ struct HomeHeader_Previews: PreviewProvider {
                 .padding()
                 .background(Color.inkPaper)
         }
+        // 無料枠判定の @Query がアクティブなコンテナを要求するため、他の @Query 画面と同じく in-memory を注入する。
+        .modelContainer(SampleData.inMemoryContainer())
     }
 }
