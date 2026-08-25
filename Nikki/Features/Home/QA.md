@@ -1,8 +1,8 @@
 ---
 feature: Home
 verification: mobile-mcp
-last_verified_commit: 2f8b4ab97dc9113a82b5f76671c2de80fc1f55e5
-last_verified_at: 2026-08-22
+last_verified_commit: 32c584bd564d5232447e659d5e78cdc87500c0cc
+last_verified_at: 2026-08-24
 ---
 
 # Home QA
@@ -14,6 +14,7 @@ last_verified_at: 2026-08-22
 - 関連: 検索・カレンダーの日付タップ・表示モード保持の実装 https://github.com/bannzai/nikki/issues/14
 - 関連: 日記のアーカイブ https://github.com/bannzai/nikki/issues/42
 - 関連: コンテキストメニュー (iOS 長押し / macOS 右クリック) の自動検証 https://github.com/bannzai/nikki/issues/45
+- 関連: 設定アイコンを歯車に変更・ホームからのリスト追加導線 https://github.com/bannzai/nikki/issues/92
 
 ## 1. 時系列リストの表示
 
@@ -249,16 +250,7 @@ last_verified_at: 2026-08-22
 
 </details>
 
-### **既定のノートの書き出しが入っている**: 開いたエディタに既定のノートの書き出しが入っていて、{{date}} の位置が今日の日付表記になっている
-
-<details><summary>動作確認スクショ</summary>
-
-**確認日: 2026-08-21**
-<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260821/cc03d133-fc9a-4b76-bc95-039e85cc262c.jpg" width="320">
-
-</details>
-
-### **戻ると一覧に反映される**: エディタで書いてホームへ戻ると、その日記が一覧の先頭 (今日の月グループ) に、書いたタイトルと抜粋で出る
+### **戻ると一覧に反映される**: エディタで書いてホームへ戻ると、その日記が一覧の先頭 (今日の月グループ) に本文の抜粋で出る (タイトルのない日記は空のタイトル行を出さない)
 
 <details><summary>動作確認スクショ</summary>
 
@@ -272,6 +264,15 @@ last_verified_at: 2026-08-22
 <details><summary>動作確認スクショ</summary>
 
 （未実行）
+
+</details>
+
+### **既定のテンプレートの書き出しが入っている**: 開いたエディタの本文に既定のテンプレートの書き出し全文(先頭の # 見出しも含む)が入っていて、{{date}} の位置が今日の日付表記になっている (タイトル欄の廃止に伴い、見出し行も本文に入る)
+
+<details><summary>動作確認スクショ</summary>
+
+**確認日: 2026-08-22**
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/79caf481-a2b4-467a-8f7f-7cb9acaae2c5.png" width="320">
 
 </details>
 
@@ -294,6 +295,58 @@ last_verified_at: 2026-08-22
 <details><summary>動作確認スクショ</summary>
 
 （未実行）
+
+</details>
+
+</details>
+
+---
+
+## 6. ヘッダとリスト追加導線 (issue #92)
+
+- [x] **設定への入り口は歯車アイコン**: ホーム右上のボタンが歯車アイコンで、タップすると設定画面が開く
+  - 自動化: manual（アイコンの見た目は目視でしか確認できない）
+  - iOS で歯車アイコンが表示され、タップで設定画面が開くことを確認した
+  - 2026-08-25 macOS (ad-hoc 署名の Debug ビルド) でも歯車のクリックで設定画面が開いた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/072f91f3-ccad-4d80-a070-78842f675295.png)
+- [x] **カレンダーモードでヘッダに「+」が出る**: カレンダーモードのときだけヘッダ右上(歯車の左)に「+」が出て、タップすると新しいリスト作成画面(NotebookCreatePage)が開く。無料枠(#94)の上限に達しているときはフォームの代わりにペイウォールが開く
+  - 自動化: manual（モードによるボタンの出し分けと遷移は目視で確認する）
+  - iOS でカレンダーモードに切り替えると「+」が出て、タップすると「New template」の作成フォームが開いた
+  - 2026-08-25 macOS で、上限 (2件) 到達時にヘッダの「+」からペイウォールが開いた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/b4d1cadb-07a8-4aa4-936a-09dfbc3973c8.png)
+- [x] **リストモードでセグメントコントロール横に「+」が出る**: リストモードのときだけ「リスト / カレンダー」のセグメントコントロールの右横に「+」が出て、タップすると新しいリスト作成画面が開く。無料枠(#94)の上限に達しているときはフォームの代わりにペイウォールが開く
+  - 自動化: manual（モードによるボタンの出し分けと遷移は目視で確認する）
+  - iOS でリストモードのセグメントコントロール右に「+」が出て、タップすると同じ作成フォームが開いた
+  - 2026-08-25 macOS で、枠内 (1件) では「+」から作成フォームが開き、上限 (2件) 到達後は同じ「+」からペイウォールが開いた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/d866e9a0-8674-4881-b4e4-018d0d57bb00.png)。iOS 側の同判定はカタログ (サンプル4件) で確認済み (Notebooks QA.md「無料枠の上限」参照)
+
+#### 動作確認
+<details>
+<summary>動作確認エビデンス</summary>
+
+### **設定への入り口は歯車アイコン**: ホーム右上のボタンが歯車アイコンで、タップすると設定画面が開く
+
+<details><summary>動作確認スクショ</summary>
+
+**確認日: 2026-08-24**
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/3608f56c-7455-45fd-afc1-cd0f1eaa8c08.jpg" width="320">
+
+</details>
+
+### **カレンダーモードでヘッダに「+」が出る**: カレンダーモードのときだけヘッダ右上(歯車の左)に「+」が出て、タップすると新しいリスト作成画面(NotebookCreatePage)が開く
+
+<details><summary>動作確認スクショ</summary>
+
+**確認日: 2026-08-24**
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/fcae6fb3-2beb-42c8-80e1-2612627b6671.jpg" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/8866366f-e67f-4d2a-9e36-43ab66440907.jpg" width="320">
+
+</details>
+
+### **リストモードでセグメントコントロール横に「+」が出る**: リストモードのときだけ「リスト / カレンダー」のセグメントコントロールの右横に「+」が出て、タップすると新しいリスト作成画面が開く
+
+<details><summary>動作確認スクショ</summary>
+
+**確認日: 2026-08-24**
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/6b2f3d2a-f6b2-4462-b7fc-60af352abc9b.jpg" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/39345c66-46ae-4e42-9e10-cfba9325ead3.jpg" width="320">
 
 </details>
 

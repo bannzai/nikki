@@ -99,42 +99,63 @@ enum SampleData {
     /// プレビュー・カタログ用ノートの中身。書く時間が決まっているノートにだけリマインドを入れる。
     /// 並び順は配列の順そのもの、テンプレートの名前はノートの名前を使うため、ここには持たない。
     private static var notebookSeeds: [(name: String, reminderFrequency: JournalReminderFrequency, markdown: String)] {
+        notebookSeeds(bundle: .main)
+    }
+
+    // bundle を引数から受け取るのは、復元の重複判定(seedMarkdownVariants)が言語別の .lproj bundle から
+    // 同じ文言を引けるようにするため。通常の表示・シードは .main(端末の言語)で使う。
+    private static func notebookSeeds(bundle: Bundle) -> [(name: String, reminderFrequency: JournalReminderFrequency, markdown: String)] {
         [
             (
-                name: String(localized: "Blank page"),
+                name: String(localized: "Journal", bundle: bundle),
                 reminderFrequency: .none,
                 markdown: "# {{date}}"
             ),
             (
-                name: String(localized: "3 lines in the morning"),
+                name: String(localized: "3 lines in the morning", bundle: bundle),
                 reminderFrequency: .daily,
                 markdown: String(localized: """
                 # Morning of {{date}}
                 - Looking forward to
                 - Skipping today
                 - One line
-                """)
+                """, bundle: bundle)
             ),
             (
-                name: String(localized: "Daily reflection"),
+                name: String(localized: "Daily reflection", bundle: bundle),
                 reminderFrequency: .daily,
                 markdown: String(localized: """
                 # {{date}}
                 Weather: {{weather}}
                 ## What went well
                 ## Note to tomorrow's me
-                """)
+                """, bundle: bundle)
             ),
             (
-                name: String(localized: "Travel log"),
+                name: String(localized: "Travel log", bundle: bundle),
                 reminderFrequency: .none,
                 markdown: String(localized: """
                 # {{place}} day 1
                 ## Where I walked
                 ## What I ate
-                """)
+                """, bundle: bundle)
             ),
         ]
+    }
+
+    /// seedNotebooks(sortOrder:) と同じ並びで、各既定テンプレートの書き出しとしてシードされ得る
+    /// 全対応言語の markdown。「既定のテンプレートを復元」の重複判定は、シード時と復元時で表示言語が
+    /// 違っても同じ既定テンプレートを既存と見なせるよう、書き出しがこの集合に含まれるかで行う。
+    static var seedMarkdownVariants: [Set<String>] {
+        // String Catalog は言語ごとの .lproj に展開されるため、対応言語ぶんの bundle から同じ文言を引く。
+        // .main も含めるのは、言語 bundle の解決に失敗した環境でも最低限、現在の言語での判定を保つため。
+        let bundles = [Bundle.main] + Bundle.main.localizations.compactMap { localization in
+            Bundle.main.path(forResource: localization, ofType: "lproj").flatMap(Bundle.init(path:))
+        }
+        let seedsPerBundle = bundles.map { notebookSeeds(bundle: $0) }
+        return notebookSeeds.indices.map { index in
+            Set(seedsPerBundle.map { $0[index].markdown })
+        }
     }
 
     /// プレビュー・カタログ用の複数ノート。ノートごとに書き出し用のテンプレートを1件持ち、
@@ -147,14 +168,17 @@ enum SampleData {
         }
     }
 
-    /// 初回起動のシードと「既定のテンプレートを復元」で使う既定ノート。ノートを意識させない方針のため、
-    /// {{date}} だけのテンプレートを持つ白紙の1冊だけを用意し、新規日記は自動でこのノートに入る。
-    /// 復元では既存テンプレートの末尾に並べるため、表示順を引数から受け取る(初回シードは 0)。
+    /// 初回起動のシードと「既定のテンプレートを復元」で使う既定ノート群(日記・朝の3行・1日の振り返り・旅の記録)。
+    /// 先頭(日記)が新規日記の既定の所属先になる(issue #92)。
+    /// 復元では既存テンプレートの末尾に並べるため、表示順の起点を引数から受け取る(初回シードは 0)。
+    /// リマインドの頻度は、通知のスケジューリングが未実装のうちは実際に通知されない設定を見せない
+    /// (NotebookCreatePage と同じ方針)ため、プレビュー用の seed の頻度は使わず「なし」で永続化する。
     static func seedNotebooks(sortOrder: Int) -> [JournalNotebook] {
-        let seed = notebookSeeds[0]
-        let notebook = JournalNotebook(name: seed.name, reminderFrequency: seed.reminderFrequency, sortOrder: sortOrder)
-        notebook.add(template: JournalTemplate(name: seed.name, markdown: seed.markdown, sortOrder: 0))
-        return [notebook]
+        notebookSeeds.enumerated().map { index, seed in
+            let notebook = JournalNotebook(name: seed.name, reminderFrequency: .none, sortOrder: sortOrder + index)
+            notebook.add(template: JournalTemplate(name: seed.name, markdown: seed.markdown, sortOrder: 0))
+            return notebook
+        }
     }
 
     /// 変数入力シート(1m)が既定で開くテンプレート(「一日の振り返り」ノートのもの)。

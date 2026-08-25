@@ -7,6 +7,7 @@ enum InkIcons {
     static let faceID = "faceid"
     static let touchID = "touchid"
     static let account = "person.crop.circle"
+    static let settings = "gearshape"
     static let chevronRight = "chevron.right"
     static let chevronLeft = "chevron.left"
     static let chevronDown = "chevron.down"

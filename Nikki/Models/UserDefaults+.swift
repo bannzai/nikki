@@ -11,6 +11,9 @@ extension UserDefaults {
         /// 既定のテンプレートのシード(または既存データの確認)をこの端末で終えたかどうか。
         /// 「すべてのテンプレートを削除」した空の状態を、次回起動のシードが勝手に復活させないための目印。
         case notebooksSeeded
+        /// 旧既定テンプレート「白紙」から「日記」への名前の移行(issue #92)をこの端末で終えたかどうか。
+        /// 対象が無くなったあとの起動が毎回全件を調べ直さないための目印。
+        case blankPageRenamedToJournal
         /// 直近の customerInfo から得た Nikki Plus 加入状態のキャッシュ(#93)。
         /// ModelContainer は起動時に一度だけ構成され、CloudKit 同期の有効/無効を実行中に切り替えられないため、
         /// 次回起動時にこのキャッシュ値で判定する。RootPage が customerInfoStream の更新のたびに書き込む。

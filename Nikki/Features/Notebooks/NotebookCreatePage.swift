@@ -7,7 +7,7 @@ import SwiftData
 /// (実際に通知されない設定を見せない)。
 struct NotebookCreatePage: View {
     @State var name: String = ""
-    // 初回シードの白紙と同じ、日付見出しだけの書き出しを起点にする。
+    // 初回シードの「日記」と同じ、日付見出しだけの書き出しを起点にする。
     @State var markdown: String = "# {{date}}"
 
     @Query(sort: \JournalNotebook.sortOrder) var notebooks: [JournalNotebook]

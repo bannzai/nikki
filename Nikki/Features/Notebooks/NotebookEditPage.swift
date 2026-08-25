@@ -38,7 +38,7 @@ struct NotebookEditPage: View {
                 markdown: Binding(get: { notebook.template?.markdown ?? "" }, set: { setTemplateMarkdown(markdown: $0) })
             )
             // 最後の1件まで削除できる(テンプレート0件の新規日記は白紙で始まり、
-            // 既定のテンプレートは設定 > テンプレート の「既定のテンプレートを復元」で戻せる)。
+            // 既定のテンプレート群は設定 > テンプレート の「既定のテンプレートを復元」で戻せる)。
             InkListSection {
                 // 遷移ではなく確認ダイアログを開くアクション行のため、シェブロンは出さない。
                 InkListRow(
