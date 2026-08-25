@@ -19,6 +19,8 @@ enum InkIcons {
     static let book = "book.closed"
     static let archive = "archivebox"
     static let unarchive = "tray.and.arrow.up"
+    static let copy = "doc.on.doc"
+    static let copyAll = "doc.on.doc.fill"
 }
 
 /// オンボーディングの図解で使う 46px 円 + 1.5px 枠の中に線画アイコンを収めるヘルパー。

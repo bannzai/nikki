@@ -94,6 +94,8 @@ struct EditorPage: View {
                                     .frame(width: 16, height: 20)
                                     .contentShape(Rectangle())
                                     .gesture(reorderGesture(block: block))
+                                    // 右クリックはドラッグ(主ボタン)と競合しない。理由は modifier の定義コメント参照。
+                                    .editorBlockCopyContextMenuOnMac(block: block, blocks: draftBlocks)
                             }
                             EditorBlockRow(
                                 block: block,
@@ -137,6 +139,7 @@ struct EditorPage: View {
                 .padding(.trailing, 28)
                 .padding(.top, 10)
             }
+            .editorCopyAllContextMenu(blocks: draftBlocks)
             // ドラッグ中にスクロールが同時に走って挿入位置がずれないようにする。
             .scrollDisabled(blockDrag != nil)
         }
