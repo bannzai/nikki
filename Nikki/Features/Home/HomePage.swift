@@ -136,6 +136,8 @@ struct HomePage: View {
                     .font(.inkScreenTitle)
                     .tracking(20 * 0.03)
                     .foregroundStyle(Color.ink)
+                    // iOS 26 のツールバー項目は幅が絞られて「N...」に切り詰められるため、固有幅で描かせる。
+                    .fixedSize()
             }
             #endif
             // リスト追加と設定は、同じ placement の並び順が環境で変わらないよう1つの ToolbarItem にまとめる。
