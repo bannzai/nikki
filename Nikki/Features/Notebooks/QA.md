@@ -1,7 +1,7 @@
 ---
 feature: Notebooks
 verification: mobile-mcp
-last_verified_commit: 386cc3aa015dd43afa9a608af57ee55f05cc1074
+last_verified_commit: 32c584bd564d5232447e659d5e78cdc87500c0cc
 last_verified_at: 2026-08-24
 ---
 
@@ -267,6 +267,9 @@ UserDefaults の notebooksSeeded フラグで再シードが抑止されるこ�
 - [x] **上限到達でロック表示になる**: テンプレートが 2 件あるとき、フッタが錠アイコン + 「Nikki Plus が必要です」のロック表示になり、タップするとペイウォールが開く (設定の管理一覧・エディタのテンプレート一覧の両方)
   - 自動化: manual（ロック表示とペイウォールへの遷移の目視確認のため）
   - 2026-08-24 simtunnel (iOS) の設定の管理一覧で、2 件目の作成直後にフッタが「Nikki Plus required」のロック表示になり、タップでペイウォールが開いた。エディタのテンプレート一覧は同じ NotebookNewFooter と canCreateNotebook を使うため挙動は同一 (ロック表示自体はローカル macOS のカタログ notebookList (サンプル 4 件) でも確認)
+- [x] **ホームのリスト追加「+」も上限でペイウォールを開く**: 上限に達しているとき、ホームの「+」(リストモードのセグメント横・カレンダーモードのヘッダ右上) はフォームの代わりにペイウォールを開く (issue #92 と #94 のマージで導線に判定を追加)
+  - 自動化: manual（遷移先の切り替わりを目視で確認する。判定関数自体は NikkiTests/NotebookPlusGateTests.swift が検証済み）
+  - 2026-08-25 ローカル iOS Simulator (カタログ entryList、サンプル 4 件 > 無料枠 2 件) で、リストモードの「+」タップでフォームではなくペイウォールが開いた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/9fd2e63d-8bd2-4142-86b7-048c5fb77659.png)。カレンダーモード側は同じ canCreateNotebook 分岐のため挙動は同一
 - [ ] **Plus 加入中は無制限**: Plus 加入中はテンプレートが 2 件以上あってもフッタが通常表示のままで、作成できる
   - 自動化: auto（NikkiTests/NotebookPlusGateTests.swift が判定を検証。導線は Plus 加入状態を simulator で作れないため TestFlight 配布後の人間確認とする）
   - 未検証: Plus 加入状態を simulator で再現できないため未実施
