@@ -1,7 +1,7 @@
 ---
 feature: Editor
 verification: mobile-mcp
-last_verified_commit: e1b626202ab6f42064987c8d9f3454d105a9a40b
+last_verified_commit: 855091612c23cb04624a1c144f5b6c6ea50097e9
 last_verified_at: 2026-08-25
 ---
 
@@ -152,6 +152,11 @@ last_verified_at: 2026-08-25
   - 自動化: NikkiTests/BlockMarkdownTests.swift (パース) + manual（描画は目視で確認する）
   - macOS でサンプル日記の全ブロック種が装飾表示された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/5836c8d8-e0bf-47f4-97de-b294d3478467.png)
   - iOS で入力した記法が再表示時に img プレースホルダ・details カードとして表示された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/1e088d02-1628-4c23-bcd8-2f0aeb5d8bb5.jpg)
+  - 2026-08-25 D&D 並び替えの revert (issue #105、コミット 8550916) 後に再確認。macOS (署名なし Debug + カタログ entryList) で全ブロック種がハンドル無しで導入前の書き出し位置に表示された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/d58d19f8-29d4-4ee1-b14e-deee992d71fc.png)。iOS (simtunnel リモート iOS Simulator) でも見出し・段落・チェックリストがハンドル無しで表示された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/c9e7dddd-6809-4f75-807b-d3fb53749289.jpg)
+- [x] **↑↓ でキャレットが行の間を移動できる**: 折り返しのある段落で、↑↓ キーがキャレットを表示行の間で移動させる (issue #105 の revert で回復した挙動。D&D 導入中は移動できなかった)
+  - 自動化: manual（ハードウェアキーボードの矢印キー入力とキャレット位置の目視確認が必要なため）
+  - 2026-08-25 macOS (署名なし Debug) で、2行に折り返した段落の1行目にキャレットを置き (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/e57358db-9593-4dbe-8749-170961569383.png)、↓ で2行目末尾へ移動してそこに「ok」が入力され (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/4c8505a4-6038-48f9-9c09-9ead541bb78e.png)、↑ で1行目中央へ戻ってそこに「up」が入力された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/9161ac54-972b-4414-a92b-d855b02106df.png)
+  - iOS はハードウェアキーボード接続時のみ該当する操作のため未検証 (ソフトウェアキーボードに矢印キーが無い)
 - [x] **チェックのタップで完了が切り替わり保存される**: チェックボックスをタップすると即座に完了(墨地+白チェック、打ち消し線+灰) / 未完了が切り替わり、閉じて開き直しても状態が残る(markdown へ - [x] / - [ ] として書き戻される)
   - 自動化: NikkiTests/BlockEditingTests.swift (togglesChecklistItemDone) + manual
   - macOS で切り替えの即時反映 (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/8f338314-392c-438e-aaa1-5332fddbf051.png) と開き直し後の保持 (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/abecee74-a207-47a6-bd05-46d845f44f64.png) を確認
@@ -194,6 +199,7 @@ last_verified_at: 2026-08-25
 - [x] **ブロックのメニューからコピーできる**: ブロックの長押し (iOS) / 右クリック (macOS) で「コピー」「すべてコピー」のメニューが出て、コピーでそのブロック、すべてコピーで本文全体 (空のブロックを除く) がペーストボードに入る
   - 自動化: manual（メニュー表示とコピー実行を実操作で確認する）
   - macOS でチェックボックス上の右クリックでメニューが出て (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/90b89be5-eda6-4fc8-9643-57072dc03ed2.png)、コピーで `- [ ] 麦茶のパック\n- [x] 蚊取り線香`、すべてコピーで本文全体の markdown が pbpaste で取れた
+  - 2026-08-25 D&D 並び替えの revert (issue #105、コミット 8550916) 後に iOS (simtunnel) で再確認。チェックリスト項目の長押しで Copy All を含むメニューが表示された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/3f25882b-edd7-4d98-9edf-b7041415399a.jpg)
   - iOS でチェックリストの長押しで Copy / Copy All のメニューが出て (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/48c97ba3-4a19-4c9e-80fc-7ef5e0f6b37f.jpg)、Copy で `- [ ] Barley tea\n- [x] Mosquito coil`、Copy All で本文全体の markdown が WDA getPasteboard で取れた。iOS は見出し・段落・空の段落の行でも長押しでメニューが出る (macOS と違い OS のテキストメニューに取られない)。テキスト編集の吹き出し (Paste 等) はタップで別途出て共存する (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/924e6e39-95d2-4e32-927f-37ffa7db5c08.jpg)。長押しメニュー表示後もチェックボックスのタップ切り替えは正常 (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/15c3ae9f-893a-4cea-96a5-863e80858583.jpg)
   - 補足: macOS の見出し・段落は入力欄が行の全幅を占め、その上の右クリックは OS のテキスト編集メニューになる (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/86c9276d-29e3-4661-9b5a-853cff0b6fdf.png)。ドラッグハンドル経由の単体コピー導線は issue #105 の D&D revert でハンドルごと無くなったため、macOS の見出し・段落は単体コピーに到達できない (本文全体は余白の「すべてコピー」で到達できる。下の既知の制限を参照)
 - [x] **本文の余白のメニューからすべてコピーできる**: ブロックの外 (本文の下の余白) の長押し / 右クリックで「すべてコピー」が出る。テキストのブロックしか無い日記でも macOS でコピーに到達できる
