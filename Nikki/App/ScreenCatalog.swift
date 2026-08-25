@@ -60,11 +60,18 @@ struct ScreenContent: View {
             .environment(\.today, SampleData.referenceToday)
             .defaultAppStorage(homePageModeDefaults(mode: .calendar))
         case .editorWriting:
-            EditorWritingPage(entry: SampleData.sampleEntry)
+            // エディタの日付キャプションはナビゲーションバーに載るため、NavigationStack に載せないと出ない。
+            NavigationStack {
+                EditorWritingPage(entry: SampleData.sampleEntry)
+            }
         case .editorSelection:
-            EditorSelectionPage(entry: SampleData.sampleEntry)
+            NavigationStack {
+                EditorSelectionPage(entry: SampleData.sampleEntry)
+            }
         case .editorReorder:
-            EditorReorderPage(entry: SampleData.sampleEntry)
+            NavigationStack {
+                EditorReorderPage(entry: SampleData.sampleEntry)
+            }
         case .notebookList:
             // NotebookListPage は @Query でノートを読むため、in-memory コンテナ(SampleData 投入済み)の下で NavigationStack に載せる。
             NavigationStack {
@@ -78,7 +85,10 @@ struct ScreenContent: View {
                 fields: TemplateVariableField.fields(template: template, today: SampleData.referenceToday, includesDemoValues: true)
             )
         case .theme:
-            ThemePage()
+            // 画面タイトルはナビゲーションバーに載るため、NavigationStack に載せないと出ない。
+            NavigationStack {
+                ThemePage()
+            }
         case .paywall:
             PaywallPage()
         case .settings:
@@ -116,7 +126,7 @@ private func homePageModeDefaults(mode: HomePageMode) -> UserDefaults {
 }
 
 /// Focus の Preview 一覧と同様に、カタログの全画面を一覧から開ける確認用ページ。
-/// 各画面は自前のナビ構成を持つため、push ではなく sheet で全画面をそのまま表示する。
+/// 各画面は ScreenContent 側でナビゲーションの有無まで含めて組み立てるため、push ではなく sheet で全画面をそのまま表示する。
 struct ScreenCatalogPage: View {
     /// 一覧から開いている画面。nil のときは一覧のみ表示。
     @State var screen: Screen?

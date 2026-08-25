@@ -5,21 +5,19 @@ import LicenseList
 struct LicenseDetailPage: View {
     let library: Library
 
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.paperColor) private var paperColor
 
     var body: some View {
         ZStack {
             paperColor.ignoresSafeArea()
             VStack(spacing: 0) {
-                InkNavBar(leading: .back, center: .title(library.name), onLeading: { dismiss() })
                 LicenseView(library: library)
-                    // 既定のスタイルが持つリポジトリリンクはナビゲーションバー上に出るが、
-                    // 本アプリはナビゲーションバーを隠して InkNavBar を使うため表示されない。
+                    // 既定のスタイルはリポジトリリンクをナビゲーションバーへ載せるが、
+                    // この画面のナビゲーションバーはライブラリ名だけを見せる場所にしたいため、リンクを持たない .plain にする。
                     .licenseViewStyle(.plain)
             }
         }
-        .inkNavigationBarHidden()
+        .inkNavigationBar(title: library.name)
     }
 }
 

@@ -13,13 +13,11 @@ struct NotebookSettingsPage: View {
     @State var notebookCreateIsPresented = false
     @State var deleteAllConfirmationDialogIsPresented = false
 
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @Environment(\.paperColor) private var paperColor
 
     var body: some View {
         VStack(spacing: 0) {
-            InkNavBar(leading: .back, center: .title(String(localized: "Templates")), onLeading: { dismiss() })
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     if !notebooks.isEmpty {
@@ -61,7 +59,7 @@ struct NotebookSettingsPage: View {
             }
         }
         .background(paperColor.ignoresSafeArea())
-        .inkNavigationBarHidden()
+        .inkNavigationBar(title: String(localized: "Templates"))
         .navigationDestination(item: $notebook) { notebook in
             NotebookEditPage(notebook: notebook)
         }

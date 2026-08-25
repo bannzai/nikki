@@ -24,14 +24,12 @@ struct LicensePage: View {
     /// 本文を表示するライブラリ。行のタップで決まる。
     @State var selectedLibrary: Library?
 
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.paperColor) private var paperColor
 
     var body: some View {
         ZStack {
             paperColor.ignoresSafeArea()
             VStack(spacing: 0) {
-                InkNavBar(leading: .back, center: .title(String(localized: "Open source licenses")), onLeading: { dismiss() })
                 ScrollView {
                     // LicenseList の LicenseListView は List + NavigationLink で一覧を組むが、その行のタップは
                     // RootPage が自動ロック用に張る simultaneousGesture(DragGesture) に奪われて本文へ遷移しない。
@@ -50,7 +48,7 @@ struct LicensePage: View {
                 }
             }
         }
-        .inkNavigationBarHidden()
+        .inkNavigationBar(title: String(localized: "Open source licenses"))
         .navigationDestination(item: $selectedLibrary) { library in
             LicenseDetailPage(library: library)
         }

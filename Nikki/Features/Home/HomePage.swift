@@ -7,14 +7,14 @@ enum HomePageMode: Int, CaseIterable {
     case calendar
 }
 
-/// ホーム画面の共通シャーシ。ロゴヘッダ・検索バー・「リスト / カレンダー」セグメント・新規作成 FAB をまとめ、
+/// ホーム画面の共通シャーシ。ナビゲーションバー(ロゴ・設定)・検索バー・「リスト / カレンダー」セグメント・新規作成 FAB をまとめ、
 /// 選択中セグメントに応じて時系列リスト(1g)とカレンダー(1h)を切り替える。
 /// 日記は @Query で読み、検索バーの入力でタイトル・本文に一致する日記へ絞り込む。
 /// 行のタップでエディタへ進む。FAB は日記を先に作成してからエディタへ進み、
 /// 既定のテンプレート(未設定なら先頭のテンプレート)の内容を自動挿入する。
 /// 書きはじめを妨げないため、作成時にテンプレート選択は挟まない(issue #82)。
 /// リスト(ノート)の追加は、リストモードではセグメントコントロール横の「+」、カレンダーモードでは
-/// ヘッダ右上の「+」から、それぞれ既存のリスト作成画面(NotebookCreatePage)を開く形で行う。
+/// ナビゲーションバー右端の「+」から、それぞれ既存のリスト作成画面(NotebookCreatePage)を開く形で行う。
 /// 日記一覧の表示は所属リストで絞り込まず、これまで通り全リストの日記を混在させたまま出す(issue #92)。
 struct HomePage: View {
     /// 表示モードの選択状態。リスト派/カレンダー派の常用に合わせて起動をまたいで保持する。
@@ -32,6 +32,9 @@ struct HomePage: View {
     /// 新しいリスト作成画面(NotebookCreatePage)への遷移状態。
     /// リストモードのセグメントコントロールの横のリスト追加ボタンから開く(issue #92)。
     @State var notebookCreateIsPresented = false
+
+    /// 設定画面(1r)への遷移状態。ナビゲーションバー右端の歯車から開く。
+    @State var settingsIsPresented = false
 
     /// 検索バーのフォーカス。⌘F ショートカットからも当てられるようにここで持つ。
     @FocusState var searchFieldIsFocused: Bool
@@ -57,7 +60,6 @@ struct HomePage: View {
 
             VStack(alignment: .leading, spacing: 0) {
                 VStack(alignment: .leading, spacing: 14) {
-                    HomeHeader(homePageMode: homePageMode)
                     InkSearchBar(text: $searchText, isFocused: $searchFieldIsFocused)
                     HStack(spacing: 8) {
                         InkSegmentedControl(
@@ -68,7 +70,7 @@ struct HomePage: View {
                                 set: { homePageMode = HomePageMode(rawValue: $0) ?? .list }
                             )
                         )
-                        // カレンダーモードのリスト追加ボタンは HomeHeader 側に置くため、ここでは出さない(issue #92)。
+                        // カレンダーモードのリスト追加ボタンはナビゲーションバー側に置くため、ここでは出さない(issue #92)。
                         if homePageMode == .list {
                             Button {
                                 notebookCreateIsPresented = true
@@ -124,7 +126,45 @@ struct HomePage: View {
             .keyboardShortcut("f", modifiers: .command)
             .hidden()
         }
-        .inkNavigationBarHidden()
+        .inkNavigationBarStyle()
+        .toolbar {
+            // macOS はウィンドウタイトルが常に "Nikki" を出すため、ロゴを置くと同じバーに
+            // 「Nikki Nikki」と重複して見える。ロゴの ToolbarItem は iOS だけに置く。
+            #if os(iOS)
+            ToolbarItem(placement: .inkNavigationBarLeading) {
+                Text("Nikki")
+                    .font(.inkScreenTitle)
+                    .tracking(20 * 0.03)
+                    .foregroundStyle(Color.ink)
+            }
+            #endif
+            // リスト追加と設定は、同じ placement の並び順が環境で変わらないよう1つの ToolbarItem にまとめる。
+            ToolbarItem(placement: .inkNavigationBarTrailing) {
+                HStack(spacing: 0) {
+                    // カレンダーモードはセグメントコントロールが出ないぶん、リスト追加をここに置く(issue #92)。
+                    if homePageMode == .calendar {
+                        Button {
+                            notebookCreateIsPresented = true
+                        } label: {
+                            Image(systemName: InkIcons.add)
+                                .font(.system(size: 17, weight: .regular))
+                                .foregroundStyle(Color(hex: 0x52514E))
+                                .frame(width: 38, height: 38)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    Button {
+                        settingsIsPresented = true
+                    } label: {
+                        Image(systemName: InkIcons.settings)
+                            .font(.system(size: 19, weight: .regular))
+                            .foregroundStyle(Color(hex: 0x52514E))
+                            .frame(width: 38, height: 38)
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+        }
         // キーボード入力はタッチとして拾えないため、検索の入力を無操作タイマーのリセットにする。
         .onChange(of: searchText) {
             resetAutoLockTimer()
@@ -137,6 +177,9 @@ struct HomePage: View {
         }
         .navigationDestination(isPresented: $notebookCreateIsPresented) {
             NotebookCreatePage()
+        }
+        .navigationDestination(isPresented: $settingsIsPresented) {
+            SettingsPage()
         }
     }
 

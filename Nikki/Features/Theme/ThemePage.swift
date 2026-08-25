@@ -8,7 +8,6 @@ struct ThemePage: View {
 
     @State var paywallSheetIsPresented = false
 
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.plusActive) private var plusActive
 
     var body: some View {
@@ -17,7 +16,6 @@ struct ThemePage: View {
         ZStack {
             paperColor.ignoresSafeArea()
             VStack(spacing: 0) {
-                InkNavBar(leading: .back, center: .title(String(localized: "Theme")), onLeading: { dismiss() })
                 ScrollView {
                     VStack(alignment: .leading, spacing: 0) {
                         ThemePreviewCard(paperColor: paperColor)
@@ -60,7 +58,7 @@ struct ThemePage: View {
                 }
             }
         }
-        .inkNavigationBarHidden()
+        .inkNavigationBar(title: String(localized: "Theme"))
         .sheet(isPresented: $paywallSheetIsPresented) {
             PaywallPage()
         }

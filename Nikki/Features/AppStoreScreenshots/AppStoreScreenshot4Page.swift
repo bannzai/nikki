@@ -37,7 +37,7 @@ struct AppStoreScreenshotNotebookScreen: View {
         case .en: ("Templates", "Choose the template for this entry.", "Daily")
         }
         VStack(spacing: 0) {
-            InkNavBar(leading: .back, center: .title(navTitle))
+            AppStoreScreenshotNavBar(center: .title(navTitle))
             VStack(alignment: .leading, spacing: 0) {
                 Text(heading)
                     .font(.ink(12.5, .regular))

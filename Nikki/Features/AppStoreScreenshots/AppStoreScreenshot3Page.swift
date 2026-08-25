@@ -25,10 +25,13 @@ struct AppStoreScreenshot3Page: View {
 
 /// エディタのモック画面。実際の EditorPage と同じく、タイトル + 生の markdown 本文をそのまま表示する
 /// (実エディタは TextEditor で markdown を装飾せずに編集するため、装飾済みのブロック表示は使わない)。
-/// 外枠は本番の EditorScreenScaffold を再利用し、本文だけ言語別のサンプルにする。
+/// 外枠は、システムのナビゲーションバーが描画されない ImageRenderer でも実画面と同じ見た目になるよう、
+/// 紙地 + ナビゲーションバーのモックで組み、本文だけ言語別のサンプルにする。
 struct AppStoreScreenshotEditorScreen: View {
     let language: AppStoreScreenshotLanguage
     let canvas: AppStoreScreenshotCanvas
+
+    @Environment(\.paperColor) private var paperColor
 
     var body: some View {
         let (caption, entryTitle, markdownBody) = switch language {
@@ -65,22 +68,27 @@ struct AppStoreScreenshotEditorScreen: View {
             """
         )
         }
-        EditorScreenScaffold(caption: caption, onDismiss: {}) {
-            VStack(alignment: .leading, spacing: 0) {
-                Text(entryTitle)
-                    .font(.inkEntryTitle)
-                    .foregroundStyle(Color.ink)
-                    .padding(.bottom, 8)
+        ZStack {
+            paperColor.ignoresSafeArea()
+            VStack(spacing: 0) {
+                AppStoreScreenshotNavBar(center: .caption(caption))
+                VStack(alignment: .leading, spacing: 0) {
+                    Text(entryTitle)
+                        .font(.inkEntryTitle)
+                        .foregroundStyle(Color.ink)
+                        .padding(.bottom, 8)
 
-                // EditorPage の本文段落と同じ書体・行間(標準の文字の大きさ 15pt)。
-                Text(markdownBody)
-                    .font(.ink(15))
-                    .lineSpacing(inkLineSpacing(fontSize: 15, multiplier: 2.05))
-                    .foregroundStyle(Color.ink)
-                    .fixedSize(horizontal: false, vertical: true)
+                    // EditorPage の本文段落と同じ書体・行間(標準の文字の大きさ 15pt)。
+                    Text(markdownBody)
+                        .font(.ink(15))
+                        .lineSpacing(inkLineSpacing(fontSize: 15, multiplier: 2.05))
+                        .foregroundStyle(Color.ink)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .padding(.horizontal, 28)
+                .padding(.top, 10)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             }
-            .padding(.horizontal, 28)
-            .padding(.top, 10)
         }
         .padding(.top, appStoreScreenshotScreenTopPadding(canvas: canvas))
     }
