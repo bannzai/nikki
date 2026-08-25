@@ -107,7 +107,7 @@ last_verified_at: 2026-08-25
   - 自動化: manual（画面上部の表示と遷移を実操作で確認する）
   - テンプレートが既定の1件だけの状態でも右上に「Template」が出て、押すと一覧が開いた
   - 2026-08-25 システムの NavigationBar への移行 (issue #104) 後、simtunnel リモート iOS Simulator (iOS 26) で、ナビゲーションバー右端の「テンプレート」から一覧が開いた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/cea30166-5fb9-4f07-affd-397d4e8e266e.jpg)
-  - macOS の trailing ボタン (エディタの「テンプレート」・作成フォームの「作成」は `.primaryAction` でウィンドウツールバーに載る) は未検証。検証を試みた時点で Mac がロック画面になり GUI 自動操作を続行できなかったため。配置 API 自体は macOS ビルドで型検査済みで、同じ placement 分岐を通る戻るボタン・歯車は macOS で実操作確認済み。次回 macOS QA で確認する
+  - 2026-08-26 macOS (ad-hoc 署名の Debug ビルド) でも trailing ボタンを実操作確認。エディタのウィンドウツールバーに日付キャプションと「テンプレート」(.primaryAction) が出てクリックで一覧が開き (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/32d2b47b-9f61-4a72-8c63-6044bda637d9.png, https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/0326038c-3be3-4b3b-adba-e1dcd9423249.png)、作成フォームの右端に「作成」が出た (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/8cf7c285-4518-4707-8679-db3463308a2a.png)
 - [x] **選択中のテンプレートにチェックが付く**: テンプレート一覧で、いま日記に使われているテンプレート(新規日記なら既定の {{date}} テンプレート)にチェックが付いている
   - 自動化: manual（一覧のチェック表示を目視で確認する）
   - 新規日記では既定の「Blank page」にチェックが付き、「Morning notes」を選ぶとチェックが移った
