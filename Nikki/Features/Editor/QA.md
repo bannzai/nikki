@@ -1,7 +1,7 @@
 ---
 feature: Editor
 verification: mobile-mcp
-last_verified_commit: 72a7f5dbdf246e5e779a3192760b1449849fd0ac
+last_verified_commit: e1b626202ab6f42064987c8d9f3454d105a9a40b
 last_verified_at: 2026-08-25
 ---
 
@@ -239,6 +239,7 @@ last_verified_at: 2026-08-25
   - macOS で新規日記へ markdown を貼り、h2・チェックリスト (未完了/完了+打ち消し線)・段落に即時復元された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/fd93f6d1-7138-4122-991f-ab716ec69fa1.png)
   - macOS で「すべてコピー」した内容を別の日記へ貼り、h1/h2・チェック状態・段落が復元された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/7d7320aa-d81d-4822-bc87-3ba4180014f7.png)
   - iOS で空の段落へ OS のペースト (タップ → Paste) で markdown を貼り、h2・チェックリスト (チェック状態・打ち消し線付き)・段落に即時復元された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/d533ae7f-5b6a-4e47-9d19-e3ffc0047e96.jpg)
+  - レビュー対応で先頭行の解釈判定を「新しく入った行だけを解釈する」方式へ作り直した後 (e1b6262)、macOS で同じ貼り付けを再確認し、h2・未完了/完了のチェックリストに復元された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/5f36124d-83b3-46b9-988d-25388bd78855.png)。既存の本文への Return・部分的な貼り付けで元の行が解釈されないことは NikkiTests/BlockEditingTests.swift (keepsTextAfterCaretOnReturn / keepsExistingFirstLineOnAppendPaste / keepsExistingChecklistItemTextOnAppendPaste) で担保する
 - 補足 (既知の制限):
   - リッチテキストの書体はアプリ同梱の Zen Kaku Gothic ではなくシステムフォント (ペースト先の端末に同梱フォントが無いため)
   - 貼り付けた markdown の空行 (ブロック区切り) は編集中は空の段落として見え、閉じるときに落ちる
