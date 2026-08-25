@@ -39,14 +39,12 @@ extension Color {
 // MARK: - 紙色プリセット
 
 extension Color {
+    /// テーマ設定(1n)の紙色プリセットの16進値。先頭から 白 / 生成 / 薄鼠 / 青磁 / 桜鼠。
+    /// Color(hex:) と HTML/PDF 書き出し(#95)の CSS 色指定の両方がこの配列を単一の情報源として使う。
+    static let paperColorPresetHex: [UInt32] = [0xFFFFFF, 0xF7F4EC, 0xECECEA, 0xE9EDEA, 0xF2EAE4]
+
     /// テーマ設定(1n)の紙色プリセット。先頭から 白 / 生成 / 薄鼠 / 青磁 / 桜鼠。
-    static let paperColorPreset: [Color] = [
-        Color(hex: 0xFFFFFF),
-        Color(hex: 0xF7F4EC),
-        Color(hex: 0xECECEA),
-        Color(hex: 0xE9EDEA),
-        Color(hex: 0xF2EAE4),
-    ]
+    static let paperColorPreset: [Color] = paperColorPresetHex.map { Color(hex: $0) }
 }
 
 // MARK: - hex 初期化

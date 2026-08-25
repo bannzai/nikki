@@ -245,12 +245,12 @@
         }
       }
     },
-    "Ash, Celadon, and Sakura. Unlock every paper color.": {
+    "Ash, Celadon, Sakura, and background images. Make your paper truly yours.": {
       "localizations": {
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "薄鼠・青磁・桜鼠。紙の色をすべて解放。"
+            "value": "薄鼠・青磁・桜鼠に背景画像も。紙をじぶんらしく。"
           }
         }
       }
@@ -658,12 +658,32 @@
         }
       }
     },
+    "Export as HTML": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HTML で書き出す"
+          }
+        }
+      }
+    },
     "Export as Markdown": {
       "localizations": {
         "ja": {
           "stringUnit": {
             "state": "translated",
             "value": "Markdown で書き出す"
+          }
+        }
+      }
+    },
+    "Export as PDF": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF で書き出す"
           }
         }
       }
@@ -840,16 +860,6 @@
         }
       }
     },
-    "Make your journal look more like you.": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "日記の見た目を、もっとじぶん好みに。"
-          }
-        }
-      }
-    },
     "Manage subscription": {
       "localizations": {
         "ja": {
@@ -946,6 +956,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nikki 1.0.0 — あなたの日記は、この端末の中に。"
+          }
+        }
+      }
+    },
+    "Nikki Plus required": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nikki Plus が必要です"
           }
         }
       }
@@ -1250,6 +1270,16 @@
         }
       }
     },
+    "Restart Nikki to apply your plan change to iCloud sync.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "プラン変更を iCloud 同期へ反映するには、Nikki を再起動してください"
+          }
+        }
+      }
+    },
     "Restore purchases": {
       "localizations": {
         "ja": {
@@ -1426,6 +1456,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "クローゼットを夏仕様に。去年の夏のシャツから、去年の夏のにおいがした。"
+          }
+        }
+      }
+    },
+    "Sync across devices": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "複数端末で同期"
+          }
+        }
+      }
+    },
+    "Sync it, style it, and keep it yours": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "同期して、装って、じぶんの日記に"
           }
         }
       }
@@ -1620,6 +1670,16 @@
         }
       }
     },
+    "Unlimited templates": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "テンプレート無制限"
+          }
+        }
+      }
+    },
     "Unlock to pick up right where you left off": {
       "localizations": {
         "ja": {
@@ -1750,6 +1810,16 @@
         }
       }
     },
+    "Write your way, in as many templates as you like.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "自分の書き方を、いくつでも。"
+          }
+        }
+      }
+    },
     "Writing": {
       "localizations": {
         "ja": {
@@ -1786,6 +1856,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "日記は、まずこの端末の中に置かれます。"
+          }
+        }
+      }
+    },
+    "Your entries stay encrypted while they sync.\nWe still can't read them. That never changes.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "同期中も、内容は暗号化されたままです。\nわたしたちが読めないことは、変わりません。"
           }
         }
       }
@@ -1836,6 +1916,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "https://bannzai.github.io/nikki/legal/terms-ja.html"
+          }
+        }
+      }
+    },
+    "iPhone and Mac. Entries stay encrypted in sync — we still can't read them.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPhone と Mac で。同期中も暗号化されたまま、わたしたちには読めません。"
           }
         }
       }

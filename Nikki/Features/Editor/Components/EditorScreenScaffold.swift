@@ -12,10 +12,11 @@ struct EditorScreenScaffold<Content: View>: View {
     @ViewBuilder var content: Content
 
     @Environment(\.paperColor) private var paperColor
+    @Environment(\.themeBackgroundImage) private var backgroundImage
 
     var body: some View {
         ZStack {
-            paperColor.ignoresSafeArea()
+            JournalBackground(paperColor: paperColor, backgroundImage: backgroundImage)
             VStack(spacing: 0) {
                 InkNavBar(leading: .dismiss, center: .caption(caption), trailing: trailing, onLeading: onDismiss, onTrailing: onTrailing)
                 content
