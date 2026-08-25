@@ -146,7 +146,7 @@ issue #104 で独自ヘッダ (InkNavBar) を廃止し、全画面をシステ�
 <details><summary>動作確認スクショ</summary>
 
 **確認日: 2026-08-25** (simtunnel リモート iOS Simulator / iOS 26。エディタからスワイプで戻った直後のホーム)
-<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/d619de59-47dd-4fa1-94ff-52f8d327b20e.jpg" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/d619de59-47dd-4fa1-94ff-52f8d327b20e.jpg" alt="iOS でエディタから左エッジスワイプで戻った直後のホーム。作成した日記が一覧に表示されている" width="320">
 
 </details>
 
@@ -155,8 +155,8 @@ issue #104 で独自ヘッダ (InkNavBar) を廃止し、全画面をシステ�
 <details><summary>動作確認スクショ</summary>
 
 **確認日: 2026-08-25** (simtunnel リモート iOS Simulator / iOS 26。設定へ push した状態と、戻るボタンで戻ったホーム)
-<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/a4d60909-ad0d-4383-a16f-3e1ad06ae8c6.jpg" width="320">
-<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/24c5e18e-39d4-4aeb-97dd-f16ed50ea28c.jpg" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/a4d60909-ad0d-4383-a16f-3e1ad06ae8c6.jpg" alt="iOS の設定画面。システムのナビゲーションバーに戻るボタンとタイトル「設定」が表示されている" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/24c5e18e-39d4-4aeb-97dd-f16ed50ea28c.jpg" alt="iOS で戻るボタンのタップで設定からホームへ戻ったところ" width="320">
 
 </details>
 
@@ -165,8 +165,8 @@ issue #104 で独自ヘッダ (InkNavBar) を廃止し、全画面をシステ�
 <details><summary>動作確認スクショ</summary>
 
 **確認日: 2026-08-25** (ad-hoc 署名の Debug ビルド。設定へ push した状態と、戻るボタンで戻ったホーム)
-<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/daf2dc18-8bba-48eb-a4ac-c3cddf130af2.png" width="320">
-<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/ecb4c063-4a18-4246-b17c-0292f002c79d.png" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/daf2dc18-8bba-48eb-a4ac-c3cddf130af2.png" alt="macOS の設定画面。ウィンドウツールバーに戻るボタンとタイトル「設定」が表示されている" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/ecb4c063-4a18-4246-b17c-0292f002c79d.png" alt="macOS でウィンドウツールバーの戻るボタンのクリックで設定からホームへ戻ったところ" width="320">
 
 </details>
 

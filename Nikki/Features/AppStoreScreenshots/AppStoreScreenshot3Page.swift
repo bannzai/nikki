@@ -34,9 +34,10 @@ struct AppStoreScreenshotEditorScreen: View {
     @Environment(\.paperColor) private var paperColor
 
     var body: some View {
-        let (caption, entryTitle, markdownBody) = switch language {
+        let (caption, templateButton, entryTitle, markdownBody) = switch language {
         case .ja: (
             "7月18日 土曜日",
+            "テンプレート",
             "梅雨明け",
             """
             朝から蝉が鳴いていた。ベランダの鉢に水をやりながら、今年も夏が来たんだなと思う。
@@ -53,6 +54,7 @@ struct AppStoreScreenshotEditorScreen: View {
         )
         case .en: (
             "Saturday, July 18",
+            "Template",
             "Summer begins",
             """
             Cicadas were singing from early morning. Watering the pots on the balcony, I realized summer is here again.
@@ -71,7 +73,7 @@ struct AppStoreScreenshotEditorScreen: View {
         ZStack {
             paperColor.ignoresSafeArea()
             VStack(spacing: 0) {
-                AppStoreScreenshotNavBar(center: .caption(caption))
+                AppStoreScreenshotNavBar(center: .caption(caption), trailingButtonText: templateButton)
                 VStack(alignment: .leading, spacing: 0) {
                     Text(entryTitle)
                         .font(.inkEntryTitle)

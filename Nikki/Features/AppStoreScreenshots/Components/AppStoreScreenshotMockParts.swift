@@ -30,6 +30,9 @@ struct AppStoreScreenshotNavBar: View {
     }
 
     let center: Center
+    // 右端のテキストボタンを持つのはエディタ(「テンプレート」)だけのため、他の画面が既定のまま使えるよう nil を既定にする。
+    /// 右端に置くテキストボタンの文言。nil のときは表示しない。実画面の InkNavigationBarTrailingButton と同じ見た目の静的表現。
+    var trailingButtonText: String? = nil
 
     var body: some View {
         ZStack {
@@ -49,6 +52,11 @@ struct AppStoreScreenshotNavBar: View {
                     .font(.system(size: 17, weight: .semibold))
                     .foregroundStyle(Color.inkTextSecondary)
                 Spacer(minLength: 0)
+                if let trailingButtonText {
+                    Text(trailingButtonText)
+                        .font(.ink(13.5, .regular))
+                        .foregroundStyle(Color.inkTextSecondary)
+                }
             }
         }
         .frame(height: 44)
