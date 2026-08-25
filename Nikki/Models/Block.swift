@@ -555,6 +555,17 @@ nonisolated extension [Block] {
         }
     }
 
+    /// ブロックを取り除いた残りの列の insertionIndex の位置へ動かす(ドラッグ&ドロップの並び替え)。
+    /// insertionIndex は「自分以外のブロックの何番目の前に入るか」(0 〜 残りの個数)で、
+    /// 範囲外は端へ丸める。blockID が見つからなければ何もしない。
+    mutating func moveBlock(blockID: UUID, insertionIndex: Int) {
+        if let sourceIndex = firstIndex(where: { $0.id == blockID }) {
+            let block = remove(at: sourceIndex)
+            // Array の min()/max() と衝突するため、標準ライブラリの関数を修飾して呼ぶ。
+            insert(block, at: Swift.min(Swift.max(insertionIndex, 0), count))
+        }
+    }
+
     /// details の開閉を反転する。書き戻し用の rawMarkdown 側も open 属性を付け外しして裏返す。
     mutating func toggleDetails(blockID: UUID) {
         if let index = firstIndex(where: { $0.id == blockID }), case .details(let id, let summary, let isCollapsed, let rawMarkdown) = self[index] {
