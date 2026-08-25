@@ -81,6 +81,46 @@ nonisolated extension Block {
         return blocks
     }
 
+    /// 入力欄に貼り付けなどで一度に入った複数行テキストを、markdown の記法を解釈してブロック列にする。
+    /// blocks(fromMarkdown:) と違い、空行を読み飛ばさず空の段落として残す。入力欄の中では空行は
+    /// ブロックの区切りではなく、Return の入力で続きを書く空の段落になる位置のため。
+    static func blocks(fromPastedText text: String) -> [Block] {
+        var blocks: [Block] = []
+        // 連続するチェックリスト行を 1 つの checklist ブロックにまとめるためのバッファ。
+        var checklistItems: [ChecklistItem] = []
+
+        func flushChecklist() {
+            if !checklistItems.isEmpty {
+                blocks.append(.checklist(items: checklistItems))
+                checklistItems = []
+            }
+        }
+
+        for rawLine in text.components(separatedBy: "\n") {
+            if rawLine.trimmingCharacters(in: .whitespaces).isEmpty {
+                flushChecklist()
+                blocks.append(.paragraph(text: rawLine))
+                continue
+            }
+            if let item = checklistItem(fromLine: rawLine) {
+                checklistItems.append(item)
+                continue
+            }
+            flushChecklist()
+            if let heading = heading(fromLine: rawLine) {
+                blocks.append(heading)
+            } else if let image = image(rawLine: rawLine) {
+                blocks.append(image)
+            } else if let details = details(rawLine: rawLine) {
+                blocks.append(details)
+            } else {
+                blocks.append(.paragraph(text: rawLine))
+            }
+        }
+        flushChecklist()
+        return blocks
+    }
+
     /// ブロック列を markdown 文字列にする。ブロック間は空行で区切り、blocks(fromMarkdown:) と往復できる形にする。
     static func markdown(blocks: [Block]) -> String {
         blocks.map { block -> String in
@@ -122,8 +162,9 @@ nonisolated extension Block {
         return nil
     }
 
-    /// 「- [ ] 」「- [x] 」で始まるチェックリスト行。
-    private static func checklistItem(fromLine line: String) -> ChecklistItem? {
+    /// 「- [ ] 」「- [x] 」で始まるチェックリスト行。貼り付けで入った行の記法を剥がすため、
+    /// 編集ヘルパー(updateChecklistItem)からも使う。
+    static func checklistItem(fromLine line: String) -> ChecklistItem? {
         if line.hasPrefix(uncheckedPrefix) {
             return ChecklistItem(text: String(line.dropFirst(uncheckedPrefix.count)), done: false)
         }
@@ -352,6 +393,17 @@ nonisolated extension Block {
         }
     }
 
+    /// このブロックで最後に文字を入力できる欄の id。見出し・段落はブロック自身、チェックリストは末尾の項目。
+    /// 文字を入力できる欄が無ければ nil。
+    var lastEditableFieldID: UUID? {
+        switch self {
+        case .heading(let id, _, _): return id
+        case .paragraph(let id, _): return id
+        case .checklist(_, let items): return items.last?.id
+        case .image, .details: return nil
+        }
+    }
+
     /// 本文を差し替えたブロック。id は保ち、入力欄の同一性(フォーカスと日本語入力の変換中テキスト)を壊さない。
     func replacing(editableText: String) -> Block {
         switch self {
@@ -362,11 +414,17 @@ nonisolated extension Block {
     }
 
     /// 改行で分けたブロック列。Return が入力欄に改行として入るプラットフォームでは、改行をブロックの
-    /// 区切りとして扱い、2つ目以降を段落にする。改行が無ければ nil を返し、分割しないことを示す。
+    /// 区切りとして扱う。貼り付けで複数行が一度に入る経路も兼ねるため、各行は markdown の記法を
+    /// 解釈してブロックにし、コピーしたチェックリスト・見出しの構造を保って貼り付けられるようにする(issue #100)。
+    /// 先頭行は記法が無ければ元のブロックの種類と id を保ち、入力欄の同一性(フォーカスと
+    /// 日本語入力の変換中テキスト)を壊さない(issue #86)。改行が無ければ nil を返し、分割しないことを示す。
     var splitByNewlines: [Block]? {
         if let editableText, editableText.contains("\n") {
-            let texts = editableText.components(separatedBy: "\n")
-            return [replacing(editableText: texts[0])] + texts.dropFirst().map { Block.paragraph(text: $0) }
+            var parsed = Block.blocks(fromPastedText: editableText)
+            if case .paragraph(_, let text) = parsed[0] {
+                parsed[0] = replacing(editableText: text)
+            }
+            return parsed
         }
         return nil
     }
@@ -423,7 +481,8 @@ nonisolated extension [Block] {
             let updated = self[index].replacing(editableText: text)
             if let split = updated.splitByNewlines {
                 replaceSubrange(index...index, with: split)
-                return split.last?.id
+                // 貼り付けで末尾が img・details になることもあるため、後ろから最初に見つかる入力欄へ移る。
+                return split.reversed().compactMap(\.lastEditableFieldID).first
             }
             self[index] = updated
         }
@@ -451,8 +510,18 @@ nonisolated extension [Block] {
                 if texts.allSatisfy(\.isEmpty) {
                     return exitChecklist(blockIndex: indexes.blockIndex, itemIndex: indexes.itemIndex)
                 }
-                items[indexes.itemIndex].text = texts[0]
-                let addedItems = texts.dropFirst().map { ChecklistItem(text: $0, done: false) }
+                // 貼り付けで入った「- [ ] 」「- [x] 」の行は記法を剥がして完了状態ごと項目にし、
+                // コピーしたチェックリストの構造を保って貼り付けられるようにする(issue #100)。
+                // 記法の無い行は、Return で項目を分けたときの挙動のまま(完了状態を変えない)。
+                if let firstItem = Block.checklistItem(fromLine: texts[0]) {
+                    items[indexes.itemIndex].text = firstItem.text
+                    items[indexes.itemIndex].done = firstItem.done
+                } else {
+                    items[indexes.itemIndex].text = texts[0]
+                }
+                let addedItems = texts.dropFirst().map { line in
+                    Block.checklistItem(fromLine: line) ?? ChecklistItem(text: line, done: false)
+                }
                 items.insert(contentsOf: addedItems, at: indexes.itemIndex + 1)
                 self[indexes.blockIndex] = .checklist(id: id, items: items)
                 return addedItems.last?.id

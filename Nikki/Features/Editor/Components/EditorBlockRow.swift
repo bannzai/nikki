@@ -20,6 +20,7 @@ struct EditorBlockRow: View {
                 focusedFieldID: $focusedFieldID,
                 bodyFontSize: bodyFontSize
             )
+            .editorBlockCopyContextMenu(block: block, blocks: blocks)
         case .checklist:
             EditorChecklistField(
                 block: block,
@@ -27,13 +28,18 @@ struct EditorBlockRow: View {
                 focusedFieldID: $focusedFieldID,
                 bodyFontSize: bodyFontSize
             )
+            .editorBlockCopyContextMenu(block: block, blocks: blocks)
         case .image(_, let label, _):
             EditorImageBlock(label: label)
+                .editorBlockCopyContextMenu(block: block, blocks: blocks)
         case .details(_, let summary, let isCollapsed, _):
             Button {
                 blocks.toggleDetails(blockID: block.id)
             } label: {
                 EditorDetailsBlock(summary: summary, isCollapsed: isCollapsed)
+                    // Button の外側に付けると macOS で右クリックに反応しないため、ラベル内側に付ける
+                    // (HomeListBody のコンテキストメニューと同じ)。
+                    .editorBlockCopyContextMenu(block: block, blocks: blocks)
             }
             .buttonStyle(.plain)
             // 開閉はシェブロンの向きだけの表現のため、VoiceOver にも現在の状態とタップの結果が伝わるようにする。

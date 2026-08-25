@@ -293,4 +293,41 @@ struct BlockEditingTests {
         """)
         #expect(Block.markdown(blocks: Block.blocks(fromMarkdown: markdown)) == markdown)
     }
+
+    @Test("markdown の複数行を段落へ貼り付けると見出し・チェックリストのブロックに復元される")
+    func pastesMarkdownIntoParagraph() {
+        var blocks: [Block] = [.paragraph(text: "")]
+        let blockID = blocks[0].id
+        let fieldID = blocks.updateEditableText(blockID: blockID, text: "## 買ったもの\n- [ ] 麦茶のパック\n- [x] 蚊取り線香")
+        #expect(Block.markdown(blocks: blocks) == "## 買ったもの\n\n- [ ] 麦茶のパック\n- [x] 蚊取り線香")
+        // 続きの入力は貼り付けた末尾(チェックリストの最後の項目)から。
+        #expect(fieldID == blocks.firstChecklistItems.last?.id)
+    }
+
+    @Test("貼り付けの先頭行に記法が無ければ元のブロックの種類と id を保つ")
+    func keepsFirstBlockOnPasteWithoutSyntax() {
+        var blocks: [Block] = [.heading(level: 2, text: "買ったもの")]
+        let blockID = blocks[0].id
+        _ = blocks.updateEditableText(blockID: blockID, text: "買ったもの\n- [ ] 麦茶のパック")
+        #expect(Block.markdown(blocks: blocks) == "## 買ったもの\n\n- [ ] 麦茶のパック")
+        #expect(blocks[0].id == blockID)
+    }
+
+    @Test("貼り付けた空行は空の段落として残り、書き戻しでは落ちる")
+    func keepsPastedEmptyLinesAsEmptyParagraphs() {
+        var blocks: [Block] = [.paragraph(text: "")]
+        let blockID = blocks[0].id
+        _ = blocks.updateEditableText(blockID: blockID, text: "## 買ったもの\n\n蝉の声で目が覚めた。")
+        #expect(blocks.count == 3)
+        #expect(Block.markdown(blocks: blocks.withoutEmptyText) == "## 買ったもの\n\n蝉の声で目が覚めた。")
+    }
+
+    @Test("チェックリスト項目への貼り付けは記法を剥がして完了状態ごと項目にする")
+    func pastesChecklistMarkdownIntoChecklistItem() {
+        var blocks = Block.blocks(fromMarkdown: "- [ ] ")
+        let itemID = blocks.firstChecklistItems[0].id
+        let fieldID = blocks.updateChecklistItem(itemID: itemID, text: "- [x] 麦茶のパック\n- [ ] 蚊取り線香")
+        #expect(Block.markdown(blocks: blocks) == "- [x] 麦茶のパック\n- [ ] 蚊取り線香")
+        #expect(fieldID == blocks.firstChecklistItems.last?.id)
+    }
 }
