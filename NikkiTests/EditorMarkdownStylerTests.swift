@@ -169,13 +169,13 @@ struct EditorMarkdownStylerTests {
         // キャレットは1行目 (先頭行) に置く。
         let boxes = editorChecklistBoxes(text: text, selectedRange: NSRange(location: 0, length: 0))
         #expect(boxes == [
-            EditorChecklistBox(syntaxRange: NSRange(location: 8, length: 6), done: true)
+            EditorChecklistBox(syntaxRange: NSRange(location: 8, length: 6), done: true, itemText: "b")
         ])
         // キャレットが段落行なら両方のチェックリスト行に出る。
         let boxesWithCaretOnParagraph = editorChecklistBoxes(text: text, selectedRange: NSRange(location: text.length, length: 0))
         #expect(boxesWithCaretOnParagraph == [
-            EditorChecklistBox(syntaxRange: NSRange(location: 0, length: 6), done: false),
-            EditorChecklistBox(syntaxRange: NSRange(location: 8, length: 6), done: true)
+            EditorChecklistBox(syntaxRange: NSRange(location: 0, length: 6), done: false, itemText: "a"),
+            EditorChecklistBox(syntaxRange: NSRange(location: 8, length: 6), done: true, itemText: "b")
         ])
     }
 

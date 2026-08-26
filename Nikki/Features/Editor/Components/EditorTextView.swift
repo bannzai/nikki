@@ -97,6 +97,15 @@ extension EditorTextView: UIViewRepresentable {
 
     func updateUIView(_ textView: UITextView, context: Context) {
         context.coordinator.parent = self
+        // 自動ロック中 (RootPage が .disabled を適用し isEnabled が false) は編集とタップを止め、
+        // ロック画面の裏で本文が変わらないようにする (旧実装の NSEvent 監視の isEnabled 条件に相当)。
+        if textView.isEditable != context.environment.isEnabled {
+            textView.isEditable = context.environment.isEnabled
+            textView.isUserInteractionEnabled = context.environment.isEnabled
+            if !context.environment.isEnabled {
+                textView.resignFirstResponder()
+            }
+        }
         // IME 変換中 (markedTextRange != nil) は外部からの text 差し替えをしない (issue #86 と同じ理由)。
         if textView.markedTextRange == nil, textView.text != text {
             textView.text = text
@@ -226,6 +235,7 @@ extension EditorTextView: UIViewRepresentable {
                 view.isHidden = false
                 view.frame = rect
                 view.done = box.done
+                view.itemText = box.itemText
                 view.onToggle = { [weak self] in
                     self?.toggleChecklistItem(syntaxRange: box.syntaxRange)
                 }
@@ -279,8 +289,10 @@ extension EditorTextView: UIViewRepresentable {
 
         func textViewDidChange(_ textView: UITextView) {
             parent.text = textView.text
-            // IME の変換中の更新・確定は shouldChangeTextIn を通らないため、その場合はカーソル行を引き直す。
-            restyle(range: editedRange ?? clampedSelectedRange())
+            // 編集で文字が入った範囲に加えてキャレット行も引き直す。行の途中の Return では
+            // 挿入された改行 (editedRange) の行だけでは分割後の後半行が漏れるため
+            // (IME の変換中の更新・確定は shouldChangeTextIn を通らないため editedRange が無いこともある)。
+            restyle(range: NSUnionRange(editedRange ?? clampedSelectedRange(), clampedSelectedRange()))
             editedRange = nil
         }
 
@@ -324,15 +336,29 @@ final class EditorUITextView: UITextView {
 
 /// チェックリスト行の記法「- [ ] 」に重ねて描画するチェックボックス。タップで完了を裏返す。
 /// このビューがタッチを受け取るため、記法の上のタップでキャレットは動かない。
+/// VoiceOver には項目名をラベルに持つオン/オフのトグルとして公開する (旧 EditorChecklistField の
+/// Toggle が持っていたアクセシビリティの置き換え)。
 final class EditorCheckboxOverlayView: UIView {
-    var done: Bool = false
+    var done: Bool = false {
+        didSet {
+            accessibilityTraits = done ? [.toggleButton, .selected] : [.toggleButton]
+        }
+    }
     var onToggle: (() -> Void)?
+    /// 項目の本文。VoiceOver がどの項目のチェックボックスかを読み上げられるようにする。
+    var itemText: String = "" {
+        didSet {
+            accessibilityLabel = itemText
+        }
+    }
 
-    // タップの受け付けと透明背景の設定が必要なためカスタム init にする。
+    // タップの受け付け・透明背景・アクセシビリティの設定が必要なためカスタム init にする。
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .clear
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
+        isAccessibilityElement = true
+        accessibilityTraits = [.toggleButton]
     }
 
     // UIView のサブクラスに要求される。Storyboard からは使わない。
@@ -342,6 +368,11 @@ final class EditorCheckboxOverlayView: UIView {
 
     @objc private func handleTap() {
         onToggle?()
+    }
+
+    override func accessibilityActivate() -> Bool {
+        onToggle?()
+        return true
     }
 
     override func draw(_ rect: CGRect) {
@@ -399,6 +430,16 @@ extension EditorTextView: NSViewRepresentable {
         context.coordinator.parent = self
         guard let textView = scrollView.documentView as? NSTextView else {
             return
+        }
+        // 自動ロック中 (RootPage が .disabled を適用し isEnabled が false) は編集と選択を止め、
+        // first responder も解放して、ロック画面の裏へ届くキー入力で本文が変わらないようにする
+        // (旧実装の NSEvent 監視の isEnabled 条件に相当)。
+        if textView.isEditable != context.environment.isEnabled {
+            textView.isEditable = context.environment.isEnabled
+            textView.isSelectable = context.environment.isEnabled
+            if !context.environment.isEnabled, textView.window?.firstResponder === textView {
+                textView.window?.makeFirstResponder(nil)
+            }
         }
         // IME 変換中 (未確定テキストあり) は外部からの text 差し替えをしない (issue #86 と同じ理由)。
         if !textView.hasMarkedText(), textView.string != text {
@@ -522,6 +563,7 @@ extension EditorTextView: NSViewRepresentable {
                 view.isHidden = false
                 view.frame = rect
                 view.done = box.done
+                view.itemText = box.itemText
                 view.onToggle = { [weak self] in
                     self?.toggleChecklistItem(syntaxRange: box.syntaxRange)
                 }
@@ -572,8 +614,10 @@ extension EditorTextView: NSViewRepresentable {
                 return
             }
             parent.text = textView.string
-            // IME の変換中の更新・確定は shouldChangeTextIn を通らない場合があるため、その場合はカーソル行を引き直す。
-            restyle(range: editedRange ?? clampedSelectedRange())
+            // 編集で文字が入った範囲に加えてキャレット行も引き直す。行の途中の Return では
+            // 挿入された改行 (editedRange) の行だけでは分割後の後半行が漏れるため
+            // (IME の変換中の更新・確定は shouldChangeTextIn を通らない場合があるため editedRange が無いこともある)。
+            restyle(range: NSUnionRange(editedRange ?? clampedSelectedRange(), clampedSelectedRange()))
             editedRange = nil
         }
 
@@ -605,6 +649,13 @@ final class EditorNSTextView: NSTextView {
         }
     }
 
+    override func paste(_ sender: Any?) {
+        // 「すべてコピー」はプレーンテキスト (markdown) とリッチテキストの2表現を書き込む。
+        // isRichText の NSTextView は RTF を選ぶが、RTF は記法を落とした表示用の文字列のため、
+        // 貼り付けると markdown ソースとして再解釈できなくなる。貼り付けは常にプレーンを使う。
+        pasteAsPlainText(sender)
+    }
+
     override func menu(for event: NSEvent) -> NSMenu? {
         // ブロックのコンテキストメニューだった「すべてコピー」(issue #100) を、
         // OS のテキスト編集メニューの末尾に足して提供する。
@@ -624,9 +675,13 @@ final class EditorNSTextView: NSTextView {
 
 /// チェックリスト行の記法「- [ ] 」に重ねて描画するチェックボックス。クリックで完了を裏返す。
 /// このビューがクリックを受け取るため、記法の上のクリックでキャレットは動かない。
+/// VoiceOver には項目名をラベルに持つチェックボックスとして公開する (旧 EditorChecklistField の
+/// Toggle が持っていたアクセシビリティの置き換え)。
 final class EditorCheckboxOverlayView: NSView {
     var done: Bool = false
     var onToggle: (() -> Void)?
+    /// 項目の本文。VoiceOver がどの項目のチェックボックスかを読み上げられるようにする。
+    var itemText: String = ""
 
     // テキストビュー (flipped) と同じ座標系で frame を扱うため上下反転にする。
     override var isFlipped: Bool {
@@ -639,6 +694,27 @@ final class EditorCheckboxOverlayView: NSView {
 
     override func mouseDown(with event: NSEvent) {
         onToggle?()
+    }
+
+    override func isAccessibilityElement() -> Bool {
+        true
+    }
+
+    override func accessibilityRole() -> NSAccessibility.Role? {
+        .checkBox
+    }
+
+    override func accessibilityLabel() -> String? {
+        itemText
+    }
+
+    override func accessibilityValue() -> Any? {
+        done ? 1 : 0
+    }
+
+    override func accessibilityPerformPress() -> Bool {
+        onToggle?()
+        return true
     }
 }
 

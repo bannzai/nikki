@@ -47,11 +47,11 @@ last_verified_at: 2026-08-26
   - 2026-08-25 システムの NavigationBar への移行 (issue #104) 後、simtunnel リモート iOS Simulator (iOS 26) で、エディタから左エッジのスワイプでホームへ戻り、作成した日記の行が一覧に出た (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/d619de59-47dd-4fa1-94ff-52f8d327b20e.jpg)
   - 2026-08-26 単一テキストビュー化 (issue #111) 後、macOS (署名なし Debug) でチェックリスト項目「tesuto」を追加して戻ると、ホームの行の抜粋が更新された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/99b92f5f-a76a-4457-854c-a77af9199fbc.png)。開き直すと追加した項目とチェック状態が保持されていた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/567d9c09-9af6-4af3-bdf8-2492166d9449.png)
   - 2026-08-26 単一テキストビュー化 (issue #111) 後、simtunnel リモート iOS Simulator (iPhone 17、reveal 判定修正後のビルド) で、戻った直後のホームに本文の抜粋が出て (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/a8e02e91-fc59-4a99-9cac-d60e12ddda8b.jpg)、開き直すと完了状態ごと本文が保持されていた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/c78c4706-db90-4a8b-b0b0-88c40e8c144c.jpg)
-- [x] **アプリを終了しても書いた内容が残る**: 書いた直後にアプリを終了して起動し直し、同じ日記を開くと本文が残っている
+- [ ] **アプリを終了しても書いた内容が残る**: 書いた直後にアプリを終了して起動し直し、同じ日記を開くと本文が残っている
   - 自動化: manual（アプリの終了と再起動をまたいだ永続化を実操作で確認する）
   - 2026-08-22 ローカル iOS Simulator で、terminate → 再起動後もホームに本文の抜粋が残っていた
   - 2026-08-22 macOS (Debug) で、エディタに「cmdq test body」を入力して開いたまま ⌘Q → 再起動すると、ホームに本文が残っていた (エディタ表示中のアプリ終了は willTerminateNotification 経由の書き戻し。 https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/a5040e50-02ff-4b9e-a64b-f05285e8dc95.png)
-  - 2026-08-26 単一テキストビュー化 (issue #111) 後は未再検証 (書き戻しの経路 = onDisappear / scenePhase / willTerminateNotification の commitDraft は変更なしで、編集先が [Block] から markdown 文字列になっただけ)
+  - ⏭️ スキップ: 2026-08-26 単一テキストビュー化 (issue #111) 後は未再検証 (書き戻しの経路 = onDisappear / scenePhase / willTerminateNotification の commitDraft は変更なしで、編集先が [Block] から markdown 文字列になっただけ)。次回 run-qa で再確認する
 
 #### 動作確認
 <details>
@@ -83,9 +83,9 @@ last_verified_at: 2026-08-26
 
 ## 2. 文字の大きさの反映
 
-- [x] **設定の文字の大きさが本文に効く**: 設定で文字の大きさを「小」「標準」「大」に変えると、エディタの本文の文字サイズがそれぞれ変わる
+- [ ] **設定の文字の大きさが本文に効く**: 設定で文字の大きさを「小」「標準」「大」に変えると、エディタの本文の文字サイズがそれぞれ変わる
   - 自動化: manual（3段階の見た目の違いを目視で比較する）
-  - 2026-08-26 単一テキストビュー化 (issue #111) 後は未再検証 (bodyFontSize の反映経路が TextField の .font から EditorTextView の属性適用に変わったため、次回 run-qa で再確認する)
+  - ⏭️ スキップ: 2026-08-26 単一テキストビュー化 (issue #111) 後は未再検証 (bodyFontSize の反映経路が TextField の .font から EditorTextView の属性適用に変わったため)。次回 run-qa で再確認する
   - 同じ本文で Standard / Large / Small を往復し、本文の文字サイズと折り返し位置が変わった (1 枚目 Large、2 枚目 Small)
   - (タイトル欄の廃止に伴い「タイトルの大きさは変わらない」項目は削除した)
 
@@ -119,9 +119,9 @@ last_verified_at: 2026-08-26
 - [x] **選択中のテンプレートにチェックが付く**: テンプレート一覧で、いま日記に使われているテンプレート(新規日記なら既定の {{date}} テンプレート)にチェックが付いている
   - 自動化: manual（一覧のチェック表示を目視で確認する）
   - 新規日記では既定の「Blank page」にチェックが付き、「Morning notes」を選ぶとチェックが移った
-- [x] **テンプレートを選ぶと書き出しが入れ替わる**: テンプレート一覧で別のテンプレートを選んでエディタへ戻ると、本文がそのテンプレートの書き出し全文(先頭の # 見出しも含む)に置き換わっている
+- [ ] **テンプレートを選ぶと書き出しが入れ替わる**: テンプレート一覧で別のテンプレートを選んでエディタへ戻ると、本文がそのテンプレートの書き出し全文(先頭の # 見出しも含む)に置き換わっている
   - 自動化: manual（戻った直後のエディタの中身を目視で確認する）+ NikkiTests/JournalEntryTests.swift (replace)
-  - 2026-08-26 単一テキストビュー化 (issue #111) 後は未再検証 (一覧から戻った時の再同期 loadDraftMarkdown の経路が [Block] から markdown 文字列に変わったため、次回 run-qa で再確認する)
+  - ⏭️ スキップ: 2026-08-26 単一テキストビュー化 (issue #111) 後は未再検証 (一覧から戻った時の再同期 loadDraftMarkdown の経路が [Block] から markdown 文字列に変わったため)。次回 run-qa で再確認する
   - タイトル欄の廃止後は見出し行も本文に入る。2026-08-22 ローカル iOS Simulator で、新規日記の本文が「# 2026年8月22日」で始まることを確認 (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/79caf481-a2b4-467a-8f7f-7cb9acaae2c5.png)
 
 #### 動作確認

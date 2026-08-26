@@ -241,6 +241,8 @@ struct EditorChecklistBox: Equatable {
     /// 記法「- [ ] 」のドキュメント内の範囲。この矩形に重ねてチェックボックスを描く。
     var syntaxRange: NSRange
     var done: Bool
+    /// 項目の本文 (記法より後ろの文字)。VoiceOver がチェックボックスを項目名で読み上げるために使う。
+    var itemText: String
 }
 
 /// チェックボックスを重ねる行 (カーソルの無いチェックリスト行) を本文全体から列挙する。
@@ -258,11 +260,13 @@ func editorChecklistBoxes(text: NSString, selectedRange: NSRange) -> [EditorChec
         if contentRange.length > 0, text.character(at: NSMaxRange(contentRange) - 1) == 0x0A {
             contentRange.length -= 1
         }
-        if case .checklistItem(let done, let syntaxRange) = editorLineStyle(lineText: text.substring(with: contentRange)) {
+        let lineText = text.substring(with: contentRange)
+        if case .checklistItem(let done, let syntaxRange) = editorLineStyle(lineText: lineText) {
             boxes.append(
                 EditorChecklistBox(
                     syntaxRange: NSRange(location: contentRange.location + syntaxRange.location, length: syntaxRange.length),
-                    done: done
+                    done: done,
+                    itemText: (lineText as NSString).substring(from: syntaxRange.length)
                 )
             )
         }
