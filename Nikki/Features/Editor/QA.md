@@ -1,7 +1,7 @@
 ---
 feature: Editor
 verification: mobile-mcp
-last_verified_commit: 1277d3ecc3f3242d21d740b8d84e40d99fed2266
+last_verified_commit: bb7fbc19192ed304b9745bcfce9c0121d0f133ee
 last_verified_at: 2026-08-26
 ---
 
@@ -24,6 +24,7 @@ last_verified_at: 2026-08-26
 - [x] **開いたらすぐ本文を書ける**: エディタにタイトル欄はなく、開くと本文末尾の空の行にキャレットが当たる(日記の続きを書く位置。issue #111 の単一テキストビュー化でフォーカス先は「ブロック」から「本文末尾のキャレット」になった)。本文が空のときはプレースホルダ(「ここに本文を書く…」)が出る
   - 自動化: manual（開いた直後のフォーカス・プレースホルダと入力の反映を実操作で確認する）
   - 2026-08-26 単一テキストビュー化 (issue #111) 後、macOS (署名なし Debug + カタログ entryList) で日記を開くと本文末尾の空の行にキャレットが出て、そのまま入力できた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/567d9c09-9af6-4af3-bdf8-2492166d9449.png)。プレースホルダは本文が完全に空の時のみの表示で未検証 (新規日記は既定テンプレートの見出しから始まるため)
+  - 2026-08-26 単一テキストビュー化 (issue #111) 後、simtunnel リモート iOS Simulator (iPhone 17、reveal 判定修正後のビルド) で、日記を開くとキーボードが上がり本文末尾の空の行にキャレットが出て、そのまま入力できた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/c78c4706-db90-4a8b-b0b0-88c40e8c144c.jpg)
   - 2026-08-22 (旧 TextEditor 実装) ローカル iOS Simulator で、新規日記(テンプレートなし)を開くとプレースホルダが出てキーボードが上がり、そのまま本文を入力できた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/771e0761-6dfa-4f52-9f55-abf3043875a9.png)
   - 2026-08-23 ブロック装飾表示 (issue #88) 後、simtunnel リモート iOS Simulator で、新規日記を開くとキーボードが上がり末尾の空の段落にキャレットが出て、そのまま本文を入力できた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260823/9bcea095-549e-42b7-9c5b-707187e83468.jpg)。本文が空の日記のプレースホルダはブロック実装後は未検証 (新規日記は既定テンプレートの見出しから始まり本文が空にならないため。表示条件は旧実装と同じ「本文が完全に空の時のみ」)
 - [x] **過去のタイトルは本文の見出しへ移る**: タイトル付きの古い日記を開くと、タイトルが本文先頭の「# タイトル」見出しに移って表示され、内容は失われない
@@ -45,6 +46,7 @@ last_verified_at: 2026-08-26
   - 2026-08-22 編集中の本文を @State に持つ変更 (issue #86) 後も、iOS で「かたなはま」を確定して閉じた直後のホームに抜粋が出た (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/961222cf-0103-465c-809d-3d78fd7773fb.png)。macOS でも同様に反映された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/91031702-4f76-4e4b-9dce-91d7e98254cb.png)
   - 2026-08-25 システムの NavigationBar への移行 (issue #104) 後、simtunnel リモート iOS Simulator (iOS 26) で、エディタから左エッジのスワイプでホームへ戻り、作成した日記の行が一覧に出た (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/d619de59-47dd-4fa1-94ff-52f8d327b20e.jpg)
   - 2026-08-26 単一テキストビュー化 (issue #111) 後、macOS (署名なし Debug) でチェックリスト項目「tesuto」を追加して戻ると、ホームの行の抜粋が更新された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/99b92f5f-a76a-4457-854c-a77af9199fbc.png)。開き直すと追加した項目とチェック状態が保持されていた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/567d9c09-9af6-4af3-bdf8-2492166d9449.png)
+  - 2026-08-26 単一テキストビュー化 (issue #111) 後、simtunnel リモート iOS Simulator (iPhone 17、reveal 判定修正後のビルド) で、戻った直後のホームに本文の抜粋が出て (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/a8e02e91-fc59-4a99-9cac-d60e12ddda8b.jpg)、開き直すと完了状態ごと本文が保持されていた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/c78c4706-db90-4a8b-b0b0-88c40e8c144c.jpg)
 - [x] **アプリを終了しても書いた内容が残る**: 書いた直後にアプリを終了して起動し直し、同じ日記を開くと本文が残っている
   - 自動化: manual（アプリの終了と再起動をまたいだ永続化を実操作で確認する）
   - 2026-08-22 ローカル iOS Simulator で、terminate → 再起動後もホームに本文の抜粋が残っていた
@@ -165,27 +167,34 @@ last_verified_at: 2026-08-26
 - [x] **markdown 記法が装飾表示される**: 見出し(#〜###)は見出しの書体、チェックリスト(- [ ] / - [x])はチェックボックスと完了項目の打ち消し線+灰色で表示され、記法の文字はカーソルの無い行では見えない
   - 自動化: NikkiTests/EditorMarkdownStylerTests.swift (行単位のスタイル判定・属性適用) + manual（描画は目視で確認する）
   - macOS でサンプル日記の見出し・チェックリスト (完了は打ち消し線+灰)・段落が装飾表示された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/c766ab0e-4f0a-4257-aef8-c69f6d986ae2.png)
+  - 2026-08-26 単一テキストビュー化 (issue #111) 後、simtunnel リモート iOS Simulator (iPhone 17、reveal 判定修正後のビルド) で、見出し (# は非表示)・チェックボックス・完了項目の打ち消し線+灰が表示された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/15760956-fa30-4dc5-87b0-c3a1d73e8087.jpg)
 - [x] **カーソルのある行では記法が生で見える (Live Preview)**: キャレットを見出し行に置くと「#」がグレーの生テキストで見え、行を離れると隠れる。チェックリスト行もカーソル行では「- [ ]」が生で見え、チェックボックスは出ない
   - 自動化: NikkiTests/EditorMarkdownStylerTests.swift (editorLineRevealsSyntax) + manual
   - macOS で ⌘↑ でキャレットを見出し行へ置くと「#」がグレーで見え (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/f3e1147d-08b2-482e-852a-3c29fc98884b.png)、行を離れると隠れた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/c766ab0e-4f0a-4257-aef8-c69f6d986ae2.png)
+  - 初回実装では、本文が改行で終わる状態で文末 (最終改行の直後) にキャレットがあると、1つ前の行も「カーソル行」と誤判定して記法が生表示のまま残った (iOS の実操作で発覚 https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/eb26a38e-8b49-4f71-9ef8-7651e777a274.jpg 、macOS でも再現)。reveal 判定を NSString.lineRange と同じ「キャレットの属する行」に正して解消し、チェックリスト行末の Return 直後にチェックボックス表示へ戻ることを macOS で確認 (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/a85773b7-4e37-4257-b6ee-c311ea6c3dbf.png)。回帰テスト caretAfterTrailingNewlineDoesNotRevealPreviousLine を追加。修正後のトグルも再確認 (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/3e6d7b75-5773-4bf9-8c1d-40b031560729.png)
+  - 2026-08-26 単一テキストビュー化 (issue #111) 後、simtunnel リモート iOS Simulator (iPhone 17、reveal 判定修正後のビルド) で、キャレットを見出し行に置くと「#」がグレーで見え、チェックリスト行はチェックボックス表示のままだった (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/15760956-fa30-4dc5-87b0-c3a1d73e8087.jpg)。チェックリスト行末の Return + 次の行への記法入力の後も、元の行はチェックボックス表示のまま残った (回帰確認。 https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/42f77ace-37bf-42da-931b-c0b71a89ae0f.jpg)
 - [x] **行頭の Backspace で前の行と結合する**: 行頭でバックスペースを押すと前の行 (空行を含む) と結合する。テキストビュー標準の挙動 (issue #111 で解消した不満 1)
   - 自動化: manual（キー入力とキャレット位置の目視確認が必要なため）
   - macOS で段落の行頭のバックスペースで上の空行が消えて詰まり (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/c27e44b6-e1bb-4ae7-a3cc-f98b9cc7dbba.png)、続けてバックスペースすると見出し行と結合して段落の文字が見出しの一部になった。⌘Z 2回で両方の操作が元に戻った
+  - iOS の行頭バックスペースでの結合は個別には未検証 (単一テキストビュー標準のテキスト削除で、行内の削除は「空のチェック項目のバックスペース」の項で確認済み)
 - [x] **行の途中の Return でカーソル以降が次の行へ移る**: 行の途中で Return すると、その位置で行が分かれてカーソル以降の文字が次の行になる (旧実装の既知の制限を解消)
   - 自動化: manual（キャレット位置を伴うキー入力の確認が必要なため）
   - macOS で段落「風が涼しく|なってきたので…」の5文字目で Return すると、「風が涼しく」と「なってきたので…」に分かれ、キャレットが2行目の先頭に来た (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/c9e62f36-7d73-4eec-b158-6c17acd50e01.png)。⌘Z で元に戻った
 - [x] **チェックのタップで完了が切り替わり保存される**: チェックボックスをタップすると即座に完了(墨地+白チェック、打ち消し線+灰) / 未完了が切り替わり、閉じて開き直しても状態が残る(markdown へ - [x] / - [ ] として書き戻される)
   - 自動化: NikkiTests/EditorMarkdownStylerTests.swift (editorChecklistBoxes) + manual
   - macOS でクリックにより未完了→完了 (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/2fa85e92-9da6-44f2-8829-67df6a5d2ddc.png)、再クリックで完了→未完了 (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/a49a0dd6-8e60-4b3b-9e8d-c134a818abdc.png) が切り替わった。追加した項目が閉じて開き直しても残ることも確認 (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/567d9c09-9af6-4af3-bdf8-2492166d9449.png)
+  - 2026-08-26 単一テキストビュー化 (issue #111) 後、simtunnel リモート iOS Simulator (iPhone 17、reveal 判定修正後のビルド) で、タップで未完了→完了 (打ち消し線+灰) に切り替わり (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/b47fefa8-dde5-43ec-ad0e-f5498b76ffc3.jpg)、閉じて開き直しても保持された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/c78c4706-db90-4a8b-b0b0-88c40e8c144c.jpg)
 - [x] **記法を打つとその行が装飾される**: 行に「- [ ] 」「- [x] 」「# 」〜「### 」を打つと、その行が装飾の対象になる。カーソルがその行にある間は記法が生で見え、行を離れるとチェックボックス・見出し表示になる。既存の文の行頭に打ち足しても効く (issue #111 で解消した不満 2)
   - 自動化: NikkiTests/EditorMarkdownStylerTests.swift (editorLineStyle) + manual
   - macOS で「- [ ] tesuto」と入力するとカーソル行では記法がグレーで見え (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/0a314ab7-665c-4dcd-a903-94f6538e6c36.png)、↑で行を離れるとチェックボックス表示になった (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/553979bb-9b90-455b-832b-c0431e312668.png)
+  - 2026-08-26 単一テキストビュー化 (issue #111) 後、simtunnel リモート iOS Simulator (iPhone 17、reveal 判定修正後のビルド) で、ソフトウェアキーボードで「- [ ] milk」を入力するとカーソル行では記法がグレーで見え、行を離れるとチェックボックス表示になった (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/15760956-fa30-4dc5-87b0-c3a1d73e8087.jpg)
 - [x] **完了した項目のテキストも編集できる**: 完了 (打ち消し線) の項目にキャレットを置いてそのまま文字を挿入・削除できる (旧実装の既知の制限を解消)
   - 自動化: manual
   - macOS で完了項目「麦茶のパック」の途中にキャレットを置くと記法「- [x]」が生で見え、そのまま「OK」を挿入できた (挿入した文字にも打ち消し線が継続。 https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/29d7910f-e06a-4ea9-b713-95e7a53ba11d.png)。⌘Z で元に戻した
 - [x] **空のチェック項目のバックスペースは記法の文字を普通に削除する**: 「- [ ] 」だけの行でバックスペースを押すと、記法の文字が1文字ずつ消える (Obsidian 実測と同じ。カーソル行では記法が生表示されているため見た目も自然)。ソフトウェアキーボードのバックスペースでも同じに動く設計 (通常のテキスト削除のため)
   - 自動化: manual
   - macOS で「- [ ] 」入力後にバックスペース2回で「- [」が残り、記法の文字が普通に削除された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/530614c1-4941-4548-b41f-39620466939f.png)
+  - 2026-08-26 単一テキストビュー化 (issue #111) 後、simtunnel リモート iOS Simulator (iPhone 17、reveal 判定修正後のビルド) で、ソフトウェアキーボード相当の削除 (WDA typeText の backspace) 2回で「- [ ] 」が「- [」になり、記法の文字が普通に削除された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/3ac0a2f8-5523-4ffa-b5da-de9fecf450d2.jpg)。旧実装の既知の制限「ソフトウェアキーボードの ⌫ でチェックボックスを外せない」は解消
 - [x] **↑↓・行またぎの選択が自然に動く**: 1つのテキストビューのため、↑↓のキャレット移動・複数行の選択が行やブロックの境界を越えて動く
   - 自動化: manual
   - macOS で本 QA の一連の操作 (⌘↑・↓×2・↑・⌘A の全選択など) がすべて期待どおりに動いた (エビデンスは各項目のスクリーンショット)
@@ -207,6 +216,7 @@ last_verified_at: 2026-08-26
 - [x] **「すべてコピー」で本文全体が2表現で入る**: テキストビューの右クリック (macOS) / 編集メニュー (iOS) の「すべてコピー」で、本文全体 (空のブロックを除く) が markdown とリッチテキスト (RTF: 見出しサイズ・☐/☑・完了の打ち消し線) の2表現でペーストボードに入る
   - 自動化: NikkiTests/EditorBlockCopyTests.swift (リッチテキスト表現) + manual
   - macOS で本文上の右クリックメニューの末尾に「すべてコピー」が出て (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/18c4929c-7b3c-49fe-ae77-a66e6a4fbd96.png)、実行すると本文全体の markdown が pbpaste で取れた
+  - 2026-08-26 単一テキストビュー化 (issue #111) 後、simtunnel リモート iOS Simulator (iPhone 17、reveal 判定修正後のビルド) で、キャレット位置のタップで出る編集メニューに「Copy All」が表示された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/27da919d-50bd-46f2-9a7c-7733f5499f5d.jpg)。実行後のペーストボード内容の検証は未実施 (コピー処理は macOS と共通コードで、markdown/RTF の内容はユニットテストと macOS の pbpaste で担保)
 - [x] **markdown の貼り付けはソースに残り、表示だけ装飾される**: 記法を含む複数行を貼ると、貼った文字がそのまま markdown ソースに入り、行単位の装飾で表示される。貼り付けで既存の文字が別の種類に変換されることはない (非破壊。行の途中に貼った「##」は見出しにならない = markdown の行頭規則のまま)
   - 自動化: NikkiTests/EditorMarkdownStylerTests.swift (行単位のスタイル判定) + manual
   - macOS で `## 貼り付け見出し\n- [x] 完了アイテム\n平文` を本文末尾 (既存の文の行末) に貼ると、1行目は既存の文と同じ行のため段落のまま、「- [x] 完了アイテム」は打ち消し線付きのチェック項目として即座に装飾された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/4394863c-5a88-4303-9bf9-2d5355b871c2.png)。⌘Z で貼り付け全体が元に戻った
