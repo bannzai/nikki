@@ -1,8 +1,8 @@
 import SwiftUI
 
 #if DEBUG
-/// ホームヘッダのモック。HomeHeader と同じ見た目(Nikki ロゴ + 人物アイコン)を、
-/// 設定画面への navigationDestination を持たない静的表現で再現する。
+/// ホームのナビゲーションバーのモック。HomePage がナビゲーションバーへ載せるのと同じ並び(Nikki ロゴ + 右端のアイコン)を、
+/// ImageRenderer では描画されない .toolbar を使わず、設定画面への遷移も持たない静的表現で再現する。
 struct AppStoreScreenshotHomeHeader: View {
     var body: some View {
         HStack(spacing: 0) {
@@ -16,6 +16,51 @@ struct AppStoreScreenshotHomeHeader: View {
                 .foregroundStyle(Color(hex: 0x52514E))
                 .frame(width: 38, height: 38)
         }
+    }
+}
+
+/// ナビゲーションバーのモック。スクショは ImageRenderer で描くため、システムのナビゲーションバー
+/// (.toolbar に載せた実画面のタイトル・戻るボタン)は描画されない。実画面と同じ見た目
+/// (左端の戻るシェブロン + 中央のタイトルまたはキャプション)を、操作を持たない静的表現で再現する。
+struct AppStoreScreenshotNavBar: View {
+    /// 中央に置く文言。画面のタイトルとエディタの日付キャプションで書体が異なるだけで、並びは同じ。
+    enum Center {
+        case title(String)
+        case caption(String)
+    }
+
+    let center: Center
+    // 右端のテキストボタンを持つのはエディタ(「テンプレート」)だけのため、他の画面が既定のまま使えるよう nil を既定にする。
+    /// 右端に置くテキストボタンの文言。nil のときは表示しない。実画面の InkNavigationBarTrailingButton と同じ見た目の静的表現。
+    var trailingButtonText: String? = nil
+
+    var body: some View {
+        ZStack {
+            switch center {
+            case .title(let text):
+                Text(text)
+                    .font(.inkNavTitle)
+                    .foregroundStyle(Color.ink)
+            case .caption(let text):
+                Text(text)
+                    .font(.ink(12.5, .regular))
+                    .foregroundStyle(Color.inkTextTertiary)
+            }
+
+            HStack {
+                Image(systemName: InkIcons.chevronLeft)
+                    .font(.system(size: 17, weight: .semibold))
+                    .foregroundStyle(Color.inkTextSecondary)
+                Spacer(minLength: 0)
+                if let trailingButtonText {
+                    Text(trailingButtonText)
+                        .font(.ink(13.5, .regular))
+                        .foregroundStyle(Color.inkTextSecondary)
+                }
+            }
+        }
+        .frame(height: 44)
+        .padding(.horizontal, 20)
     }
 }
 

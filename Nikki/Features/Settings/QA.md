@@ -1,8 +1,8 @@
 ---
 feature: Settings
 verification: mobile-mcp
-last_verified_commit: 386cc3aa015dd43afa9a608af57ee55f05cc1074
-last_verified_at: 2026-08-24
+last_verified_commit: 51aeef8989e9a524ee4e9484c51c02ab373bb70e
+last_verified_at: 2026-08-25
 ---
 
 # Settings QA
@@ -138,6 +138,7 @@ last_verified_at: 2026-08-24
   - 自動化: manual（シートの開閉操作を伴うため）
 - [x] **戻るボタンで設定を閉じられる**: ナビゲーションバーの戻るボタンで設定画面を閉じ、元の画面に戻る
   - 自動化: manual（画面遷移の目視確認）
+  - 2026-08-25 システムの NavigationBar への移行 (issue #104) 後、simtunnel リモート iOS Simulator (iOS 26) で、ホームの歯車から設定を開き (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/a4d60909-ad0d-4383-a16f-3e1ad06ae8c6.jpg)、システムの戻るボタンのタップでホームへ戻れた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/24c5e18e-39d4-4aeb-97dd-f16ed50ea28c.jpg)。移行直後は RootPage の無操作検出 (simultaneousGesture) が戻るボタンのタップを奪って戻れない不具合があり、タッチを消費しない観測用 recognizer への置き換えで解消した (同 PR に含む)
 
 #### 動作確認
 <details>

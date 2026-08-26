@@ -32,7 +32,6 @@ struct NotebookListPage: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            InkNavBar(leading: .back, center: .title(String(localized: "Templates")), onLeading: { dismiss() })
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     Text("Choose the template for this entry.")
@@ -66,7 +65,7 @@ struct NotebookListPage: View {
             }
         }
         .background(paperColor.ignoresSafeArea())
-        .inkNavigationBarHidden()
+        .inkNavigationBar(title: String(localized: "Templates"))
         .navigationDestination(isPresented: $notebookCreateIsPresented) {
             NotebookCreatePage()
         }

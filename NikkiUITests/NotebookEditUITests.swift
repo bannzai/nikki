@@ -47,12 +47,17 @@ nonisolated final class NotebookEditUITests: XCTestCase {
         return nameField
     }
 
-    /// InkNavBar の戻る。
-    /// app.buttons の並び順にはアプリ外のボタン(macOS のウィンドウ枠・変換候補バー、iOS のキーボード)が
-    /// 混ざり、添字では取り違えるため、アプリ側で付けた明示の identifier で引く。
+    /// システムのナビゲーションバーの戻る。
+    /// app.buttons をアプリ全体から引くと、アプリ外のボタン(macOS のウィンドウ枠・変換候補バー、
+    /// iOS のキーボード)が混ざって取り違えるため、バーの中に絞って引く。
+    /// バーの実体は、iOS がナビゲーションバー、macOS がウィンドウのツールバーと分かれる。
     @MainActor
     private func backButton(app: XCUIApplication) -> XCUIElement {
-        app.buttons["ink-nav-back"].firstMatch
+        #if os(macOS)
+        return app.toolbars.buttons.firstMatch
+        #else
+        return app.navigationBars.buttons.firstMatch
+        #endif
     }
 
     /// 名前を末尾から1文字ずつ削除して空にし、そのまま戻ると元の名前のまま残る。
@@ -75,7 +80,7 @@ nonisolated final class NotebookEditUITests: XCTestCase {
         )
 
         // iOS はキーボードのキー(次のキーボード等)も app.buttons に並ぶため、リターンで
-        // キーボードを閉じてから、InkNavBar の戻るで一覧へ戻る。
+        // キーボードを閉じてから、ナビゲーションバーの戻るで一覧へ戻る。
         nameField.typeText("\n")
         backButton(app: app).tap()
 

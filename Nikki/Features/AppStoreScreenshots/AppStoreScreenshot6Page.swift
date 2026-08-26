@@ -51,7 +51,7 @@ struct AppStoreScreenshotThemeScreen: View {
         )
         }
         VStack(spacing: 0) {
-            InkNavBar(leading: .back, center: .title(navTitle))
+            AppStoreScreenshotNavBar(center: .title(navTitle))
             VStack(alignment: .leading, spacing: 0) {
                 // ThemePreviewCard と同じライブプレビューの見た目。サンプル文言を言語別に渡す。
                 VStack(alignment: .leading, spacing: 0) {

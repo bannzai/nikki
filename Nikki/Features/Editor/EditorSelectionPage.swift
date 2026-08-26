@@ -6,7 +6,7 @@ struct EditorSelectionPage: View {
     let entry: JournalEntry
 
     var body: some View {
-        EditorScreenScaffold(caption: editorDateText(date: entry.date), onDismiss: {}) {
+        EditorScreenScaffold(caption: editorDateText(date: entry.date)) {
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 0) {
                     // パースの二重計算を避けるため、body 内でローカル let に束縛して使い回す。

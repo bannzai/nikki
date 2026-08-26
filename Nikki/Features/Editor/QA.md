@@ -1,7 +1,7 @@
 ---
 feature: Editor
 verification: mobile-mcp
-last_verified_commit: c05c634ada240973a5ea3e5b82f863de1822bb55
+last_verified_commit: 51aeef8989e9a524ee4e9484c51c02ab373bb70e
 last_verified_at: 2026-08-25
 ---
 
@@ -35,10 +35,12 @@ last_verified_at: 2026-08-25
 - [x] **日付が上部に出る**: 画面上部に日記の日付が「7月18日 土曜日」の形式 (英語表示では「Saturday, July 18」) で出る
   - 自動化: manual（日付の表記を目視で確認する）
   - 2026-08-22 ローカル iOS Simulator (日本語) で「8月22日 土曜日」
-- [x] **戻るとホームに反映される**: 左上の戻るボタン(左向きシェブロン。issue #92 で下向きシェブロンから変更)でホームへ戻ると、その日記の行が本文の抜粋で表示される (タイトルのない日記は空のタイトル行を出さない)
-  - 自動化: manual（画面をまたいだ反映を目視で確認する）
+  - 2026-08-25 システムの NavigationBar への移行 (issue #104) 後、simtunnel リモート iOS Simulator (iOS 26) で、日付がナビゲーションバー中央のキャプションとして「8月25日 火曜日」と出た (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/16b0d4dc-845f-4300-a09f-d36c206a5c97.jpg)
+- [x] **戻るとホームに反映される**: 左上の戻るボタン(issue #104 でシステム標準の戻るボタンに移行)または左エッジのスワイプでホームへ戻ると、その日記の行が本文の抜粋で表示される (タイトルのない日記は空のタイトル行を出さない)
+  - 自動化: manual（画面をまたいだ反映を目視で確認する）+ NikkiUITests/NavigationSwipeBackUITests.swift (スワイプで戻れること自体の機械検証)
   - 2026-08-22 ローカル iOS Simulator で、閉じた直後のホームに本文の抜粋だけの行が出た (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/9501fb65-25a9-40fd-93c6-12ce758b1c53.png)
   - 2026-08-22 編集中の本文を @State に持つ変更 (issue #86) 後も、iOS で「かたなはま」を確定して閉じた直後のホームに抜粋が出た (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/961222cf-0103-465c-809d-3d78fd7773fb.png)。macOS でも同様に反映された (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/91031702-4f76-4e4b-9dce-91d7e98254cb.png)
+  - 2026-08-25 システムの NavigationBar への移行 (issue #104) 後、simtunnel リモート iOS Simulator (iOS 26) で、エディタから左エッジのスワイプでホームへ戻り、作成した日記の行が一覧に出た (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/d619de59-47dd-4fa1-94ff-52f8d327b20e.jpg)
 - [x] **アプリを終了しても書いた内容が残る**: 書いた直後にアプリを終了して起動し直し、同じ日記を開くと本文が残っている
   - 自動化: manual（アプリの終了と再起動をまたいだ永続化を実操作で確認する）
   - 2026-08-22 ローカル iOS Simulator で、terminate → 再起動後もホームに本文の抜粋が残っていた
@@ -104,6 +106,8 @@ last_verified_at: 2026-08-25
 - [x] **テンプレート一覧へ進める**: エディタの右上に「テンプレート」が出て(テンプレートが1件だけでも出る)、押すとテンプレート一覧が開く
   - 自動化: manual（画面上部の表示と遷移を実操作で確認する）
   - テンプレートが既定の1件だけの状態でも右上に「Template」が出て、押すと一覧が開いた
+  - 2026-08-25 システムの NavigationBar への移行 (issue #104) 後、simtunnel リモート iOS Simulator (iOS 26) で、ナビゲーションバー右端の「テンプレート」から一覧が開いた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/cea30166-5fb9-4f07-affd-397d4e8e266e.jpg)
+  - 2026-08-26 macOS (ad-hoc 署名の Debug ビルド) でも trailing ボタンを実操作確認。エディタのウィンドウツールバーに日付キャプションと「テンプレート」(.primaryAction) が出てクリックで一覧が開き (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/32d2b47b-9f61-4a72-8c63-6044bda637d9.png, https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/0326038c-3be3-4b3b-adba-e1dcd9423249.png)、作成フォームの右端に「作成」が出た (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/8cf7c285-4518-4707-8679-db3463308a2a.png)
 - [x] **選択中のテンプレートにチェックが付く**: テンプレート一覧で、いま日記に使われているテンプレート(新規日記なら既定の {{date}} テンプレート)にチェックが付いている
   - 自動化: manual（一覧のチェック表示を目視で確認する）
   - 新規日記では既定の「Blank page」にチェックが付き、「Morning notes」を選ぶとチェックが移った
