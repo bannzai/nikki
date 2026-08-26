@@ -150,6 +150,7 @@ struct HomePage: View {
                     // iOS 26 のツールバー項目は幅が絞られて「N...」に切り詰められるため、固有幅で描かせる。
                     .fixedSize()
             }
+            .inkSharedBackgroundHidden()
             #endif
             // リスト追加と設定は、同じ placement の並び順が環境で変わらないよう1つの ToolbarItem にまとめる。
             ToolbarItem(placement: .inkNavigationBarTrailing) {
@@ -183,6 +184,7 @@ struct HomePage: View {
                     .buttonStyle(.plain)
                 }
             }
+            .inkSharedBackgroundHidden()
         }
         // キーボード入力はタッチとして拾えないため、検索の入力を無操作タイマーのリセットにする。
         .onChange(of: searchText) {

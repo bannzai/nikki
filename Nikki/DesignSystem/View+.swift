@@ -34,6 +34,7 @@ struct InkNavigationBarTrailingButton: ToolbarContent {
             }
             .buttonStyle(.plain)
         }
+        .inkSharedBackgroundHidden()
     }
 }
 
@@ -49,6 +50,7 @@ private struct InkNavigationBarTitle: ViewModifier {
                         .font(.inkNavTitle)
                         .foregroundStyle(Color.ink)
                 }
+                .inkSharedBackgroundHidden()
             }
             .inkNavigationBarStyle()
     }
@@ -66,6 +68,7 @@ private struct InkNavigationBarCaption: ViewModifier {
                         .font(.ink(12.5, .regular))
                         .foregroundStyle(Color.inkTextTertiary)
                 }
+                .inkSharedBackgroundHidden()
             }
             .inkNavigationBarStyle()
     }

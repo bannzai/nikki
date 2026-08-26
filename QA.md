@@ -136,6 +136,9 @@ issue #104 で独自ヘッダ (InkNavBar) を廃止し、全画面をシステ�
 - [x] **macOS で戻るボタンのタップでも戻れる**: ウィンドウツールバーの戻るボタンをタップすると前の画面に戻る
   - 自動化: manual（macOS の UI テストは provisioning profile が無くローカルで実行できないため、実操作で確認する）
   - 2026-08-25 ad-hoc 署名の Debug ビルドで、ホームの歯車から設定へ push し (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/daf2dc18-8bba-48eb-a4ac-c3cddf130af2.png)、戻るボタンでホームへ戻れた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/ecb4c063-4a18-4246-b17c-0292f002c79d.png)
+- [x] **ツールバー項目に Liquid Glass のカプセルが付かない (iOS 26 / macOS 26)**: ホームのロゴ・「+」・歯車、principal のタイトル / エディタの日付キャプション、ナビ右端のテキストボタン (テンプレート等) が紙色の地に直接載り、OS 標準の Glass のカプセルが付かない。システムの戻るボタンの円形の地だけは、消すとエッジスワイプバックが無効になる (NavigationSwipeBackUITests で実測) ため OS 標準のまま許容する (仕様判断)
+  - 自動化: manual（Glass の有無は視覚判定のため、スクリーンショットの目視で確認する）
+  - 2026-08-26 ローカル iOS Simulator (iOS 26.5) と ad-hoc 署名の macOS Debug ビルドで、ホームとエディタ (カタログ `editor` = 製品の EditorPage) のナビゲーションバーからカプセルが消えていることを目視確認 (下の動作確認スクショ)。同ビルドで NavigationSwipeBackUITests の2件が pass し、スワイプバックが保たれていることも確認
 
 #### 動作確認
 <details>
@@ -167,6 +170,18 @@ issue #104 で独自ヘッダ (InkNavBar) を廃止し、全画面をシステ�
 **確認日: 2026-08-25** (ad-hoc 署名の Debug ビルド。設定へ push した状態と、戻るボタンで戻ったホーム)
 <img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/daf2dc18-8bba-48eb-a4ac-c3cddf130af2.png" alt="macOS の設定画面。ウィンドウツールバーに戻るボタンとタイトル「設定」が表示されている" width="320">
 <img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/ecb4c063-4a18-4246-b17c-0292f002c79d.png" alt="macOS でウィンドウツールバーの戻るボタンのクリックで設定からホームへ戻ったところ" width="320">
+
+</details>
+
+### **ツールバー項目に Liquid Glass のカプセルが付かない (iOS 26 / macOS 26)**: ロゴ・歯車・タイトル・キャプション・右端ボタンが紙色の地に直接載る
+
+<details><summary>動作確認スクショ</summary>
+
+**確認日: 2026-08-26** (iOS: ローカル iOS Simulator / iOS 26.5、macOS: ad-hoc 署名の Debug ビルド。ホームのロゴ・「+」・歯車と、エディタの日付キャプション・「テンプレート」ボタンにカプセルが付いていない。エディタ左上のシステムの戻るボタンの円形の地は仕様どおり残る)
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/0bce24a7-ce4d-402c-9d9c-388b62e835a8.png" alt="iOS のホーム。ロゴ Nikki と歯車が Glass のカプセルなしで紙色の地に載っている" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/ea8625df-5ede-40f9-8957-869ee960ed74.png" alt="iOS のエディタ。日付キャプションとテンプレートボタンが Glass のカプセルなしで表示され、左上のシステムの戻るボタンには円形の地が残っている" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/a535a7dc-a7e2-4631-a946-7473f5f1a16d.png" alt="macOS のホーム。歯車が Glass のカプセルなしでウィンドウツールバーに載っている" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/090cad47-d953-4d80-8627-c3de710da936.png" alt="macOS のエディタ。日付キャプションとテンプレートボタンが Glass のカプセルなしで表示され、左上のシステムの戻るボタンには円形の地が残っている" width="320">
 
 </details>
 

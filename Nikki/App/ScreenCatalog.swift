@@ -11,6 +11,7 @@ enum Screen: String, CaseIterable, Identifiable {
     case lock
     case entryList
     case calendar
+    case editor
     case editorWriting
     case editorSelection
     case editorReorder
@@ -59,6 +60,12 @@ struct ScreenContent: View {
             }
             .environment(\.today, SampleData.referenceToday)
             .defaultAppStorage(homePageModeDefaults(mode: .calendar))
+        case .editor:
+            // EditorWritingPage(静的カタログ)と違い、ナビ右端の「テンプレート」ボタンを含む製品のエディタ。
+            // EditorPage は @Environment(\.modelContext) で書き戻すため、in-memory コンテナの下に置く。
+            ScreenCatalogPushedStack {
+                EditorPage(entry: SampleData.sampleEntry)
+            }
         case .editorWriting:
             ScreenCatalogPushedStack {
                 EditorWritingPage(entry: SampleData.sampleEntry)
