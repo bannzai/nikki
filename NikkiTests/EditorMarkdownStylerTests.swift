@@ -195,6 +195,8 @@ struct EditorMarkdownStylerTests {
         let markdown = "# 今日\nかきくけこ"
         let textStorage = NSTextStorage(string: markdown)
         let markedRange = NSRange(location: 5, length: 5)
+        // IME が変換中テキストへ付ける属性の代わりの目印。restyle が触れなければそのまま残る。
+        textStorage.addAttribute(.foregroundColor, value: EditorTextColor.red, range: markedRange)
         editorRestyle(
             textStorage: textStorage,
             range: NSRange(location: 0, length: (markdown as NSString).length),
@@ -202,8 +204,9 @@ struct EditorMarkdownStylerTests {
             selectedRange: NSRange(location: 10, length: 0),
             markedRange: markedRange
         )
-        // 変換中の行 (2行目) には装飾が付かない。
-        #expect(textStorage.attribute(.font, at: markedRange.location, effectiveRange: nil) == nil)
+        // 変換中の行 (2行目) の属性は書き換えられない。
+        let markedColor = textStorage.attribute(.foregroundColor, at: markedRange.location, effectiveRange: nil) as? EditorTextColor
+        #expect(markedColor == EditorTextColor.red)
         // 変換中でない行 (見出し) には装飾が付く。
         let headingFont = textStorage.attribute(.font, at: 2, effectiveRange: nil) as? EditorTextFont
         #expect(headingFont?.pointSize == 22)
