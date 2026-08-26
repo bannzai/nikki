@@ -28,7 +28,6 @@ struct SettingsPage: View {
     /// Markdown 書き出しは読んだときに時系列で並ぶよう古い順に取り出す。
     @Query(sort: \JournalEntry.date) var entries: [JournalEntry]
 
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.plusActive) private var plusActive
     @Environment(\.modelContext) private var modelContext
     @Environment(\.paperColor) private var paperColor
@@ -39,8 +38,6 @@ struct SettingsPage: View {
             paperColor.ignoresSafeArea()
 
             VStack(spacing: 0) {
-                InkNavBar(leading: .back, center: .title(String(localized: "Settings")), onLeading: { dismiss() })
-
                 ScrollView {
                     VStack(alignment: .leading, spacing: 0) {
                         SettingsSectionLabel(text: String(localized: "Writing"))
@@ -225,7 +222,7 @@ struct SettingsPage: View {
                 }
             }
         }
-        .inkNavigationBarHidden()
+        .inkNavigationBar(title: String(localized: "Settings"))
         .navigationDestination(isPresented: $themeIsPresented) {
             ThemePage()
         }

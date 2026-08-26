@@ -171,12 +171,19 @@ func effectiveCloudKitDatabase(plusActive: Bool) -> ModelConfiguration.CloudKitD
     plusActive ? .private("iCloud.com.bannzai.Nikki") : .none
 }
 
-/// 起動画面の振り分け。環境変数 NIKKI_SCREEN が画面名ならその画面、それ以外の値ならカタログ一覧、無ければ通常フロー。
+/// 起動画面の振り分け。環境変数 NIKKI_SCREEN が "root" なら通常フロー、画面名ならその画面、
+/// それ以外の値ならカタログ一覧、無ければ通常フロー。
 private struct NikkiAppContent: View {
     var body: some View {
         #if DEBUG
         if let raw = ProcessInfo.processInfo.environment["NIKKI_SCREEN"] {
-            if let screen = Screen(rawValue: raw) {
+            // "root" はカタログの画面ではなく、通常フロー(RootPage)を in-memory ストアで起動する指定。
+            // 自動ロックやタッチの観測など RootPage 配下でしか働かない仕組みを、開発用ストアと
+            // 実利用の設定を汚さずに UI テストから検証するために使う。
+            if raw == "root" {
+                RootPage()
+                    .defaultAppStorage(rootFlowDefaults())
+            } else if let screen = Screen(rawValue: raw) {
                 ScreenContent(screen: screen)
             } else {
                 ScreenCatalogPage()

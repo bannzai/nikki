@@ -15,7 +15,6 @@ struct ArchivePage: View {
     /// 実機検証で確認したため、NotebookListPage と同じ item ベースの遷移をこの画面に閉じて持つ。
     @State var editorEntry: JournalEntry?
 
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @Environment(\.paperColor) private var paperColor
 
@@ -25,8 +24,6 @@ struct ArchivePage: View {
             paperColor.ignoresSafeArea()
 
             VStack(spacing: 0) {
-                InkNavBar(leading: .back, center: .title(String(localized: "Archived entries")), onLeading: { dismiss() })
-
                 if archivedEntries.isEmpty {
                     ArchiveEmptyState()
                 } else {
@@ -75,7 +72,7 @@ struct ArchivePage: View {
                 }
             }
         }
-        .inkNavigationBarHidden()
+        .inkNavigationBar(title: String(localized: "Archived entries"))
         .navigationDestination(item: $editorEntry) { entry in
             EditorPage(entry: entry)
         }

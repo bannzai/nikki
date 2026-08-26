@@ -19,17 +19,13 @@ struct NotebookCreatePage: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            InkNavBar(
-                leading: .back,
-                center: .title(String(localized: "New template")),
-                trailing: .text(String(localized: "Create")),
-                onLeading: { dismiss() },
-                onTrailing: { create() }
-            )
             NotebookFormFields(name: $name, markdown: $markdown)
         }
         .background(paperColor.ignoresSafeArea())
-        .inkNavigationBarHidden()
+        .inkNavigationBar(title: String(localized: "New template"))
+        .toolbar {
+            InkNavigationBarTrailingButton(text: String(localized: "Create"), action: { create() })
+        }
     }
 
     /// テンプレートを作成・保存して一覧へ戻る。

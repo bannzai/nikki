@@ -29,7 +29,6 @@ struct EditorPage: View {
 
     @AppStorage(.textSize) var textSize: TextSize = .standard
 
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @Environment(\.resetAutoLockTimer) private var resetAutoLockTimer
     @Environment(\.scenePhase) private var scenePhase
@@ -43,9 +42,8 @@ struct EditorPage: View {
         }
         EditorScreenScaffold(
             caption: editorDateText(date: entry.date),
-            onDismiss: { dismiss() },
-            trailing: .text(String(localized: "Template")),
-            onTrailing: { notebookListIsPresented = true }
+            trailingButtonText: String(localized: "Template"),
+            onTrailingButtonTap: { notebookListIsPresented = true }
         ) {
             ZStack(alignment: .topLeading) {
                 EditorTextView(text: $draftMarkdown, bodyFontSize: bodyFontSize)
@@ -61,7 +59,6 @@ struct EditorPage: View {
                 }
             }
         }
-        .inkNavigationBarHidden()
         .onAppear {
             // タイトル入力の廃止前に書かれた日記のタイトルを、本文先頭の見出しとして見えるまま残す。
             entry.mergeTitleIntoBodyMarkdown()

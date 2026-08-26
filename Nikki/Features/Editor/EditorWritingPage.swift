@@ -6,7 +6,7 @@ struct EditorWritingPage: View {
     let entry: JournalEntry
 
     var body: some View {
-        EditorScreenScaffold(caption: editorDateText(date: entry.date), onDismiss: {}) {
+        EditorScreenScaffold(caption: editorDateText(date: entry.date)) {
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 0) {
                     let paragraphs = entry.blocks.paragraphTexts

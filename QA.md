@@ -1,8 +1,8 @@
 ---
 feature: _root
 verification: mobile-mcp
-last_verified_commit: da31688b6eaa28f714d9c3c264de77687e05f228
-last_verified_at: 2026-08-21
+last_verified_commit: 176a8d9050f454b5bafe654937e9d68d34a8a4f2
+last_verified_at: 2026-08-25
 ---
 
 # QA 全体ガイド
@@ -20,6 +20,7 @@ last_verified_at: 2026-08-21
 - ローカル iOS: `make ios` (Simulator 向けビルドのみ)。ローカル macOS: `make macos`
 - ユニットテスト: `.github/workflows/test.yml` (GitHub Actions) または `xcodebuild test -project Nikki.xcodeproj -scheme Nikki -only-testing:NikkiTests`
 - 画面単体の直接起動 (DEBUG のみ): 環境変数 `NIKKI_SCREEN=<画面名>` (対応表は Nikki/App/ScreenCatalog.swift)。自動ロックの無効化は `NIKKI_AUTOLOCK_DISABLED=1`
+- 通常フローの検証用起動 (DEBUG のみ): `NIKKI_SCREEN=root` で RootPage を in-memory ストア + オンボーディング完了済みの専用 UserDefaults suite で起動する。自動ロックやタッチの観測など RootPage 配下でしか働かない仕組みを、開発用ストアと実利用の設定を汚さずに確認できる
 
 ## ログイン方法
 
@@ -120,21 +121,67 @@ last_verified_at: 2026-08-21
 
 ---
 
-## 2. ナビゲーション (issue #92)
+## 2. ナビゲーション (issue #92, #104)
 
-- [ ] **iOS で右エッジスワイプでも戻れる**: システムのナビゲーションバーを隠して独自ヘッダを使う画面 (ホーム以外のほぼ全画面) で、画面左端からのスワイプでも前の画面に戻れる
-  - 自動化: manual（実タッチのジェスチャは目視でしか確認できない）
-  - ⏭️ スキップ: simtunnel の WDA 経由の合成タッチ (`swipe` アクション) で検証を試みたが、対照実験として同じ操作を素の iOS 標準 Settings アプリ (General 画面) に対して行っても戻らず、この検証手段自体が iOS のエッジスワイプ (interactivePopGestureRecognizer) を再現できないことを確認した。修正自体は UINavigationController の interactivePopGestureRecognizer を明示的に有効化する標準的な対処 (Nikki/DesignSystem/View+.swift) で、実機 / 手動操作での確認が必要
+issue #104 で独自ヘッダ (InkNavBar) を廃止し、全画面をシステムのナビゲーションバー + `.toolbar` へ移行した。
+戻る操作は iOS / macOS ともシステム標準の戻るボタンとスワイプに任せる。
+
+- [x] **iOS で左エッジスワイプでも戻れる**: push 遷移した画面 (ホーム以外のほぼ全画面) で、画面左端からのスワイプで前の画面に戻れる
+  - 自動化: NikkiUITests/NavigationSwipeBackUITests.swift の `testSwipeBackReturnsToPreviousScreen`（通常フロー(RootPage)配下でホーム → 設定へ push し、左エッジのドラッグで戻ることを実イベントで検証する。CI では実行されない）
+  - 2026-08-25 ローカル iOS Simulator で pass。simtunnel リモート iOS Simulator (iOS 26) の手動操作でも、エディタからのスワイプでホームへ戻れた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/d619de59-47dd-4fa1-94ff-52f8d327b20e.jpg)
+  - 補足: issue #92 時点で「simtunnel の WDA 経由の合成タッチでは検証不可」と記録していたが、システムのナビゲーションバーへ移行した後は WDA の `swipe` でも戻れることを確認した (エッジ判定に入る最左端から始め、確定までゆっくり動かす)
+- [x] **iOS で戻るボタンのタップでも戻れる**: push 遷移した画面のシステムの戻るボタンをタップすると前の画面に戻る
+  - 自動化: NikkiUITests/NavigationSwipeBackUITests.swift の `testBackButtonReturnsToPreviousScreen`（CI では実行されない）
+  - 2026-08-25 ローカル iOS Simulator で pass。自動ロックの無操作検出を旧実装 (`simultaneousGesture` の `DragGesture`) に一時的に戻すとこのテストだけが失敗することを確認済みで、戻るボタンのタップが奪われる回帰を実際に検出できる (スワイプ側は旧実装でも pass するため、この項目が回帰の検出を受け持つ)
+- [x] **macOS で戻るボタンのタップでも戻れる**: ウィンドウツールバーの戻るボタンをタップすると前の画面に戻る
+  - 自動化: manual（macOS の UI テストは provisioning profile が無くローカルで実行できないため、実操作で確認する）
+  - 2026-08-25 ad-hoc 署名の Debug ビルドで、ホームの歯車から設定へ push し (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/daf2dc18-8bba-48eb-a4ac-c3cddf130af2.png)、戻るボタンでホームへ戻れた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/ecb4c063-4a18-4246-b17c-0292f002c79d.png)
+- [x] **ツールバー項目に Liquid Glass のカプセルが付かない (iOS 26 / macOS 26)**: ホームのロゴ・「+」・歯車、principal のタイトル / エディタの日付キャプション、ナビ右端のテキストボタン (テンプレート等) が紙色の地に直接載り、OS 標準の Glass のカプセルが付かない。システムの戻るボタンの円形の地だけは、消すとエッジスワイプバックが無効になる (NavigationSwipeBackUITests で実測) ため OS 標準のまま許容する (仕様判断)
+  - 自動化: manual（Glass の有無は視覚判定のため、スクリーンショットの目視で確認する）
+  - 2026-08-26 ローカル iOS Simulator (iOS 26.5) と ad-hoc 署名の macOS Debug ビルドで、ホームとエディタ (カタログ `editor` = 製品の EditorPage) のナビゲーションバーからカプセルが消えていることを目視確認 (下の動作確認スクショ)。同ビルドで NavigationSwipeBackUITests の2件が pass し、スワイプバックが保たれていることも確認
 
 #### 動作確認
 <details>
 <summary>動作確認エビデンス</summary>
 
-### **iOS で右エッジスワイプでも戻れる**: システムのナビゲーションバーを隠して独自ヘッダを使う画面で、画面左端からのスワイプでも前の画面に戻れる
+### **iOS で左エッジスワイプでも戻れる**: push 遷移した画面で、画面左端からのスワイプで前の画面に戻れる
 
 <details><summary>動作確認スクショ</summary>
 
-（未実行。上記の理由により simtunnel の自動操作では検証不可。実機での確認が必要）
+**確認日: 2026-08-25** (simtunnel リモート iOS Simulator / iOS 26。エディタからスワイプで戻った直後のホーム)
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/d619de59-47dd-4fa1-94ff-52f8d327b20e.jpg" alt="iOS でエディタから左エッジスワイプで戻った直後のホーム。作成した日記が一覧に表示されている" width="320">
+
+</details>
+
+### **iOS で戻るボタンのタップでも戻れる**: push 遷移した画面のシステムの戻るボタンをタップすると前の画面に戻る
+
+<details><summary>動作確認スクショ</summary>
+
+**確認日: 2026-08-25** (simtunnel リモート iOS Simulator / iOS 26。設定へ push した状態と、戻るボタンで戻ったホーム)
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/a4d60909-ad0d-4383-a16f-3e1ad06ae8c6.jpg" alt="iOS の設定画面。システムのナビゲーションバーに戻るボタンとタイトル「設定」が表示されている" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/24c5e18e-39d4-4aeb-97dd-f16ed50ea28c.jpg" alt="iOS で戻るボタンのタップで設定からホームへ戻ったところ" width="320">
+
+</details>
+
+### **macOS で戻るボタンのタップでも戻れる**: ウィンドウツールバーの戻るボタンをタップすると前の画面に戻る
+
+<details><summary>動作確認スクショ</summary>
+
+**確認日: 2026-08-25** (ad-hoc 署名の Debug ビルド。設定へ push した状態と、戻るボタンで戻ったホーム)
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/daf2dc18-8bba-48eb-a4ac-c3cddf130af2.png" alt="macOS の設定画面。ウィンドウツールバーに戻るボタンとタイトル「設定」が表示されている" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/ecb4c063-4a18-4246-b17c-0292f002c79d.png" alt="macOS でウィンドウツールバーの戻るボタンのクリックで設定からホームへ戻ったところ" width="320">
+
+</details>
+
+### **ツールバー項目に Liquid Glass のカプセルが付かない (iOS 26 / macOS 26)**: ロゴ・歯車・タイトル・キャプション・右端ボタンが紙色の地に直接載る
+
+<details><summary>動作確認スクショ</summary>
+
+**確認日: 2026-08-26** (iOS: ローカル iOS Simulator / iOS 26.5、macOS: ad-hoc 署名の Debug ビルド。ホームのロゴ・「+」・歯車と、エディタの日付キャプション・「テンプレート」ボタンにカプセルが付いていない。エディタ左上のシステムの戻るボタンの円形の地は仕様どおり残る)
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/0bce24a7-ce4d-402c-9d9c-388b62e835a8.png" alt="iOS のホーム。ロゴ Nikki と歯車が Glass のカプセルなしで紙色の地に載っている" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/ea8625df-5ede-40f9-8957-869ee960ed74.png" alt="iOS のエディタ。日付キャプションとテンプレートボタンが Glass のカプセルなしで表示され、左上のシステムの戻るボタンには円形の地が残っている" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/a535a7dc-a7e2-4631-a946-7473f5f1a16d.png" alt="macOS のホーム。歯車が Glass のカプセルなしでウィンドウツールバーに載っている" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/090cad47-d953-4d80-8627-c3de710da936.png" alt="macOS のエディタ。日付キャプションとテンプレートボタンが Glass のカプセルなしで表示され、左上のシステムの戻るボタンには円形の地が残っている" width="320">
 
 </details>
 

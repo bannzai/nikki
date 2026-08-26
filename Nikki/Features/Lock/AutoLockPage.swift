@@ -15,7 +15,6 @@ struct AutoLockPage: View {
 
     @State var paywallSheetIsPresented = false
 
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.paperColor) private var paperColor
     @Environment(\.plusActive) private var plusActive
 
@@ -23,7 +22,6 @@ struct AutoLockPage: View {
         // Plus 失効中はプリセット外の保存値を既定へ倒した実効値で選択中を見せる(実際のロックも同じ値で動く)。
         let effectiveSeconds = effectiveAutoLockSeconds(storedSeconds: autoLockSeconds, plusActive: plusActive)
         VStack(spacing: 0) {
-            InkNavBar(leading: .back, center: .title(String(localized: "Auto-lock")), onLeading: { dismiss() })
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     InkListSection {
@@ -81,7 +79,7 @@ struct AutoLockPage: View {
             }
         }
         .background(paperColor.ignoresSafeArea())
-        .inkNavigationBarHidden()
+        .inkNavigationBar(title: String(localized: "Auto-lock"))
         .sheet(isPresented: $paywallSheetIsPresented) {
             PaywallPage()
         }

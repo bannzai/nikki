@@ -11,6 +11,7 @@ enum Screen: String, CaseIterable, Identifiable {
     case lock
     case entryList
     case calendar
+    case editor
     case editorWriting
     case editorSelection
     case editorReorder
@@ -59,15 +60,27 @@ struct ScreenContent: View {
             }
             .environment(\.today, SampleData.referenceToday)
             .defaultAppStorage(homePageModeDefaults(mode: .calendar))
+        case .editor:
+            // EditorWritingPage(静的カタログ)と違い、ナビ右端の「テンプレート」ボタンを含む製品のエディタ。
+            // EditorPage は @Environment(\.modelContext) で書き戻すため、in-memory コンテナの下に置く。
+            ScreenCatalogPushedStack {
+                EditorPage(entry: SampleData.sampleEntry)
+            }
         case .editorWriting:
-            EditorWritingPage(entry: SampleData.sampleEntry)
+            ScreenCatalogPushedStack {
+                EditorWritingPage(entry: SampleData.sampleEntry)
+            }
         case .editorSelection:
-            EditorSelectionPage(entry: SampleData.sampleEntry)
+            ScreenCatalogPushedStack {
+                EditorSelectionPage(entry: SampleData.sampleEntry)
+            }
         case .editorReorder:
-            EditorReorderPage(entry: SampleData.sampleEntry)
+            ScreenCatalogPushedStack {
+                EditorReorderPage(entry: SampleData.sampleEntry)
+            }
         case .notebookList:
-            // NotebookListPage は @Query でノートを読むため、in-memory コンテナ(SampleData 投入済み)の下で NavigationStack に載せる。
-            NavigationStack {
+            // NotebookListPage は @Query でノートを読むため、in-memory コンテナ(SampleData 投入済み)の下に置く。
+            ScreenCatalogPushedStack {
                 NotebookListPage(entry: SampleData.sampleEntry)
             }
         case .templateVariable:
@@ -78,17 +91,18 @@ struct ScreenContent: View {
                 fields: TemplateVariableField.fields(template: template, today: SampleData.referenceToday, includesDemoValues: true)
             )
         case .theme:
-            ThemePage()
+            ScreenCatalogPushedStack {
+                ThemePage()
+            }
         case .paywall:
             PaywallPage()
         case .settings:
-            // SettingsPage はノート管理・テーマ等へ navigationDestination で遷移するため、NavigationStack に載せる。
-            NavigationStack {
+            ScreenCatalogPushedStack {
                 SettingsPage()
             }
         case .archive:
-            // ArchivePage は @Query でアーカイブ済みの日記を読むため、NavigationStack に載せる。
-            NavigationStack {
+            // ArchivePage は @Query でアーカイブ済みの日記を読む。
+            ScreenCatalogPushedStack {
                 ArchivePage()
             }
         case .appstore1:
@@ -107,6 +121,29 @@ struct ScreenContent: View {
     }
 }
 
+/// 製品では push 先として開く画面を、カタログでも push された状態で表示するスタック。
+/// システムの戻るボタンはスタックに戻り先があるときだけ出るため、遷移元の紙地を1枚挟んで
+/// 製品と同じ「戻るボタンのあるナビゲーションバー」を再現する。
+private struct ScreenCatalogPushedStack<Content: View>: View {
+    @ViewBuilder let content: Content
+
+    /// 対象の画面を出しているかどうか。戻るボタンで pop すると遷移元の紙地に戻る。
+    @State var contentIsPresented = true
+
+    var body: some View {
+        NavigationStack {
+            Color.inkPaper
+                .ignoresSafeArea()
+                // 遷移元に題があると戻るボタンがその題のラベル付きで出る。製品の遷移元(ホーム)は
+                // 題を持たずシェブロンだけの戻るボタンになるため、空の題で見た目を揃える。
+                .navigationTitle("")
+                .navigationDestination(isPresented: $contentIsPresented) {
+                    content
+                }
+        }
+    }
+}
+
 /// カタログの list / calendar 画面用に、ホームの表示モードを固定した UserDefaults suite を返す。
 /// 実利用(.appGroups)の保存値を汚さないよう専用 suite に毎回書き込む(冪等)。
 private func homePageModeDefaults(mode: HomePageMode) -> UserDefaults {
@@ -115,8 +152,17 @@ private func homePageModeDefaults(mode: HomePageMode) -> UserDefaults {
     return defaults
 }
 
+/// 通常フロー(RootPage)を検証用に起動するときの UserDefaults suite を返す。
+/// オンボーディングを完了済みにしてホームから始め、実利用(.appGroups)の設定を汚さないよう
+/// 専用 suite に毎回書き込む(冪等)。
+func rootFlowDefaults() -> UserDefaults {
+    let defaults = UserDefaults(suiteName: "screen-catalog-root-flow")!
+    defaults.set(true, forKey: UserDefaults.BoolKey.onboardingCompleted.key)
+    return defaults
+}
+
 /// Focus の Preview 一覧と同様に、カタログの全画面を一覧から開ける確認用ページ。
-/// 各画面は自前のナビ構成を持つため、push ではなく sheet で全画面をそのまま表示する。
+/// 各画面は ScreenContent 側でナビゲーションの有無まで含めて組み立てるため、push ではなく sheet で全画面をそのまま表示する。
 struct ScreenCatalogPage: View {
     /// 一覧から開いている画面。nil のときは一覧のみ表示。
     @State var screen: Screen?

@@ -32,7 +32,6 @@ struct NotebookEditPage: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            InkNavBar(leading: .back, center: .title(String(localized: "Edit template")), onLeading: { dismiss() })
             NotebookFormFields(
                 name: $name,
                 markdown: Binding(get: { notebook.template?.markdown ?? "" }, set: { setTemplateMarkdown(markdown: $0) })
@@ -52,7 +51,7 @@ struct NotebookEditPage: View {
             .padding(.bottom, 24)
         }
         .background(paperColor.ignoresSafeArea())
-        .inkNavigationBarHidden()
+        .inkNavigationBar(title: String(localized: "Edit template"))
         .confirmationDialog("Delete template", isPresented: $deleteConfirmationDialogIsPresented, titleVisibility: .visible) {
             Button("Delete template", role: .destructive) {
                 modelContext.delete(notebook)

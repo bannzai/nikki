@@ -62,10 +62,20 @@ struct RootPage: View {
                 // ロック中は下の画面ごと無効化し、ハードウェアキーボードのショートカット(⌘N / ⌘F)が
                 // ロックの裏で画面状態を変えないようにする。
                 .disabled(locked)
-                // 画面に触れている間はロックしないよう、配下へのあらゆるタッチを無操作起点のリセットとして拾う。
+                // 画面に触れている間はロックしないよう、あらゆるタッチを無操作起点のリセットとして拾う。
+                // iOS はタッチを消費しない観測用 recognizer で拾う。SwiftUI の
+                // simultaneousGesture(DragGesture(minimumDistance: 0)) は UIKit 実装のコントロール
+                // (システムのナビゲーションバーの戻るボタン・List の NavigationLink) のタップを奪うため使わない。
+                #if os(iOS)
+                .background(TouchActivityObserver(onTouch: registerActivity))
+                #else
+                // macOS のクリック・スクロール・キー入力は下の NSEvent ローカルモニターが拾う。
+                // モニターが対象にしない magnify 以外のドラッグ継続も拾えるよう、こちらは残す
+                // (macOS のウィンドウツールバーは AppKit 配送のため、この gesture にタップを奪われない)。
                 .simultaneousGesture(
                     DragGesture(minimumDistance: 0).onChanged { _ in registerActivity() }
                 )
+                #endif
 
                 if locked {
                     LockPage(locked: $locked)
