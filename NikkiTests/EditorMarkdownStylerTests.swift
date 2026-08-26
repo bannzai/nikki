@@ -130,24 +130,35 @@ struct EditorMarkdownStylerTests {
     @Test("キャレットのある行だけ記法を見せる")
     func revealsSyntaxOnlyOnCaretLine() {
         // 2行のテキスト「# a\nb」: 1行目の範囲は改行を含む (0,4)、2行目は (4,1)。
+        let text = "# a\nb" as NSString
         let firstLine = NSRange(location: 0, length: 4)
         let secondLine = NSRange(location: 4, length: 1)
-        #expect(editorLineRevealsSyntax(lineRange: firstLine, selectedRange: NSRange(location: 2, length: 0), textLength: 5))
-        #expect(!editorLineRevealsSyntax(lineRange: secondLine, selectedRange: NSRange(location: 2, length: 0), textLength: 5))
+        #expect(editorLineRevealsSyntax(lineRange: firstLine, selectedRange: NSRange(location: 2, length: 0), text: text))
+        #expect(!editorLineRevealsSyntax(lineRange: secondLine, selectedRange: NSRange(location: 2, length: 0), text: text))
         // 改行の直後のキャレットは次の行のもの。
-        #expect(!editorLineRevealsSyntax(lineRange: firstLine, selectedRange: NSRange(location: 4, length: 0), textLength: 5))
-        #expect(editorLineRevealsSyntax(lineRange: secondLine, selectedRange: NSRange(location: 4, length: 0), textLength: 5))
+        #expect(!editorLineRevealsSyntax(lineRange: firstLine, selectedRange: NSRange(location: 4, length: 0), text: text))
+        #expect(editorLineRevealsSyntax(lineRange: secondLine, selectedRange: NSRange(location: 4, length: 0), text: text))
         // 末尾に改行の無い最終行では、文末のキャレットもその行のもの。
-        #expect(editorLineRevealsSyntax(lineRange: secondLine, selectedRange: NSRange(location: 5, length: 0), textLength: 5))
+        #expect(editorLineRevealsSyntax(lineRange: secondLine, selectedRange: NSRange(location: 5, length: 0), text: text))
+    }
+
+    @Test("本文が改行で終わるときの文末のキャレットは、1つ前の行の記法を見せない")
+    func caretAfterTrailingNewlineDoesNotRevealPreviousLine() {
+        // チェックリスト行の行末で Return した直後の状態。キャレットは最終の改行の後の空の行にあり、
+        // 「- [ ] abc」の行は記法を隠したまま (チェックボックス表示) にする。
+        let text = "- [ ] abc\n" as NSString
+        let checklistLine = NSRange(location: 0, length: 10)
+        #expect(!editorLineRevealsSyntax(lineRange: checklistLine, selectedRange: NSRange(location: 10, length: 0), text: text))
     }
 
     @Test("範囲選択は交差する行すべての記法を見せる")
     func revealsSyntaxOnSelectedLines() {
+        let text = "# a\nb" as NSString
         let firstLine = NSRange(location: 0, length: 4)
         let secondLine = NSRange(location: 4, length: 1)
         let selection = NSRange(location: 1, length: 4)
-        #expect(editorLineRevealsSyntax(lineRange: firstLine, selectedRange: selection, textLength: 5))
-        #expect(editorLineRevealsSyntax(lineRange: secondLine, selectedRange: selection, textLength: 5))
+        #expect(editorLineRevealsSyntax(lineRange: firstLine, selectedRange: selection, text: text))
+        #expect(editorLineRevealsSyntax(lineRange: secondLine, selectedRange: selection, text: text))
     }
 
     // MARK: - editorChecklistBoxes

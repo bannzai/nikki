@@ -174,12 +174,14 @@ func editorLineAttributes(
 
 /// 選択 (キャレット) がこの行の記法を生で見せる位置にあるか。キャレットはその行の中にあるとき、
 /// 範囲選択はその行と交差するときに記法を見せる (Obsidian の Live Preview と同じ)。
+/// キャレットの属する行は NSString.lineRange と同じ規則で決める。改行の直後は次の行、
+/// 改行の無い最終行では文末のキャレットもその行になり、本文が改行で終わるときの文末は
+/// その改行の後の空の行になる (1つ前の行を誤って見せない)。
 /// - Parameter lineRange: 行末の改行を含む行の範囲。
-func editorLineRevealsSyntax(lineRange: NSRange, selectedRange: NSRange, textLength: Int) -> Bool {
+func editorLineRevealsSyntax(lineRange: NSRange, selectedRange: NSRange, text: NSString) -> Bool {
     if selectedRange.length == 0 {
-        // 末尾に改行の無い最終行では、文末のキャレット位置が行の範囲の1つ外になるため個別に見る。
-        return NSLocationInRange(selectedRange.location, lineRange)
-            || (selectedRange.location == NSMaxRange(lineRange) && NSMaxRange(lineRange) == textLength)
+        let caretLocation = min(selectedRange.location, text.length)
+        return NSEqualRanges(lineRange, text.lineRange(for: NSRange(location: caretLocation, length: 0)))
     }
     return NSIntersectionRange(lineRange, selectedRange).length > 0
 }
@@ -222,7 +224,7 @@ func editorRestyle(
             revealsSyntax: editorLineRevealsSyntax(
                 lineRange: lineRange,
                 selectedRange: selectedRange,
-                textLength: nsText.length
+                text: nsText
             )
         )
         // 行末の改行にも行の属性を与え、行の高さと段落スタイルを行全体で一貫させる。
@@ -249,7 +251,7 @@ func editorChecklistBoxes(text: NSString, selectedRange: NSRange) -> [EditorChec
     while location < text.length {
         let lineRange = text.lineRange(for: NSRange(location: location, length: 0))
         location = NSMaxRange(lineRange)
-        if editorLineRevealsSyntax(lineRange: lineRange, selectedRange: selectedRange, textLength: text.length) {
+        if editorLineRevealsSyntax(lineRange: lineRange, selectedRange: selectedRange, text: text) {
             continue
         }
         var contentRange = lineRange

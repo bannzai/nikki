@@ -161,35 +161,9 @@ extension EditorTextView: UIViewRepresentable {
                 selectedRange: textView.selectedRange,
                 markedRange: markedRange
             )
-            invalidateLayout(range: range)
             revealedLineRange = (textView.text as NSString).lineRange(for: clampedSelectedRange())
             updateTypingAttributes()
             updateCheckboxes()
-        }
-
-        /// 引き直した行の描画を無効化して再描画させる。チェックリスト記法の隠し直しは色だけの
-        /// 属性変更のため、iOS の TextKit 2 では無効化しないと前の描画 (生の記法) が残る
-        /// (見出しはフォントも変わるためレイアウト無効化が自動で走り、この問題が出ない)。
-        private func invalidateLayout(range: NSRange) {
-            guard let textView, let textLayoutManager = textView.textLayoutManager,
-                  let textContentManager = textLayoutManager.textContentManager else {
-                return
-            }
-            let nsText = textView.text as NSString
-            let clampedLocation = min(max(0, range.location), nsText.length)
-            let lineRange = nsText.lineRange(
-                for: NSRange(
-                    location: clampedLocation,
-                    length: min(max(0, range.length), nsText.length - clampedLocation)
-                )
-            )
-            let documentLocation = textContentManager.documentRange.location
-            guard let start = textContentManager.location(documentLocation, offsetBy: lineRange.location),
-                  let end = textContentManager.location(documentLocation, offsetBy: NSMaxRange(lineRange)),
-                  let textRange = NSTextRange(location: start, end: end) else {
-                return
-            }
-            textLayoutManager.invalidateLayout(for: textRange)
         }
 
         /// 本文の長さに収めた選択範囲。装飾の引き直しの途中で選択が本文の外を指す瞬間があっても落ちないようにする。
