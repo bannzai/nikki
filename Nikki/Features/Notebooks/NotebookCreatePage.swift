@@ -15,7 +15,6 @@ struct NotebookCreatePage: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @Environment(\.paperColor) private var paperColor
-    @Environment(\.plusActive) private var plusActive
 
     var body: some View {
         VStack(spacing: 0) {
@@ -34,11 +33,6 @@ struct NotebookCreatePage: View {
         if name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             return
         }
-        // 呼び出し元(NotebookSettingsPage / NotebookListPage)がロック導線でこの画面への遷移自体を止めるため
-        // 通常はここに来ないが、複数端末からの並行操作などに備えた保険として同じ判定をもう一度掛ける(#94)。
-        if !canCreateNotebook(existingNotebookCount: notebooks.count, plusActive: plusActive) {
-            return
-        }
         // 一覧の末尾に並ぶよう、既存の最大 sortOrder の次にする。
         let notebook = JournalNotebook(name: name, reminderFrequency: .none, sortOrder: (notebooks.last?.sortOrder ?? -1) + 1)
         modelContext.insert(notebook)
@@ -52,15 +46,6 @@ struct NotebookCreatePage: View {
         try? modelContext.save()
         dismiss()
     }
-}
-
-/// 無料ユーザーが作成できるノート数の上限(#94)。テンプレートはノート1件につき1件の運用のため、
-/// テンプレート数の実質的な上限も同じ値になる。ユーザーが選定した値(2件)。Plus 加入で無制限になる。
-let freeNotebookLimit = 2
-
-/// 新しいノートを作成できるかどうか。Plus 加入時は上限なし。
-func canCreateNotebook(existingNotebookCount: Int, plusActive: Bool) -> Bool {
-    plusActive || existingNotebookCount < freeNotebookLimit
 }
 
 struct NotebookCreatePage_Previews: PreviewProvider {

@@ -20,7 +20,6 @@ struct NotebookListPage: View {
 
     /// 「＋ 新しいテンプレート」の作成フォームへの遷移状態。
     @State var notebookCreateIsPresented = false
-    @State var paywallSheetIsPresented = false
 
     /// 既定のテンプレートの id(UUID 文字列)。空のときは未設定。選んだテンプレートを次回の自動挿入用に記憶する。
     @AppStorage(.defaultNotebookID) var defaultNotebookID: String = ""
@@ -28,7 +27,6 @@ struct NotebookListPage: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @Environment(\.paperColor) private var paperColor
-    @Environment(\.plusActive) private var plusActive
 
     var body: some View {
         VStack(spacing: 0) {
@@ -50,16 +48,7 @@ struct NotebookListPage: View {
                         }
                     }
 
-                    NotebookNewFooter(
-                        locked: !canCreateNotebook(existingNotebookCount: notebooks.count, plusActive: plusActive),
-                        onTap: {
-                            if canCreateNotebook(existingNotebookCount: notebooks.count, plusActive: plusActive) {
-                                notebookCreateIsPresented = true
-                            } else {
-                                paywallSheetIsPresented = true
-                            }
-                        }
-                    )
+                    NotebookNewFooter(onTap: { notebookCreateIsPresented = true })
                 }
                 .padding(.horizontal, 24)
             }
@@ -68,9 +57,6 @@ struct NotebookListPage: View {
         .inkNavigationBar(title: String(localized: "Templates"))
         .navigationDestination(isPresented: $notebookCreateIsPresented) {
             NotebookCreatePage()
-        }
-        .sheet(isPresented: $paywallSheetIsPresented) {
-            PaywallPage()
         }
         .alert("Replace current content", isPresented: $replaceAlertIsPresented, presenting: notebook) { notebook in
             Button("Replace", role: .destructive) { apply(notebook: notebook) }

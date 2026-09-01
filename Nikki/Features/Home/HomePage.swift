@@ -36,9 +36,6 @@ struct HomePage: View {
     /// 設定画面(1r)への遷移状態。ナビゲーションバー右端の歯車から開く。
     @State var settingsIsPresented = false
 
-    /// リスト追加ボタンで無料枠(#94)の上限に達していたときに開くペイウォール。
-    @State var paywallSheetIsPresented = false
-
     /// 検索バーのフォーカス。⌘F ショートカットからも当てられるようにここで持つ。
     @FocusState var searchFieldIsFocused: Bool
 
@@ -52,7 +49,6 @@ struct HomePage: View {
     @Query(sort: \JournalNotebook.sortOrder) var notebooks: [JournalNotebook]
 
     @Environment(\.today) private var today
-    @Environment(\.plusActive) private var plusActive
     @Environment(\.resetAutoLockTimer) private var resetAutoLockTimer
     @Environment(\.modelContext) private var modelContext
     @Environment(\.paperColor) private var paperColor
@@ -77,14 +73,8 @@ struct HomePage: View {
                         )
                         // カレンダーモードのリスト追加ボタンはナビゲーションバー側に置くため、ここでは出さない(issue #92)。
                         if homePageMode == .list {
-                            // 作成フォーム側の上限判定は静かに return するだけのため、遷移前に無料枠(#94)を
-                            // 判定し、上限ならフォームの代わりにペイウォールを開く(設定の管理一覧と同じ)。
                             Button {
-                                if canCreateNotebook(existingNotebookCount: notebooks.count, plusActive: plusActive) {
-                                    notebookCreateIsPresented = true
-                                } else {
-                                    paywallSheetIsPresented = true
-                                }
+                                notebookCreateIsPresented = true
                             } label: {
                                 Image(systemName: InkIcons.add)
                                     .font(.system(size: 14, weight: .semibold))
@@ -157,14 +147,8 @@ struct HomePage: View {
                 HStack(spacing: 0) {
                     // カレンダーモードはセグメントコントロールが出ないぶん、リスト追加をここに置く(issue #92)。
                     if homePageMode == .calendar {
-                        // 作成フォーム側の上限判定は静かに return するだけのため、遷移前に無料枠(#94)を
-                        // 判定し、上限ならフォームの代わりにペイウォールを開く(リストモードの「+」と同じ)。
                         Button {
-                            if canCreateNotebook(existingNotebookCount: notebooks.count, plusActive: plusActive) {
-                                notebookCreateIsPresented = true
-                            } else {
-                                paywallSheetIsPresented = true
-                            }
+                            notebookCreateIsPresented = true
                         } label: {
                             Image(systemName: InkIcons.add)
                                 .font(.system(size: 17, weight: .regular))
@@ -201,9 +185,6 @@ struct HomePage: View {
         }
         .navigationDestination(isPresented: $settingsIsPresented) {
             SettingsPage()
-        }
-        .sheet(isPresented: $paywallSheetIsPresented) {
-            PaywallPage()
         }
     }
 

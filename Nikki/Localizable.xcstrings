@@ -980,16 +980,6 @@
         }
       }
     },
-    "Nikki Plus required": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nikki Plus が必要です"
-          }
-        }
-      }
-    },
     "No AI, no analytics, no sharing. Just a journal.": {
       "localizations": {
         "ja": {
@@ -1690,16 +1680,6 @@
         }
       }
     },
-    "Unlimited templates": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "テンプレート無制限"
-          }
-        }
-      }
-    },
     "Unlock to pick up right where you left off": {
       "localizations": {
         "ja": {
@@ -1826,16 +1806,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "ここに本文を書く…"
-          }
-        }
-      }
-    },
-    "Write your way, in as many templates as you like.": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "自分の書き方を、いくつでも。"
           }
         }
       }

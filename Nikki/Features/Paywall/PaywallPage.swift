@@ -4,7 +4,7 @@ import RevenueCat
 /// サブスク訴求 / ペイウォール画面(1q「Nikki Plus」)。
 /// 料金プランは offering `default` の packages から表示し、購入・復元は RevenueCat 経由で行う。
 /// 特典の記載は実際に解放される機能(プレミアムテーマ・背景画像・自動ロックのカスタム秒数・
-/// iCloud 同期・テンプレート無制限)のみに絞る(#97、分割元 #54 の各ゲート実装が揃ったため復元)。
+/// iCloud 同期)のみに絞る(#97、分割元 #54 の各ゲート実装が揃ったため復元)。
 struct PaywallPage: View {
     /// 見本(1q)では年プランを選択済みとして墨枠強調しているため、初期選択は年プラン。
     /// offering に年プランが無い場合は loadOffering() で購入可能なプランへ倒す。
@@ -54,9 +54,6 @@ struct PaywallPage: View {
                         // 「end to end」の断定は Advanced Data Protection の設定に依存するため使わず、
                         // アプリとして保証できる範囲(CloudKit の暗号化フィールドで、開発者が読めない)だけを謳う。
                         PaywallBenefitRow(title: String(localized: "Sync across devices"), description: String(localized: "iPhone and Mac. Entries stay encrypted in sync — we still can't read them."))
-                            .padding(.bottom, 16)
-
-                        PaywallBenefitRow(title: String(localized: "Unlimited templates"), description: String(localized: "Write your way, in as many templates as you like."))
                             .padding(.bottom, 16)
 
                         PaywallBenefitRow(title: String(localized: "More themes"), description: String(localized: "Ash, Celadon, Sakura, and background images. Make your paper truly yours."))
