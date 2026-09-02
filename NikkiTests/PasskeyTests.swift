@@ -19,16 +19,30 @@ struct PasskeyTests {
         let x = x963[1..<33]
         let y = x963[33..<65]
         // COSE_Key(EC2 / ES256 / P-256): {1: 2, 3: -7, -1: 1, -2: x, -3: y}
-        let coseKey = Data([0xa5, 0x01, 0x02, 0x03, 0x26, 0x20, 0x01, 0x21, 0x58, 0x20]) + x + Data([0x22, 0x58, 0x20]) + y
-        let aaguid = Data(repeating: 0, count: 16)
-        let attestedCredentialData = aaguid + Data([UInt8(credentialID.count >> 8), UInt8(credentialID.count & 0xff)]) + credentialID + coseKey
+        var coseKey = Data([0xa5, 0x01, 0x02, 0x03, 0x26, 0x20, 0x01, 0x21, 0x58, 0x20])
+        coseKey.append(x)
+        coseKey.append(Data([0x22, 0x58, 0x20]))
+        coseKey.append(y)
         // flags: UP | UV | AT
-        let authData = authenticatorData(relyingPartyIdentifier: relyingPartyIdentifier, flags: 0x45) + attestedCredentialData
+        var authData = authenticatorData(relyingPartyIdentifier: relyingPartyIdentifier, flags: 0x45)
+        authData.append(Data(repeating: 0, count: 16))
+        authData.append(Data([UInt8(credentialID.count >> 8), UInt8(credentialID.count & 0xff)]))
+        authData.append(credentialID)
+        authData.append(coseKey)
         // {"fmt": "none", "attStmt": {}, "authData": <bytes>}
-        return Data([0xa3])
-            + Data([0x63]) + Data("fmt".utf8) + Data([0x64]) + Data("none".utf8)
-            + Data([0x67]) + Data("attStmt".utf8) + Data([0xa0])
-            + Data([0x68]) + Data("authData".utf8) + Data([0x58, UInt8(authData.count)]) + authData
+        var object = Data([0xa3])
+        object.append(Data([0x63]))
+        object.append(Data("fmt".utf8))
+        object.append(Data([0x64]))
+        object.append(Data("none".utf8))
+        object.append(Data([0x67]))
+        object.append(Data("attStmt".utf8))
+        object.append(Data([0xa0]))
+        object.append(Data([0x68]))
+        object.append(Data("authData".utf8))
+        object.append(Data([0x58, UInt8(authData.count)]))
+        object.append(authData)
+        return object
     }
 
     /// 解除時に OS が返す clientDataJSON を組み立てる。
@@ -61,7 +75,10 @@ struct PasskeyTests {
         let algRange = object.range(of: Data([0x03, 0x26, 0x20, 0x01]))!
         object.replaceSubrange(algRange, with: Data([0x03, 0x39, 0x01, 0x00, 0x20, 0x01]))
         // authData の長さが 2 バイト増えるため、bytes ヘッダの長さも合わせる。
-        let lengthRange = object.range(of: Data([0x68]) + Data("authData".utf8) + Data([0x58]))!
+        var lengthHeader = Data([0x68])
+        lengthHeader.append(Data("authData".utf8))
+        lengthHeader.append(Data([0x58]))
+        let lengthRange = object.range(of: lengthHeader)!
         object[lengthRange.upperBound] += 2
         #expect(throws: PasskeyVerificationError.unsupportedPublicKey) {
             try passkeyPublicKey(attestationObject: object)
