@@ -10,7 +10,8 @@ struct LockPasskeyButton: View {
     @AppStorage(.passkeyPublicKey) var passkeyPublicKey: Data = Data()
 
     var body: some View {
-        if !passkeyCredentialID.isEmpty {
+        // 識別子と公開鍵の両方が揃っている時だけ出す。片方だけ残った状態では署名を検証できず解除に進めないため。
+        if !passkeyCredentialID.isEmpty && !passkeyPublicKey.isEmpty {
             Button {
                 Task {
                     if await evaluatePasskeyUnlockAuthentication(credential: PasskeyCredential(credentialID: passkeyCredentialID, publicKey: passkeyPublicKey)) {

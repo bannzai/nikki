@@ -298,8 +298,10 @@ struct SettingsPage: View {
     private func registerPasskeyFromSettings() async {
         do {
             let credential = try await registerPasskey()
-            passkeyCredentialID = credential.credentialID
+            // 登録状態の判定に使う credentialID は最後に保存する。2 つの値は別々に書き込まれるため、
+            // 先に credentialID だけが残ると公開鍵なしで登録済み扱いになる。
             passkeyPublicKey = credential.publicKey
+            passkeyCredentialID = credential.credentialID
         } catch {
             if !isPasskeyCanceled(error: error) {
                 passkeyRegistrationErrorMessage = error.localizedDescription

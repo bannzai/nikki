@@ -29,6 +29,10 @@ func registerPasskey() async throws -> PasskeyCredential {
     )
 }
 
+/// 評価中のパスキーによるロック解除認証。ウィンドウの非表示時に認証シートを閉じる(cancel)ために保持する。
+/// 認証シートは同時に1つしか出ないため、モジュールで1つだけ持てば足りる(LockAuthentication の LAContext と同じ扱い)。
+@MainActor private var passkeyUnlockAuthorizationRunner: PasskeyAuthorizationRunner?
+
 /// 登録済みのパスキーでロック解除の認証を行い、保存済みの公開鍵で検証できたかを返す。キャンセル・失敗時は false を返す。
 @MainActor
 func evaluatePasskeyUnlockAuthentication(credential: PasskeyCredential) async -> Bool {
@@ -37,7 +41,15 @@ func evaluatePasskeyUnlockAuthentication(credential: PasskeyCredential) async ->
     let request = provider.createCredentialAssertionRequest(challenge: challenge)
     // 登録時のパスキーだけを候補にし、同じ relying party の別のパスキー(他端末で登録したもの)を選ばせない。
     request.allowedCredentials = [ASAuthorizationPlatformPublicKeyCredentialDescriptor(credentialID: credential.credentialID)]
-    guard let authorization = try? await PasskeyAuthorizationRunner().perform(request: request),
+    let runner = PasskeyAuthorizationRunner()
+    passkeyUnlockAuthorizationRunner = runner
+    defer {
+        // 評価中にキャンセル→再提示が起きた場合、古い評価の後始末が新しい runner を消さないよう同一性を確認する。
+        if passkeyUnlockAuthorizationRunner === runner {
+            passkeyUnlockAuthorizationRunner = nil
+        }
+    }
+    guard let authorization = try? await runner.perform(request: request),
           let assertion = authorization.credential as? ASAuthorizationPlatformPublicKeyCredentialAssertion,
           assertion.credentialID == credential.credentialID else {
         return false
@@ -50,6 +62,14 @@ func evaluatePasskeyUnlockAuthentication(credential: PasskeyCredential) async ->
         challenge: challenge,
         relyingPartyIdentifier: Const.passkeyRelyingPartyIdentifier
     )
+}
+
+/// 評価中のパスキーによるロック解除認証を中断し、表示中の認証シートを閉じる。評価中でなければ何もしない(冪等)。
+/// 登録(設定・オンボーディング)の認証はロック画面の外で行うため対象にしない。
+@MainActor
+func cancelPasskeyUnlockAuthentication() {
+    passkeyUnlockAuthorizationRunner?.cancel()
+    passkeyUnlockAuthorizationRunner = nil
 }
 
 /// パスキーの認証エラーがユーザーのキャンセルによるものかを返す。キャンセルはエラー表示の対象にしない。
@@ -78,6 +98,11 @@ private final class PasskeyAuthorizationRunner: NSObject, ASAuthorizationControl
             self.controller = controller
             controller.performRequests()
         }
+    }
+
+    /// 進行中の認証を中断する。デリゲートにキャンセルのエラーが届き、perform はそのエラーで終わる。
+    func cancel() {
+        controller?.cancel()
     }
 
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
