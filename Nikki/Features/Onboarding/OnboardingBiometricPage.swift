@@ -6,6 +6,13 @@ struct OnboardingBiometricPage: View {
     /// オンボーディングの完了状態。生体認証の実登録は OS 設定に委ねるため、ボタンは完了として扱う。
     @Binding var onboardingCompleted: Bool
 
+    /// パスキー登録に失敗した時のエラー文言。nil でアラートを閉じる。
+    @State var passkeyRegistrationErrorMessage: String?
+
+    /// 登録済みパスキー(issue #84)。「パスキーを登録する」の成功で保存し、オンボーディングを完了にする。
+    @AppStorage(.passkeyCredentialID) var passkeyCredentialID: Data = Data()
+    @AppStorage(.passkeyPublicKey) var passkeyPublicKey: Data = Data()
+
     var body: some View {
         // 生体認証が使えない端末(パスコード未設定・生体認証なしの Mac 等)は OS の用語(macOS: パスワード、iOS / iPadOS: パスコード)に合わせる。
         #if os(macOS)
@@ -45,16 +52,45 @@ struct OnboardingBiometricPage: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
 
-                // パスキーは未実装のため「パスキーを登録する」ボタンは置かない(実装時に戻す。issue #84)。
-                Button(primaryButtonTitle) {
-                    onboardingCompleted = true
+                VStack(spacing: 10) {
+                    Button(primaryButtonTitle) {
+                        onboardingCompleted = true
+                    }
+                    .buttonStyle(InkPrimaryButtonStyle())
+
+                    // パスキーはロック解除の代替手段(issue #84)。登録できたらそのまま完了し、キャンセルならこの画面に留まる。
+                    Button("Register a passkey") {
+                        Task {
+                            await registerPasskeyAndComplete()
+                        }
+                    }
+                    .buttonStyle(InkSecondaryButtonStyle())
                 }
-                .buttonStyle(InkPrimaryButtonStyle())
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .padding(.horizontal, 28)
             .padding(.top, 50)
             .padding(.bottom, 16)
+        }
+        .alert("Couldn't register the passkey", isPresented: Binding(get: { passkeyRegistrationErrorMessage != nil }, set: { if !$0 { passkeyRegistrationErrorMessage = nil } })) {
+            Button("OK") {}
+        } message: {
+            Text(passkeyRegistrationErrorMessage ?? "")
+        }
+    }
+
+    /// OS のパスキー登録を起動し、成功したら識別子と公開鍵を保存してオンボーディングを完了にする。
+    /// キャンセルは何もせず、それ以外の失敗はアラートで知らせる(設定の登録行と同じ扱い)。
+    private func registerPasskeyAndComplete() async {
+        do {
+            let credential = try await registerPasskey()
+            passkeyCredentialID = credential.credentialID
+            passkeyPublicKey = credential.publicKey
+            onboardingCompleted = true
+        } catch {
+            if !isPasskeyCanceled(error: error) {
+                passkeyRegistrationErrorMessage = error.localizedDescription
+            }
         }
     }
 }

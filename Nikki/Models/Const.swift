@@ -10,4 +10,9 @@ enum Const {
 
     /// Nikki Plus の解放判定に使う RevenueCat の entitlement ID。
     static let revenueCatPlusEntitlementID = "plus"
+
+    /// パスキー(ロック解除の代替手段。issue #84)の relying party。GitHub Pages のユーザーサイト直下の
+    /// /.well-known/apple-app-site-association がこのアプリ(TQPN82UBBY.com.bannzai.Nikki)を webcredentials で許可する。
+    /// entitlements の associated-domains(webcredentials:)と一致させる。
+    static let passkeyRelyingPartyIdentifier = "bannzai.github.io"
 }
