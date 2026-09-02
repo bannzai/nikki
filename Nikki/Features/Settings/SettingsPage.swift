@@ -23,6 +23,13 @@ struct SettingsPage: View {
     @State var pdfExporterIsPresented = false
     @State var htmlExporterIsPresented = false
     @State var deleteAllEntriesConfirmationDialogIsPresented = false
+    @State var passkeyRemoveConfirmationDialogIsPresented = false
+    /// パスキー登録に失敗した時のエラー文言。nil でアラートを閉じる。
+    @State var passkeyRegistrationErrorMessage: String?
+
+    /// 登録済みパスキー(issue #84)。credentialID が空なら未登録。
+    @AppStorage(.passkeyCredentialID) var passkeyCredentialID: Data = Data()
+    @AppStorage(.passkeyPublicKey) var passkeyPublicKey: Data = Data()
 
     @Query(sort: \JournalNotebook.sortOrder) var notebooks: [JournalNotebook]
     /// Markdown 書き出しは読んだときに時系列で並ぶよう古い順に取り出す。
@@ -60,8 +67,22 @@ struct SettingsPage: View {
 
                         SettingsSectionLabel(text: String(localized: "Lock"))
                         InkListSection {
-                            // パスキーは未実装のため行を置かない(実装したらここに登録行を戻す。issue #84)。
-                            InkListRow(title: String(localized: "Unlock with Face ID"), showsSeparator: false, trailing: AnyView(SettingsToggle(isOn: $faceIDUnlockEnabled)))
+                            InkListRow(title: String(localized: "Unlock with Face ID"), trailing: AnyView(SettingsToggle(isOn: $faceIDUnlockEnabled)))
+                            // 未登録なら OS のパスキー登録を起動し、登録済みなら削除の確認を出す。
+                            InkListRow(
+                                title: String(localized: "Passkey"),
+                                value: passkeyCredentialID.isEmpty ? String(localized: "Not registered") : String(localized: "Registered"),
+                                showsSeparator: false,
+                                action: {
+                                    if passkeyCredentialID.isEmpty {
+                                        Task {
+                                            await registerPasskeyFromSettings()
+                                        }
+                                    } else {
+                                        passkeyRemoveConfirmationDialogIsPresented = true
+                                    }
+                                }
+                            )
                         }
                         .padding(.bottom, 20)
 
@@ -254,6 +275,36 @@ struct SettingsPage: View {
                 Button(textSizeLabel(size)) {
                     textSize = size
                 }
+            }
+        }
+        .confirmationDialog("Remove passkey", isPresented: $passkeyRemoveConfirmationDialogIsPresented, titleVisibility: .visible) {
+            Button("Remove passkey", role: .destructive) {
+                // 端末に保存した識別子と公開鍵を消してロック画面の候補から外す。iCloud キーチェーン上のパスキー自体は
+                // アプリから削除できないため、Passwords アプリからの削除に委ねる(message の文言)。
+                passkeyCredentialID = Data()
+                passkeyPublicKey = Data()
+            }
+        } message: {
+            Text("This device will stop unlocking with the passkey. The passkey itself stays in Passwords until you delete it there.")
+        }
+        .alert("Couldn't register the passkey", isPresented: Binding(get: { passkeyRegistrationErrorMessage != nil }, set: { if !$0 { passkeyRegistrationErrorMessage = nil } })) {
+            Button("OK") {}
+        } message: {
+            Text(passkeyRegistrationErrorMessage ?? "")
+        }
+    }
+
+    /// OS のパスキー登録を起動し、成功したら識別子と公開鍵を保存する。キャンセルは何もせず、それ以外の失敗はアラートで知らせる。
+    private func registerPasskeyFromSettings() async {
+        do {
+            let credential = try await registerPasskey()
+            // 登録状態の判定に使う credentialID は最後に保存する。2 つの値は別々に書き込まれるため、
+            // 先に credentialID だけが残ると公開鍵なしで登録済み扱いになる。
+            passkeyPublicKey = credential.publicKey
+            passkeyCredentialID = credential.credentialID
+        } catch {
+            if !isPasskeyCanceled(error: error) {
+                passkeyRegistrationErrorMessage = error.localizedDescription
             }
         }
     }

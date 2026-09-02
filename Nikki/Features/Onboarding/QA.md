@@ -1,8 +1,8 @@
 ---
 feature: Onboarding
 verification: mobile-mcp
-last_verified_commit: 2f8b4ab97dc9113a82b5f76671c2de80fc1f55e5
-last_verified_at: 2026-08-22
+last_verified_commit: d9a0668810533553706dff848ecd52d427c13c22
+last_verified_at: 2026-09-02
 ---
 
 # Onboarding QA
@@ -12,6 +12,7 @@ last_verified_at: 2026-08-22
 - 仕様: 仕様なし QA (「仕様・期待挙動」欄を持つ issue が存在しないため、コードの実挙動を正として項目を書いている)
 - 関連: https://github.com/bannzai/nikki/pull/10 (デザイン引き継ぎ書からの画面実装)
 - 関連: https://github.com/bannzai/nikki/pull/34 (ようこそ画面のロゴマークを日記帳アイコンに置き換え)
+- 関連: https://github.com/bannzai/nikki/issues/84 (パスキーでの登録・認証の実装)
 
 ## 1. 初回起動のステップ進行
 
@@ -28,9 +29,12 @@ last_verified_at: 2026-08-22
 - [x] **完了してホームへ到達する**: 生体認証を有効にするボタンを押すとオンボーディングが終わり、日記一覧が表示される
   - 自動化: manual（初回起動フローの目視確認）
   - 「Enable Face ID」で完了しホームへ到達することを確認した
-- [x] **パスキー登録ボタンは出ない**: パスキーは未実装のため「パスキーを登録する」ボタンを撤去した (実装時に戻す)。最終ステップのボタンは生体認証を有効にするものだけが出る
+- [x] **パスキー登録ボタンが出る**: 最終ステップに、生体認証を有効にする主ボタンの下に枠線の「パスキーを登録する」ボタンが出る (issue #84)
   - 自動化: manual（最終ステップの表示を目視で確認する）
-  - 2026-08-22 macOS (Debug、カタログの biometric) でボタンが1つだけなことを確認
+  - 2026-09-02 iOS (simtunnel、カタログの biometric) で「Enable Face ID」の下に枠線の「Register a passkey」、macOS (Debug、カタログの biometric) で「Touch ID を有効にする」の下に「パスキーを登録する」が出た
+- [ ] **パスキーを登録して完了する**: 「パスキーを登録する」で OS のパスキー登録が始まり、登録できるとオンボーディングが終わってホームへ到達する。キャンセルするとこの画面に留まる
+  - 自動化: manual（OS のパスキー登録ダイアログを伴うため）
+  - ⏭️ スキップ: OS のパスキー登録は relying party (bannzai.github.io) の apple-app-site-association の配信 ( https://github.com/bannzai/bannzai.github.io/pull/4 ) と署名済みビルドが前提で、simtunnel の署名なし Simulator ビルドと未署名の macOS Debug ビルドでは登録に進めない。AASA 配信後に実機 (または署名済みビルド) で確認する
 
 #### 動作確認
 <details>
@@ -73,6 +77,24 @@ last_verified_at: 2026-08-22
 </details>
 
 ### **Touch ID / パスコード端末の生体認証案内**: Touch ID 端末では Touch ID の図像・文言、生体認証を使えない端末ではパスコード・パスワードの文言に切り替わる
+
+<details><summary>動作確認スクショ</summary>
+
+（未実行）
+
+</details>
+
+### **パスキー登録ボタンが出る**: 最終ステップに、生体認証を有効にする主ボタンの下に枠線の「パスキーを登録する」ボタンが出る (issue #84)
+
+<details><summary>動作確認スクショ</summary>
+
+**確認日: 2026-09-02**
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260902/11ba36bd-b2cb-4625-be88-230fd0689d70.jpg" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260902/d758a662-bfff-4575-947d-346f93ac7af8.png" width="320">
+
+</details>
+
+### **パスキーを登録して完了する**: 「パスキーを登録する」で OS のパスキー登録が始まり、登録できるとオンボーディングが終わってホームへ到達する。キャンセルするとこの画面に留まる
 
 <details><summary>動作確認スクショ</summary>
 
