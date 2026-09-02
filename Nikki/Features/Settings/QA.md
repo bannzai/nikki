@@ -1,8 +1,8 @@
 ---
 feature: Settings
 verification: mobile-mcp
-last_verified_commit: 51aeef8989e9a524ee4e9484c51c02ab373bb70e
-last_verified_at: 2026-08-25
+last_verified_commit: d9a0668810533553706dff848ecd52d427c13c22
+last_verified_at: 2026-09-02
 ---
 
 # Settings QA
@@ -14,6 +14,7 @@ last_verified_at: 2026-08-25
 - 関連: https://github.com/bannzai/nikki/issues/46 (すべての日記を削除して欲しい)
 - 関連: https://github.com/bannzai/nikki/pull/49 (設定に「すべての日記を削除」を追加)
 - 関連: https://github.com/bannzai/nikki/pull/59 (ノート管理導線の追加)
+- 関連: https://github.com/bannzai/nikki/issues/84 (パスキーでの登録・認証の実装)
 
 ## 1. 設定項目の表示
 
@@ -23,9 +24,13 @@ last_verified_at: 2026-08-25
 - [x] **「既定のテンプレート」の行は出ない**: 「既定のテンプレート」の設定行・選択画面は廃止した(テンプレート管理一覧へ統合)。テンプレートの件数によらず「テンプレート」行の直後に「自動ロック」行が並ぶ
   - 自動化: manual（テンプレートの件数を変えながらの表示確認）
   - 2026-08-22 ローカル iOS Simulator (1件) と macOS (4件) のどちらでも「既定のテンプレート」行は出なかった (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/10e1a7ee-0a01-4704-ac06-901c15abd131.png, https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/af3dd66f-6859-4b9f-b417-2e96a5a6982b.png)
-- [x] **パスキーの行は出ない**: パスキーは未実装のため「パスキー」の行を撤去した (実装時に戻す)。「鍵」セクションには「Face ID で解除」のトグルだけが出る
+- [x] **パスキーの行が出る**: 「鍵」セクションに「Face ID で解除」のトグルに続けて「パスキー」の行が出て、未登録なら「未登録」が表示される (issue #84)
   - 自動化: manual（表示の目視確認）
-  - 2026-08-22 macOS (Debug、カタログの settings) で「鍵」セクションが Face ID トグルのみなことを確認
+  - 2026-09-02 iOS (simtunnel、カタログの settings) と macOS (Debug、カタログの settings) の両方で「Face ID で解除」の下に「パスキー / Not registered (未登録)」の行が出た
+- [ ] **パスキーの登録と削除**: 「パスキー」行をタップすると OS のパスキー登録が始まり、登録後は「登録済み」になる。登録済みの行をタップすると削除の確認が出て、削除すると「未登録」に戻る
+  - 自動化: manual（OS のパスキー登録ダイアログを伴うため）
+  - ⏭️ スキップ: OS のパスキー登録は relying party (bannzai.github.io) の apple-app-site-association の配信 ( https://github.com/bannzai/bannzai.github.io/pull/4 ) と署名済みビルドが前提で、simtunnel の署名なし Simulator ビルドと未署名の macOS Debug ビルドでは登録に進めない。AASA 配信後に実機 (または署名済みビルド) で確認する
+  - 2026-09-02 部分確認: 未登録の行をタップすると OS からのエラーがアラート「Couldn't register the passkey」に出る (iOS: https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260902/7ac94710-d6e5-4abd-ae49-e54b002e8bfb.jpg 、macOS: https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260902/be888a11-613c-48c5-a2cb-10a1ffdee571.png )。起動引数で登録済み状態を再現すると行が「Registered (登録済み)」になり (iOS: https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260902/7826161f-8d72-4b95-a630-be0f63dbc220.jpg 、macOS: https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260902/1665f5ed-238d-45a9-a45e-64d608e9b000.png )、タップで削除の確認 (「Remove passkey」+ Passwords アプリに残る旨の説明) が出た (iOS: https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260902/44addea4-fe74-43ca-832a-11f560f95cf0.jpg )。削除後の「未登録」への復帰は、起動引数が保存値より優先されるため再現環境では確認できていない
 
 #### 動作確認
 <details>
@@ -40,19 +45,31 @@ last_verified_at: 2026-08-25
 
 </details>
 
-### **「既定のテンプレート」の行は出ない**: 「既定のテンプレート」の設定行・選択画面は廃止した(テンプレート管理一覧へ統合)
+### **「既定のテンプレート」の行は出ない**: 「既定のテンプレート」の設定行・選択画面は廃止した(テンプレート管理一覧へ統合)。テンプレートの件数によらず「テンプレート」行の直後に「自動ロック」行が並ぶ
 
 <details><summary>動作確認スクショ</summary>
 
-（行の廃止に伴い旧エビデンスを撤去。PR 作成時の run-qa で再取得する）
+**確認日: 2026-08-22**
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/10e1a7ee-0a01-4704-ac06-901c15abd131.png" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/af3dd66f-6859-4b9f-b417-2e96a5a6982b.png" width="320">
 
 </details>
 
-### **パスキーの行は出ない**: パスキーは未実装のため「パスキー」の行を撤去した
+### **パスキーの行が出る**: 「鍵」セクションに「Face ID で解除」のトグルに続けて「パスキー」の行が出て、未登録なら「未登録」が表示される (issue #84)
 
 <details><summary>動作確認スクショ</summary>
 
-（行の撤去に伴い旧エビデンスを撤去。PR 作成時の run-qa で再取得する）
+**確認日: 2026-09-02**
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260902/b6116b28-4b3a-4e28-ae8c-12460adfa904.jpg" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260902/9c045cce-1f94-4d37-94f9-11af6d98c461.png" width="320">
+
+</details>
+
+### **パスキーの登録と削除**: 「パスキー」行をタップすると OS のパスキー登録が始まり、登録後は「登録済み」になる。登録済みの行をタップすると削除の確認が出て、削除すると「未登録」に戻る
+
+<details><summary>動作確認スクショ</summary>
+
+（未実行）
 
 </details>
 
@@ -79,7 +96,7 @@ last_verified_at: 2026-08-25
 <details>
 <summary>動作確認エビデンス</summary>
 
-### **自動ロックの秒数を選べる**: 「自動ロック」をタップすると秒数の選択肢が出て、選んだ値が行に反映される
+### **自動ロックの秒数を選べる**: 「自動ロック」をタップすると秒数の選択ページ(設定 > 自動ロック)が開き、選んだ値が行に反映される (選択ページ自体の項目は Lock feature の QA.md「自動ロックの秒数設定」を参照)
 
 <details><summary>動作確認スクショ</summary>
 
@@ -144,7 +161,7 @@ last_verified_at: 2026-08-25
 <details>
 <summary>動作確認エビデンス</summary>
 
-### **各行から対応する画面へ遷移する**: テンプレート・自動ロック・テーマ・アーカイブ済み・オープンソースライセンスの各行から、それぞれの画面へ遷移して戻ってこられる
+### **各行から対応する画面へ遷移する**: テンプレート・自動ロック・テーマ・アーカイブ済み・オープンソースライセンスの各行から、それぞれの画面へ遷移して戻ってこられる (2026-08-22 の変更で「既定のテンプレート」行は廃止)
 
 <details><summary>動作確認スクショ</summary>
 
@@ -207,7 +224,7 @@ last_verified_at: 2026-08-25
   - 2026-08-24 simtunnel (iOS) とローカル macOS (Debug) の両方で両行の錠アイコンを確認し、iOS で「PDF で書き出す」をタップするとペイウォールが開いた。初回 QA で「Markdown で書き出す」の保存画面が開かない不具合を発見 (同じ View への fileExporter 3 連鎖で先頭が無効化) → 行ごとに fileExporter を分離して修正 (再検証の結果は同セクションの「Markdown の保存先を選べる」の記録を参照)
 - [ ] **PDF / HTML の書き出し (Plus 加入中)**: 各行から保存画面が開き、PDF は 1 日記 1 ページの装飾付き文書、HTML はテーマの紙色を背景に反映した装飾付き文書が保存される (issue #95)
   - 自動化: auto（NikkiTests/JournalEntryTests.swift の exportHTML テストが HTML の構造と紙色の反映を、NikkiTests/SettingsExportPDFGeneratorTests.swift が PDF のページ数を検証。見た目と保存画面は Plus 加入状態を simulator で作れないため TestFlight 配布後の人間確認とする）
-  - 未検証: Plus 加入状態を simulator で再現できないため保存画面からの書き出しは未実施
+  - ⏭️ スキップ: Plus 加入状態を simulator で再現できないため保存画面からの書き出しは未実施 (TestFlight 配布後の人間確認)
 
 #### 動作確認
 <details>
@@ -261,7 +278,7 @@ Files アプリのプレビューで開いた書き出し結果。
 
 </details>
 
-### **PDF / HTML 書き出しのロック表示 (Plus 未加入)**: 「PDF で書き出す」「HTML で書き出す」の行に錠アイコンが付き、タップするとペイウォールが開く
+### **PDF / HTML 書き出しのロック表示 (Plus 未加入)**: 「PDF で書き出す」「HTML で書き出す」の行に錠アイコンが付き、タップするとペイウォールが開く。「Markdown で書き出す」は無料のまま保存画面が開く (issue #95)
 
 <details><summary>動作確認スクショ</summary>
 
@@ -270,6 +287,14 @@ Files アプリのプレビューで開いた書き出し結果。
 <img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/3ad31ec8-239f-4ab3-b5cd-a386a75e26be.jpg" alt="iOS の設定。PDF / HTML の書き出し行に錠アイコンが付いている" width="320">
 <img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/23c55852-ca50-4f18-95ab-0088d42e7a09.jpg" alt="ロック行のタップで開いた iOS のペイウォール" width="320">
 <img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260824/4d99a921-c6d4-47c6-935e-ca38dd3df112.png" alt="macOS の設定。PDF / HTML の書き出し行に錠アイコンが付いている" width="320">
+
+</details>
+
+### **PDF / HTML の書き出し (Plus 加入中)**: 各行から保存画面が開き、PDF は 1 日記 1 ページの装飾付き文書、HTML はテーマの紙色を背景に反映した装飾付き文書が保存される (issue #95)
+
+<details><summary>動作確認スクショ</summary>
+
+（未実行）
 
 </details>
 
