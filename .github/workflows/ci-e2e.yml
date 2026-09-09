@@ -1,0 +1,63 @@
+# managed-by: setup-ci (bannzai/castle)
+name: ci-e2e
+
+on:
+  schedule:
+    # PR ごとの長時間実行を避け、日本時間の早朝に回す。
+    - cron: '23 19 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  e2e:
+    runs-on: macos-26
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
+      - name: iOS Simulator を用意
+        # 既存の単体テスト CI と同じ runtime に揃える。
+        # runner は実行ごとに破棄されるため、専用 simulator を新規作成する。
+        run: |
+          xcrun simctl list runtimes
+          UDID=$(xcrun simctl create "e2e-ios" "iPhone 17" "com.apple.CoreSimulator.SimRuntime.iOS-26-2")
+          echo "SIMULATOR_UDID=$UDID" >> "$GITHUB_ENV"
+      - name: UI の回帰テスト
+        # 撮影専用テストは別パイプラインで実行する。UI 操作の干渉を避けるため並列化しない。
+        # xcresult は実行ごとの使い捨て runner に出力するため、既存結果の上書きは不要。
+        run: |
+          mkdir -p tmp
+          xcodebuild -project Nikki.xcodeproj -scheme Nikki \
+            -destination "id=$SIMULATOR_UDID" \
+            -derivedDataPath tmp/DerivedData \
+            -resultBundlePath tmp/e2e.xcresult \
+            -skipPackagePluginValidation \
+            -parallel-testing-enabled NO \
+            -only-testing:NikkiUITests \
+            -skip-testing:NikkiUITests/AppStoreScreenshotSnapshotUITests \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO \
+            test > tmp/e2e.log 2>&1
+      - name: ログとテスト実行を確認
+        if: always()
+        run: |
+          if [ -f tmp/e2e.log ]; then
+            grep -Ei 'warning:|error:|Test Suite|Test Case|\*\* TEST' tmp/e2e.log || true
+          fi
+          # 全件スキップや対象なしの実行を成功扱いにしない。
+          grep -Eq "Test Case .*NikkiUITests.* passed" tmp/e2e.log
+      - name: 実行結果を保存
+        if: always()
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        with:
+          name: e2e-results
+          path: |
+            tmp/e2e.log
+            tmp/e2e.xcresult
+          retention-days: 7
