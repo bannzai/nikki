@@ -7,7 +7,6 @@
 ## 基本原則
 
 - コーディング規約から逸脱したい場合はコメントに理由を書いてください
-- **コードの読みやすさを優先する**
 - **宣言的なスタイルを使用する**: 手続き的なコードよりも宣言的なコードを優先する
 - **パフォーマンス最適化は基本的に考慮しない。コードの読みやすさを優先する**
   - N+1問題のようなパフォーマンス問題は、以下の場合を除いて考慮しない
@@ -19,7 +18,6 @@
 ## インデントとフォーマット
 
 - インデントは4スペースにする
-  - Focus は tab(=2space) を採用しているが、Nikki の既存コードは4スペースで統一されているため、現状に合わせる（プロジェクトに `.swift-format` は未導入）
 - 標準型の拡張ファイルは `{TypeName}+.swift` のような命名にする（例: `Date+.swift`, `String+.swift`）
   - 1つの型に対して1つの拡張ファイルを使用し、ファイル内で複数の拡張がある場合は `// MARK: -` を使って機能ごとにセクション分けする
 
@@ -37,44 +35,11 @@
 - `guard let ... else { return }` や `if let ... { ... }` を1行にまとめて書かない
 - 条件部分、else句（guardの場合）、本体（ifの場合）はそれぞれ別の行に分ける
 
-良い例:
-```swift
-guard let match, match.numberOfRanges > 1 else {
-    return
-}
-```
-
-悪い例:
-```swift
-guard let match, match.numberOfRanges > 1 else { return }
-```
-
 ## コメントの書き方
 
 ### プロパティのコメントは横ではなく上に書く
 
 enumのケースやプロパティの説明コメントは、同じ行ではなく上の行に記載する
-
-良い例:
-```swift
-enum InkNavLeading {
-    // 先頭ボタンなし
-    case none
-    // 戻るボタン
-    case back
-    // 閉じるボタン
-    case dismiss
-}
-```
-
-悪い例:
-```swift
-enum InkNavLeading {
-    case none     // 先頭ボタンなし
-    case back     // 戻るボタン
-    case dismiss  // 閉じるボタン
-}
-```
 
 ### コメントには具体的な数値を書かない
 
@@ -103,7 +68,7 @@ enum InkNavLeading {
 - **記述が短くなる、という理由だけで変数やプロパティを宣言しない**
   - 変数・プロパティは意味のある抽象化や再利用のために宣言する
   - 単に記述を短くするだけの目的で宣言すると、かえって可読性が下がり、コードの意図が不明確になる
-  - 1回しか使わない値を変数に入れるのは避ける。直接使用する方が明確
+  - 一度しか参照しない中間変数は `coding-rules-no-intermediate-variables.md` に従う
 - **ただ関数を呼ぶだけの computed property（getter）を作らない**
   - 関数を1回呼ぶだけのラッパー getter は宣言せず、関数を直接呼び出す
   - 同じ値を複数回参照して二重計算を避けたい場合は、`body` 等の中でローカル `let` に束縛する（getter は作らない）
@@ -129,31 +94,6 @@ enum InkNavLeading {
 - あるデータから派生する計算ロジックは、そのデータを所有する型が責任を持つべき
 - computed property を使って、派生データの計算ロジックを所有者に集約する
 - 使用側で毎回同じ計算ロジックを書くのは DRY 原則に反する
-
-良い例（`JournalEntry` が本文ブロックから抜粋テキストを計算する）:
-```swift
-struct JournalEntry: Identifiable, Hashable {
-    var blocks: [Block]
-
-    /// 一覧の抜粋に使う、本文段落を連結したプレーンテキスト。
-    var excerpt: String {
-        blocks.compactMap { block -> String? in
-            switch block {
-            case .paragraph(_, let text): return text
-            case .heading(_, _, let text): return text
-            default: return nil
-            }
-        }
-        .joined(separator: " ")
-    }
-}
-```
-
-悪い例:
-```swift
-// 使用側で毎回計算
-let excerpt = entry.blocks.compactMap { ... }.joined(separator: " ")
-```
 
 ### ロジックの重複を無理に共通化しない
 

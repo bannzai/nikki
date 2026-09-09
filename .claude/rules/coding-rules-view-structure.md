@@ -29,38 +29,6 @@ paths:
 - ファイル名もコンポーネント名と同じにする
 - 例: `Features/Paywall/Components/PaywallPlanCard.swift`
 
-### 良い例：Feature構造
-
-```
-Features/
-├── Home/
-│   ├── HomePage.swift            # エントリーポイント（共通シャーシ）
-│   └── Components/
-│       ├── HomeListBody.swift    # Feature名が prefix、ファイル名=型名
-│       └── HomeCalendarBody.swift
-├── Editor/
-│   ├── EditorPage.swift          # エントリーポイント
-│   └── Components/
-│       └── EditorParagraphBlock.swift
-└── Settings/
-    └── SettingsPage.swift        # エントリーポイント
-```
-
-```swift
-// Features/Home/HomePage.swift
-struct HomePage: View {  // ✅ {FeatureName}Page
-    var body: some View {
-        // ...
-        HomeListBody(entries: entries)  // ✅ Feature名が prefix
-    }
-}
-
-// Features/Home/Components/HomeListBody.swift
-struct HomeListBody: View {  // ✅ Feature名が prefix
-    // ...
-}
-```
-
 ## Body パターン
 
 ### いつ使うか
@@ -69,7 +37,6 @@ struct HomeListBody: View {  // ✅ Feature名が prefix
   - 例: `HomePage` は選択モードに応じて `HomeListBody` / `HomeCalendarBody` を切り替える
 - 単純な画面では Body を作らず、直接 Page に `body` を実装する
 - **（非同期データ取得を導入した時）** エントリーポイントで非同期のデータ取得が必要になった場合、取得を親 View で解決し、取得成功時に `{Feature}Body` を表示する形にする
-  - 現在 Nikki は非同期データ取得層（Firestore 等）を未導入。導入時にこのパターンを適用する
 
 ## 状態管理
 
@@ -83,36 +50,6 @@ struct HomeListBody: View {  // ✅ Feature名が prefix
 - コールバック（onSuccess, onError, onSave, onComplete など）は極力書かない
 - そのコンポーネントや View 内部で処理を完結させる
 - どうしても書く必要がある場合はコメントに理由を残す
-- 補足: Nikki の現状は画面が振る舞いを持たないスタブ段階で、`onNewEntry` / `onSelect` / `onStart` などのコールバックを多用している。実データ層・画面遷移を配線する段階で、各画面内に処理を閉じる方向へ見直す
-
-#### コールバックを使わない例
-
-良い例（保存も dismiss も画面内で完結）:
-```swift
-struct SomeSheetView: View {
-    @Environment(\.dismiss) var dismiss
-    @State var title: String
-
-    var body: some View {
-        Button("Save") {
-            save()
-            dismiss()  // 画面内で完結
-        }
-    }
-
-    private func save() {
-        // 保存処理
-    }
-}
-```
-
-悪い例（onSave コールバックで呼び出し側に処理を押し出す）:
-```swift
-struct SomeSheetView: View {
-    let onSave: () -> Void  // ❌ コールバック
-    // ...
-}
-```
 
 ## イニシャライザ
 
