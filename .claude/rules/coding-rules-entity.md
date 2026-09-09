@@ -7,8 +7,6 @@ paths:
 
 このドキュメントは、Model（値型・将来の SwiftData `@Model` 等）やデータ層に関するコーディングルールを定義します。
 
-Nikki の `Nikki/Models/` は現在プレーンな値型（`JournalEntry` / `Block` / `JournalTemplate` / `ChecklistItem` / `SampleData`）で構成されています。README のとおり将来 SwiftData + CloudKit を導入予定のため、SwiftData 固有のルールは「導入時に適用」と明記して残します。
-
 （構造の定義に付けるドキュメントコメント（`///`）はグローバル規約 `document-definitions` を参照。ここでは重複させません）
 
 ## 命名規則
@@ -24,7 +22,6 @@ Nikki の `Nikki/Models/` は現在プレーンな値型（`JournalEntry` / `Blo
 
 - `UserDefaults+.swift` 等で定義された key 名と、`@AppStorage` で使用する変数名を同じにする
 - 理由: key名と変数名が一致していることで、どの UserDefaults キーを使用しているか一目で分かる
-- 現在 Nikki には `@AppStorage` / UserDefaults キー定義はまだ無い。導入時に適用する
 
 ## 文字列とローカライゼーション
 
@@ -51,26 +48,7 @@ Nikki の `Nikki/Models/` は現在プレーンな値型（`JournalEntry` / `Blo
 - ドメインメソッド内で必ず `updatedDateTime = .now` を更新する
 - SwiftData には CoreData の `willSave` のようなモデルレベルのフックが存在しないため、ドメインメソッドで一貫して updatedDateTime を更新する運用で対応する
 - `onChange(of:)` 等でエンティティの変更を検知する場合は、個別プロパティではなく `updatedDateTime` を監視する
-- 現在 Nikki の Model は値型のため未適用。SwiftData 導入時に適用する
 
-#### 導入時の例
+### enum の表示ロジック
 
-```swift
-@Model
-final class JournalEntry {
-    private(set) var title: String
-    private(set) var updatedAt: Date = Date.now
-
-    /// title を更新し、updatedAt も同時に更新する。
-    func setTitle(_ title: String) {
-        self.title = title
-        self.updatedAt = .now
-    }
-}
-```
-
-### enum に表示用の文字列やアイコンを返すプロパティは持たせない
-
-- `var label: String` や `var systemImage: String` のような表示ロジックは enum ではなく View に書く
-- enum は純粋なデータ型として定義し、表示に関するロジックは使用側（View）で switch 文を使って判定する
-- 例外: enum の説明文を生成する場合でも、View 内で switch 文を使って判定する
+- 表示文字列・アイコンの責任は `coding-rules-view-ui.md` の「enum と View」に従う
