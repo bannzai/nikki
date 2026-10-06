@@ -84,19 +84,25 @@ macos-debug:
 	@echo "Release に戻すには: make macos"
 
 # ユニットテスト (NikkiTests) を CI (test.yml) と同じ iOS Simulator 向け・同じ runtime で実行する。
-# simulator は sim-boot で起動した worktree 固有のものを使い、起動済みなら再利用する
+# simulator は sim-boot で起動した worktree 固有のものを使い、起動済みなら再利用する。
+# CI と同じく、StoreKit テストが skip・未実行のまま成功扱いになっていないことをログで検査する
 .PHONY: test
 
 test:
-	@set -e; \
+	@set -e; set -o pipefail; \
 	simulator_udid=$$(SCRIPT_QUIET=1 SIM_RUNTIME=$(TEST_SIM_RUNTIME) sim-boot | sed -n 's/^DEVICE_UDID=//p' | tail -n 1); \
 	[ -n "$$simulator_udid" ] || { echo "Error: sim-boot で Simulator を解決できません (sim-boot が PATH にあるか確認してください)" >&2; exit 1; }; \
+	mkdir -p tmp; \
 	xcodebuild -project $(PROJECT) -scheme $(SCHEME) \
 		-destination "platform=iOS Simulator,id=$$simulator_udid" \
 		-derivedDataPath $(DERIVED_DATA) \
 		$(SKIP_PLUGIN_VALIDATION) \
 		-only-testing:NikkiTests \
-		test
+		test 2>&1 | tee tmp/test.log; \
+	if [ "$$(grep -cE 'Test Case .*StoreKitConfigurationTests.* passed' tmp/test.log)" -lt 5 ]; then \
+		echo "Error: StoreKitConfigurationTests の pass が 5 件未満です (skip または未実行の可能性。実行可能な runtime を使ってください)" >&2; \
+		exit 1; \
+	fi
 
 # 引数なしの make で動作確認 (verify) を実行する
 .DEFAULT_GOAL := verify
