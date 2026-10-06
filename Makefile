@@ -6,6 +6,9 @@ INSTALL_APP := /Applications/Nikki.app
 # GUI での承認結果は共有されない xcuserdata に入るため、CLI ビルドでは検証をスキップする
 SKIP_PLUGIN_VALIDATION := -skipPackagePluginValidation
 LSREGISTER := /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister
+# ユニットテストを実行する simulator の runtime。StoreKit テスト (StoreKitConfigurationTests) は iOS 26.5 simulator の
+# 既知の問題で skip されるため、CI (test.yml) と同じ runtime に固定して skip を成功扱いにしない
+TEST_SIM_RUNTIME := com.apple.CoreSimulator.SimRuntime.iOS-26-2
 
 .PHONY: macos ios ios-device
 
@@ -80,13 +83,13 @@ macos-debug:
 	@echo "起動するには: open $(INSTALL_APP)"
 	@echo "Release に戻すには: make macos"
 
-# ユニットテスト (NikkiTests) を CI (test.yml) と同じ iOS Simulator 向けで実行する。
+# ユニットテスト (NikkiTests) を CI (test.yml) と同じ iOS Simulator 向け・同じ runtime で実行する。
 # simulator は sim-boot で起動した worktree 固有のものを使い、起動済みなら再利用する
 .PHONY: test
 
 test:
 	@set -e; \
-	simulator_udid=$$(SCRIPT_QUIET=1 sim-boot | sed -n 's/^DEVICE_UDID=//p' | tail -n 1); \
+	simulator_udid=$$(SCRIPT_QUIET=1 SIM_RUNTIME=$(TEST_SIM_RUNTIME) sim-boot | sed -n 's/^DEVICE_UDID=//p' | tail -n 1); \
 	[ -n "$$simulator_udid" ] || { echo "Error: sim-boot で Simulator を解決できません (sim-boot が PATH にあるか確認してください)" >&2; exit 1; }; \
 	xcodebuild -project $(PROJECT) -scheme $(SCHEME) \
 		-destination "platform=iOS Simulator,id=$$simulator_udid" \
