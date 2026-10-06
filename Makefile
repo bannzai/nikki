@@ -79,3 +79,24 @@ macos-debug:
 	$(LSREGISTER) -f $(INSTALL_APP)
 	@echo "起動するには: open $(INSTALL_APP)"
 	@echo "Release に戻すには: make macos"
+
+# ユニットテスト (NikkiTests) を CI (test.yml) と同じ iOS Simulator 向けで実行する。
+# simulator は sim-boot で起動した worktree 固有のものを使い、起動済みなら再利用する
+.PHONY: test
+
+test:
+	@set -e; \
+	simulator_udid=$$(SCRIPT_QUIET=1 sim-boot | sed -n 's/^DEVICE_UDID=//p' | tail -n 1); \
+	[ -n "$$simulator_udid" ] || { echo "Error: sim-boot で Simulator を解決できません (sim-boot が PATH にあるか確認してください)" >&2; exit 1; }; \
+	xcodebuild -project $(PROJECT) -scheme $(SCHEME) \
+		-destination "platform=iOS Simulator,id=$$simulator_udid" \
+		-derivedDataPath $(DERIVED_DATA) \
+		$(SKIP_PLUGIN_VALIDATION) \
+		-only-testing:NikkiTests \
+		test
+
+# 引数なしの make で動作確認 (verify) を実行する
+.DEFAULT_GOAL := verify
+
+.PHONY: verify
+verify: test
