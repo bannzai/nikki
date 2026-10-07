@@ -104,8 +104,8 @@ test:
 		exit 1; \
 	fi
 
-# 引数なしの make で動作確認 (verify) を実行する
-.DEFAULT_GOAL := verify
+# 引数なしの make で macos を実行する (人が手で動作確認するための入口。検査・テストは CI が行う)
+.DEFAULT_GOAL := macos
 
 .PHONY: verify
 verify: test
