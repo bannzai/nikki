@@ -6,6 +6,7 @@ enum InkIcons {
     static let search = "magnifyingglass"
     static let faceID = "faceid"
     static let touchID = "touchid"
+    static let passkey = "person.badge.key"
     static let account = "person.crop.circle"
     static let settings = "gearshape"
     static let chevronRight = "chevron.right"

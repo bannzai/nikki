@@ -1,8 +1,8 @@
 ---
 feature: Lock
 verification: mobile-mcp
-last_verified_commit: 0921aeff51f8f93a4905449ddfad41b38cd374ee
-last_verified_at: 2026-08-22
+last_verified_commit: d9a0668810533553706dff848ecd52d427c13c22
+last_verified_at: 2026-09-02
 ---
 
 # Lock QA
@@ -15,6 +15,7 @@ last_verified_at: 2026-08-22
 - 関連: https://github.com/bannzai/nikki/issues/29 (macOS: ウィンドウがアクティブなら Touch ID を受け付けたい)
 - 関連: https://github.com/bannzai/nikki/issues/47 (macOS: 自動提示をやめてボタン押下時だけにする)
 - 関連: https://github.com/bannzai/nikki/issues/52 (macOS: アクティブ化で提示・非表示で認証ダイアログを閉じる)
+- 関連: https://github.com/bannzai/nikki/issues/84 (パスキーでの登録・認証の実装)
 
 ## 1. 自動ロックの発動
 
@@ -104,6 +105,47 @@ last_verified_at: 2026-08-22
 - [ ] **失効中はプリセットへ倒れる**: カスタム秒数を保存したまま Plus が失効すると、表示と実際のロックが既定の5秒に倒れる (保存値は残り、再加入で戻る)
   - 自動化: NikkiTests/AutoLockPlusGateTests.swift（実 UI での確認は加入・失効の切り替えが必要なため）
   - ⏭️ スキップ: 加入状態を切り替えられないためユニットテストのみ
+
+#### 動作確認
+<details>
+<summary>動作確認エビデンス</summary>
+
+### **プリセットを選べる**: 設定 > 自動ロック でプリセットの秒数が並び、いま適用されている秒数にチェックが付く
+
+<details><summary>動作確認スクショ</summary>
+
+**確認日: 2026-08-22**
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/bf90e27b-7e7a-4e68-b8b4-a97fea94d4f2.png" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/6681d6d0-6c91-43f9-b943-2ebd1db25c9b.png" width="320">
+
+</details>
+
+### **未加入のカスタムはペイウォールへ**: Nikki Plus 未加入のとき「カスタム」行に錠前が付き、タップするとペイウォールが開く。ペイウォールの特典に「1秒きざみの自動ロック」が載っている
+
+<details><summary>動作確認スクショ</summary>
+
+**確認日: 2026-08-22**
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/04e48518-8ffb-4cfa-9147-5e53d02cc0e5.png" width="320">
+
+</details>
+
+### **加入中はカスタム秒数を入力できる**: Nikki Plus 加入中は「カスタム」行に秒数の入力欄が出て、1〜3600 の整数を入れるとその秒数が保存され、ロックがその秒数で発動する
+
+<details><summary>動作確認スクショ</summary>
+
+（未実行）
+
+</details>
+
+### **失効中はプリセットへ倒れる**: カスタム秒数を保存したまま Plus が失効すると、表示と実際のロックが既定の5秒に倒れる (保存値は残り、再加入で戻る)
+
+<details><summary>動作確認スクショ</summary>
+
+（未実行）
+
+</details>
+
+</details>
 
 ---
 
@@ -253,6 +295,41 @@ last_verified_at: 2026-08-22
 </details>
 
 ### **スクロール・キー入力でも自動ロックが延長される**: macOS でトラックパッドのスクロールやキー入力を続けている間はロック画面が出ない
+
+<details><summary>動作確認スクショ</summary>
+
+（未実行）
+
+</details>
+
+</details>
+
+---
+
+## 6. パスキーでの解除 (issue #84)
+
+- [x] **パスキー登録済みならロック画面に「パスキーで開く」が出る**: 設定 > 鍵 でパスキーを登録した端末では、ロック画面の解除ボタンの下に枠線の「パスキーで開く」ボタンが並ぶ。未登録の端末では出ない
+  - 自動化: manual（登録状態ごとのロック画面の目視確認）
+  - 2026-09-02 登録済み状態は起動引数 (`-DataKey_passkeyCredentialID '<data>AQID</data>' -DataKey_passkeyPublicKey '<data>BA==</data>'`) で再現。iOS (simtunnel、カタログの lock) と macOS (Debug、カタログの lock) の両方で、登録済みでは「Open with Face ID / Touch ID で開く」の下に枠線の「Open with passkey / パスキーで開く」が並び、未登録では出なかった (未登録の iOS: https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260902/dd7afa47-edec-455f-a534-973c4856597f.jpg 、macOS: https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260902/1e9e7cb9-f8c3-494c-9ef9-542c462486db.png )
+- [ ] **パスキーで解除できる**: 「パスキーで開く」で OS のパスキー認証を通すとロックが解除され、ロック前の画面へ戻る。キャンセルするとロック画面のまま残る
+  - 自動化: manual（OS のパスキー認証ダイアログを伴うため）
+  - ⏭️ スキップ: OS のパスキー登録は relying party (bannzai.github.io) の apple-app-site-association の配信 ( https://github.com/bannzai/bannzai.github.io/pull/4 ) と署名済みビルドが前提で、simtunnel の署名なし Simulator ビルドと未署名の macOS Debug ビルドでは登録できず、解除の認証も試せない。AASA 配信後に実機 (または署名済みビルド) で確認する。署名の検証ロジック自体は NikkiTests/PasskeyTests.swift で機械検証済み
+
+#### 動作確認
+<details>
+<summary>動作確認エビデンス</summary>
+
+### **パスキー登録済みならロック画面に「パスキーで開く」が出る**: 設定 > 鍵 でパスキーを登録した端末では、ロック画面の解除ボタンの下に枠線の「パスキーで開く」ボタンが並ぶ。未登録の端末では出ない
+
+<details><summary>動作確認スクショ</summary>
+
+**確認日: 2026-09-02**
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260902/061dfa96-22f8-4b2a-98d0-ed1868f627cd.jpg" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260902/12be0195-1851-4e38-aa0d-1050f659dafb.png" width="320">
+
+</details>
+
+### **パスキーで解除できる**: 「パスキーで開く」で OS のパスキー認証を通すとロックが解除され、ロック前の画面へ戻る。キャンセルするとロック画面のまま残る
 
 <details><summary>動作確認スクショ</summary>
 
