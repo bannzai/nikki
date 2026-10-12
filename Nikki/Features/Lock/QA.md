@@ -1,8 +1,8 @@
 ---
 feature: Lock
 verification: mobile-mcp
-last_verified_commit: 0921aeff51f8f93a4905449ddfad41b38cd374ee
-last_verified_at: 2026-08-22
+last_verified_commit: 17729d297ee8348276f16730cc7338ebd63a332b
+last_verified_at: 2026-10-12
 ---
 
 # Lock QA
@@ -119,7 +119,11 @@ last_verified_at: 2026-08-22
   - Face ID 対応機の Simulator で、Face ID のアイコンと「Open with Face ID」の文言が出た
 - [ ] **解除ボタンが Touch ID・パスコードの端末に合う**: Touch ID の端末・生体認証のない端末で、解除ボタンの文言とアイコンがそれぞれ Touch ID / パスコード・パスワードに一致する
   - 自動化: manual（端末ごとの生体認証構成に依存する表示の目視確認）
-  - ⏭️ スキップ: Face ID 対応 iPhone の Simulator のみで実施。Touch ID・生体認証なし端末の構成は simulator で用意できず未確認
+  - 2026-10-12 Touch ID の端末は確認済み: iPhone Duo (iOS 27.1) の Simulator で、指紋のアイコンと「Touch ID で開く」の文言が出た (外側・内側の両ディスプレイ、issue #125)
+  - ⏭️ スキップ: 生体認証のない端末の構成は simulator で用意できず未確認
+- [x] **折りたたみ端末の両ディスプレイで崩れない**: iPhone Duo の外側・内側ディスプレイと、閉じる・開くの切り替えの後も、ロック画面の部品が見切れず、内側ディスプレイ右端の時計の列とも重ならない
+  - 自動化: manual（Simulator の姿勢切り替え (duo-pose.sh) と目視確認）
+  - 2026-10-12 iPhone Duo (iOS 27.1) で、閉じた姿勢で起動 → 開く → 閉じ直す、開いた姿勢で起動 → 閉じる → 開き直す、の両方で確認 (issue #125)
 
 #### 動作確認
 <details>
@@ -156,7 +160,20 @@ last_verified_at: 2026-08-22
 
 <details><summary>動作確認スクショ</summary>
 
-（未実行）
+**確認日: 2026-10-12** (iPhone Duo、Touch ID の端末。左が外側、右が内側)
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/2026/10/12/c3930217-6d74-4d44-a620-c8e380212fcc-before__lock-1-outer.jpg" width="240" alt="iPhone Duo の外側ディスプレイのロック画面。指紋アイコンと「Touch ID で開く」ボタン">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/2026/10/12/8891d69f-719d-4ae0-af37-d9a2d569eb39-before__lock-2-inner.jpg" width="320" alt="iPhone Duo の内側ディスプレイのロック画面。指紋アイコンと「Touch ID で開く」ボタン">
+
+</details>
+
+### **折りたたみ端末の両ディスプレイで崩れない**: iPhone Duo の外側・内側ディスプレイと、閉じる・開くの切り替えの後も、ロック画面の部品が見切れず、内側ディスプレイ右端の時計の列とも重ならない
+
+<details><summary>動作確認スクショ</summary>
+
+**確認日: 2026-10-12** (外側 → 内側 → 閉じ直した外側)
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/2026/10/12/c3930217-6d74-4d44-a620-c8e380212fcc-before__lock-1-outer.jpg" width="200" alt="閉じた姿勢で起動した iPhone Duo の外側ディスプレイのロック画面">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/2026/10/12/8891d69f-719d-4ae0-af37-d9a2d569eb39-before__lock-2-inner.jpg" width="280" alt="開いた姿勢にした iPhone Duo の内側ディスプレイのロック画面。右端の時計の列と重ならない">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/2026/10/12/d8a14131-76c2-4b9e-b59d-6c53601eddbf-before__lock-3-outer-reclosed.jpg" width="200" alt="閉じ直した iPhone Duo の外側ディスプレイのロック画面">
 
 </details>
 
