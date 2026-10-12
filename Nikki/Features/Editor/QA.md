@@ -1,8 +1,8 @@
 ---
 feature: Editor
 verification: mobile-mcp
-last_verified_commit: 51aeef8989e9a524ee4e9484c51c02ab373bb70e
-last_verified_at: 2026-08-25
+last_verified_commit: eed43cdec28a9f9ae6f809778f1c1c4090c9597f
+last_verified_at: 2026-10-12
 ---
 
 # Editor QA
@@ -108,6 +108,13 @@ last_verified_at: 2026-08-25
   - テンプレートが既定の1件だけの状態でも右上に「Template」が出て、押すと一覧が開いた
   - 2026-08-25 システムの NavigationBar への移行 (issue #104) 後、simtunnel リモート iOS Simulator (iOS 26) で、ナビゲーションバー右端の「テンプレート」から一覧が開いた (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260825/cea30166-5fb9-4f07-affd-397d4e8e266e.jpg)
   - 2026-08-26 macOS (ad-hoc 署名の Debug ビルド) でも trailing ボタンを実操作確認。エディタのウィンドウツールバーに日付キャプションと「テンプレート」(.primaryAction) が出てクリックで一覧が開き (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/32d2b47b-9f61-4a72-8c63-6044bda637d9.png, https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/0326038c-3be3-4b3b-adba-e1dcd9423249.png)、作成フォームの右端に「作成」が出た (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260826/8cf7c285-4518-4707-8679-db3463308a2a.png)
+- [x] **本文をスクロールしても「テンプレート」が消えない**: キーボードを出して本文がスクロールした状態でも、ナビゲーションバーに日付と「テンプレート」が出たままで、押すとテンプレート一覧が開く (issue #127)
+  - 自動化: manual（iPhone Duo の姿勢の切り替えとナビゲーションバーの表示を実機相当の Simulator で確認する。NikkiTests ではナビゲーションバーの縮みを観測できない）
+  - 2026-10-12 ローカル iOS Simulator の iPhone Duo (iOS 27.1) で、カタログの editor を開いた直後 (末尾の段落にフォーカスが当たりキーボードが出て本文がスクロールした状態) を撮影。修正前は外側・内側とも日付と「テンプレート」がナビゲーションバーから消えていた (外側: https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/2026/10/12/fa3df85f-fcfb-46df-82f2-dc9c4a22d31a-editor-duo-before-outer.jpg)。修正後は外側 (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/2026/10/12/6ef2380c-d6c0-42d6-a8c3-4f692e7bc6d5-editor-duo-after-outer.jpg)・内側 (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/2026/10/12/0a885aad-6c3e-426d-8c2f-17c4a55fe949-editor-duo-after-inner.jpg) とも出たまま
+  - 同じ状態から「テンプレート」を押すと一覧が開いた。外側は Maestro の座標タップ (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/2026/10/12/6a33110c-13ba-47f4-a2ff-fc6f2fc5ca2a-editor-duo-after-outer-tapped.jpg)、内側は一時的な XCUITest で `app.buttons["テンプレート"]` を押して確認 (https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/2026/10/12/07f053ea-377d-4b3b-af1c-bc05c2b21ecd-editor-duo-after-inner-tapped.jpg)。iPhone Duo のナビゲーションバーの項目は Maestro の要素一覧に出ず、内側ディスプレイでは Maestro の座標が画面とずれるため
+  - ローカル simulator を使ったのは、iPhone Duo の姿勢の切り替え (duo-pose.sh) がローカルでしか使えず、simtunnel では内側ディスプレイを確認できないため
+  - 既存の iPhone 17 Pro (iOS 27.0) では修正前後で同じ状態の画面の差がステータスバーの時刻だけだった (iOS 27.0 の 17 Pro では修正前からバーは縮まない)
+  - ボタンの文字が「テンプレ…」と省略される表示は修正前からのもので、本項目の対象外
 - [x] **選択中のテンプレートにチェックが付く**: テンプレート一覧で、いま日記に使われているテンプレート(新規日記なら既定の {{date}} テンプレート)にチェックが付いている
   - 自動化: manual（一覧のチェック表示を目視で確認する）
   - 新規日記では既定の「Blank page」にチェックが付き、「Morning notes」を選ぶとチェックが移った
@@ -125,6 +132,19 @@ last_verified_at: 2026-08-25
 
 **確認日: 2026-08-22**
 <img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/bannzai/nikki/20260822/8fae462b-1b92-4e2c-b25c-ac52f6041bb3.jpg" width="320">
+
+</details>
+
+### **本文をスクロールしても「テンプレート」が消えない**: キーボードを出して本文がスクロールした状態でも、ナビゲーションバーに日付と「テンプレート」が出たままで、押すとテンプレート一覧が開く
+
+<details><summary>動作確認スクショ</summary>
+
+**確認日: 2026-10-12** (iPhone Duo iOS 27.1。修正前の外側 / 修正後の外側 / 修正後の内側 / 外側で押した後 / 内側で押した後)
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/2026/10/12/fa3df85f-fcfb-46df-82f2-dc9c4a22d31a-editor-duo-before-outer.jpg" alt="修正前の iPhone Duo 外側。スクロールした状態でナビゲーションバーの日付とテンプレートが消えている" width="200">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/2026/10/12/6ef2380c-d6c0-42d6-a8c3-4f692e7bc6d5-editor-duo-after-outer.jpg" alt="修正後の iPhone Duo 外側。スクロールした状態でも日付とテンプレートが出ている" width="200">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/2026/10/12/0a885aad-6c3e-426d-8c2f-17c4a55fe949-editor-duo-after-inner.jpg" alt="修正後の iPhone Duo 内側。スクロールした状態でも日付とテンプレートが出ている" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/2026/10/12/6a33110c-13ba-47f4-a2ff-fc6f2fc5ca2a-editor-duo-after-outer-tapped.jpg" alt="iPhone Duo 外側でテンプレートを押した後のテンプレート一覧" width="200">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/2026/10/12/07f053ea-377d-4b3b-af1c-bc05c2b21ecd-editor-duo-after-inner-tapped.jpg" alt="iPhone Duo 内側でテンプレートを押した後のテンプレート一覧" width="320">
 
 </details>
 
