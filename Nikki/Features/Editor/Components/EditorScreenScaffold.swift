@@ -20,6 +20,7 @@ struct EditorScreenScaffold<Content: View>: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }
         .inkNavigationBarCaption(caption: caption)
+        .inkNavigationBarMinimizationDisabled()
         .toolbar {
             if let trailingButtonText {
                 InkNavigationBarTrailingButton(text: trailingButtonText, action: { onTrailingButtonTap?() })
