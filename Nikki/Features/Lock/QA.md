@@ -161,8 +161,8 @@ last_verified_at: 2026-10-12
 <details><summary>動作確認スクショ</summary>
 
 **確認日: 2026-10-12** (iPhone Duo、Touch ID の端末。左が外側、右が内側)
-<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/2026/10/12/c3930217-6d74-4d44-a620-c8e380212fcc-before__lock-1-outer.jpg" width="240">
-<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/2026/10/12/8891d69f-719d-4ae0-af37-d9a2d569eb39-before__lock-2-inner.jpg" width="320">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/2026/10/12/c3930217-6d74-4d44-a620-c8e380212fcc-before__lock-1-outer.jpg" width="240" alt="iPhone Duo の外側ディスプレイのロック画面。指紋アイコンと「Touch ID で開く」ボタン">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/2026/10/12/8891d69f-719d-4ae0-af37-d9a2d569eb39-before__lock-2-inner.jpg" width="320" alt="iPhone Duo の内側ディスプレイのロック画面。指紋アイコンと「Touch ID で開く」ボタン">
 
 </details>
 
@@ -171,9 +171,9 @@ last_verified_at: 2026-10-12
 <details><summary>動作確認スクショ</summary>
 
 **確認日: 2026-10-12** (外側 → 内側 → 閉じ直した外側)
-<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/2026/10/12/c3930217-6d74-4d44-a620-c8e380212fcc-before__lock-1-outer.jpg" width="200">
-<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/2026/10/12/8891d69f-719d-4ae0-af37-d9a2d569eb39-before__lock-2-inner.jpg" width="280">
-<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/2026/10/12/d8a14131-76c2-4b9e-b59d-6c53601eddbf-before__lock-3-outer-reclosed.jpg" width="200">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/2026/10/12/c3930217-6d74-4d44-a620-c8e380212fcc-before__lock-1-outer.jpg" width="200" alt="閉じた姿勢で起動した iPhone Duo の外側ディスプレイのロック画面">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/2026/10/12/8891d69f-719d-4ae0-af37-d9a2d569eb39-before__lock-2-inner.jpg" width="280" alt="開いた姿勢にした iPhone Duo の内側ディスプレイのロック画面。右端の時計の列と重ならない">
+<img src="https://pub-7f3469dd3e2e445b9b8ec2d1381b5ea8.r2.dev/2026/10/12/d8a14131-76c2-4b9e-b59d-6c53601eddbf-before__lock-3-outer-reclosed.jpg" width="200" alt="閉じ直した iPhone Duo の外側ディスプレイのロック画面">
 
 </details>
 
