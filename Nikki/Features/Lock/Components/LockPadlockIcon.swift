@@ -26,7 +26,8 @@ struct LockPadlockIcon: View {
 
 /// 南京錠の本体(角丸矩形)とシャックル(弧)を描く輪郭。鍵穴は別途重ねる。
 struct LockPadlockOutline: Shape {
-    func path(in rect: CGRect) -> Path {
+    // Shape.path(in:) は nonisolated の要件のため、既定の MainActor 分離のままでは Xcode 27.1 の Swift でコンパイルエラーになる。
+    nonisolated func path(in rect: CGRect) -> Path {
         // viewBox 0..16(x) / 0..18(y) を rect にアスペクト比保持で収める(SVG の meet 相当)。
         let scale = min(rect.width / 16, rect.height / 18)
         let offsetX = rect.midX - 16 * scale / 2
