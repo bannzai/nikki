@@ -132,8 +132,20 @@ set_pose() {
     return 1
 }
 
-# 終了時は外側ディスプレイ (閉じた姿勢) に戻す。
-trap 'bash "$DUO_POSE_SH" set --udid "$DUO_UDID" closed > /dev/null 2>&1 || true' EXIT
+# 内側ディスプレイをホスト側で撮るバックグラウンドのループの PID (generate_inner が設定する)。
+# 中断時にもループを回収するため、関数のローカル変数ではなくここに置く。
+capture_loop_pid=""
+
+# 終了時は、残っている撮影ループを止め、外側ディスプレイ (閉じた姿勢) に戻す。
+# 中断 (Ctrl-C 等) で .stop に到達しなかった時にループが残り、次回の実行と同じディレクトリを取り合うのを防ぐ。
+cleanup() {
+    if [ -n "$capture_loop_pid" ] && kill -0 "$capture_loop_pid" 2>/dev/null; then
+        kill "$capture_loop_pid" 2>/dev/null || true
+        wait "$capture_loop_pid" 2>/dev/null || true
+    fi
+    bash "$DUO_POSE_SH" set --udid "$DUO_UDID" closed > /dev/null 2>&1 || true
+}
+trap cleanup EXIT
 
 if [ "$SKIP_BUILD" = false ]; then
     ./scripts/generate_screenshots/build_appstore_screenshots.sh duo
@@ -221,7 +233,7 @@ generate_inner() {
             sleep 0.2
         done
     ) &
-    local capture_loop_pid=$!
+    capture_loop_pid=$!
 
     if ! SNAPSHOT_HOST_CAPTURE_DIR="$capture_dir" ./scripts/generate_screenshots/run_appstore_screenshots.sh duo-inner "$LANGUAGES" "$PAGES"; then
         failed_displays+=("inner")
@@ -231,6 +243,7 @@ generate_inner() {
     if ! wait "$capture_loop_pid"; then
         failed_displays+=("inner")
     fi
+    capture_loop_pid=""
 }
 
 if [ "$DISPLAY_TARGET" != "inner" ]; then

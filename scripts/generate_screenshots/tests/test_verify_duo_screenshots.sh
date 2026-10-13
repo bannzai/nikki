@@ -13,6 +13,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 VERIFY_SCRIPT="$SCRIPT_DIR/../verify_duo_screenshots.sh"
 REPOSITORY_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd -P)"
 # 一時ファイルは gitignore 済みの tmp/ に置いて残す (後片付けに rm を使わない運用のため)。
+# tmp/ は git 管理外で clone 直後には無く、mktemp は親ディレクトリを作らないため先に作る。
+mkdir -p "$REPOSITORY_ROOT/tmp"
 TEST_DIRECTORY="$(mktemp -d "$REPOSITORY_ROOT/tmp/verify-duo-test.XXXXXX")"
 
 pass_count=0
