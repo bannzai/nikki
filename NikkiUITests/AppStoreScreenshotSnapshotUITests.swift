@@ -1,12 +1,18 @@
 import XCTest
 
-/// App Store スクリーンショット(iPhone / iPad)の撮影テスト。
+/// App Store スクリーンショット(iPhone / iPad / iPhone Duo)の撮影テスト。
 /// 環境変数 NIKKI_SCREEN でスクショページを直接起動し、シミュレータのネイティブ解像度で
 /// 全画面スクリーンショットを XCTAttachment として保存する。
 /// 実行は scripts/generate_screenshots/ のパイプラインから行い、xcresult から画像を抽出する。
 ///
 /// 通常の `xcodebuild test -scheme Nikki` にも含まれるが、パイプラインが渡す SNAPSHOT_ENABLED が無い時は
 /// 何もせずスキップする(通常の UI テスト実行に 12 回のアプリ再起動と大型 attachment を足さないため)。
+///
+/// iPhone Duo の内側ディスプレイは XCTest の API では App Store の仕様の寸法で撮れないため
+/// (appstore-screenshot-builder skill の references/iphone-duo.md)、パイプラインが SNAPSHOT_HOST_CAPTURE_DIR を
+/// 渡した時は、ページを表示するたびにそのディレクトリへ `{attachment 名}.ready` を書き、ホスト側が
+/// `xcrun simctl io <UDID> screenshot --display=primary-1` で撮って `{attachment 名}.done` を書くまで待つ
+/// (simulator のテストランナーはホストのファイルシステムに書けるため、ファイルで同期する)。
 ///
 /// プロジェクト既定の SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor のままだと、nonisolated な XCTestCase の
 /// init / setUp をオーバーライドできずビルドが通らないため、クラスは nonisolated にする(ContextMenuUITests と同じ)。
@@ -23,10 +29,16 @@ nonisolated final class AppStoreScreenshotSnapshotUITests: XCTestCase {
             "スクリーンショット撮影は scripts/generate_screenshots/ のパイプラインからだけ実行する(SNAPSHOT_ENABLED=1)"
         )
 
-        // 撮影の再現性のため、アプリのデザイン(ライト固定)と縦向きに揃える。
+        // パイプラインが撮影するキャンバスを指定した時だけアプリに引き渡す(iPhone Duo の外側・内側の区別に使う。
+        // 未指定ならアプリがデバイスから判定する)。
+        let canvas = ProcessInfo.processInfo.environment["SNAPSHOT_CANVAS"] ?? ""
+
+        // 撮影の再現性のため、アプリのデザイン(ライト固定)と向きを揃える。
+        // Duo の内側ディスプレイは開いた姿勢の simulator が横向き(landscapeRight)になるため横にし
+        // (外側の撮影で縦にした向きが残らないように明示する)、それ以外は縦にする。
         XCUIDevice.shared.appearance = .light
         #if !os(macOS)
-        XCUIDevice.shared.orientation = .portrait
+        XCUIDevice.shared.orientation = canvas == "duoInner" ? .landscapeRight : .portrait
         #endif
 
         for language in filteredLanguages() {
@@ -34,6 +46,9 @@ nonisolated final class AppStoreScreenshotSnapshotUITests: XCTestCase {
                 let app = XCUIApplication()
                 app.launchEnvironment["NIKKI_SCREEN"] = page
                 app.launchEnvironment["NIKKI_APPSTORE_LANG"] = language
+                if !canvas.isEmpty {
+                    app.launchEnvironment["NIKKI_APPSTORE_CANVAS"] = canvas
+                }
                 app.launch()
 
                 // 起動画面や描画途中を撮らないよう、スクショページのルート要素の出現を待つ。
@@ -51,14 +66,50 @@ nonisolated final class AppStoreScreenshotSnapshotUITests: XCTestCase {
                     XCTAssertTrue(banner.waitForNonExistence(timeout: 15), "\(page) (\(language)) の撮影前に通知バナーが消えなかった")
                 }
 
+                // organize スクリプトとホスト側の撮影ループが「---」区切りでページ・言語をパースするための命名。
+                let attachmentName = "AppStoreScreenshot---\(page)---\(language)---0"
                 let attachment = XCTAttachment(screenshot: app.screenshot())
-                // organize スクリプトが「---」区切りでページ・言語をパースするための命名。
-                attachment.name = "AppStoreScreenshot---\(page)---\(language)---0"
+                attachment.name = attachmentName
                 attachment.lifetime = .keepAlways
                 add(attachment)
 
+                try waitForHostCaptureIfNeeded(attachmentName: attachmentName, page: page, language: language)
+
                 app.terminate()
             }
+        }
+    }
+
+    /// パイプラインが SNAPSHOT_HOST_CAPTURE_DIR を渡した時だけ、ホスト側の撮影完了を待つ。
+    /// `{attachmentName}.ready` を書いて `{attachmentName}.done` が現れるまでポーリングする。
+    @MainActor
+    private func waitForHostCaptureIfNeeded(attachmentName: String, page: String, language: String) throws {
+        guard let hostCaptureDirectoryPath = ProcessInfo.processInfo.environment["SNAPSHOT_HOST_CAPTURE_DIR"],
+              !hostCaptureDirectoryPath.isEmpty else {
+            return
+        }
+        let hostCaptureDirectoryURL = URL(fileURLWithPath: hostCaptureDirectoryPath)
+        let doneFilePath = hostCaptureDirectoryURL.appendingPathComponent("\(attachmentName).done").path
+        // ホストが撮影に失敗した時の合図。timeout まで待たずに失敗させる。
+        let failedFilePath = hostCaptureDirectoryURL.appendingPathComponent("\(attachmentName).failed").path
+        XCTAssertTrue(
+            FileManager.default.createFile(atPath: hostCaptureDirectoryURL.appendingPathComponent("\(attachmentName).ready").path, contents: nil),
+            "\(page) (\(language)) のホスト撮影の合図を \(hostCaptureDirectoryPath) に書けなかった"
+        )
+
+        // ホストの 1 枚の撮影(simctl screenshot と alpha の除去)は数秒で終わる。
+        // Mac の負荷が高い時の遅れを見込んで余裕を持たせ、それでも来なければホストが止まっているとみなす。
+        let deadline = Date.now.addingTimeInterval(120)
+        while !FileManager.default.fileExists(atPath: doneFilePath) {
+            if FileManager.default.fileExists(atPath: failedFilePath) {
+                XCTFail("\(page) (\(language)) のホストの撮影が失敗した (\(failedFilePath))")
+                return
+            }
+            if Date.now > deadline {
+                XCTFail("\(page) (\(language)) のホストの撮影完了 (\(doneFilePath)) が 120 秒以内に来なかった")
+                return
+            }
+            Thread.sleep(forTimeInterval: 0.2)
         }
     }
 
