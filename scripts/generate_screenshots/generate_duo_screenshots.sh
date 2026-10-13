@@ -60,9 +60,19 @@ DUO_POSE_SH="${DUO_POSE_SH:-$HOME/.claude/skills/ios-simulator/scripts/duo-pose.
 
 while [ $# -gt 0 ]; do
     case "$1" in
-        -l) LANGUAGES=$2; shift 2 ;;
-        -n) PAGES=$2; shift 2 ;;
-        --display) DISPLAY_TARGET=$2; shift 2 ;;
+        -l | -n | --display)
+            # 値が無い時は set -u の unbound variable (exit 1) ではなく、引数不正として exit 2 にする。
+            if [ $# -lt 2 ]; then
+                echo "Error: $1 には値が必要です" >&2
+                exit 2
+            fi
+            case "$1" in
+                -l) LANGUAGES=$2 ;;
+                -n) PAGES=$2 ;;
+                --display) DISPLAY_TARGET=$2 ;;
+            esac
+            shift 2
+            ;;
         --skip-build) SKIP_BUILD=true; shift ;;
         *) echo "Error: 不明なオプション: $1" >&2; exit 2 ;;
     esac

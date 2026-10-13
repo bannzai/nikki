@@ -52,7 +52,12 @@ check_png() {
     fi
 
     local sips_output width height has_alpha
-    sips_output=$(sips -g pixelWidth -g pixelHeight -g hasAlpha "$file")
+    # 壊れた PNG で sips が失敗しても set -e で止めず、NG として数えて残りの検査を続ける。
+    if ! sips_output=$(sips -g pixelWidth -g pixelHeight -g hasAlpha "$file" 2>&1); then
+        echo "[NG] $file: 画像として読めない (sips: $sips_output)"
+        ng_count=$((ng_count + 1))
+        return
+    fi
     width=$(echo "$sips_output" | awk '/pixelWidth/ {print $2}')
     height=$(echo "$sips_output" | awk '/pixelHeight/ {print $2}')
     has_alpha=$(echo "$sips_output" | awk '/hasAlpha/ {print $2}')

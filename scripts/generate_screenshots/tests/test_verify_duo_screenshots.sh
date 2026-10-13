@@ -81,6 +81,21 @@ magick -size 1398x2034 xc:none "$alpha_dir/ja/outer/2.png"
 assert_exit_code "alpha がある時は exit 1" 1 \
     bash "$VERIFY_SCRIPT" "$alpha_dir" "ja,en-US" "1,2"
 
+broken_dir="$TEST_DIRECTORY/broken"
+make_complete_output "$broken_dir"
+# 画像として読めないファイルがあっても途中で止まらず、NG として数えて exit 1 にする。
+echo "not a png" > "$broken_dir/ja/outer/1.png"
+assert_exit_code "壊れた PNG がある時は exit 1" 1 \
+    bash "$VERIFY_SCRIPT" "$broken_dir" "ja,en-US" "1,2"
+if grep -q "検証結果: OK 7" "$TEST_DIRECTORY/last.log"; then
+    echo "PASS: 壊れた PNG の後も残りの検査を続ける"
+    pass_count=$((pass_count + 1))
+else
+    echo "FAIL: 壊れた PNG の後の検査が続いていない"
+    cat "$TEST_DIRECTORY/last.log"
+    fail_count=$((fail_count + 1))
+fi
+
 assert_exit_code "引数が足りない時は exit 2" 2 \
     bash "$VERIFY_SCRIPT" "$complete_dir" "ja"
 

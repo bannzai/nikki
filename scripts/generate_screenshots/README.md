@@ -108,7 +108,14 @@
 
    ```bash
    asc --version   # 5.12.0 以降であること
-   asc screenshots upload --version-localization <LOCALIZATION_ID> --path scripts/generate_screenshots/artifacts/duo/ja/outer --device-type APP_IPHONE_DUO --skip-existing
+   # <LOCALIZATION_ID> は対象バージョンの言語ごとの ID (asc の version-localizations の一覧コマンドで取る。取り方は asc のヘルプを正とする)
+   # 1 枠に最大 10 枚のため、--path には 10 枚以内に選んだ画像を置いたディレクトリを渡す (例: 外側 6 枚 + 内側 4 枚)
+   asc screenshots upload --version-localization <LOCALIZATION_ID> --path <10 枚以内に選んだ画像のディレクトリ> --device-type APP_IPHONE_DUO --skip-existing
    ```
 
-2. **App Store Connect の Web UI**。App Store Connect → 対象アプリ → 対象バージョン → 「iPhone Duo」の枠に、`artifacts/duo/{言語}/outer/{1..6}.png` と `inner/{1..6}.png` をドラッグして上げる (枠の名称・表示は未確認。Web UI の画面を本パイプラインの作成時に見ていない)。言語ごとに ja と en-US を切り替えて同じ操作を行う
+   言語ごとに `<LOCALIZATION_ID>` と `--path` を変えて実行する (ja と en-US で 2 回)。
+
+2. **App Store Connect の Web UI**。App Store Connect → 対象アプリ → 対象バージョン → 「iPhone Duo」の枠を開く (枠の名称・表示と、外側と内側が別の枠かどうかは未確認。Web UI の画面を本パイプラインの作成時に見ていない)
+   - 外側と内側が同じ枠なら、1 枠が最大 10 枚のため、`artifacts/duo/{言語}/outer/{1..6}.png` と `inner/{1..6}.png` の 12 枚から 10 枚以内 (例: 外側 6 枚 + 内側 1〜4) を選んでページ番号順にドラッグする
+   - 別の枠なら、外側の枠に `outer/{1..6}.png`、内側の枠に `inner/{1..6}.png` をそれぞれページ番号順にドラッグする
+   - 言語ごとに ja と en-US を切り替えて同じ操作を行う
