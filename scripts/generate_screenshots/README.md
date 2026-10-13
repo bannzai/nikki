@@ -104,7 +104,7 @@
 
 `upload_appstore_screenshots.sh` (deliver) は Duo を扱わない。次のどちらかで上げる。
 
-1. **`asc` CLI (5.12.0 以降)**。App Store Connect API は公開の OpenAPI 仕様に無い表示タイプ `APP_IPHONE_DUO` を受け付け、`asc` 5.12.0 が対応した (根拠: 同参照「アップロード経路」の表。対応 PR https://github.com/rorkai/App-Store-Connect-CLI/pull/2926 )。外側と内側は同じ表示タイプの 1 つの枠 (最大 10 枚) に入るため、外側 6 枚 + 内側 6 枚の 12 枚は全部は入らない。**内側の寸法をサーバが受け付けるかは未確認** (同 PR が明記)
+1. **`asc` CLI (5.12.0 以降)**。App Store Connect API は公開の OpenAPI 仕様に無い表示タイプ `APP_IPHONE_DUO` を受け付け、`asc` 5.12.0 が対応した (根拠: 同参照「アップロード経路」の表。対応 PR https://github.com/rorkai/App-Store-Connect-CLI/pull/2926 )。API 上は外側と内側の 4 寸法が 1 つの表示タイプ `APP_IPHONE_DUO` に属し、`asc screenshots sizes --display-type APP_IPHONE_DUO` が 4 寸法を 1 つの表示タイプとして返す (根拠: 同参照「アップロード経路」の表の asc の行)。1 つの表示タイプの枠は最大 10 枚のため、外側 6 枚 + 内側 6 枚の 12 枚は全部は入らない。**内側の寸法をサーバが受け付けるかは未確認** (同 PR が明記)。Web UI でこの表示タイプがどう見えるか (1 つの枠か、外側・内側で別の枠か) は、API の扱いとは別に未確認 (次の 2 を参照)
 
    ```bash
    asc --version   # 5.12.0 以降であること
@@ -115,7 +115,7 @@
 
    言語ごとに `<LOCALIZATION_ID>` と `--path` を変えて実行する (ja と en-US で 2 回)。
 
-2. **App Store Connect の Web UI**。App Store Connect → 対象アプリ → 対象バージョン → 「iPhone Duo」の枠を開く (枠の名称・表示と、外側と内側が別の枠かどうかは未確認。Web UI の画面を本パイプラインの作成時に見ていない)
+2. **App Store Connect の Web UI**。App Store Connect → 対象アプリ → 対象バージョン → 「iPhone Duo」の枠を開く (枠の名称・表示と、API 上は 1 つの表示タイプである外側と内側を Web UI が 1 つの枠で見せるか別の枠で見せるかは未確認。Web UI の画面を本パイプラインの作成時に見ていない)
    - 外側と内側が同じ枠なら、1 枠が最大 10 枚のため、`artifacts/duo/{言語}/outer/{1..6}.png` と `inner/{1..6}.png` の 12 枚から 10 枚以内 (例: 外側 6 枚 + 内側 1〜4) を選んでページ番号順にドラッグする
    - 別の枠なら、外側の枠に `outer/{1..6}.png`、内側の枠に `inner/{1..6}.png` をそれぞれページ番号順にドラッグする
    - 言語ごとに ja と en-US を切り替えて同じ操作を行う

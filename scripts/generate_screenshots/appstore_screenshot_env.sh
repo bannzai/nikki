@@ -39,15 +39,13 @@ export ARTIFACTS_DIR="scripts/generate_screenshots/artifacts"
 export DUO_OUTPUT_DIR="$ARTIFACTS_DIR/duo"
 
 # App Store Connect が要求するピクセルサイズ(検証に使う)。
-# iphone: 6.9インチ / ipad: 13インチ / mac: 2880x1800 /
-# duo-outer: iPhone Duo 外側ディスプレイ(縦) / duo-inner: iPhone Duo 内側ディスプレイ(横。理由は generate_duo_screenshots.sh のヘッダー)。
+# iphone: 6.9インチ / ipad: 13インチ / mac: 2880x1800
+# (iPhone Duo の寸法は organize を通らず verify_duo_screenshots.sh が持つ)。
 expected_size() {
     case "$1" in
         iphone) echo "1320x2868" ;;
         ipad) echo "2064x2752" ;;
         mac) echo "2880x1800" ;;
-        duo-outer) echo "1398x2034" ;;
-        duo-inner) echo "2853x2007" ;;
         *) echo "unknown" ;;
     esac
 }
@@ -89,7 +87,7 @@ screenshot_source_fingerprint() {
 }
 
 # PNG のピクセルサイズが期待値と一致するか検証する。不一致なら異常終了する。
-# Usage: verify_png_size <PNGパス> <device(iphone|ipad|mac|duo-outer|duo-inner)>
+# Usage: verify_png_size <PNGパス> <device(iphone|ipad|mac)>
 verify_png_size() {
     local png=$1
     local device=$2

@@ -205,34 +205,43 @@ remove_previous_outputs() {
 # 撮影に失敗したディスプレイ。失敗しても他方の撮影を続け、最後に 1 つでもあれば exit 1 にする。
 failed_displays=()
 
+# 同じディスプレイの失敗を重ねて数えない (1 枚ごとに記録するため同じ名前が何度も来る)。
+# 引数: $1 ディスプレイ名 (outer | inner)
+record_failed_display() {
+    case " ${failed_displays[*]-} " in
+        *" $1 "*) ;;
+        *) failed_displays+=("$1") ;;
+    esac
+}
+
 # 外側ディスプレイ: 閉じた姿勢で撮影テストを実行し、XCTAttachment の画像を置く。
 generate_outer() {
     set_pose closed
     remove_previous_outputs outer
     if ! ./scripts/generate_screenshots/run_appstore_screenshots.sh duo-outer "$LANGUAGES" "$PAGES"; then
-        failed_displays+=("outer")
+        record_failed_display outer
     fi
     local raw_dir="$ARTIFACTS_DIR/raw/duo-outer"
     if [ ! -f "$raw_dir/manifest.json" ]; then
         echo "Error: attachment を取り出せませんでした: $raw_dir/manifest.json" >&2
-        failed_displays+=("outer")
+        record_failed_display outer
         return 0
     fi
     # jq の結果を先に受けてから現在のシェルで 1 枚ずつ処理する。パイプの中で place_png が失敗すると
     # set -e で関数ごと止まり、外側の失敗を記録しないまま内側の撮影に進めなくなるため。
     local attachment_lines destination
     if ! attachment_lines=$(jq -r '.[] | .attachments[] | "\(.exportedFileName)\t\(.suggestedHumanReadableName)"' "$raw_dir/manifest.json"); then
-        failed_displays+=("outer")
+        record_failed_display outer
         return 0
     fi
     if [ -n "$attachment_lines" ]; then
         while IFS=$'\t' read -r exported_file suggested_name; do
             if ! destination=$(output_path_for_attachment "${suggested_name%%.png*}" outer); then
-                failed_displays+=("outer")
+                record_failed_display outer
                 continue
             fi
             if ! place_png "$raw_dir/$exported_file" "$destination"; then
-                failed_displays+=("outer")
+                record_failed_display outer
             fi
         done <<< "$attachment_lines"
     fi
@@ -271,12 +280,12 @@ generate_inner() {
     capture_loop_pid=$!
 
     if ! SNAPSHOT_HOST_CAPTURE_DIR="$capture_dir" ./scripts/generate_screenshots/run_appstore_screenshots.sh duo-inner "$LANGUAGES" "$PAGES"; then
-        failed_displays+=("inner")
+        record_failed_display inner
     fi
 
     touch "$capture_dir/.stop"
     if ! wait "$capture_loop_pid"; then
-        failed_displays+=("inner")
+        record_failed_display inner
     fi
     capture_loop_pid=""
 }

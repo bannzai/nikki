@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # verify_duo_screenshots.sh のテスト。
-# magick で作った PNG を置き、揃っている時に exit 0、欠け・寸法違い・alpha ありの時に exit 1、
+# magick で作った PNG を置き、揃っている時に exit 0、欠け・寸法違い・alpha あり・壊れた PNG の時に exit 1、
 # 引数不足の時に exit 2 になることを確かめる。simulator は使わない。
 #
 # 【使い方】
