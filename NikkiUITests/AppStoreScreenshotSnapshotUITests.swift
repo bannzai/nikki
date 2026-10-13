@@ -90,6 +90,8 @@ nonisolated final class AppStoreScreenshotSnapshotUITests: XCTestCase {
         }
         let hostCaptureDirectoryURL = URL(fileURLWithPath: hostCaptureDirectoryPath)
         let doneFilePath = hostCaptureDirectoryURL.appendingPathComponent("\(attachmentName).done").path
+        // ホストが撮影に失敗した時の合図。timeout まで待たずに失敗させる。
+        let failedFilePath = hostCaptureDirectoryURL.appendingPathComponent("\(attachmentName).failed").path
         XCTAssertTrue(
             FileManager.default.createFile(atPath: hostCaptureDirectoryURL.appendingPathComponent("\(attachmentName).ready").path, contents: nil),
             "\(page) (\(language)) のホスト撮影の合図を \(hostCaptureDirectoryPath) に書けなかった"
@@ -99,6 +101,10 @@ nonisolated final class AppStoreScreenshotSnapshotUITests: XCTestCase {
         // Mac の負荷が高い時の遅れを見込んで余裕を持たせ、それでも来なければホストが止まっているとみなす。
         let deadline = Date.now.addingTimeInterval(120)
         while !FileManager.default.fileExists(atPath: doneFilePath) {
+            if FileManager.default.fileExists(atPath: failedFilePath) {
+                XCTFail("\(page) (\(language)) のホストの撮影が失敗した (\(failedFilePath))")
+                return
+            }
             if Date.now > deadline {
                 XCTFail("\(page) (\(language)) のホストの撮影完了 (\(doneFilePath)) が 120 秒以内に来なかった")
                 return

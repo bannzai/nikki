@@ -203,10 +203,24 @@ generate_outer() {
         failed_displays+=("outer")
         return 0
     fi
-    jq -r '.[] | .attachments[] | "\(.exportedFileName)\t\(.suggestedHumanReadableName)"' "$raw_dir/manifest.json" |
+    # jq の結果を先に受けてから現在のシェルで 1 枚ずつ処理する。パイプの中で place_png が失敗すると
+    # set -e で関数ごと止まり、外側の失敗を記録しないまま内側の撮影に進めなくなるため。
+    local attachment_lines destination
+    if ! attachment_lines=$(jq -r '.[] | .attachments[] | "\(.exportedFileName)\t\(.suggestedHumanReadableName)"' "$raw_dir/manifest.json"); then
+        failed_displays+=("outer")
+        return 0
+    fi
+    if [ -n "$attachment_lines" ]; then
         while IFS=$'\t' read -r exported_file suggested_name; do
-            place_png "$raw_dir/$exported_file" "$(output_path_for_attachment "${suggested_name%%.png*}" outer)"
-        done
+            if ! destination=$(output_path_for_attachment "${suggested_name%%.png*}" outer); then
+                failed_displays+=("outer")
+                continue
+            fi
+            if ! place_png "$raw_dir/$exported_file" "$destination"; then
+                failed_displays+=("outer")
+            fi
+        done <<< "$attachment_lines"
+    fi
 }
 
 # 内側ディスプレイ: 開いた姿勢で撮影テストを実行し、テストが書く {name}.ready を見てホスト側で撮る。
@@ -219,15 +233,21 @@ generate_inner() {
     mkdir -p "$capture_dir"
 
     # テストの {name}.ready を待って内側ディスプレイを撮り、{name}.done で撮り終えたことをテストに伝える。
+    # 撮影か配置に失敗した時は {name}.failed を書いてテストをすぐ失敗させる (.done を待つ 120 秒の timeout を
+    # 待たせず、set -e でループが死んだまま .done が来ない状態も作らない)。
     (
         while [ ! -e "$capture_dir/.stop" ]; do
             for ready_file in "$capture_dir"/*.ready; do
                 if [ -e "$ready_file" ]; then
                     name=$(basename "$ready_file" .ready)
-                    xcrun simctl io "$DUO_UDID" screenshot --display=primary-1 "$capture_dir/$name.png" > /dev/null
-                    place_png "$capture_dir/$name.png" "$(output_path_for_attachment "$name" inner)"
-                    mv "$ready_file" "$capture_dir/$name.taken"
-                    touch "$capture_dir/$name.done"
+                    if ! xcrun simctl io "$DUO_UDID" screenshot --display=primary-1 "$capture_dir/$name.png" > /dev/null ||
+                        ! place_png "$capture_dir/$name.png" "$(output_path_for_attachment "$name" inner)"; then
+                        echo "Error: 内側ディスプレイの撮影に失敗しました: $name" >&2
+                        mv "$ready_file" "$capture_dir/$name.failed"
+                    else
+                        mv "$ready_file" "$capture_dir/$name.taken"
+                        touch "$capture_dir/$name.done"
+                    fi
                 fi
             done
             sleep 0.2

@@ -89,7 +89,7 @@
 
 - 前提: Xcode 27.1 以降 + iOS 27.1 ランタイム (iPhone Duo のシミュレータはそれ以降にしか無い)、ImageMagick (`magick`)、jq、ios-simulator skill の `duo-pose.sh`
 - ローカルの Mac でしか実行できない。姿勢の切り替え (`duo-pose.sh`) が Device Hub のウィンドウをアクセシビリティ API で操作するため、simtunnel のリモート simulator では使えない。本リポジトリの CLAUDE.md「シミュレータでの動作確認は simtunnel を使う」の例外に当たる
-- 外側は閉じた姿勢で撮影テスト (`AppStoreScreenshotSnapshotUITests`) が撮る。内側は XCTest の API では仕様の寸法で撮れないため、テストがページを表示して `{attachment 名}.ready` を書いた時点でホスト側が `xcrun simctl io <UDID> screenshot --display=primary-1` で撮り、`.done` を書いてテストを進める (根拠: `references/iphone-duo.md` の SwiftUI の節 5 番「`XCTAttachment(screenshot: app.screenshot())` は真っ黒な 2006×2852 を返す」「`screens[1].screenshot()` は…仕様 (2853×2007) より縦横 1px ずつ小さい」)
+- 外側は閉じた姿勢で撮影テスト (`AppStoreScreenshotSnapshotUITests`) が撮る。内側は XCTest の API では仕様の寸法で撮れないため、テストがページを表示して `{attachment 名}.ready` を書いた時点でホスト側が `xcrun simctl io <UDID> screenshot --display=primary-1` で撮り、`.done` を書いてテストを進める (撮影に失敗した時は `.failed` を書き、テストは timeout を待たずに失敗する) (根拠: `references/iphone-duo.md` の SwiftUI の節 5 番「`XCTAttachment(screenshot: app.screenshot())` は真っ黒な 2006×2852 を返す」「`screens[1].screenshot()` は…仕様 (2853×2007) より縦横 1px ずつ小さい」)
 - 内側は横向き (2853x2007) で作る。開いた姿勢のシミュレータは向きが landscapeRight になり、simctl が回転なしで 2853x2007 を返すため (同参照「決めること」の根拠)。レイアウトは `AppStoreScreenshotCanvas.duoInner` (キャッチコピーを左、縮小した iPhone フレームを右に置く 2 カラム)
 - キャンバスは環境変数 `NIKKI_APPSTORE_CANVAS` (duoOuter / duoInner) で切り替える。Duo の idiom は phone のため、端末種別からは iPhone と区別できない
 - xcodebuild には `-parallel-testing-enabled NO` を渡す。既定の clone は閉じた姿勢で起動し、元の simulator の姿勢が反映されないため (同参照 SwiftUI の節 2 番)
