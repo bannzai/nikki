@@ -170,8 +170,13 @@ output_path_for_attachment() {
 place_png() {
     local source=$1
     local destination=$2
-    mkdir -p "$(dirname "$destination")"
-    magick "$source" -alpha remove -alpha off "$destination"
+    # `if ! place_png` の条件で呼ばれると関数内で set -e が効かないため、失敗を明示的に返す。
+    if ! mkdir -p "$(dirname "$destination")"; then
+        return 1
+    fi
+    if ! magick "$source" -alpha remove -alpha off "$destination"; then
+        return 1
+    fi
     echo "Placed: $destination"
 }
 
