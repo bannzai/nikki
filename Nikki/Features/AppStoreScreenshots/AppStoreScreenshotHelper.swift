@@ -17,15 +17,25 @@ enum AppStoreScreenshotLanguage: String {
 
 /// App Store スクリーンショットの出力キャンバス。App Store Connect の必須サイズに対応する。
 /// iphone: 6.9インチ(1320x2868 = 440x956pt @3x) / ipad: 13インチ(2064x2752 = 1032x1376pt @2x) /
-/// mac: 2880x1800(= 1440x900pt @2x)。
-enum AppStoreScreenshotCanvas {
+/// mac: 2880x1800(= 1440x900pt @2x) /
+/// duoOuter: iPhone Duo の外側ディスプレイ(1398x2034 = 466x678pt @3x、縦) /
+/// duoInner: iPhone Duo の内側ディスプレイ(2853x2007 = 951x669pt @3x、横。開いた姿勢の simulator が
+/// landscapeRight になり、ホストの simctl が回転なしで横長を返すため横で作る)。
+enum AppStoreScreenshotCanvas: String {
     case iphone
     case ipad
     case mac
+    case duoOuter
+    case duoInner
 
-    /// 実行中のデバイスからキャンバスを解決する(シミュレータ撮影用)。
+    /// 撮影テストが環境変数 NIKKI_APPSTORE_CANVAS で指定したキャンバス、無ければ実行中のデバイスから解決する(シミュレータ撮影用)。
+    /// iPhone Duo は idiom が phone のまま画面の寸法だけが違い、デバイスからは判定できないため、
+    /// Duo の撮影テストは外側・内側のどちらを撮るかを環境変数で渡す。
     /// macOS のスクショは ImageRenderer が直接 .mac を指定するため、ここでは iOS 系のみ判定する。
-    static func fromDevice() -> AppStoreScreenshotCanvas {
+    static func fromEnvironmentOrDevice() -> AppStoreScreenshotCanvas {
+        if let canvas = AppStoreScreenshotCanvas(rawValue: ProcessInfo.processInfo.environment["NIKKI_APPSTORE_CANVAS"] ?? "") {
+            return canvas
+        }
         #if os(macOS)
         return .mac
         #else
@@ -77,14 +87,42 @@ struct AppStoreScreenshotFrame<Content: View>: View {
                     .padding(.trailing, 96)
                     .padding(.top, 120)
                     .frame(maxWidth: .infinity, alignment: .topTrailing)
+                case .duoOuter:
+                    // 外側ディスプレイ(466x678pt)は iPhone より背が低く幅が広いため、
+                    // iPhone の縦構図のままキャッチコピーの余白と文字を詰め、フレームを縮めて画面の見える範囲を保つ。
+                    VStack(spacing: 0) {
+                        AppStoreScreenshotHeadline(title: title, subtitle: subtitle, titleSize: 29, subtitleSize: 14)
+                            .padding(.top, 48)
+                            .padding(.horizontal, 36)
+                        AppStoreScreenshotPhoneBezel(scale: 0.82) {
+                            content
+                        }
+                        .padding(.top, 28)
+                    }
+                case .duoInner:
+                    // 内側ディスプレイ(951x669pt、横)は Mac と同じ「左にキャッチコピー・右に端末」の2カラム構図にし、
+                    // 端末は iPhone フレームを縮めて置く(Nikki の画面は縦長の端末で見せるのが主用途のため)。
+                    AppStoreScreenshotPhoneBezel(scale: 0.78) {
+                        content
+                    }
+                    .padding(.trailing, 80)
+                    .padding(.top, 44)
+                    .frame(maxWidth: .infinity, alignment: .topTrailing)
                 }
             }
-            // Mac はウィンドウモックの左にキャッチコピーを縦中央で置く2カラム構図のため、overlay を分ける。
+            // Mac と Duo の内側は端末モックの左にキャッチコピーを縦中央で置く2カラム構図のため、overlay を分ける。
             .overlay(alignment: .leading) {
-                if case .mac = canvas {
+                switch canvas {
+                case .mac:
                     AppStoreScreenshotHeadline(title: title, subtitle: subtitle, titleSize: 38, subtitleSize: 17.5, alignment: .leading)
                         .frame(width: 560, alignment: .leading)
                         .padding(.leading, 100)
+                case .duoInner:
+                    AppStoreScreenshotHeadline(title: title, subtitle: subtitle, titleSize: 33, subtitleSize: 15.5, alignment: .leading)
+                        .frame(width: 440, alignment: .leading)
+                        .padding(.leading, 72)
+                case .iphone, .ipad, .duoOuter:
+                    EmptyView()
                 }
             }
             // overlay の上端が safe area に押し下げられないよう、背景単体ではなく overlay 込みの全体をキャンバス全面に広げる。
@@ -101,10 +139,10 @@ struct AppStoreScreenshotFrame<Content: View>: View {
 }
 
 /// モック画面の先頭コンテンツに与える上端の余白。
-/// iPhone は Dynamic Island、iPad はベゼル上端、Mac はウィンドウのタイトルバーとの間隔に合わせる。
+/// iPhone と Duo (iPhone フレームを使う) は Dynamic Island、iPad はベゼル上端、Mac はウィンドウのタイトルバーとの間隔に合わせる。
 func appStoreScreenshotScreenTopPadding(canvas: AppStoreScreenshotCanvas) -> CGFloat {
     switch canvas {
-    case .iphone: return 56
+    case .iphone, .duoOuter, .duoInner: return 56
     case .ipad: return 28
     case .mac: return 14
     }
@@ -156,6 +194,9 @@ struct AppStoreScreenshotBackground: View {
 /// フレーム下端はキャンバス外に見切れる前提の構図のため、画面の高さはキャンバスより長く固定し、
 /// 最下部のアクションボタン類はモック画面に置かない。
 struct AppStoreScreenshotPhoneBezel<Content: View>: View {
+    // iPhone のキャンバスは等倍、Duo のキャンバスは画面に収まるように縮めて置く。
+    // モック画面は等倍で組んでからフレームごと縮めるため、各ページのレイアウトはキャンバスを問わず同じになる。
+    var scale: CGFloat = 1
     @ViewBuilder let content: Content
 
     var body: some View {
@@ -183,6 +224,10 @@ struct AppStoreScreenshotPhoneBezel<Content: View>: View {
                 .fill(Color.ink)
         )
         .shadow(color: Color.ink.opacity(0.18), radius: 24, x: 0, y: 18)
+        // scaleEffect は描画だけを縮めてレイアウトの大きさを変えないため、縮めた後の大きさを frame で与え直す
+        // (与えないと、上のキャッチコピーとの間隔が等倍のフレームを基準に計算される)。
+        .scaleEffect(scale)
+        .frame(width: 372 * scale, height: 900 * scale)
     }
 }
 
