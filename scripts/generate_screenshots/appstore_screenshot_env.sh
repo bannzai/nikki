@@ -22,18 +22,32 @@ export IPAD_SIM_DEVICE_TYPE="com.apple.CoreSimulator.SimDeviceType.iPad-Pro-13-i
 # ensure_simulator がエラーを出すので、その時はこの値を手元のランタイムに合わせて更新する。
 export SIM_RUNTIME="com.apple.CoreSimulator.SimRuntime.iOS-26-5"
 
+# iPhone Duo (折りたたみ端末) の撮影用シミュレータ。iPhone Duo の simulator は iOS 27.1 以降のランタイムにしか無いため、
+# 上の SIM_RUNTIME とは別に固定する (generate_duo_screenshots.sh が使う)。
+export DUO_SIM_NAME="Nikki-AppStore-iPhoneDuo"
+export DUO_SIM_DEVICE_TYPE="com.apple.CoreSimulator.SimDeviceType.iPhone-Duo"
+export DUO_SIM_RUNTIME="com.apple.CoreSimulator.SimRuntime.iOS-27-1"
+
 # ビルド成果物と生成画像の置き場所(すべて gitignore 対象)。
 export DERIVED_DATA_IOS="tmp/DerivedData-screenshots"
 export DERIVED_DATA_MAC="tmp/DerivedData-screenshots-mac"
+# Duo は iOS 27.1 の simulator を destination にビルドするため、iOS 26.5 向けの成果物と分ける。
+export DERIVED_DATA_DUO="tmp/DerivedData-screenshots-duo"
 export ARTIFACTS_DIR="scripts/generate_screenshots/artifacts"
+# Duo の最終出力。fastlane deliver が読む fastlane/screenshots/ には置かない
+# (deliver は画像の px 寸法で表示クラスを判定し、Duo の寸法を受け付けないため。README「iPhone Duo」参照)。
+export DUO_OUTPUT_DIR="$ARTIFACTS_DIR/duo"
 
 # App Store Connect が要求するピクセルサイズ(検証に使う)。
-# iphone: 6.9インチ / ipad: 13インチ / mac: 2880x1800。
+# iphone: 6.9インチ / ipad: 13インチ / mac: 2880x1800 /
+# duo-outer: iPhone Duo 外側ディスプレイ(縦) / duo-inner: iPhone Duo 内側ディスプレイ(横。理由は generate_duo_screenshots.sh のヘッダー)。
 expected_size() {
     case "$1" in
         iphone) echo "1320x2868" ;;
         ipad) echo "2064x2752" ;;
         mac) echo "2880x1800" ;;
+        duo-outer) echo "1398x2034" ;;
+        duo-inner) echo "2853x2007" ;;
         *) echo "unknown" ;;
     esac
 }
@@ -48,16 +62,17 @@ map_language_to_fastlane() {
 }
 
 # 指定した名前の撮影用シミュレータを冪等に用意し、UDID を出力する。
-# 既存端末は SIM_RUNTIME のデバイス一覧からだけ探す(旧ランタイムの同名端末を再利用すると
-# 固定 OS での再現性が失われるため。SIM_RUNTIME 更新時は新ランタイムで作り直される)。
-# Usage: ensure_simulator <名前> <デバイスタイプID>
+# 既存端末は指定ランタイム(省略時 SIM_RUNTIME)のデバイス一覧からだけ探す(旧ランタイムの同名端末を再利用すると
+# 固定 OS での再現性が失われるため。ランタイム更新時は新ランタイムで作り直される)。
+# Usage: ensure_simulator <名前> <デバイスタイプID> [ランタイムID]
 ensure_simulator() {
     local name=$1
     local device_type=$2
+    local runtime=${3:-$SIM_RUNTIME}
     local udid
-    udid=$(xcrun simctl list devices --json | jq -r --arg name "$name" --arg runtime "$SIM_RUNTIME" '.devices[$runtime] // [] | .[] | select(.name == $name and .isAvailable) | .udid' | head -1)
+    udid=$(xcrun simctl list devices --json | jq -r --arg name "$name" --arg runtime "$runtime" '.devices[$runtime] // [] | .[] | select(.name == $name and .isAvailable) | .udid' | head -1)
     if [ -z "$udid" ]; then
-        udid=$(xcrun simctl create "$name" "$device_type" "$SIM_RUNTIME")
+        udid=$(xcrun simctl create "$name" "$device_type" "$runtime")
     fi
     echo "$udid"
 }
@@ -74,7 +89,7 @@ screenshot_source_fingerprint() {
 }
 
 # PNG のピクセルサイズが期待値と一致するか検証する。不一致なら異常終了する。
-# Usage: verify_png_size <PNGパス> <device(iphone|ipad|mac)>
+# Usage: verify_png_size <PNGパス> <device(iphone|ipad|mac|duo-outer|duo-inner)>
 verify_png_size() {
     local png=$1
     local device=$2
