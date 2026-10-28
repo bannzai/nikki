@@ -17,6 +17,24 @@ extension View {
     func inkNavigationBarStyle() -> some View {
         modifier(InkNavigationBarStyle())
     }
+
+    /// 本文をスクロールしてもナビゲーションバーを縮めず、中央・右端の項目を出したままにする。
+    /// iOS 27.1 の iPhone Duo で、スクロールでバーが縮み、エディタの日付と「テンプレート」ボタンが
+    /// 先頭へ戻るまで消えることを確認したため(issue #127)、書いている途中に使う操作を持つ画面で使う。
+    @ViewBuilder
+    func inkNavigationBarMinimizationDisabled() -> some View {
+        // toolbarMinimizationBehavior は iOS 27 SDK で入った API で、CI の Xcode 26 ではコンパイルできない。
+        // .never は macOS では使えない。
+        #if os(iOS) && compiler(>=6.4)
+        if #available(iOS 27.0, *) {
+            toolbarMinimizationBehavior(.never, for: .inkNavigationBar)
+        } else {
+            self
+        }
+        #else
+        self
+        #endif
+    }
 }
 
 /// ナビゲーションバー右端のテキストボタン。エディタのテンプレート選択・テンプレート作成の確定など、

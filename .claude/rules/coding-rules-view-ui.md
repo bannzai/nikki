@@ -42,38 +42,8 @@ paths:
 
 ## Slot-based Layout
 
-- コンポーネント設計は Slot-based Layout の原則に従う（詳細は `component-design-slotbased.md` / `component-design-examples.md`）
-- **ドメインを表す Feature コンポーネント**では、UI 要素（String, Color, UUID 等）を抽象化して渡さず、具体的な型（`JournalEntry`, `Block`, `JournalTemplate` 等）をそのまま渡す
-- 異なる型には個別のコンポーネントを作成する
-- 例外: 挙動が完全に同じで型だけが異なる場合、enum argument で型を受け取ることを許容する（プロパティ名は実態がわかるように省略せず宣言する）
-- 補足: `Nikki/DesignSystem/` の `Ink*` コンポーネントは SwiftUI 標準の `Button` / `Label` と同様の汎用プリミティブであり、`title: String` などのプリミティブを受け取ってよい。上のルールはドメインデータを扱う Feature コンポーネントを対象とする
+- コンポーネント設計は `component-design-slotbased.md`、enum argument の例外は `component-design-examples.md` に従う
 
 ## `.disabled()` と `.onTapGesture` の組み合わせの禁止
 
 - toolbar, ToolbarItem, Menu などのフレームワーク固有の挙動がある箇所では `.disabled()` + `.onTapGesture` パターンを使用しない。代わりに、Button の action 内に全てのロジック（条件分岐含む）を記述する
-
-### 悪い例
-
-```swift
-Button {
-    doSomething()
-}
-.disabled(!hasPremium)
-.onTapGesture {
-    if !hasPremium {
-        showPaywall = true
-    }
-}
-```
-
-### 良い例
-
-```swift
-Button {
-    if !hasPremium {
-        showPaywall = true
-    } else {
-        doSomething()
-    }
-} label: { ... }
-```

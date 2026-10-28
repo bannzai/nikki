@@ -106,17 +106,17 @@ struct ScreenContent: View {
                 ArchivePage()
             }
         case .appstore1:
-            AppStoreScreenshot1Page(language: .fromEnvironment(), canvas: .fromDevice())
+            AppStoreScreenshot1Page(language: .fromEnvironment(), canvas: .fromEnvironmentOrDevice())
         case .appstore2:
-            AppStoreScreenshot2Page(language: .fromEnvironment(), canvas: .fromDevice())
+            AppStoreScreenshot2Page(language: .fromEnvironment(), canvas: .fromEnvironmentOrDevice())
         case .appstore3:
-            AppStoreScreenshot3Page(language: .fromEnvironment(), canvas: .fromDevice())
+            AppStoreScreenshot3Page(language: .fromEnvironment(), canvas: .fromEnvironmentOrDevice())
         case .appstore4:
-            AppStoreScreenshot4Page(language: .fromEnvironment(), canvas: .fromDevice())
+            AppStoreScreenshot4Page(language: .fromEnvironment(), canvas: .fromEnvironmentOrDevice())
         case .appstore5:
-            AppStoreScreenshot5Page(language: .fromEnvironment(), canvas: .fromDevice())
+            AppStoreScreenshot5Page(language: .fromEnvironment(), canvas: .fromEnvironmentOrDevice())
         case .appstore6:
-            AppStoreScreenshot6Page(language: .fromEnvironment(), canvas: .fromDevice())
+            AppStoreScreenshot6Page(language: .fromEnvironment(), canvas: .fromEnvironmentOrDevice())
         }
     }
 }
