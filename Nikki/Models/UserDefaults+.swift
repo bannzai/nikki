@@ -79,6 +79,30 @@ extension AppStorage {
     }
 }
 
+// MARK: - Data
+
+extension UserDefaults {
+    /// Data を保存する UserDefaults キー。@AppStorage には対応する AppStorage.init を通して渡す。
+    enum DataKey: String, CaseIterable {
+        /// 登録済みパスキーの識別子(issue #84)。空なら未登録で、登録状態はこの値の有無で表す。
+        case passkeyCredentialID
+        /// 登録済みパスキーの公開鍵(X9.63 表現)。ロック解除時の署名検証に使う。
+        case passkeyPublicKey
+
+        var key: String {
+            "DataKey_\(rawValue)"
+        }
+    }
+}
+
+extension AppStorage {
+    typealias DataKey = UserDefaults.DataKey
+
+    init(wrappedValue: Value, _ key: DataKey, store: UserDefaults? = nil) where Value == Data {
+        self.init(wrappedValue: wrappedValue, key.key, store: store)
+    }
+}
+
 // MARK: - Enum String
 
 extension UserDefaults {
