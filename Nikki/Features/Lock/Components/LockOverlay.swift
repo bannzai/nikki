@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// 画面中央のロック解除オーバーレイ(南京錠円・文言・Face ID ボタン・脚注)。
+/// 画面中央のロック解除オーバーレイ(南京錠円・文言・Face ID ボタン・パスキーボタン・脚注)。
 struct LockOverlay: View {
     /// 自動ロック状態。Face ID ボタンが解除に成功すると false に戻す。
     @Binding var locked: Bool
@@ -20,8 +20,12 @@ struct LockOverlay: View {
                     .lineSpacing(inkLineSpacing(fontSize: 12.5, multiplier: 1.9))
             }
 
-            LockFaceIDButton(locked: $locked)
-                .padding(.top, 8)
+            VStack(spacing: 10) {
+                LockFaceIDButton(locked: $locked)
+                // パスキー登録済みの端末でだけ現れる代替の解除手段(issue #84)。
+                LockPasskeyButton(locked: $locked)
+            }
+            .padding(.top, 8)
 
             Text("Unlock to pick up right where you left off")
                 .font(.ink(12, .regular))
