@@ -79,9 +79,8 @@ bash ~/.claude/skills/ios-deploy-actions/scripts/asc-api.sh GET \
 `project.pbxproj` の手動署名指定は Release かつ実機 SDK (`[sdk=iphoneos*]`) に限定してある。
 
 - simulator ビルド (`make ios`) と macOS ビルド (`make macos`) は Automatic 署名のまま。影響しない
-- 実機 Release ビルド (`make ios-device`) は `Nikki.AppStore` profile と Apple Distribution 証明書を
-  ローカルの Keychain / Provisioning Profiles に持っている必要がある。持っていない場合は
-  `-configuration Debug` でビルドする
+- 実機 Release ビルド (`make ios-device`) は `IOSDeviceSigning.xcconfig` で Automatic の開発署名に戻すため、
+  `Nikki.AppStore` profile と Apple Distribution 証明書をローカルに持っている必要はない
 
 ## うまくいかない時
 
