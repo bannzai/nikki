@@ -1,0 +1,10 @@
+// make ios-device が xcodebuild に -xcconfig で渡す、ローカルの実機向けビルドの署名の上書き。
+// pbxproj の Release[sdk=iphoneos*] は TestFlight 配布 (ios-deploy.yml) 用の署名 (App Store 用 profile) で、
+// そのままでは実機へ直接インストールできないため、開発署名に戻す。
+// xcodebuild の引数では条件付きの設定名を渡せないため、ファイルで渡す
+CODE_SIGN_STYLE[sdk=iphoneos*] = Automatic
+CODE_SIGN_IDENTITY[sdk=iphoneos*] = Apple Development
+PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*] =
+// -xcconfig の設定は SwiftPM のパッケージのターゲットにもかかり、上の署名の証明書の指定を受けた
+// パッケージのリソースの bundle が開発チームを求めるため、pbxproj の Nikki と同じチームを全ターゲットに渡す
+DEVELOPMENT_TEAM = TQPN82UBBY
