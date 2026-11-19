@@ -1,6 +1,7 @@
 import Foundation
 import SwiftData
 import Testing
+
 @testable import Nikki
 
 struct JournalEntryTests {
@@ -187,17 +188,18 @@ struct JournalEntryTests {
                 updatedAt: .now
             ),
         ]
-        #expect(entries.exportMarkdown == """
-        # 2026-07-16 何もない日
+        #expect(
+            entries.exportMarkdown == """
+                # 2026-07-16 何もない日
 
-        特別なことは何もなかった。
+                特別なことは何もなかった。
 
-        ---
+                ---
 
-        # 2026-07-18
+                # 2026-07-18
 
-        タイトルのない日。
-        """)
+                タイトルのない日。
+                """)
     }
 
     @Test("exportHTML は日付見出し・段落・チェックリストをタグ化し、紙色を背景に反映する(#95)")
@@ -209,7 +211,7 @@ struct JournalEntryTests {
                 bodyMarkdown: "# 見出し\n\n段落<script>\n\n- [ ] 未完了\n- [x] 完了",
                 createdAt: .now,
                 updatedAt: .now
-            ),
+            )
         ]
         let html = entries.exportHTML(paperColorHex: "#F7F4EC", languageCode: "ja")
         #expect(html.contains("background: #F7F4EC;"))

@@ -1,5 +1,5 @@
-import SwiftUI
 import CoreGraphics
+import SwiftUI
 
 /// 日記全件を装飾付き PDF に書き出す(#95、Plus 限定)。1日記を1ページとし、ページの高さは内容に合わせて可変にする。
 /// CoreGraphics の CGContext へ直接書き出すため、UIKit/AppKit 固有の PDF API に頼らず iOS/macOS 共通の実装で書ける。

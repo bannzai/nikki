@@ -7,16 +7,19 @@ struct AppStoreScreenshot3Page: View {
     let canvas: AppStoreScreenshotCanvas
 
     var body: some View {
-        let (title, subtitle) = switch language {
-        case .ja: (
-            "書くことに集中できる\n静かなエディタ",
-            "マークダウン互換で見出しもチェックリストも"
-        )
-        case .en: (
-            "A quiet editor\nbuilt for writing",
-            "Markdown-friendly with headings and checklists"
-        )
-        }
+        let (title, subtitle) =
+            switch language {
+            case .ja:
+                (
+                    "書くことに集中できる\n静かなエディタ",
+                    "マークダウン互換で見出しもチェックリストも"
+                )
+            case .en:
+                (
+                    "A quiet editor\nbuilt for writing",
+                    "Markdown-friendly with headings and checklists"
+                )
+            }
         AppStoreScreenshotFrame(canvas: canvas, title: title, subtitle: subtitle) {
             AppStoreScreenshotEditorScreen(language: language, canvas: canvas)
         }
@@ -34,42 +37,45 @@ struct AppStoreScreenshotEditorScreen: View {
     @Environment(\.paperColor) private var paperColor
 
     var body: some View {
-        let (caption, templateButton, entryTitle, markdownBody) = switch language {
-        case .ja: (
-            "7月18日 土曜日",
-            "テンプレート",
-            "梅雨明け",
-            """
-            朝から蝉が鳴いていた。ベランダの鉢に水をやりながら、今年も夏が来たんだなと思う。
+        let (caption, templateButton, entryTitle, markdownBody) =
+            switch language {
+            case .ja:
+                (
+                    "7月18日 土曜日",
+                    "テンプレート",
+                    "梅雨明け",
+                    """
+                    朝から蝉が鳴いていた。ベランダの鉢に水をやりながら、今年も夏が来たんだなと思う。
 
-            ## 買ったもの
+                    ## 買ったもの
 
-            - [x] 麦茶のパック
-            - [ ] 蚊取り線香
+                    - [x] 麦茶のパック
+                    - [ ] 蚊取り線香
 
-            ## 夕方から
+                    ## 夕方から
 
-            風が涼しくなってきたので、窓を全部開けて麦茶を飲んだ。
-            """
-        )
-        case .en: (
-            "Saturday, July 18",
-            "Template",
-            "Summer begins",
-            """
-            Cicadas were singing from early morning. Watering the pots on the balcony, I realized summer is here again.
+                    風が涼しくなってきたので、窓を全部開けて麦茶を飲んだ。
+                    """
+                )
+            case .en:
+                (
+                    "Saturday, July 18",
+                    "Template",
+                    "Summer begins",
+                    """
+                    Cicadas were singing from early morning. Watering the pots on the balcony, I realized summer is here again.
 
-            ## Picked up
+                    ## Picked up
 
-            - [x] Barley tea packs
-            - [ ] Mosquito coils
+                    - [x] Barley tea packs
+                    - [ ] Mosquito coils
 
-            ## In the evening
+                    ## In the evening
 
-            The breeze turned cool, so I opened every window and poured myself some barley tea.
-            """
-        )
-        }
+                    The breeze turned cool, so I opened every window and poured myself some barley tea.
+                    """
+                )
+            }
         ZStack {
             paperColor.ignoresSafeArea()
             VStack(spacing: 0) {

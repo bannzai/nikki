@@ -1,5 +1,5 @@
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 /// 変数入力のシートカード本体。ドラッグハンドル・見出し・変数フィールド群・
 /// markdown プレビュー・開始ボタンを上端角丸24のカードに載せる。
@@ -92,11 +92,12 @@ struct TemplateVariableSheet_Previews: PreviewProvider {
     static var previews: some View {
         TemplateVariableSheet(
             template: .constant(SampleData.reflectionTemplate),
-            fields: .constant(TemplateVariableField.fields(
-                template: SampleData.reflectionTemplate,
-                today: SampleData.referenceToday,
-                includesDemoValues: true
-            )),
+            fields: .constant(
+                TemplateVariableField.fields(
+                    template: SampleData.reflectionTemplate,
+                    today: SampleData.referenceToday,
+                    includesDemoValues: true
+                )),
             entry: .constant(nil),
             today: SampleData.referenceToday
         )

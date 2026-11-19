@@ -29,18 +29,20 @@ enum ThemeBackgroundImage {
         guard let source = CGImageSourceCreateWithData(data as CFData, nil) else {
             throw SaveError.decodeFailed
         }
-        guard let downsampled = CGImageSourceCreateThumbnailAtIndex(
-            source,
-            0,
-            [
-                // 埋め込みサムネイルの有無に左右されないよう、常に原画像から縮小する。
-                kCGImageSourceCreateThumbnailFromImageAlways: true,
-                // Exif の向き情報を画素へ反映し、横倒しで表示されないようにする。
-                kCGImageSourceCreateThumbnailWithTransform: true,
-                // iPhone の 3x フルスクリーン背景を賄える実用上限。これ以上は表示で差が出ず、原寸のままではメモリを浪費する。
-                kCGImageSourceThumbnailMaxPixelSize: 2048,
-            ] as CFDictionary
-        ) else {
+        guard
+            let downsampled = CGImageSourceCreateThumbnailAtIndex(
+                source,
+                0,
+                [
+                    // 埋め込みサムネイルの有無に左右されないよう、常に原画像から縮小する。
+                    kCGImageSourceCreateThumbnailFromImageAlways: true,
+                    // Exif の向き情報を画素へ反映し、横倒しで表示されないようにする。
+                    kCGImageSourceCreateThumbnailWithTransform: true,
+                    // iPhone の 3x フルスクリーン背景を賄える実用上限。これ以上は表示で差が出ず、原寸のままではメモリを浪費する。
+                    kCGImageSourceThumbnailMaxPixelSize: 2048,
+                ] as CFDictionary
+            )
+        else {
             throw SaveError.decodeFailed
         }
         let encoded = NSMutableData()

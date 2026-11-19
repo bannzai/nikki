@@ -1,24 +1,25 @@
 import Testing
+
 @testable import Nikki
 
 struct BlockMarkdownTests {
     /// 全ブロック種(段落・見出し・チェックリスト・img・details)を含む markdown。
     private let fullMarkdown = """
-    朝から蝉が鳴いていた。
+        朝から蝉が鳴いていた。
 
-    ## 買ったもの
+        ## 買ったもの
 
-    - [x] 麦茶のパック
-    - [ ] 蚊取り線香
+        - [x] 麦茶のパック
+        - [ ] 蚊取り線香
 
-    <img alt="夕焼けの写真">
+        <img alt="夕焼けの写真">
 
-    <details><summary>病院メモ</summary></details>
+        <details><summary>病院メモ</summary></details>
 
-    ### 夕方から
+        ### 夕方から
 
-    風が涼しくなってきた。
-    """
+        風が涼しくなってきた。
+        """
 
     // 各ブロックを単独で markdown 化した文字列は「種別 + 内容」を一意に表すため、
     // id(UUID)を無視したブロックの内容比較として使う。
@@ -29,15 +30,16 @@ struct BlockMarkdownTests {
     @Test("全ブロック種をパースできる")
     func parsesAllBlockKinds() {
         let blocks = Block.blocks(fromMarkdown: fullMarkdown)
-        #expect(contents(of: blocks) == [
-            "朝から蝉が鳴いていた。",
-            "## 買ったもの",
-            "- [x] 麦茶のパック\n- [ ] 蚊取り線香",
-            "<img alt=\"夕焼けの写真\">",
-            "<details><summary>病院メモ</summary></details>",
-            "### 夕方から",
-            "風が涼しくなってきた。",
-        ])
+        #expect(
+            contents(of: blocks) == [
+                "朝から蝉が鳴いていた。",
+                "## 買ったもの",
+                "- [x] 麦茶のパック\n- [ ] 蚊取り線香",
+                "<img alt=\"夕焼けの写真\">",
+                "<details><summary>病院メモ</summary></details>",
+                "### 夕方から",
+                "風が涼しくなってきた。",
+            ])
     }
 
     @Test("ブロック列を markdown にできる")
@@ -53,20 +55,21 @@ struct BlockMarkdownTests {
             .details(summary: "折りたたみ", isCollapsed: true, rawMarkdown: "<details><summary>折りたたみ</summary></details>"),
             .details(summary: "ひらいたまま", isCollapsed: false, rawMarkdown: "<details open><summary>ひらいたまま</summary></details>"),
         ]
-        #expect(Block.markdown(blocks: blocks) == """
-        # 見出し
+        #expect(
+            Block.markdown(blocks: blocks) == """
+                # 見出し
 
-        段落
+                段落
 
-        - [x] 済み
-        - [ ] 未了
+                - [x] 済み
+                - [ ] 未了
 
-        <img alt="写真">
+                <img alt="写真">
 
-        <details><summary>折りたたみ</summary></details>
+                <details><summary>折りたたみ</summary></details>
 
-        <details open><summary>ひらいたまま</summary></details>
-        """)
+                <details open><summary>ひらいたまま</summary></details>
+                """)
     }
 
     @Test("markdown とブロック列を往復できる")
@@ -79,11 +82,12 @@ struct BlockMarkdownTests {
 
     @Test("サポート外の行は段落として扱う")
     func fallsBackToParagraph() {
-        let blocks = Block.blocks(fromMarkdown: """
-        #### 深すぎる見出し
-        - ただの箇条書き
-        天気: 晴れ
-        """)
+        let blocks = Block.blocks(
+            fromMarkdown: """
+                #### 深すぎる見出し
+                - ただの箇条書き
+                天気: 晴れ
+                """)
         #expect(contents(of: blocks) == ["#### 深すぎる見出し", "- ただの箇条書き", "天気: 晴れ"])
     }
 
@@ -133,12 +137,12 @@ struct BlockMarkdownTests {
     func preservesUnrecognizedSyntax() {
         // img の src やサポート外の属性、details の属性、段落の行内の空白を書き戻しで失わない。
         let markdown = """
-        <img src="https://example.com/photo.png" width="100">
+            <img src="https://example.com/photo.png" width="100">
 
-        <details class="memo"><summary>病院メモ</summary></details>
+            <details class="memo"><summary>病院メモ</summary></details>
 
-          行頭に空白のある段落
-        """
+              行頭に空白のある段落
+            """
         #expect(Block.markdown(blocks: Block.blocks(fromMarkdown: markdown)) == markdown)
     }
 
@@ -146,12 +150,12 @@ struct BlockMarkdownTests {
     func keepsIndentedSyntaxAsParagraph() {
         // インデントをチェックリスト等に変換すると書き戻しでインデントが失われるため、記法の判定は行頭に限る。
         let markdown = """
-        - [ ] 行頭のチェックリスト
+            - [ ] 行頭のチェックリスト
 
-            - [ ] インデントされた行
+                - [ ] インデントされた行
 
-          # インデントされた見出し
-        """
+              # インデントされた見出し
+            """
         let blocks = Block.blocks(fromMarkdown: markdown)
         #expect(blocks.firstChecklistItems.map(\.text) == ["行頭のチェックリスト"])
         #expect(blocks.paragraphTexts == ["    - [ ] インデントされた行", "  # インデントされた見出し"])

@@ -1,5 +1,6 @@
 import SwiftUI
 import UniformTypeIdentifiers
+
 #if canImport(UIKit)
 import UIKit
 #else
@@ -56,11 +57,12 @@ func editorCopyAttributedString(blocks: [Block]) -> NSAttributedString {
         }
         switch block {
         case .heading(_, let level, let text):
-            let headingFont: EditorCopyFont = switch level {
-            case ...1: .systemFont(ofSize: 22, weight: .bold)
-            case 2: .systemFont(ofSize: 18, weight: .bold)
-            default: .systemFont(ofSize: 16, weight: .medium)
-            }
+            let headingFont: EditorCopyFont =
+                switch level {
+                case ...1: .systemFont(ofSize: 22, weight: .bold)
+                case 2: .systemFont(ofSize: 18, weight: .bold)
+                default: .systemFont(ofSize: 16, weight: .medium)
+                }
             result.append(NSAttributedString(string: text, attributes: [.font: headingFont]))
         case .paragraph(_, let text):
             result.append(NSAttributedString(string: text, attributes: [.font: bodyFont]))

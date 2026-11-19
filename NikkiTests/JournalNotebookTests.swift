@@ -1,6 +1,7 @@
 import Foundation
 import SwiftData
 import Testing
+
 @testable import Nikki
 
 struct JournalNotebookTests {
@@ -41,12 +42,13 @@ struct JournalNotebookTests {
     func seedNotebooksSeedsDefaultFour() {
         let notebooks = SampleData.seedNotebooks(sortOrder: 3)
         #expect(notebooks.count == 4)
-        #expect(notebooks.map(\.name) == [
-            String(localized: "Journal"),
-            String(localized: "3 lines in the morning"),
-            String(localized: "Daily reflection"),
-            String(localized: "Travel log"),
-        ])
+        #expect(
+            notebooks.map(\.name) == [
+                String(localized: "Journal"),
+                String(localized: "3 lines in the morning"),
+                String(localized: "Daily reflection"),
+                String(localized: "Travel log"),
+            ])
         #expect(notebooks[0].template?.markdown == "# {{date}}")
         // 通知のスケジューリングが未実装のうちは、シードが通知されないリマインドを約束しない。
         #expect(notebooks.allSatisfy { $0.reminderFrequency == .none })

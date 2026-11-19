@@ -26,24 +26,25 @@ enum SampleData {
             JournalEntry(
                 date: date(2026, 7, 18, 21, 4),
                 title: String(localized: "Summer begins"),
-                bodyMarkdown: String(localized: """
-                Cicadas were singing from early morning. Watering the pots on the balcony, I realized summer is here again.
+                bodyMarkdown: String(
+                    localized: """
+                        Cicadas were singing from early morning. Watering the pots on the balcony, I realized summer is here again.
 
-                Brewed a strong iced coffee and drank it on the balcony
+                        Brewed a strong iced coffee and drank it on the balcony
 
-                ## Things I bought
+                        ## Things I bought
 
-                - [x] Barley tea bags
-                - [ ] Mosquito coil
+                        - [x] Barley tea bags
+                        - [ ] Mosquito coil
 
-                <img alt="Photo of the sunset">
+                        <img alt="Photo of the sunset">
 
-                <details><summary>Hospital notes (folded away)</summary></details>
+                        <details><summary>Hospital notes (folded away)</summary></details>
 
-                ## From the evening
+                        ## From the evening
 
-                The wind turned cool, so I opened every window and drank barley tea.
-                """),
+                        The wind turned cool, so I opened every window and drank barley tea.
+                        """),
                 createdAt: date(2026, 7, 18, 21, 4),
                 updatedAt: date(2026, 7, 18, 21, 4)
             ),
@@ -92,7 +93,7 @@ enum SampleData {
                 createdAt: date(2026, 5, 3, 18, 20),
                 updatedAt: date(2026, 5, 3, 18, 20),
                 isArchived: true
-            ),
+            )
         ]
     }
 
@@ -114,31 +115,34 @@ enum SampleData {
             (
                 name: String(localized: "3 lines in the morning", bundle: bundle),
                 reminderFrequency: .daily,
-                markdown: String(localized: """
-                # Morning of {{date}}
-                - Looking forward to
-                - Skipping today
-                - One line
-                """, bundle: bundle)
+                markdown: String(
+                    localized: """
+                        # Morning of {{date}}
+                        - Looking forward to
+                        - Skipping today
+                        - One line
+                        """, bundle: bundle)
             ),
             (
                 name: String(localized: "Daily reflection", bundle: bundle),
                 reminderFrequency: .daily,
-                markdown: String(localized: """
-                # {{date}}
-                Weather: {{weather}}
-                ## What went well
-                ## Note to tomorrow's me
-                """, bundle: bundle)
+                markdown: String(
+                    localized: """
+                        # {{date}}
+                        Weather: {{weather}}
+                        ## What went well
+                        ## Note to tomorrow's me
+                        """, bundle: bundle)
             ),
             (
                 name: String(localized: "Travel log", bundle: bundle),
                 reminderFrequency: .none,
-                markdown: String(localized: """
-                # {{place}} day 1
-                ## Where I walked
-                ## What I ate
-                """, bundle: bundle)
+                markdown: String(
+                    localized: """
+                        # {{place}} day 1
+                        ## Where I walked
+                        ## What I ate
+                        """, bundle: bundle)
             ),
         ]
     }
@@ -149,9 +153,11 @@ enum SampleData {
     static var seedMarkdownVariants: [Set<String>] {
         // String Catalog は言語ごとの .lproj に展開されるため、対応言語ぶんの bundle から同じ文言を引く。
         // .main も含めるのは、言語 bundle の解決に失敗した環境でも最低限、現在の言語での判定を保つため。
-        let bundles = [Bundle.main] + Bundle.main.localizations.compactMap { localization in
-            Bundle.main.path(forResource: localization, ofType: "lproj").flatMap(Bundle.init(path:))
-        }
+        let bundles =
+            [Bundle.main]
+            + Bundle.main.localizations.compactMap { localization in
+                Bundle.main.path(forResource: localization, ofType: "lproj").flatMap(Bundle.init(path:))
+            }
         let seedsPerBundle = bundles.map { notebookSeeds(bundle: $0) }
         return notebookSeeds.indices.map { index in
             Set(seedsPerBundle.map { $0[index].markdown })

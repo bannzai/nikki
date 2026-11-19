@@ -1,5 +1,6 @@
-import SwiftUI
 import RevenueCat
+import SwiftUI
+
 #if os(macOS)
 import AppKit
 #endif

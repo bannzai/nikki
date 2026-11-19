@@ -1,5 +1,5 @@
-import SwiftUI
 import SwiftData
+import SwiftUI
 import UniformTypeIdentifiers
 
 /// 設定画面(1r)。iOS 標準のグループ化リスト形式で各設定項目を表示し、
@@ -107,11 +107,13 @@ struct SettingsPage: View {
                                 // PDF / HTML の装飾付き書き出しは Plus 限定(#95)。Markdown は無料のまま変更しない。
                                 InkListRow(
                                     title: String(localized: "Export as PDF"),
-                                    trailing: plusActive ? nil : AnyView(
-                                        Image(systemName: InkIcons.lock)
-                                            .font(.system(size: 13, weight: .semibold))
-                                            .foregroundStyle(Color.inkTextSecondary)
-                                    ),
+                                    trailing: plusActive
+                                        ? nil
+                                        : AnyView(
+                                            Image(systemName: InkIcons.lock)
+                                                .font(.system(size: 13, weight: .semibold))
+                                                .foregroundStyle(Color.inkTextSecondary)
+                                        ),
                                     action: {
                                         if plusActive {
                                             pdfExporterIsPresented = true
@@ -139,11 +141,13 @@ struct SettingsPage: View {
                                 }
                                 InkListRow(
                                     title: String(localized: "Export as HTML"),
-                                    trailing: plusActive ? nil : AnyView(
-                                        Image(systemName: InkIcons.lock)
-                                            .font(.system(size: 13, weight: .semibold))
-                                            .foregroundStyle(Color.inkTextSecondary)
-                                    ),
+                                    trailing: plusActive
+                                        ? nil
+                                        : AnyView(
+                                            Image(systemName: InkIcons.lock)
+                                                .font(.system(size: 13, weight: .semibold))
+                                                .foregroundStyle(Color.inkTextSecondary)
+                                        ),
                                     action: {
                                         if plusActive {
                                             htmlExporterIsPresented = true

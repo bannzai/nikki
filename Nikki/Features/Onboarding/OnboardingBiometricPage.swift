@@ -13,11 +13,12 @@ struct OnboardingBiometricPage: View {
         #else
         let fallback = (InkIcons.lock, String(localized: "From now on,\nit's easy."), String(localized: "Left open, the screen locks itself. Your passcode quietly opens it again."), String(localized: "Enable auto-lock"))
         #endif
-        let (systemName, headline, description, primaryButtonTitle) = switch currentBiometryType() {
-        case .faceID: (InkIcons.faceID, String(localized: "From now on,\njust your face."), String(localized: "Left open, the screen locks itself. Face ID quietly opens it again."), String(localized: "Enable Face ID"))
-        case .touchID: (InkIcons.touchID, String(localized: "From now on,\njust a fingertip."), String(localized: "Left open, the screen locks itself. Touch ID quietly opens it again."), String(localized: "Enable Touch ID"))
-        default: fallback
-        }
+        let (systemName, headline, description, primaryButtonTitle) =
+            switch currentBiometryType() {
+            case .faceID: (InkIcons.faceID, String(localized: "From now on,\njust your face."), String(localized: "Left open, the screen locks itself. Face ID quietly opens it again."), String(localized: "Enable Face ID"))
+            case .touchID: (InkIcons.touchID, String(localized: "From now on,\njust a fingertip."), String(localized: "Left open, the screen locks itself. Touch ID quietly opens it again."), String(localized: "Enable Touch ID"))
+            default: fallback
+            }
         ZStack {
             Color.inkPaper.ignoresSafeArea()
 

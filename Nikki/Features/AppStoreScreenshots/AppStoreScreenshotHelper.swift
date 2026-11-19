@@ -132,8 +132,8 @@ struct AppStoreScreenshotFrame<Content: View>: View {
             .accessibilityIdentifier("AppStoreScreenshotFrame")
             // シミュレータ実機撮影で OS の時刻・電池・ホームインジケータが写り込まないようにする。
             #if os(iOS)
-            .statusBarHidden(true)
-            .persistentSystemOverlays(.hidden)
+        .statusBarHidden(true)
+        .persistentSystemOverlays(.hidden)
             #endif
     }
 }
@@ -218,16 +218,16 @@ struct AppStoreScreenshotPhoneBezel<Content: View>: View {
                     .padding(.top, 12)
             }
             .clipShape(RoundedRectangle(cornerRadius: 48, style: .continuous))
-        .padding(10)
-        .background(
-            RoundedRectangle(cornerRadius: 58, style: .continuous)
-                .fill(Color.ink)
-        )
-        .shadow(color: Color.ink.opacity(0.18), radius: 24, x: 0, y: 18)
-        // scaleEffect は描画だけを縮めてレイアウトの大きさを変えないため、縮めた後の大きさを frame で与え直す
-        // (与えないと、上のキャッチコピーとの間隔が等倍のフレームを基準に計算される)。
-        .scaleEffect(scale)
-        .frame(width: 372 * scale, height: 900 * scale)
+            .padding(10)
+            .background(
+                RoundedRectangle(cornerRadius: 58, style: .continuous)
+                    .fill(Color.ink)
+            )
+            .shadow(color: Color.ink.opacity(0.18), radius: 24, x: 0, y: 18)
+            // scaleEffect は描画だけを縮めてレイアウトの大きさを変えないため、縮めた後の大きさを frame で与え直す
+            // (与えないと、上のキャッチコピーとの間隔が等倍のフレームを基準に計算される)。
+            .scaleEffect(scale)
+            .frame(width: 372 * scale, height: 900 * scale)
     }
 }
 
@@ -245,12 +245,12 @@ struct AppStoreScreenshotPadBezel<Content: View>: View {
                     .frame(width: 754, height: 1700, alignment: .top)
             }
             .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
-        .padding(13)
-        .background(
-            RoundedRectangle(cornerRadius: 36, style: .continuous)
-                .fill(Color.ink)
-        )
-        .shadow(color: Color.ink.opacity(0.18), radius: 24, x: 0, y: 18)
+            .padding(13)
+            .background(
+                RoundedRectangle(cornerRadius: 36, style: .continuous)
+                    .fill(Color.ink)
+            )
+            .shadow(color: Color.ink.opacity(0.18), radius: 24, x: 0, y: 18)
     }
 }
 

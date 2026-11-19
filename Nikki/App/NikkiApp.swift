@@ -1,6 +1,6 @@
-import SwiftUI
-import SwiftData
 import RevenueCat
+import SwiftData
+import SwiftUI
 
 @main
 struct NikkiApp: App {
@@ -18,7 +18,8 @@ struct NikkiApp: App {
         // RevenueCat もネットワークに触れないよう configure しない(参照側は Purchases.isConfigured で分岐する)。
         if environment["NIKKI_SCREEN"] != nil
             || environment["XCTestSessionIdentifier"] != nil
-            || environment["XCTestConfigurationFilePath"] != nil {
+            || environment["XCTestConfigurationFilePath"] != nil
+        {
             modelContainer = SampleData.inMemoryContainer()
             cloudSyncActive = false
         } else {

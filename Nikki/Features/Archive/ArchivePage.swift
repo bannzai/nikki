@@ -1,5 +1,5 @@
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 /// アーカイブした日記の一覧(設定 > アーカイブした日記)。ホームの時系列リストと同じ月まとめ + 行のレイアウト
 /// (HomeMonthGroup / HomeEntryRow)で表示し、行のタップでエディタへ、コンテキストメニューでアーカイブから戻す。
@@ -43,7 +43,8 @@ struct ArchivePage: View {
                                     } label: {
                                         HomeEntryRow(
                                             entry: entry,
-                                            showsSeparator: !(groupIndex == monthGroups.count - 1
+                                            showsSeparator:
+                                                !(groupIndex == monthGroups.count - 1
                                                 && rowIndex == group.entries.count - 1)
                                         )
                                         // タイトルが短い行は大半が透明な余白で、そのままでは余白部分がヒットテストに

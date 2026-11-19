@@ -1,5 +1,5 @@
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 /// 時系列リスト本体。日記を月ごとにまとめ、日付ブロック + タイトル + 2行抜粋の行を並べる。
 /// 行のタップで該当日記のエディタへ、長押しのコンテキストメニューでアーカイブへ進む。日記が1件もないときは空状態を表示する。
@@ -26,7 +26,8 @@ struct HomeListBody: View {
                             NavigationLink(value: entry) {
                                 HomeEntryRow(
                                     entry: entry,
-                                    showsSeparator: !(groupIndex == monthGroups.count - 1
+                                    showsSeparator:
+                                        !(groupIndex == monthGroups.count - 1
                                         && rowIndex == group.entries.count - 1)
                                 )
                                 // タイトルが短い行は大半が透明な余白で、そのままでは余白部分がヒットテストに

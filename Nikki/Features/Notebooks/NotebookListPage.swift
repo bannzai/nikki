@@ -1,5 +1,5 @@
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 /// テンプレート一覧(1l)。日記に使うテンプレートをカード(名前 + リマインドの頻度 +
 /// テンプレートの markdown プレビュー)で並べ、いま日記に使われているものにチェックを付ける
@@ -95,10 +95,11 @@ struct NotebookListPage: View {
         entry.setNotebook(notebook: notebook)
         // 書き出しを持たないテンプレートは置き換えるものがないため、紐付けだけ変えて本文はそのまま残す。
         if let template = notebook.template {
-            entry.replace(templateMarkdown: TemplateVariableField.substitutedMarkdown(
-                template: template,
-                fields: TemplateVariableField.fields(template: template, today: entry.date, includesDemoValues: false)
-            ))
+            entry.replace(
+                templateMarkdown: TemplateVariableField.substitutedMarkdown(
+                    template: template,
+                    fields: TemplateVariableField.fields(template: template, today: entry.date, includesDemoValues: false)
+                ))
         }
         // エディタへ戻った直後にアプリが kill されても置き換えが残るよう明示保存する。
         try? modelContext.save()

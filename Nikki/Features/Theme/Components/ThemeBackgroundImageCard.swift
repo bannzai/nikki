@@ -1,5 +1,5 @@
-import SwiftUI
 import PhotosUI
+import SwiftUI
 
 /// 背景画像の選択リスト(#96)。「写真から選ぶ」と、現在選択中の状態(なし/選択済み)を表示する。
 /// Plus 限定機能。未加入時は選択導線をロックし、タップで PaywallPage を開く。
@@ -44,11 +44,13 @@ struct ThemeBackgroundImageCard: View {
                     title: String(localized: "None"),
                     showsChevron: false,
                     showsSeparator: false,
-                    trailing: hasStoredImage ? nil : AnyView(
-                        Image(systemName: InkIcons.checkmark)
-                            .font(.system(size: 13, weight: .semibold))
-                            .foregroundStyle(Color.ink)
-                    ),
+                    trailing: hasStoredImage
+                        ? nil
+                        : AnyView(
+                            Image(systemName: InkIcons.checkmark)
+                                .font(.system(size: 13, weight: .semibold))
+                                .foregroundStyle(Color.ink)
+                        ),
                     // 既に「なし」が選択中(画像未保存)のときは押しても変わらないため、タップ不要にする。
                     action: hasStoredImage ? { removeImage() } : nil
                 )
@@ -73,7 +75,8 @@ struct ThemeBackgroundImageCard: View {
             Task {
                 // 縮小・エンコードできないデータは保存されないため、保存に成功した時だけ選択済みの表示にする。
                 if let data = try? await newItem?.loadTransferable(type: Data.self),
-                   (try? ThemeBackgroundImage.save(data: data)) != nil {
+                    (try? ThemeBackgroundImage.save(data: data)) != nil
+                {
                     hasStoredImage = true
                     themeBackgroundImageVersion += 1
                 }

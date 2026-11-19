@@ -1,5 +1,5 @@
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 /// 新しいテンプレートの作成フォーム(設定 > テンプレート、またはテンプレート一覧の「＋ 新しいテンプレート」から)。
 /// 名前と書き出し(markdown)を入力して JournalNotebook + JournalTemplate を作成する。

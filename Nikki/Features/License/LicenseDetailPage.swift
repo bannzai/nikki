@@ -1,5 +1,5 @@
-import SwiftUI
 import LicenseList
+import SwiftUI
 
 /// ライブラリ1件のライセンス本文画面。本文中の URL のリンク化は LicenseList の LicenseView に任せる。
 struct LicenseDetailPage: View {

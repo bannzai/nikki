@@ -21,7 +21,7 @@ struct AutoLockCustomSecondsField: View {
                 // 「3600」の4桁が収まり、行の題を圧迫しない幅。
                 .frame(width: 64)
                 #if os(iOS)
-                .keyboardType(.numberPad)
+            .keyboardType(.numberPad)
                 #endif
                 .focused($fieldIsFocused)
                 .onSubmit {
@@ -33,16 +33,16 @@ struct AutoLockCustomSecondsField: View {
                     }
                 }
                 #if os(iOS)
-                // .numberPad にはリターンキーがなく onSubmit が発火しないため、キーボード上に確定の導線を置く。
-                .toolbar {
-                    ToolbarItemGroup(placement: .keyboard) {
-                        Spacer()
-                        Button("Done") {
-                            fieldIsFocused = false
-                        }
+            // .numberPad にはリターンキーがなく onSubmit が発火しないため、キーボード上に確定の導線を置く。
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button("Done") {
+                        fieldIsFocused = false
                     }
                 }
-                #endif
+            }
+            #endif
             Text("seconds")
                 .font(.ink(13.5, .regular))
                 .foregroundStyle(Color.inkTextSecondary)
