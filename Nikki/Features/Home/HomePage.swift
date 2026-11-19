@@ -1,5 +1,5 @@
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 /// ホームの表示モード(リスト / カレンダー)。セグメントの index と rawValue が対応する。
 enum HomePageMode: Int, CaseIterable {

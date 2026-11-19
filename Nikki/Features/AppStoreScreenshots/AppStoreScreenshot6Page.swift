@@ -7,16 +7,19 @@ struct AppStoreScreenshot6Page: View {
     let canvas: AppStoreScreenshotCanvas
 
     var body: some View {
-        let (title, subtitle) = switch language {
-        case .ja: (
-            "紙の色を\nじぶんの好みに",
-            "テーマは Nikki Plus で解放"
-        )
-        case .en: (
-            "Paper in your\nfavorite shade",
-            "Themes unlock with Nikki Plus"
-        )
-        }
+        let (title, subtitle) =
+            switch language {
+            case .ja:
+                (
+                    "紙の色を\nじぶんの好みに",
+                    "テーマは Nikki Plus で解放"
+                )
+            case .en:
+                (
+                    "Paper in your\nfavorite shade",
+                    "Themes unlock with Nikki Plus"
+                )
+            }
         AppStoreScreenshotFrame(canvas: canvas, title: title, subtitle: subtitle) {
             AppStoreScreenshotThemeScreen(language: language, canvas: canvas)
         }
@@ -32,24 +35,27 @@ struct AppStoreScreenshotThemeScreen: View {
     let canvas: AppStoreScreenshotCanvas
 
     var body: some View {
-        let (navTitle, previewLabel, previewTitle, previewBody, paperSection, swatchLabels) = switch language {
-        case .ja: (
-            "テーマ",
-            "プレビュー",
-            "梅雨明け",
-            "朝から蝉が鳴いていた。今年も夏が来たんだなと思う。",
-            "紙の色",
-            ["白", "生成", "薄鼠", "青磁", "桜鼠"]
-        )
-        case .en: (
-            "Theme",
-            "Preview",
-            "Summer begins",
-            "Cicadas were singing this morning. Summer is here again.",
-            "Paper color",
-            ["White", "Cream", "Ash", "Celadon", "Sakura"]
-        )
-        }
+        let (navTitle, previewLabel, previewTitle, previewBody, paperSection, swatchLabels) =
+            switch language {
+            case .ja:
+                (
+                    "テーマ",
+                    "プレビュー",
+                    "梅雨明け",
+                    "朝から蝉が鳴いていた。今年も夏が来たんだなと思う。",
+                    "紙の色",
+                    ["白", "生成", "薄鼠", "青磁", "桜鼠"]
+                )
+            case .en:
+                (
+                    "Theme",
+                    "Preview",
+                    "Summer begins",
+                    "Cicadas were singing this morning. Summer is here again.",
+                    "Paper color",
+                    ["White", "Cream", "Ash", "Celadon", "Sakura"]
+                )
+            }
         VStack(spacing: 0) {
             AppStoreScreenshotNavBar(center: .title(navTitle))
             VStack(alignment: .leading, spacing: 0) {

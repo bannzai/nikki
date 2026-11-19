@@ -8,16 +8,19 @@ struct AppStoreScreenshot4Page: View {
 
     var body: some View {
         // 機能(テンプレート)をタイトルで先に伝える。使い方の具体例はサブに置く。
-        let (title, subtitle) = switch language {
-        case .ja: (
-            "テンプレートで\nすぐ書きはじめる",
-            "「朝の3行」「一日の振り返り」から今日のテンプレートを選ぶ"
-        )
-        case .en: (
-            "Start right away\nwith templates",
-            "Pick a template like \"3 lines in the morning\""
-        )
-        }
+        let (title, subtitle) =
+            switch language {
+            case .ja:
+                (
+                    "テンプレートで\nすぐ書きはじめる",
+                    "「朝の3行」「一日の振り返り」から今日のテンプレートを選ぶ"
+                )
+            case .en:
+                (
+                    "Start right away\nwith templates",
+                    "Pick a template like \"3 lines in the morning\""
+                )
+            }
         AppStoreScreenshotFrame(canvas: canvas, title: title, subtitle: subtitle) {
             AppStoreScreenshotNotebookScreen(language: language, canvas: canvas)
         }
@@ -32,10 +35,11 @@ struct AppStoreScreenshotNotebookScreen: View {
     let canvas: AppStoreScreenshotCanvas
 
     var body: some View {
-        let (navTitle, heading, reminderDaily) = switch language {
-        case .ja: ("テンプレート", "この日記に使うテンプレートを選べます。", "毎日")
-        case .en: ("Templates", "Choose the template for this entry.", "Daily")
-        }
+        let (navTitle, heading, reminderDaily) =
+            switch language {
+            case .ja: ("テンプレート", "この日記に使うテンプレートを選べます。", "毎日")
+            case .en: ("Templates", "Choose the template for this entry.", "Daily")
+            }
         VStack(spacing: 0) {
             AppStoreScreenshotNavBar(center: .title(navTitle))
             VStack(alignment: .leading, spacing: 0) {

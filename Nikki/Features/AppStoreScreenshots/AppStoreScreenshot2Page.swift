@@ -7,16 +7,19 @@ struct AppStoreScreenshot2Page: View {
     let canvas: AppStoreScreenshotCanvas
 
     var body: some View {
-        let (title, subtitle) = switch language {
-        case .ja: (
-            "手が止まると\nそっとロック",
-            "Face ID / Touch ID でひらきます"
-        )
-        case .en: (
-            "Step away\nand it locks itself",
-            "Open again with Face ID / Touch ID"
-        )
-        }
+        let (title, subtitle) =
+            switch language {
+            case .ja:
+                (
+                    "手が止まると\nそっとロック",
+                    "Face ID / Touch ID でひらきます"
+                )
+            case .en:
+                (
+                    "Step away\nand it locks itself",
+                    "Open again with Face ID / Touch ID"
+                )
+            }
         AppStoreScreenshotFrame(canvas: canvas, title: title, subtitle: subtitle) {
             AppStoreScreenshotLockScreen(language: language, canvas: canvas)
         }
@@ -31,36 +34,41 @@ struct AppStoreScreenshotLockScreen: View {
 
     var body: some View {
         // Mac のウィンドウモックでは実機と同じ Touch ID 表記にする(Mac に Face ID は無いため)。
-        let (heading, caption, buttonIcon, buttonTitle, footnote) = switch (language, canvas) {
-        case (.ja, .mac): (
-            "鍵をかけておきました",
-            "しばらく手が止まっていたので、\nそっとロックしました。",
-            InkIcons.touchID,
-            "Touch ID で開く",
-            "解除すると、さっきの続きに戻ります"
-        )
-        case (.ja, _): (
-            "鍵をかけておきました",
-            "しばらく手が止まっていたので、\nそっとロックしました。",
-            InkIcons.faceID,
-            "Face ID で開く",
-            "解除すると、さっきの続きに戻ります"
-        )
-        case (.en, .mac): (
-            "Locked, just in case",
-            "Your hands rested for a while,\nso we quietly locked the page.",
-            InkIcons.touchID,
-            "Open with Touch ID",
-            "Unlock to pick up right where you left off"
-        )
-        case (.en, _): (
-            "Locked, just in case",
-            "Your hands rested for a while,\nso we quietly locked the page.",
-            InkIcons.faceID,
-            "Open with Face ID",
-            "Unlock to pick up right where you left off"
-        )
-        }
+        let (heading, caption, buttonIcon, buttonTitle, footnote) =
+            switch (language, canvas) {
+            case (.ja, .mac):
+                (
+                    "鍵をかけておきました",
+                    "しばらく手が止まっていたので、\nそっとロックしました。",
+                    InkIcons.touchID,
+                    "Touch ID で開く",
+                    "解除すると、さっきの続きに戻ります"
+                )
+            case (.ja, _):
+                (
+                    "鍵をかけておきました",
+                    "しばらく手が止まっていたので、\nそっとロックしました。",
+                    InkIcons.faceID,
+                    "Face ID で開く",
+                    "解除すると、さっきの続きに戻ります"
+                )
+            case (.en, .mac):
+                (
+                    "Locked, just in case",
+                    "Your hands rested for a while,\nso we quietly locked the page.",
+                    InkIcons.touchID,
+                    "Open with Touch ID",
+                    "Unlock to pick up right where you left off"
+                )
+            case (.en, _):
+                (
+                    "Locked, just in case",
+                    "Your hands rested for a while,\nso we quietly locked the page.",
+                    InkIcons.faceID,
+                    "Open with Face ID",
+                    "Unlock to pick up right where you left off"
+                )
+            }
         ZStack(alignment: .top) {
             LockSkeletonBackground()
 

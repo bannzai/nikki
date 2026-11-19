@@ -6,7 +6,9 @@ struct HomeCalendarMonthNav: View {
 
     var body: some View {
         HStack(spacing: 0) {
-            Button { shiftMonth(by: -1) } label: {
+            Button {
+                shiftMonth(by: -1)
+            } label: {
                 Image(systemName: InkIcons.chevronLeft)
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(Color.inkTextSecondary)
@@ -21,7 +23,9 @@ struct HomeCalendarMonthNav: View {
 
             Spacer(minLength: 0)
 
-            Button { shiftMonth(by: 1) } label: {
+            Button {
+                shiftMonth(by: 1)
+            } label: {
                 Image(systemName: InkIcons.chevronRight)
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(Color.inkTextSecondary)

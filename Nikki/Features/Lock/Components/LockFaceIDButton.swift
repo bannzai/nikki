@@ -1,5 +1,5 @@
-import SwiftUI
 import LocalAuthentication
+import SwiftUI
 
 /// ロック解除の墨 pill ボタン。高さ50・横パディング26・角丸25。
 /// 端末で使える生体認証(Face ID / Touch ID)に合わせて文言とアイコンを出し分ける。
@@ -15,11 +15,12 @@ struct LockFaceIDButton: View {
         #else
         let fallback = (InkIcons.lock, String(localized: "Open with passcode"))
         #endif
-        let (systemName, title) = switch currentBiometryType() {
-        case .faceID: (InkIcons.faceID, String(localized: "Open with Face ID"))
-        case .touchID: (InkIcons.touchID, String(localized: "Open with Touch ID"))
-        default: fallback
-        }
+        let (systemName, title) =
+            switch currentBiometryType() {
+            case .faceID: (InkIcons.faceID, String(localized: "Open with Face ID"))
+            case .touchID: (InkIcons.touchID, String(localized: "Open with Touch ID"))
+            default: fallback
+            }
         Button {
             Task {
                 await unlock()

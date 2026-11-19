@@ -48,10 +48,11 @@ struct AutoLockPage: View {
                                 title: String(localized: "Custom"),
                                 showsChevron: false,
                                 showsSeparator: false,
-                                trailing: AnyView(AutoLockCustomSecondsField(
-                                    customSecondsText: $customSecondsText,
-                                    autoLockSeconds: $autoLockSeconds
-                                ))
+                                trailing: AnyView(
+                                    AutoLockCustomSecondsField(
+                                        customSecondsText: $customSecondsText,
+                                        autoLockSeconds: $autoLockSeconds
+                                    ))
                             )
                         } else {
                             InkListRow(

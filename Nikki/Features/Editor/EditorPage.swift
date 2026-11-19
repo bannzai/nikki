@@ -1,5 +1,6 @@
-import SwiftUI
 import SwiftData
+import SwiftUI
+
 #if os(macOS)
 import AppKit
 #endif
@@ -55,11 +56,12 @@ struct EditorPage: View {
 
     var body: some View {
         // 設定「文字の大きさ」は書く時間が長い本文にだけ反映する。標準は見本の 15pt、前後は読みやすさを保つ 2pt 刻み。
-        let bodyFontSize: CGFloat = switch textSize {
-        case .small: 13
-        case .standard: 15
-        case .large: 17
-        }
+        let bodyFontSize: CGFloat =
+            switch textSize {
+            case .small: 13
+            case .standard: 15
+            case .large: 17
+            }
         EditorScreenScaffold(
             caption: editorDateText(date: entry.date),
             trailingButtonText: String(localized: "Template"),
@@ -188,7 +190,8 @@ struct EditorPage: View {
             // 見出し・段落や本文のある項目、日本語入力の変換中 (変換中テキストが項目の本文に入り
             // 空でなくなる) では nil が返ってイベントをそのまま通す。
             if event.keyCode == 51, event.modifierFlags.intersection([.command, .option, .control]).isEmpty,
-               let fieldID = focusedFieldID, let paragraphFieldID = draftBlocks.exitChecklist(emptyItemID: fieldID) {
+                let fieldID = focusedFieldID, let paragraphFieldID = draftBlocks.exitChecklist(emptyItemID: fieldID)
+            {
                 // リスト脱出の直後は移動先の入力欄がまだ描画されていないため、即時に代入すると
                 // first responder が失われて続きの入力が消える。次の runloop で移す。
                 DispatchQueue.main.async {

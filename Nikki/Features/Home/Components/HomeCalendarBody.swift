@@ -16,7 +16,8 @@ struct HomeCalendarBody: View {
             HomeCalendarDaysGrid(entries: entries, displayedMonth: displayedMonth)
             // 前後の月を表示している間は today のカードが紛らわしいため、today を含む月だけプレビューを出す。
             if let entry = entries.first(where: { Calendar.display.isDate($0.date, inSameDayAs: today) }),
-               Calendar.display.isDate(today, equalTo: displayedMonth, toGranularity: .month) {
+                Calendar.display.isDate(today, equalTo: displayedMonth, toGranularity: .month)
+            {
                 NavigationLink(value: entry) {
                     HomeCalendarPreviewCard(entry: entry)
                 }

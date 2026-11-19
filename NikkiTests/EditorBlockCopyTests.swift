@@ -1,6 +1,8 @@
 import Foundation
 import Testing
+
 @testable import Nikki
+
 #if canImport(UIKit)
 import UIKit
 #else

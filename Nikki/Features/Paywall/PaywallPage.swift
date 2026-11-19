@@ -1,5 +1,5 @@
-import SwiftUI
 import RevenueCat
+import SwiftUI
 
 /// サブスク訴求 / ペイウォール画面(1q「Nikki Plus」)。
 /// 料金プランは offering `default` の packages から表示し、購入・復元は RevenueCat 経由で行う。
@@ -222,7 +222,8 @@ struct PaywallPage: View {
     private func annualPerMonthCaption() -> String {
         if let storeProduct = offering?.annual?.storeProduct {
             if let pricePerMonth = storeProduct.pricePerMonth,
-               let formatted = storeProduct.priceFormatter?.string(from: pricePerMonth) {
+                let formatted = storeProduct.priceFormatter?.string(from: pricePerMonth)
+            {
                 return String(localized: "\(formatted)/month")
             }
             return String(localized: "/year")

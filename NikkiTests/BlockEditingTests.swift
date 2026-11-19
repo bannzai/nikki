@@ -1,5 +1,6 @@
 import Foundation
 import Testing
+
 @testable import Nikki
 
 /// エディタがブロックを直接書き換えるヘルパー(Block / [Block] の「編集」セクション)のテスト。
@@ -147,13 +148,14 @@ struct BlockEditingTests {
             .checklist(items: [ChecklistItem(text: "", done: false)]),
             .image(label: "夕焼けの写真", rawMarkdown: "<img alt=\"夕焼けの写真\">"),
         ]
-        #expect(Block.markdown(blocks: blocks.withoutEmptyText) == """
-        朝から蝉が鳴いていた。
+        #expect(
+            Block.markdown(blocks: blocks.withoutEmptyText) == """
+                朝から蝉が鳴いていた。
 
-        - [ ] 麦茶
+                - [ ] 麦茶
 
-        <img alt="夕焼けの写真">
-        """)
+                <img alt="夕焼けの写真">
+                """)
     }
 
     @Test("記法だけを打ち終えた段落は見出し・チェックリストへ変わる")
@@ -328,13 +330,14 @@ struct BlockEditingTests {
         blocks.toggleDetails(blockID: detailsID)
 
         let markdown = Block.markdown(blocks: blocks.withoutEmptyText)
-        #expect(markdown == """
-        ## 買ったもの
+        #expect(
+            markdown == """
+                ## 買ったもの
 
-        - [x] 麦茶のパック
+                - [x] 麦茶のパック
 
-        <details open><summary>病院メモ</summary></details>
-        """)
+                <details open><summary>病院メモ</summary></details>
+                """)
         #expect(Block.markdown(blocks: Block.blocks(fromMarkdown: markdown)) == markdown)
     }
 

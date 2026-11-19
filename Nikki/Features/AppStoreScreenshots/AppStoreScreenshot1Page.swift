@@ -7,16 +7,19 @@ struct AppStoreScreenshot1Page: View {
     let canvas: AppStoreScreenshotCanvas
 
     var body: some View {
-        let (title, subtitle) = switch language {
-        case .ja: (
-            "ここに書くことは\nあなたしか読めません",
-            "日記は端末とあなたの iCloud にだけ"
-        )
-        case .en: (
-            "What you write here\nonly you can read",
-            "Entries live only on your device and your iCloud"
-        )
-        }
+        let (title, subtitle) =
+            switch language {
+            case .ja:
+                (
+                    "ここに書くことは\nあなたしか読めません",
+                    "日記は端末とあなたの iCloud にだけ"
+                )
+            case .en:
+                (
+                    "What you write here\nonly you can read",
+                    "Entries live only on your device and your iCloud"
+                )
+            }
         AppStoreScreenshotFrame(canvas: canvas, title: title, subtitle: subtitle) {
             AppStoreScreenshotHomeListScreen(language: language, canvas: canvas)
         }
@@ -29,10 +32,11 @@ struct AppStoreScreenshotHomeListScreen: View {
     let canvas: AppStoreScreenshotCanvas
 
     var body: some View {
-        let (searchPlaceholder, segments, julyLabel, juneLabel, mayLabel) = switch language {
-        case .ja: ("日記をさがす", ["リスト", "カレンダー"], "2026年7月", "2026年6月", "2026年5月")
-        case .en: ("Search your journal", ["List", "Calendar"], "July 2026", "June 2026", "May 2026")
-        }
+        let (searchPlaceholder, segments, julyLabel, juneLabel, mayLabel) =
+            switch language {
+            case .ja: ("日記をさがす", ["リスト", "カレンダー"], "2026年7月", "2026年6月", "2026年5月")
+            case .en: ("Search your journal", ["List", "Calendar"], "July 2026", "June 2026", "May 2026")
+            }
         VStack(alignment: .leading, spacing: 0) {
             VStack(alignment: .leading, spacing: 14) {
                 AppStoreScreenshotHomeHeader()

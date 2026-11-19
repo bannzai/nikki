@@ -1,5 +1,6 @@
 import Foundation
 import Testing
+
 @testable import Nikki
 
 struct TemplateVariableFieldTests {
@@ -20,7 +21,7 @@ struct TemplateVariableFieldTests {
     func substitutesSpacedTokens() {
         let template = JournalTemplate(name: "白紙", markdown: "# {{ date }}", sortOrder: 0)
         let fields = [
-            TemplateVariableField(name: "date", isAuto: true, value: "2026年7月23日 木曜日", bodyValue: "2026年7月23日", placeholder: ""),
+            TemplateVariableField(name: "date", isAuto: true, value: "2026年7月23日 木曜日", bodyValue: "2026年7月23日", placeholder: "")
         ]
         #expect(
             TemplateVariableField.substitutedMarkdown(template: template, fields: fields)
@@ -32,7 +33,7 @@ struct TemplateVariableFieldTests {
     func keepsUnfilledTokens() {
         let template = JournalTemplate(name: "一日の振り返り", markdown: "天気: {{weather}}", sortOrder: 0)
         let fields = [
-            TemplateVariableField(name: "weather", isAuto: false, value: "", bodyValue: nil, placeholder: "きょうの天気"),
+            TemplateVariableField(name: "weather", isAuto: false, value: "", bodyValue: nil, placeholder: "きょうの天気")
         ]
         #expect(
             TemplateVariableField.substitutedMarkdown(template: template, fields: fields)
@@ -44,7 +45,7 @@ struct TemplateVariableFieldTests {
     func substitutesValuesContainingRegexTemplateCharacters() {
         let template = JournalTemplate(name: "白紙", markdown: "# {{place}}", sortOrder: 0)
         let fields = [
-            TemplateVariableField(name: "place", isAuto: false, value: "鎌倉 $0\\海岸", bodyValue: nil, placeholder: ""),
+            TemplateVariableField(name: "place", isAuto: false, value: "鎌倉 $0\\海岸", bodyValue: nil, placeholder: "")
         ]
         #expect(
             TemplateVariableField.substitutedMarkdown(template: template, fields: fields)

@@ -1,5 +1,6 @@
 import SwiftData
 import Testing
+
 @testable import Nikki
 
 struct CloudSyncPlusGateTests {

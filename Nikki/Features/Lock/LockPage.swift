@@ -1,4 +1,5 @@
 import SwiftUI
+
 #if os(macOS)
 import AppKit
 #endif
@@ -56,8 +57,9 @@ struct LockPage: View {
                 .receive(on: DispatchQueue.main)
         ) { notification in
             if let application = notification.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication,
-               application.processIdentifier != ProcessInfo.processInfo.processIdentifier,
-               application.activationPolicy == .regular {
+                application.processIdentifier != ProcessInfo.processInfo.processIdentifier,
+                application.activationPolicy == .regular
+            {
                 cancelUnlockAuthentication()
                 autoPromptArmed = true
             }

@@ -110,7 +110,8 @@ nonisolated extension Block {
         }
         var suffixCount = 0
         while suffixCount < original.count - prefixCount, suffixCount < new.count - prefixCount,
-              original[original.count - 1 - suffixCount] == new[new.count - 1 - suffixCount] {
+            original[original.count - 1 - suffixCount] == new[new.count - 1 - suffixCount]
+        {
             suffixCount += 1
         }
         let insertedRange = prefixCount..<(new.count - suffixCount)
@@ -298,8 +299,9 @@ nonisolated extension Block {
     /// <summary> 開始タグ (属性付きも許す) と </summary> に挟まれた要約。summary タグが無ければ nil。
     private static func detailsSummary(line: String) -> String? {
         guard let summaryStart = line.range(of: "<summary"),
-              let summaryTagEnd = tagEnd(line: line, start: summaryStart.upperBound),
-              let summaryClose = line.range(of: "</summary>", range: summaryTagEnd..<line.endIndex) else {
+            let summaryTagEnd = tagEnd(line: line, start: summaryStart.upperBound),
+            let summaryClose = line.range(of: "</summary>", range: summaryTagEnd..<line.endIndex)
+        else {
             return nil
         }
         return String(line[line.index(after: summaryTagEnd)..<summaryClose.lowerBound])
@@ -627,7 +629,8 @@ nonisolated extension [Block] {
     /// 通常の文字削除のままにする。リストから抜けたときだけ、続けて入力する段落の id を返す。
     mutating func exitChecklist(emptyItemID itemID: UUID) -> UUID? {
         if let indexes = checklistIndexes(itemID: itemID), case .checklist(_, let items) = self[indexes.blockIndex],
-           items[indexes.itemIndex].text.isEmpty {
+            items[indexes.itemIndex].text.isEmpty
+        {
             return exitChecklist(blockIndex: indexes.blockIndex, itemIndex: indexes.itemIndex)
         }
         return nil

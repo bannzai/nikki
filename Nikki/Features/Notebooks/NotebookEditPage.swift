@@ -1,5 +1,5 @@
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 /// テンプレートの編集(設定 > テンプレート > テンプレートの行から)。書き出し(markdown)は直接編集し、
 /// 変更のたびにドメインメソッドで書き戻す(エディタと同じ即時反映)。

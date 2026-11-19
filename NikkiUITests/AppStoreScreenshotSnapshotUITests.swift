@@ -85,7 +85,8 @@ nonisolated final class AppStoreScreenshotSnapshotUITests: XCTestCase {
     @MainActor
     private func waitForHostCaptureIfNeeded(attachmentName: String, page: String, language: String) throws {
         guard let hostCaptureDirectoryPath = ProcessInfo.processInfo.environment["SNAPSHOT_HOST_CAPTURE_DIR"],
-              !hostCaptureDirectoryPath.isEmpty else {
+            !hostCaptureDirectoryPath.isEmpty
+        else {
             return
         }
         let hostCaptureDirectoryURL = URL(fileURLWithPath: hostCaptureDirectoryPath)

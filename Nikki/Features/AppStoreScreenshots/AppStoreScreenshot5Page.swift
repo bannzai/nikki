@@ -7,16 +7,19 @@ struct AppStoreScreenshot5Page: View {
     let canvas: AppStoreScreenshotCanvas
 
     var body: some View {
-        let (title, subtitle) = switch language {
-        case .ja: (
-            "書いた日々を\nカレンダーで振り返る",
-            "iPhone・iPad・Mac でいつでも同期"
-        )
-        case .en: (
-            "Look back over\nyour written days",
-            "Syncs across iPhone, iPad, and Mac"
-        )
-        }
+        let (title, subtitle) =
+            switch language {
+            case .ja:
+                (
+                    "書いた日々を\nカレンダーで振り返る",
+                    "iPhone・iPad・Mac でいつでも同期"
+                )
+            case .en:
+                (
+                    "Look back over\nyour written days",
+                    "Syncs across iPhone, iPad, and Mac"
+                )
+            }
         AppStoreScreenshotFrame(canvas: canvas, title: title, subtitle: subtitle) {
             AppStoreScreenshotCalendarScreen(language: language, canvas: canvas)
         }
@@ -30,26 +33,29 @@ struct AppStoreScreenshotCalendarScreen: View {
     let canvas: AppStoreScreenshotCanvas
 
     var body: some View {
-        let (segments, monthLabel, weekdaySymbols, cardDate, cardTime, cardTitle, cardExcerpt) = switch language {
-        case .ja: (
-            ["リスト", "カレンダー"],
-            "2026年7月",
-            ["日", "月", "火", "水", "木", "金", "土"],
-            "7月18日 土曜日",
-            "21:04",
-            "梅雨明け",
-            "朝から蝉が鳴いていた。ベランダの鉢に水をやりながら、今年も夏が来たんだなと思う。"
-        )
-        case .en: (
-            ["List", "Calendar"],
-            "July 2026",
-            ["S", "M", "T", "W", "T", "F", "S"],
-            "Saturday, July 18",
-            "21:04",
-            "Summer begins",
-            "Cicadas were singing from early morning. Watering the pots on the balcony, I realized summer is here again."
-        )
-        }
+        let (segments, monthLabel, weekdaySymbols, cardDate, cardTime, cardTitle, cardExcerpt) =
+            switch language {
+            case .ja:
+                (
+                    ["リスト", "カレンダー"],
+                    "2026年7月",
+                    ["日", "月", "火", "水", "木", "金", "土"],
+                    "7月18日 土曜日",
+                    "21:04",
+                    "梅雨明け",
+                    "朝から蝉が鳴いていた。ベランダの鉢に水をやりながら、今年も夏が来たんだなと思う。"
+                )
+            case .en:
+                (
+                    ["List", "Calendar"],
+                    "July 2026",
+                    ["S", "M", "T", "W", "T", "F", "S"],
+                    "Saturday, July 18",
+                    "21:04",
+                    "Summer begins",
+                    "Cicadas were singing from early morning. Watering the pots on the balcony, I realized summer is here again."
+                )
+            }
         VStack(alignment: .leading, spacing: 0) {
             VStack(alignment: .leading, spacing: 14) {
                 AppStoreScreenshotHomeHeader()

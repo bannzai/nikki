@@ -133,7 +133,8 @@ extension [JournalEntry] {
         formatter.timeZone = .autoupdatingCurrent
         formatter.dateFormat = "yyyy-MM-dd"
         return map { entry in
-            let heading = entry.title.isEmpty
+            let heading =
+                entry.title.isEmpty
                 ? "# \(formatter.string(from: entry.date))"
                 : "# \(formatter.string(from: entry.date)) \(entry.title)"
             return "\(heading)\n\n\(entry.bodyMarkdown)"
@@ -154,40 +155,41 @@ extension [JournalEntry] {
         formatter.timeZone = .autoupdatingCurrent
         formatter.dateFormat = "yyyy-MM-dd"
         let articles = map { entry -> String in
-            let heading = entry.title.isEmpty
+            let heading =
+                entry.title.isEmpty
                 ? formatter.string(from: entry.date)
                 : "\(formatter.string(from: entry.date)) \(entry.title)"
             return """
-            <article>
-            <h1>\(heading.htmlEscaped)</h1>
-            \(entry.blocks.exportHTMLBody)
-            </article>
-            """
+                <article>
+                <h1>\(heading.htmlEscaped)</h1>
+                \(entry.blocks.exportHTMLBody)
+                </article>
+                """
         }
         .joined(separator: "\n<hr>\n")
         return """
-        <!doctype html>
-        <html lang="\(languageCode)">
-        <head>
-        <meta charset="utf-8">
-        <title>Nikki</title>
-        <style>
-        body { background: \(paperColorHex); color: #1C1B1A; font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif; max-width: 640px; margin: 0 auto; padding: 32px 24px; line-height: 1.8; }
-        h1 { font-size: 20px; margin-top: 48px; }
-        h1:first-child { margin-top: 0; }
-        h2, h3, h4 { margin-top: 24px; }
-        p { margin: 12px 0; white-space: pre-wrap; }
-        ul.checklist { list-style: none; padding-left: 0; }
-        ul.checklist li.done { color: #6E6D69; text-decoration: line-through; }
-        pre { white-space: pre-wrap; font-family: inherit; background: rgba(28,27,26,0.05); padding: 8px 12px; border-radius: 8px; }
-        hr { border: none; border-top: 1px solid rgba(28,27,26,0.12); margin: 40px 0; }
-        </style>
-        </head>
-        <body>
-        \(articles)
-        </body>
-        </html>
-        """
+            <!doctype html>
+            <html lang="\(languageCode)">
+            <head>
+            <meta charset="utf-8">
+            <title>Nikki</title>
+            <style>
+            body { background: \(paperColorHex); color: #1C1B1A; font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", sans-serif; max-width: 640px; margin: 0 auto; padding: 32px 24px; line-height: 1.8; }
+            h1 { font-size: 20px; margin-top: 48px; }
+            h1:first-child { margin-top: 0; }
+            h2, h3, h4 { margin-top: 24px; }
+            p { margin: 12px 0; white-space: pre-wrap; }
+            ul.checklist { list-style: none; padding-left: 0; }
+            ul.checklist li.done { color: #6E6D69; text-decoration: line-through; }
+            pre { white-space: pre-wrap; font-family: inherit; background: rgba(28,27,26,0.05); padding: 8px 12px; border-radius: 8px; }
+            hr { border: none; border-top: 1px solid rgba(28,27,26,0.12); margin: 40px 0; }
+            </style>
+            </head>
+            <body>
+            \(articles)
+            </body>
+            </html>
+            """
     }
 }
 

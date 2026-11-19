@@ -33,12 +33,13 @@ struct HomeCalendarDaysGrid: View {
         )
         for day in dayRange {
             let date = calendar.date(byAdding: .day, value: day - 1, to: firstOfMonth) ?? firstOfMonth
-            cells.append(HomeCalendarDay(
-                day: day,
-                isToday: calendar.isDate(date, inSameDayAs: today),
-                isFuture: calendar.startOfDay(for: date) > todayStart,
-                entry: entries.first { calendar.isDate($0.date, inSameDayAs: date) }
-            ))
+            cells.append(
+                HomeCalendarDay(
+                    day: day,
+                    isToday: calendar.isDate(date, inSameDayAs: today),
+                    isFuture: calendar.startOfDay(for: date) > todayStart,
+                    entry: entries.first { calendar.isDate($0.date, inSameDayAs: date) }
+                ))
         }
         return cells
     }

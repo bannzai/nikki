@@ -1,4 +1,5 @@
 import Testing
+
 @testable import Nikki
 
 struct AutoLockPlusGateTests {
