@@ -455,6 +455,16 @@
         }
       }
     },
+    "Couldn't register the passkey": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "パスキーを登録できませんでした"
+          }
+        }
+      }
+    },
     "Cream": {
       "localizations": {
         "ja": {
@@ -1090,6 +1100,16 @@
         }
       }
     },
+    "OK": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        }
+      }
+    },
     "Only you can read it": {
       "localizations": {
         "ja": {
@@ -1136,6 +1156,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "パスコードで開く"
+          }
+        }
+      }
+    },
+    "Open with passkey": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "パスキーで開く"
           }
         }
       }
@@ -1256,6 +1286,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "登録済み"
+          }
+        }
+      }
+    },
+    "Remove passkey": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "パスキーを削除"
           }
         }
       }
@@ -1616,6 +1656,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "「%@」を削除します。このテンプレートで書いた日記は削除されずに残ります。"
+          }
+        }
+      }
+    },
+    "This device will stop unlocking with the passkey. The passkey itself stays in Passwords until you delete it there.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この端末ではパスキーで解除できなくなります。パスキー自体は「パスワード」アプリで削除するまで残ります。"
           }
         }
       }
