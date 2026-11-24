@@ -32,9 +32,10 @@ func evaluateUnlockAuthentication() async -> Bool {
     return (try? await context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: String(localized: "Unlock your journal"))) == true
 }
 
-/// 評価中のロック解除認証を中断し、表示中の認証ダイアログを閉じる。評価中でなければ何もしない(冪等)。
+/// 評価中のロック解除認証(生体認証・パスキーの両方)を中断し、表示中の認証ダイアログを閉じる。評価中でなければ何もしない(冪等)。
 @MainActor
 func cancelUnlockAuthentication() {
     unlockAuthenticationContext?.invalidate()
     unlockAuthenticationContext = nil
+    cancelPasskeyUnlockAuthentication()
 }
